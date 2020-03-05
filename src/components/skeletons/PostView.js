@@ -12,10 +12,10 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 0,
   },
   skeleton: {
-    maxWidth: 512,
+    maxWidth: '100%',
     backgroundColor: theme.palette.action.hover,
-    borderRadius: 4,
-  },
+    borderRadius: 4
+  }
 }))
 
 const PostSkeleton = () => {
@@ -24,49 +24,31 @@ const PostSkeleton = () => {
   return (
     <Paper elevation={0} className={classes.root}>
       <Grid container>
-        <Grid
-          direction="row"
-          alignItems="center"
-          container
-          xs={12}
-          style={{ marginBottom: 14 }}
-        >
+        <Grid item xs={12}>
           <Skeleton
-            variant="circle"
-            width={20}
-            height={20}
+            variant="rect"
+            width={512}
             className={classes.skeleton}
-            style={{ marginRight: 8 }}
-          />
-          <Skeleton
-            variant="text"
-            width={128}
-            className={classes.skeleton}
-            height={20}
+            height={14}
           />
         </Grid>
         <Grid item xs={12}>
           <Skeleton
             variant="rect"
-            width="100%"
+            width={256}
+            style={{ marginTop: 14 }}
             className={classes.skeleton}
             height={14}
           />
         </Grid>
-        <Grid container xs={12} direction="row">
-          {Array(4)
-            .fill(null)
-            .map((_, i) => (
-              <Grid justify="center" container xs={3} key={i}>
-                <Skeleton
-                  variant="rect"
-                  width={64}
-                  style={{ marginTop: 20 }}
-                  className={classes.skeleton}
-                  height={20}
-                />
-              </Grid>
-            ))}
+        <Grid item xs={12}>
+          <Skeleton
+            variant="rect"
+            width={512}
+            style={{ marginTop: 12 }}
+            className={classes.skeleton}
+            height={28}
+          />
         </Grid>
       </Grid>
     </Paper>

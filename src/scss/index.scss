@@ -1,31 +1,7 @@
-/*@font-face {
-  font-family: 'GoogleSans-Regular';
-  font-style: normal;
-  src: url('../fonts/Google-Sans-Regular.ttf');
-}
-
-@font-face {
-  font-family: 'GoogleSans-Medium';
-  font-style: normal;
-  src: url('../fonts/Google-Sans-Medium.ttf');
-}
-
-@font-face {
-  font-family: 'GoogleSans-Bold';
-  font-style: normal;
-  src: url('../fonts/Google-Sans-Bold.ttf');
-}*/
-
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: '-apple-system', BlinkMacSystemFont, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  line-height: 1.5;
 }

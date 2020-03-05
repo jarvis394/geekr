@@ -20,8 +20,8 @@ const App = () => {
   return (
     <>
       <Switch>
-        {/* Post; 'a' stands for article here */}
-        <Route path="/a/:id">
+        {/* Article */}
+        <Route path="/article/:id">
           <Post />
         </Route>
 

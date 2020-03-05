@@ -12,9 +12,24 @@ const useStyles = makeStyles(theme => ({
   title: {
     fontWeight: '800',
     fontFamily: 'Google Sans',
-    fontSize: 20,
-    marginBottom: theme.spacing(1)
-  }
+    fontSize: 32,
+    lineHeight: '40px',
+    marginBottom: theme.spacing(4),
+  },
+  text: {
+    '& img': {
+      maxWidth: '100%',
+      width: '100%',
+    },
+    '& a': {
+      color: theme.palette.primary.main,
+      textDecoration: 'none'
+    },
+    '& a:hover': {
+      color: theme.palette.primary.dark,
+      textDecoration: 'underline'
+    },
+  },
 }))
 
 const getPost = id =>
@@ -30,10 +45,14 @@ const Post = props => {
     get()
   }, [])
 
+  if (post) document.title = post.article.title
+
   return post ? (
     <Container style={{ overflow: 'auto', width: '100%' }}>
       <Typography className={classes.title}>{post.article.title}</Typography>
-      <Typography variant="body" dangerouslySetInnerHTML={{ __html: post.article.text_html }}></Typography>
+      <Typography className={classes.text}
+        dangerouslySetInnerHTML={{ __html: post.article.text_html }}
+      ></Typography>
     </Container>
   ) : (
     <Typography variant="h4">Loading...</Typography>
