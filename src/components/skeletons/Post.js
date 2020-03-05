@@ -10,8 +10,12 @@ const useStyles = makeStyles(theme => ({
     marginBottom: '15px',
     background: theme.palette.background.paper,
     borderRadius: 0,
-    width: '100%',
   },
+  skeleton: {
+    maxWidth: '100%',
+    backgroundColor: theme.palette.action.hover,
+    borderRadius: 4
+  }
 }))
 
 const PostSkeleton = () => {
@@ -31,24 +35,22 @@ const PostSkeleton = () => {
             variant="circle"
             width={20}
             height={20}
-            animation="wave"
+            className={classes.skeleton}
             style={{ marginRight: 8 }}
           />
           <Skeleton
             variant="text"
             width={128}
-            style={{ maxWidth: '100%' }}
+            className={classes.skeleton}
             height={20}
-            animation="wave"
           />
         </Grid>
         <Grid item xs={12}>
           <Skeleton
             variant="rect"
             width={512}
-            style={{ maxWidth: '100%' }}
+            className={classes.skeleton}
             height={20}
-            animation="wave"
           />
         </Grid>
       </Grid>

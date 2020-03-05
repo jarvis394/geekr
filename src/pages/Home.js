@@ -18,6 +18,8 @@ const useStyles = makeStyles(theme => ({
     overflow: 'auto',
     background: theme.palette.background.default,
     padding: 0,
+    width: '100%',
+    height: '100%',
   },
   noDeco: {
     textDecoration: 'none !important',
@@ -38,8 +40,12 @@ const useStyles = makeStyles(theme => ({
     marginTop: 6,
   },
   postAuthor: {
-    color: theme.palette.primary.main,
+    color:
+      theme.palette.type === 'light'
+        ? theme.palette.primary.light
+        : theme.palette.primary.dark,
     marginRight: theme.spacing(1),
+    fontWeight: 800
   },
   postTs: {
     color: theme.palette.text.hint,
@@ -109,7 +115,9 @@ const Home = ({ state }) => {
         ? posts.articleIds.map((id, i) => (
             <PostItem post={posts.articleRefs[id]} key={i} />
           ))
-        : Array(20).map((_, i) => <PostSkeleton key={i} />)}
+        : Array(20)
+            .fill(null)
+            .map((_, i) => <PostSkeleton key={i} />)}
     </List>
   )
 }
