@@ -156,6 +156,8 @@ const Home = ({ state }) => {
   const [posts, setPosts] = useState()
   const classes = useStyles()
 
+  document.title = 'habra.'
+
   useEffect(() => {
     const get = async () => setPosts((await getPosts()).data)
     get()
