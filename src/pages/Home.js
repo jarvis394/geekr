@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Link from 'react-router-dom/Link'
@@ -45,6 +44,12 @@ const useStyles = makeStyles(theme => ({
   postTs: {
     color: theme.palette.text.hint,
   },
+  postAvatar: {
+    width: theme.spacing(2.5),
+    height: theme.spacing(2.5),
+    marginRight: theme.spacing(1),
+    borderRadius: 2,
+  },
 }))
 
 const getPosts = () =>
@@ -56,15 +61,19 @@ const getPosts = () =>
 const PostItem = ({ post }) => {
   const classes = useStyles()
   const ts = moment(post.time_published).fromNow()
-  const { login, id: authorId } = post.author
+  const { login, id: authorId, avatar } = post.author
   const { title, id } = post
 
   return (
     <Paper elevation={0} className={classes.paper}>
       <Grid container>
         <Grid alignItems="center" container xs={12} direction="row">
+          <Avatar src={avatar} className={classes.postAvatar} />
           <Typography variant="caption">
-            <Link className={classes.noDeco + ' ' + classes.postAuthor} to={'/u/' + authorId}>
+            <Link
+              className={classes.noDeco + ' ' + classes.postAuthor}
+              to={'/u/' + authorId}
+            >
               {login}
             </Link>
           </Typography>
@@ -100,7 +109,7 @@ const Home = ({ state }) => {
         ? posts.articleIds.map((id, i) => (
             <PostItem post={posts.articleRefs[id]} key={i} />
           ))
-        : Array(50).map((_, i) => <PostSkeleton key={i} />)}
+        : Array(20).map((_, i) => <PostSkeleton key={i} />)}
     </List>
   )
 }
