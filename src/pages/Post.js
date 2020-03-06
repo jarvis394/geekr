@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   container: {
     overflow: 'auto',
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   authorBar: { marginTop: theme.spacing(2.5) },
   avatar: {
@@ -112,16 +112,12 @@ const Post = props => {
     <div className={classes.root + ' ' + classes.container}>
       <Container className={classes.hubs}>
         {post.article.hubs.map((hub, i) => (
-          
-            <Typography key={i} variant="caption">
-              <Link
-                className={classes.hubLink}
-                to={'/hub/' + hub.alias}
-              >
-                {hub.title}
-              </Link>{post.article.hubs.length - 1 !== i && ', '}
-            </Typography>
-        
+          <Typography key={i} variant="caption">
+            <Link className={classes.hubLink} to={'/hub/' + hub.alias}>
+              {hub.title}
+            </Link>
+            {post.article.hubs.length - 1 !== i && ', '}
+          </Typography>
         ))}
       </Container>
       <Divider />
