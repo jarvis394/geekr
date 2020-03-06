@@ -3,8 +3,13 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Link from 'react-router-dom/Link'
 import Avatar from '@material-ui/core/Avatar'
+import Icon from '@material-ui/core/Icon'
 import List from '@material-ui/core/List'
 import Paper from '@material-ui/core/Paper'
+import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
+import VisibilityIcon from '@material-ui/icons/Visibility'
+import BookmarkIcon from '@material-ui/icons/Bookmark'
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
 import { makeStyles } from '@material-ui/core/styles'
 import { get } from 'request-promise-native'
 import PostSkeleton from '../components/skeletons/Post'
@@ -37,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: '800',
     fontFamily: 'Google Sans',
     fontSize: 18,
-    marginTop: 6,
+    marginTop: theme.spacing(1),
   },
   postAuthor: {
     color:
@@ -45,7 +50,7 @@ const useStyles = makeStyles(theme => ({
         ? theme.palette.primary.light
         : theme.palette.primary.dark,
     marginRight: theme.spacing(1),
-    fontWeight: 800
+    fontWeight: 800,
   },
   postTs: {
     color: theme.palette.text.hint,
@@ -56,6 +61,17 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1),
     borderRadius: 2,
   },
+  postBottomRow: {
+    marginTop: theme.spacing(2),
+  },
+  postBottomRowItem: {
+    color: theme.palette.text.hint,
+    fontSize: 8,
+  },
+  postBottomRowItemIcon: {
+    fontSize: 16,
+    marginRight: theme.spacing(1),
+  },
 }))
 
 const getPosts = () =>
@@ -64,11 +80,43 @@ const getPosts = () =>
     { json: true }
   )
 
+const formatNumber = n =>
+  n >= 1000 ? (Math.ceil(n / 100) / 10 + 'k').replace('.', ',') : n
+
 const PostItem = ({ post }) => {
   const classes = useStyles()
   const ts = moment(post.time_published).fromNow()
   const { login, id: authorId, avatar } = post.author
-  const { title, id } = post
+  const {
+    title,
+    id,
+    score: sc,
+    reading_count,
+    favorites_count,
+    comments_count,
+  } = post
+  const reads = formatNumber(reading_count)
+  const score = formatNumber(sc)
+  const favorites = formatNumber(favorites_count)
+  const comments = formatNumber(comments_count)
+  const bottomRow = [
+    {
+      icon: <ThumbsUpDownIcon className={classes.postBottomRowItemIcon} />,
+      text: score,
+    },
+    {
+      icon: <VisibilityIcon className={classes.postBottomRowItemIcon} />,
+      text: reads,
+    },
+    {
+      icon: <BookmarkIcon className={classes.postBottomRowItemIcon} />,
+      text: favorites,
+    },
+    {
+      icon: <ChatBubbleIcon className={classes.postBottomRowItemIcon} />,
+      text: comments,
+    },
+  ]
 
   return (
     <Paper elevation={0} className={classes.paper}>
@@ -78,7 +126,7 @@ const PostItem = ({ post }) => {
           <Typography variant="caption">
             <Link
               className={classes.noDeco + ' ' + classes.postAuthor}
-              to={'/u/' + authorId}
+              to={'/user/' + authorId}
             >
               {login}
             </Link>
@@ -90,10 +138,28 @@ const PostItem = ({ post }) => {
         <Grid item xs={12}>
           <Link
             className={classes.postLink + ' ' + classes.noDeco}
-            to={'/a/' + id}
+            to={'/article/' + id}
           >
             <Typography className={classes.postTitle}>{title}</Typography>
           </Link>
+        </Grid>
+        <Grid className={classes.postBottomRow} container xs={12}>
+          {bottomRow.map(({ icon, text }, i) => (
+            <Grid
+              container
+              direction="row"
+              alignItems="center"
+              justify="center"
+              xs={3}
+              key={i}
+              className={classes.postBottomRowItem}
+            >
+              {icon}
+              <Typography style={{ fontSize: 12, fontWeight: 600 }}>
+                {text}
+              </Typography>
+            </Grid>
+          ))}
         </Grid>
       </Grid>
     </Paper>
@@ -103,6 +169,8 @@ const PostItem = ({ post }) => {
 const Home = ({ state }) => {
   const [posts, setPosts] = useState()
   const classes = useStyles()
+
+  document.title = 'habra.'
 
   useEffect(() => {
     const get = async () => setPosts((await getPosts()).data)
