@@ -86,9 +86,8 @@ const PostSkeleton = () => {
         {Array(20)
           .fill(null)
           .map((_, i) => (
-            <Grid item xs={12}>
+            <Grid key={i} item xs={12}>
               <Skeleton
-                key={i}
                 variant="rect"
                 width={random(75, 100) + '%'}
                 style={{ marginTop: 8 }}
