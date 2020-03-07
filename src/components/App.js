@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import React from 'react'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Home from '../pages/Home'
 import Post from '../pages/Post'
@@ -26,14 +26,19 @@ const App = ({ state, setState }) => {
           <Post state={state} setState={setState} />
         </Route>
 
-        {/* Home */}
+        {/* Settings */}
         <Route exact path="/settings">
           <Settings state={state} setState={setState} />
         </Route>
 
-        {/* Home */}
-        <Route exact path="/">
+        {/* PageView */}
+        <Route exact path="/page/:page">
           <Home state={state} setState={setState} />
+        </Route>
+
+        {/* Redirect from home to the PageView */}
+        <Route exact path="/">
+          <Redirect to="/page/1" />
         </Route>
       </Switch>
     </>

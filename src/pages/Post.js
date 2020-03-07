@@ -7,12 +7,20 @@ import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/core/styles'
 import { useParams } from 'react-router'
 import { get } from 'request-promise-native'
-import Link from 'react-router-dom/Link'
+import { Link } from 'react-router-dom'
+import SyntaxHighlighter from 'react-syntax-highlighter'
+import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import parse, { domToReact } from 'html-react-parser'
 import PostViewSkeleton from '../components/skeletons/PostView'
 import moment from 'moment'
 
 const useStyles = makeStyles(theme => ({
-  root: { width: '100%', height: '100%', maxWidth: '100vw' },
+  root: {
+    width: '100%',
+    height: '100%',
+    maxWidth: '100vw',
+    background: theme.palette.background.paper,
+  },
   hubs: {
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
@@ -62,9 +70,9 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
   },
   text: {
+    color: theme.palette.type === 'dark' ? '#eee' : theme.palette.text.primary,
     '& img': {
       maxWidth: '100%',
-      width: '100%',
     },
     '& a': {
       color: theme.palette.primary.main,
@@ -74,22 +82,25 @@ const useStyles = makeStyles(theme => ({
       color: theme.palette.primary.dark,
       textDecoration: 'underline',
     },
-    '& pre': {
-      width: '100%',
-      maxWidth: '100%',
-      maxHeight: 320,
-      overflow: 'auto',
-      tabSize: 4,
-      border: '1px solid ' + theme.palette.divider,
-      borderRadius: theme.shape.borderRadius,
-      background: theme.palette.background.default,
-      // margin: 0
-    },
-    '& code': {
-      width: '100%',
-      height: '100%',
-      // margin: theme.spacing(3)
-    },
+    '& p': { margin: 0 },
+  },
+  pre: {
+    tabSize: 4,
+    border: '1px solid ' + theme.palette.divider,
+    borderRadius: theme.shape.borderRadius,
+    background: theme.palette.background.default,
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
+    overflow: 'auto',
+  },
+  syntaxHighlighter: {
+    display: 'inline',
+    margin: 0,
+    padding: 0,
+    width: 'auto',
+    height: 'auto',
+    background: theme.palette.background.default + ' !important',
+    color: theme.palette.text.primary + ' !important',
   },
 }))
 
@@ -107,6 +118,29 @@ const Post = props => {
   }, [])
 
   if (post) document.title = post.article.title
+
+  const options = {
+    replace: ({ name, attribs, children }) => {
+      if (name === 'pre') {
+        return (
+          <pre className={classes.pre}>{domToReact(children, options)}</pre>
+        )
+      }
+      if (name === 'code') {
+        return (
+          <code>
+            <SyntaxHighlighter
+              style={style}
+              language={attribs.class}
+              className={classes.syntaxHighlighter}
+            >
+              {domToReact(children, options)}
+            </SyntaxHighlighter>
+          </code>
+        )
+      }
+    },
+  }
 
   return post ? (
     <div className={classes.root + ' ' + classes.container}>
@@ -137,10 +171,9 @@ const Post = props => {
           </Typography>
         </Grid>
         <Typography className={classes.title}>{post.article.title}</Typography>
-        <Typography
-          className={classes.text}
-          dangerouslySetInnerHTML={{ __html: post.article.text_html }}
-        ></Typography>
+        <div className={classes.text}>
+          {parse(post.article.text_html, options)}
+        </div>
       </Container>
     </div>
   ) : (

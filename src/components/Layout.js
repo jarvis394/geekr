@@ -16,24 +16,24 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     height: `calc(100vh - 48px - ${isMobile() ? chromeAddressBarHeight : 0}px)`,
     borderRadius: 0,
-  },
-  hidden: {
-    display: 'none',
-  },
+    flexDirection: 'column',
+  }
 }))
 
 const Layout = () => {
   const classes = useStyles()
   const [state, setState] = useState({
     theme,
+    posts: {},
+    pages: null
   })
 
   return (
-    <ThemeProvider theme={createMuiTheme(theme)}>
+    <ThemeProvider theme={createMuiTheme(state.theme)}>
       <Router>
         <AppBar />
         <div style={{ maxWidth: minWidth, margin: '0px auto 0 auto' }}>
-          <Paper elevation={0} className={classes.app}>
+          <Paper elevation={0} style={{ background: state.theme.palette.background.default }} className={classes.app}>
             <App state={state} setState={setState} />
           </Paper>
         </div>

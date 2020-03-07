@@ -1,32 +1,31 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid'
-import Avatar from '@material-ui/core/Avatar'
 import Divider from '@material-ui/core/Divider'
 import {
   Switch,
   List,
   ListItem,
   ListItemText,
-  ListSubheader,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { useParams } from 'react-router'
-import { get } from 'request-promise-native'
-import Link from 'react-router-dom/Link'
-import PostViewSkeleton from '../components/skeletons/PostView'
-import moment from 'moment'
+import { makeBackgroundColors } from '../config/theme'
 
 const useStyles = makeStyles(theme => ({
   root: { width: '100%', height: '100%', maxWidth: '100vw' },
   title: {
-    fontFamily: 'Google Sans',
-    fontWeight: 500,
-    marginTop: theme.spacing(2),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    background: theme.palette.background.default,
+    '& p': {
+      fontFamily: 'Google Sans',
+      fontWeight: 500,
+      fontSize: 24,
+    },
   },
-  subheader: {
-    marginTop: theme.spacing(1),
+  list: {
+    '& span': { fontSize: 16 },
+    '& p': { fontSize: 14 },
   },
 }))
 
@@ -36,37 +35,32 @@ const Settings = ({ state, setState }) => {
 
   const setTheme = () => {
     const newThemeType = theme.palette.type === 'light' ? 'dark' : 'light'
-    const newTheme = {
-      palette: {
-        type: newThemeType,
-        ...state.theme.palette
-      },
-      ...state.theme
-    }
-    setState(prev => ({ ...prev, theme: newTheme}))
+    const newTheme = theme
+    newTheme.palette.type = newThemeType
+    newTheme.palette.background = makeBackgroundColors(newThemeType)
+    setState(prev => ({ ...prev, theme: newTheme }))
     localStorage.setItem('theme', newThemeType)
   }
 
   return (
-    <div>
-      <Container>
-        <Typography className={classes.title} variant="h4">
-          Настройки
-        </Typography>
+    <div style={{ width: '100%' }}>
+      <Container className={classes.title}>
+        <Typography>Настройки</Typography>
       </Container>
+      <Divider />
 
-      <List
-        subheader={<ListSubheader>Основные</ListSubheader>}
-        className={classes.subheader}
-      >
+      <List className={classes.list}>
         <ListItem button onClick={setTheme}>
           <ListItemText
-            secondary={theme.palette.type}
-            primary="Тема"
+            secondary={
+              theme.palette.type === 'dark'
+                ? 'Сейчас включена темная тема'
+                : 'Сейчас включена светлая тема'
+            }
+            primary="Включить тёмную тему"
           />
           <Switch checked={theme.palette.type === 'dark'} color="primary" />
         </ListItem>
-        <Divider />
       </List>
     </div>
   )

@@ -2,7 +2,6 @@ import React from 'react'
 import Skeleton from '@material-ui/lab/Skeleton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
-import Divider from '@material-ui/core/Divider'
 import Container from '@material-ui/core/Container'
 
 const useStyles = makeStyles(theme => ({
@@ -11,6 +10,8 @@ const useStyles = makeStyles(theme => ({
     marginBottom: '15px',
     background: theme.palette.background.paper,
     borderRadius: 0,
+    overflow: 'auto',
+    height: '100%'
   },
   skeleton: {
     maxWidth: '100%',
