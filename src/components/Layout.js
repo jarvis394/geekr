@@ -32,10 +32,8 @@ const Layout = () => {
     <ThemeProvider theme={createMuiTheme(state.theme)}>
       <Router>
         <AppBar />
-        <div style={{ maxWidth: minWidth, margin: '0px auto 0 auto' }}>
-          <Paper elevation={0} style={{ background: state.theme.palette.background.default }} className={classes.app}>
-            <App state={state} setState={setState} />
-          </Paper>
+        <div className={classes.app} style={{ maxWidth: minWidth, margin: '0px auto 0 auto' }}>
+          <App state={state} setState={setState} />
         </div>
       </Router>
     </ThemeProvider>

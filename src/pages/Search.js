@@ -10,6 +10,8 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { makeBackgroundColors } from '../config/theme'
+import PostItem from '../components/PostItem'
+import DotStepper from '../components/DotStepper'
 
 const useStyles = makeStyles(theme => ({
   root: { width: '100%', height: '100%', maxWidth: '100vw' },

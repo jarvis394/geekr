@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import List from '@material-ui/core/List'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -11,11 +11,9 @@ import Scrollbar from '../components/Scrollbar'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    // overflow: 'auto',
     background: theme.palette.background.default,
     padding: 0,
     width: '100%',
-    // maxHeight: '100%',
     paddingTop: theme.spacing(2),
   },
   centered: {
@@ -34,6 +32,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Home = ({ state, setState }) => {
+  document.title = 'habra.'
+
   const [posts, setPosts] = useState(
     state.posts.articleIds ? state.posts : null
   )
@@ -41,12 +41,13 @@ const Home = ({ state, setState }) => {
   const history = useHistory()
   const classes = useStyles()
   const params = useParams()
+  const postsRef = useRef()
   const postsComponents = posts
     ? posts.articleIds.map((id, i) => (
         <PostItem post={posts.articleRefs[id]} key={i} />
       ))
     : [...new Array(20)].map((_, i) => <PostSkeleton key={i} />)
-  let currentPage = Number(params.page) - 1
+  let currentPage = Number(params.page)
 
   const ErrorComponent = () => (
     <div className={classes.centered}>
@@ -54,7 +55,7 @@ const Home = ({ state, setState }) => {
         {fetchError}
       </Typography>
       <Typography className={classes.googleFont} variant="h6">
-        <Link to="/page/1" className={classes.link}>
+        <Link to="/page/1" onClick={() => currentPage = 1} className={classes.link}>
           Домой
         </Link>
       </Typography>
@@ -80,28 +81,30 @@ const Home = ({ state, setState }) => {
       { json: true }
     )
 
-  document.title = 'habra.'
-
   useEffect(() => {
     const get = async () => {
       let data
 
       try {
-        data = await getPosts(currentPage + 1)
+        data = await getPosts(currentPage)
       } catch (e) {
-        console.log(e)
-        return setError(e.message)
-      }
-
-      if (!data.success) {
-        return setError('Нет такой страницы!')
+        if (e.statusCode === 400) return setError('Нет такой страницы!')
+        else return setError(e.message)
       }
 
       data = data.data
+
+      // Reset error state
       setError(null)
+
+      // Set component's posts data
       setPosts(data)
+
+      // Set application state's posts data
       setState(prev => ({ ...prev, posts: data }))
 
+      // Set the amount of pages to the state so DotStepper will always have
+      // static number of steps
       if (!state.pages) setState(prev => ({ ...prev, pages: data.pagesCount }))
     }
 
@@ -112,15 +115,17 @@ const Home = ({ state, setState }) => {
     <ErrorComponent />
   ) : (
     <>
-      <Scrollbar>
-        <List className={classes.root}>{postsComponents}</List>
+      <Scrollbar key={currentPage}>
+        <List key={currentPage} ref={postsRef} className={classes.root}>
+          {postsComponents}
+        </List>
       </Scrollbar>
       {state.pages && (
         <DotStepper
           handleBack={handleClick}
           handleNext={handleClick}
           steps={state.pages}
-          currentStep={currentPage}
+          currentStep={currentPage - 1}
         />
       )}
     </>

@@ -2,12 +2,7 @@ import React from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
-import {
-  Switch,
-  List,
-  ListItem,
-  ListItemText,
-} from '@material-ui/core'
+import { Switch, List, ListItem, ListItemText, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { makeBackgroundColors } from '../config/theme'
 
@@ -26,6 +21,11 @@ const useStyles = makeStyles(theme => ({
   list: {
     '& span': { fontSize: 16 },
     '& p': { fontSize: 14 },
+    height: '100%',
+    padding: 0,
+    backgroundColor: theme.palette.background.paper,
+    borderBottomLeftRadius: theme.shape.borderRadius,
+    borderBottomRightRadius: theme.shape.borderRadius,
   },
 }))
 
@@ -43,26 +43,34 @@ const Settings = ({ state, setState }) => {
   }
 
   return (
-    <div style={{ width: '100%' }}>
-      <Container className={classes.title}>
-        <Typography>Настройки</Typography>
-      </Container>
-      <Divider />
+    <Grid
+      container
+      direction="column"
+      style={{ width: '100%', height: '100%' }}
+    >
+      <Grid item>
+        <Container className={classes.title}>
+          <Typography>Настройки</Typography>
+        </Container>
+        <Divider />
+      </Grid>
 
-      <List className={classes.list}>
-        <ListItem button onClick={setTheme}>
-          <ListItemText
-            secondary={
-              theme.palette.type === 'dark'
-                ? 'Сейчас включена темная тема'
-                : 'Сейчас включена светлая тема'
-            }
-            primary="Включить тёмную тему"
-          />
-          <Switch checked={theme.palette.type === 'dark'} color="primary" />
-        </ListItem>
-      </List>
-    </div>
+      <Grid style={{ overflow: 'auto' }} item>
+        <List style={{ overflow: 'auto' }} className={classes.list}>
+          <ListItem button onClick={setTheme}>
+            <ListItemText
+              secondary={
+                theme.palette.type === 'dark'
+                  ? 'Сейчас включена темная тема'
+                  : 'Сейчас включена светлая тема'
+              }
+              primary="Включить тёмную тему"
+            />
+            <Switch checked={theme.palette.type === 'dark'} color="primary" />
+          </ListItem>
+        </List>
+      </Grid>
+    </Grid>
   )
 }
 

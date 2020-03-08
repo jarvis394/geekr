@@ -152,9 +152,9 @@ export default ({ post }) => {
               className={classes.postBottomRowItem}
             >
               {icon}
-              <Typography style={{ fontSize: 12, fontWeight: 600 }}>
+              <div style={{ fontSize: 12, fontWeight: 600 }}>
                 {coloredText ? getFormattedText(text) : text}
-              </Typography>
+              </div>
             </Grid>
           ))}
         </Grid>

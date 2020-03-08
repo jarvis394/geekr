@@ -3,15 +3,14 @@ import Skeleton from '@material-ui/lab/Skeleton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
+import Scrollbar from '../Scrollbar'
 
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(2),
-    marginBottom: '15px',
     background: theme.palette.background.paper,
     borderRadius: 0,
     overflow: 'auto',
-    height: '100%'
   },
   skeleton: {
     maxWidth: '100%',
@@ -28,77 +27,79 @@ const PostSkeleton = () => {
   const classes = useStyles()
 
   return (
-    <Container className={classes.root}>
-      <Grid container>
-        <Grid item>
-          <Skeleton
-            variant="text"
-            width={256}
-            height={18}
-            className={classes.skeleton}
-          />
-        </Grid>
-        <Grid container direction="row" style={{ marginTop: 28 }}>
-          <Grid item>
-            <Skeleton
-              variant="circle"
-              width={20}
-              height={20}
-              className={classes.skeleton}
-            />
-          </Grid>
+    <Scrollbar>
+      <Container className={classes.root}>
+        <Grid container>
           <Grid item>
             <Skeleton
               variant="text"
-              style={{ marginLeft: 8 }}
-              width={186}
+              width={256}
               height={18}
               className={classes.skeleton}
             />
           </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Skeleton
-            variant="text"
-            width="100%"
-            className={classes.skeleton}
-            style={{ marginTop: 16 }}
-            height={28}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Skeleton
-            variant="text"
-            width="75%"
-            className={classes.skeleton}
-            height={28}
-            style={{ marginTop: 8 }}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Skeleton
-            variant="rect"
-            width="100%"
-            className={classes.skeleton}
-            style={{ marginTop: 24, marginBottom: 16 }}
-            height={164}
-          />
-        </Grid>
-        {Array(20)
-          .fill(null)
-          .map((_, i) => (
-            <Grid key={i} item xs={12}>
+          <Grid container direction="row" style={{ marginTop: 28 }}>
+            <Grid item>
               <Skeleton
-                variant="rect"
-                width={random(75, 100) + '%'}
-                style={{ marginTop: 8 }}
+                variant="circle"
+                width={20}
+                height={20}
                 className={classes.skeleton}
-                height={12}
               />
             </Grid>
-          ))}
-      </Grid>
-    </Container>
+            <Grid item>
+              <Skeleton
+                variant="text"
+                style={{ marginLeft: 8 }}
+                width={186}
+                height={18}
+                className={classes.skeleton}
+              />
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <Skeleton
+              variant="text"
+              width="100%"
+              className={classes.skeleton}
+              style={{ marginTop: 16 }}
+              height={28}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Skeleton
+              variant="text"
+              width="75%"
+              className={classes.skeleton}
+              height={28}
+              style={{ marginTop: 8 }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Skeleton
+              variant="rect"
+              width="100%"
+              className={classes.skeleton}
+              style={{ marginTop: 24, marginBottom: 16 }}
+              height={164}
+            />
+          </Grid>
+          {Array(20)
+            .fill(null)
+            .map((_, i) => (
+              <Grid key={i} item xs={12}>
+                <Skeleton
+                  variant="rect"
+                  width={random(75, 100) + '%'}
+                  style={{ marginTop: 8 }}
+                  className={classes.skeleton}
+                  height={12}
+                />
+              </Grid>
+            ))}
+        </Grid>
+      </Container>
+    </Scrollbar>
   )
 }
 

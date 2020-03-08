@@ -12,6 +12,7 @@ import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import parse, { domToReact } from 'html-react-parser'
 import PostViewSkeleton from '../components/skeletons/PostView'
+import Scrollbar from '../components/Scrollbar'
 import moment from 'moment'
 
 const useStyles = makeStyles(theme => ({
@@ -83,22 +84,33 @@ const useStyles = makeStyles(theme => ({
       textDecoration: 'underline',
     },
     '& p': { margin: 0 },
-  },
-  pre: {
-    tabSize: 4,
-    border: '1px solid ' + theme.palette.divider,
-    borderRadius: theme.shape.borderRadius,
-    background: theme.palette.background.default,
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-    overflow: 'auto',
+    '& em': { color: theme.palette.text.hint },
+    '& code': {
+      background: theme.palette.background.default,
+      padding: theme.spacing(0.25),
+      borderRadius: theme.shape.borderRadius,
+    },
+    '& table': {
+      margin: '1.5em 0',
+      width: '100%',
+      border: '1px solid ' + theme.palette.text.hint,
+      borderCollapse: 'collapse',
+    },
+    '& table td': {
+      padding: '6px 12px 9px',
+      border: '1px solid ' + theme.palette.text.hint,
+      verticalAlign: 'top',
+      lineHeight: '1.5',
+    }
   },
   syntaxHighlighter: {
-    display: 'inline',
     margin: 0,
-    padding: 0,
-    width: 'auto',
-    height: 'auto',
+    display: 'block',
+    tabSize: 4,
+    overflow: 'auto',
+    border: '1px solid ' + theme.palette.divider,
+    borderRadius: theme.shape.borderRadius,
+    padding: theme.spacing(2) + 'px !important',
     background: theme.palette.background.default + ' !important',
     color: theme.palette.text.primary + ' !important',
   },
@@ -120,61 +132,64 @@ const Post = props => {
   if (post) document.title = post.article.title
 
   const options = {
-    replace: ({ name, attribs, children }) => {
+    replace: ({ name, children }) => {
       if (name === 'pre') {
+        const language = children[0].attribs.class || null
+        const data = children[0].children[0].data || ''
+        
         return (
-          <pre className={classes.pre}>{domToReact(children, options)}</pre>
+          <SyntaxHighlighter
+            style={style}
+            language={language}
+            className={classes.syntaxHighlighter}
+          >
+            {data}
+          </SyntaxHighlighter>
         )
       }
-      if (name === 'code') {
-        return (
-          <code>
-            <SyntaxHighlighter
-              style={style}
-              language={attribs.class}
-              className={classes.syntaxHighlighter}
-            >
-              {domToReact(children, options)}
-            </SyntaxHighlighter>
-          </code>
-        )
-      }
-    },
+    }
   }
 
   return post ? (
     <div className={classes.root + ' ' + classes.container}>
-      <Container className={classes.hubs}>
-        {post.article.hubs.map((hub, i) => (
-          <Typography key={i} variant="caption">
-            <Link className={classes.hubLink} to={'/hub/' + hub.alias}>
-              {hub.title}
-            </Link>
-            {post.article.hubs.length - 1 !== i && ', '}
+      <Scrollbar>
+        <Container className={classes.hubs}>
+          {post.article.hubs.map((hub, i) => (
+            <Typography key={i} variant="caption">
+              <Link className={classes.hubLink} to={'/hub/' + hub.alias}>
+                {hub.title}
+              </Link>
+              {post.article.hubs.length - 1 !== i && ', '}
+            </Typography>
+          ))}
+        </Container>
+        <Divider />
+        <Container>
+          <Grid
+            className={classes.authorBar}
+            container
+            direction="row"
+            alignItems="center"
+          >
+            <Avatar
+              src={post.article.author.avatar}
+              className={classes.avatar}
+            />
+            <Typography className={classes.author}>
+              {post.article.author.login}
+            </Typography>
+            <Typography className={classes.ts}>
+              {moment(post.article.time_published).fromNow()}
+            </Typography>
+          </Grid>
+          <Typography className={classes.title}>
+            {post.article.title}
           </Typography>
-        ))}
-      </Container>
-      <Divider />
-      <Container>
-        <Grid
-          className={classes.authorBar}
-          container
-          direction="row"
-          alignItems="center"
-        >
-          <Avatar src={post.article.author.avatar} className={classes.avatar} />
-          <Typography className={classes.author}>
-            {post.article.author.login}
-          </Typography>
-          <Typography className={classes.ts}>
-            {moment(post.article.time_published).fromNow()}
-          </Typography>
-        </Grid>
-        <Typography className={classes.title}>{post.article.title}</Typography>
-        <div className={classes.text}>
-          {parse(post.article.text_html, options)}
-        </div>
-      </Container>
+          <div className={classes.text}>
+            {parse(post.article.text_html, options)}
+          </div>
+        </Container>
+      </Scrollbar>
     </div>
   ) : (
     <PostViewSkeleton />
