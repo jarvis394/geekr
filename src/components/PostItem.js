@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { Link } from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar'
-import Paper from '@material-ui/core/Paper'
+import ListItem from '@material-ui/core/ListItem'
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
@@ -116,7 +116,7 @@ export default ({ post }) => {
   }
 
   return (
-    <Paper elevation={0} className={classes.paper}>
+    <ListItem className={classes.paper}>
       <Grid container>
         <Grid alignItems="center" container xs={12} direction="row">
           <Avatar src={avatar} className={classes.postAvatar} />
@@ -159,6 +159,6 @@ export default ({ post }) => {
           ))}
         </Grid>
       </Grid>
-    </Paper>
+    </ListItem>
   )
 }

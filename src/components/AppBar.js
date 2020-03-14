@@ -38,7 +38,7 @@ const Component = () => {
       <Container className={classes.container}>
         <Toolbar style={{ minHeight: 'unset', height: 48 }}>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
-            <Link to="/" className={classes.link}>
+            <Link to="/page/1" className={classes.link}>
               habra.
             </Link>
           </Typography>

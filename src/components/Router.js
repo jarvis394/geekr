@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const App = ({ state, setState }) => {
+const Router = ({ state, setState }) => {
   const classes = useStyles()
 
   // Set root classes
@@ -45,4 +45,4 @@ const App = ({ state, setState }) => {
   )
 }
 
-export default App
+export default Router

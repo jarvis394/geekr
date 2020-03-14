@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import ThemeProvider from '@material-ui/styles/ThemeProvider'
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
-import Paper from '@material-ui/core/Paper'
 import makeStyles from '@material-ui/styles/makeStyles'
 import theme from '../config/theme'
-import App from './App'
+import AppRouter from './Router'
 import AppBar from './AppBar'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { MIN_WIDTH as minWidth } from '../config/constants'
@@ -17,6 +16,8 @@ const useStyles = makeStyles(theme => ({
     height: `calc(100vh - 48px - ${isMobile() ? chromeAddressBarHeight : 0}px)`,
     borderRadius: 0,
     flexDirection: 'column',
+    maxWidth: minWidth, 
+    margin: '0px auto 0 auto'
   }
 }))
 
@@ -25,15 +26,15 @@ const Layout = () => {
   const [state, setState] = useState({
     theme,
     posts: {},
-    pages: null
+    pagesCount: null
   })
 
   return (
     <ThemeProvider theme={createMuiTheme(state.theme)}>
       <Router>
         <AppBar />
-        <div className={classes.app} style={{ maxWidth: minWidth, margin: '0px auto 0 auto' }}>
-          <App state={state} setState={setState} />
+        <div className={classes.app}>
+          <AppRouter state={state} setState={setState} />
         </div>
       </Router>
     </ThemeProvider>

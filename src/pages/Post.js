@@ -12,6 +12,7 @@ import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import parse, { domToReact } from 'html-react-parser'
 import PostViewSkeleton from '../components/skeletons/PostView'
+import ErrorComponent from '../components/Error'
 import Scrollbar from '../components/Scrollbar'
 import moment from 'moment'
 
@@ -101,7 +102,10 @@ const useStyles = makeStyles(theme => ({
       border: '1px solid ' + theme.palette.text.hint,
       verticalAlign: 'top',
       lineHeight: '1.5',
-    }
+    },
+    '& h1, h2, h3, h4, h5, h6': {
+      margin: theme.spacing(2) + 'px 0 0 0',
+    },
   },
   syntaxHighlighter: {
     margin: 0,
@@ -113,7 +117,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2) + 'px !important',
     background: theme.palette.background.default + ' !important',
     color: theme.palette.text.primary + ' !important',
-  },
+  }
 }))
 
 const getPost = id =>
@@ -121,11 +125,33 @@ const getPost = id =>
 
 const Post = props => {
   const [post, setPost] = useState()
+  const [fetchError, _setError] = useState()
   const classes = useStyles()
   const { id } = useParams()
 
+  
+
+  const setError = e => {
+    setPost(null)
+    return _setError(e)
+  }
+
   useEffect(() => {
-    const get = async () => setPost((await getPost(id)).data)
+    const get = async () => {
+      let data
+
+      // Reset error state
+      setError(null)
+
+      try {
+        data = await getPost(id)
+      } catch (e) {
+        if (e.statusCode === 404) return setError('Статья не найдена')
+        else return setError(e.message)
+      }
+
+      setPost(data.data)
+    }
     get()
   }, [])
 
@@ -136,7 +162,7 @@ const Post = props => {
       if (name === 'pre') {
         const language = children[0].attribs.class || null
         const data = children[0].children[0].data || ''
-        
+
         return (
           <SyntaxHighlighter
             style={style}
@@ -147,10 +173,13 @@ const Post = props => {
           </SyntaxHighlighter>
         )
       }
-    }
+    },
   }
 
-  return post ? (
+  if (fetchError) return <ErrorComponent message={fetchError} />
+  if (!post) return <PostViewSkeleton />
+
+  return (
     <div className={classes.root + ' ' + classes.container}>
       <Scrollbar>
         <Container className={classes.hubs}>
@@ -191,8 +220,6 @@ const Post = props => {
         </Container>
       </Scrollbar>
     </div>
-  ) : (
-    <PostViewSkeleton />
   )
 }
 

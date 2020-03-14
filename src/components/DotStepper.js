@@ -12,7 +12,13 @@ const useStyles = makeStyles({
   },
 })
 
-const DotStepper = ({ steps, handleNext: handleNextComp, handleBack: handleBackComp, currentStep }) => {
+const DotStepper = ({
+  disabled = false,
+  steps,
+  handleNext: handleNextComp,
+  handleBack: handleBackComp,
+  currentStep,
+}) => {
   const classes = useStyles()
   const theme = useTheme()
   const [activeStep, setActiveStep] = React.useState(currentStep * 1)
@@ -40,7 +46,7 @@ const DotStepper = ({ steps, handleNext: handleNextComp, handleBack: handleBackC
           <Button
             size="small"
             onClick={handleNext}
-            disabled={activeStep === steps - 1}
+            disabled={activeStep === steps - 1 || disabled}
           >
             Next
             {theme.direction === 'rtl' ? (
@@ -51,7 +57,11 @@ const DotStepper = ({ steps, handleNext: handleNextComp, handleBack: handleBackC
           </Button>
         }
         backButton={
-          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+          <Button
+            size="small"
+            onClick={handleBack}
+            disabled={activeStep === 0 || disabled}
+          >
             {theme.direction === 'rtl' ? (
               <KeyboardArrowRight />
             ) : (
