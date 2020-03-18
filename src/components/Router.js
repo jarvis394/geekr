@@ -1,6 +1,6 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import makeStyles from '@material-ui/styles/makeStyles'
 import Home from '../pages/Home'
 import Post from '../pages/Post'
 import Settings from '../pages/Settings'
@@ -9,7 +9,10 @@ const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.default,
     color: theme.palette.text.primary,
-  },
+    margin: 0,
+    fontFamily: '-apple-system, BlinkMacSystemFont, Arial, sans-serif',
+    lineHeight: 1.5
+  }
 }))
 
 const Router = ({ state, setState }) => {
@@ -17,6 +20,21 @@ const Router = ({ state, setState }) => {
 
   // Set root classes
   document.body.className = classes.root
+
+  const getCachedMode = () => {
+    const modes = {
+      all: "all",
+      day: "top/day",
+      week: "top/week",
+      month: "top/month"
+    }
+    const mode = localStorage.getItem('mode')
+
+    if (!mode) {
+      localStorage.setItem('mode', 'all')
+      return 'all'
+    } else return modes[mode]
+  }
 
   return (
     <>
@@ -32,13 +50,13 @@ const Router = ({ state, setState }) => {
         </Route>
 
         {/* PageView */}
-        <Route exact path="/page/:page">
+        <Route exact path={["/all/page/:page", "/top/day/page/:page", "/top/week/page/:page", "/top/month/page/:page"]}>
           <Home state={state} setState={setState} />
         </Route>
 
         {/* Redirect from home to the PageView */}
         <Route exact path="/">
-          <Redirect to="/page/1" />
+          <Redirect to={`/${getCachedMode()}/page/1`} />
         </Route>
       </Switch>
     </>

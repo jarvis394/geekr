@@ -27,7 +27,7 @@ const ErrorComponent = ({ message, onHomeClick }) => {
         {message}
       </Typography>
       <Typography className={classes.googleFont} variant="h6">
-        <Link onClick={onHomeClick} to="/page/1" className={classes.link}>
+        <Link onClick={onHomeClick} to="/" className={classes.link}>
           Домой
         </Link>
       </Typography>

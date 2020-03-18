@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Component = () => {
+const Component = ({ setState }) => {
   const classes = useStyles()
   const history = useHistory()
 
@@ -38,7 +38,7 @@ const Component = () => {
       <Container className={classes.container}>
         <Toolbar style={{ minHeight: 'unset', height: 48 }}>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
-            <Link to="/page/1" className={classes.link}>
+            <Link onClick={() => setState(prev => ({ ...prev, posts: {} }))} to="/" className={classes.link}>
               habra.
             </Link>
           </Typography>

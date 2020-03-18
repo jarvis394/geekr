@@ -6,11 +6,15 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
 import Divider from '@material-ui/core/Divider'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
+    color: disabled => disabled ? theme.palette.text.hint : theme.palette.text.main,
+    fontWeight: 800,
+    fontSize: 14,
+    background: theme.palette.background.paper
   },
-})
+}))
 
 const DotStepper = ({
   disabled = false,
@@ -19,7 +23,7 @@ const DotStepper = ({
   handleBack: handleBackComp,
   currentStep,
 }) => {
-  const classes = useStyles()
+  const classes = useStyles(disabled)
   const theme = useTheme()
   const [activeStep, setActiveStep] = React.useState(currentStep * 1)
 
@@ -37,7 +41,7 @@ const DotStepper = ({
     <>
       <Divider />
       <MobileStepper
-        variant="dots"
+        variant="text"
         steps={steps}
         position="static"
         activeStep={activeStep}
@@ -46,9 +50,8 @@ const DotStepper = ({
           <Button
             size="small"
             onClick={handleNext}
-            disabled={activeStep === steps - 1 || disabled}
+            disabled={(activeStep >= steps - 1) || disabled}
           >
-            Next
             {theme.direction === 'rtl' ? (
               <KeyboardArrowLeft />
             ) : (
@@ -60,14 +63,13 @@ const DotStepper = ({
           <Button
             size="small"
             onClick={handleBack}
-            disabled={activeStep === 0 || disabled}
+            disabled={(activeStep <= 0) || disabled}
           >
             {theme.direction === 'rtl' ? (
               <KeyboardArrowRight />
             ) : (
               <KeyboardArrowLeft />
             )}
-            Back
           </Button>
         }
       />

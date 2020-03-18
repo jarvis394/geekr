@@ -108,7 +108,6 @@ export default ({ post }) => {
       text = '+' + text
       className = 'greenText'
     } else if (n < 0) {
-      text = '-' + text
       className = 'redText'
     }
     

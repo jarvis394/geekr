@@ -6,11 +6,11 @@ import Avatar from '@material-ui/core/Avatar'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/core/styles'
 import { useParams } from 'react-router'
-import { get } from 'request-promise-native'
+import { get } from 'axios'
 import { Link } from 'react-router-dom'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
-import parse, { domToReact } from 'html-react-parser'
+import parse from 'html-react-parser'
 import PostViewSkeleton from '../components/skeletons/PostView'
 import ErrorComponent from '../components/Error'
 import Scrollbar from '../components/Scrollbar'
@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     height: '100%',
     maxWidth: '100vw',
+    overflow: 'auto',
     background: theme.palette.background.paper,
   },
   hubs: {
@@ -34,11 +35,6 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.primary.main,
     fontWeight: 500,
     textDecoration: 'none',
-  },
-  container: {
-    overflow: 'auto',
-    width: '100%',
-    height: '100%',
   },
   authorBar: { marginTop: theme.spacing(2.5) },
   avatar: {
@@ -117,43 +113,54 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2) + 'px !important',
     background: theme.palette.background.default + ' !important',
     color: theme.palette.text.primary + ' !important',
+  },
+}))
+
+const useCommentsStyles = makeStyles(theme =>({
+  commentsRoot: {
+    background: theme.palette.background.default
   }
 }))
 
-const getPost = id =>
-  get(`https://m.habr.com/kek/v1/articles/${id}/?fl=ru&hl=ru`, { json: true })
-
 const Post = props => {
   const [post, setPost] = useState()
+  const [comments, setComments] = useState()
   const [fetchError, _setError] = useState()
   const classes = useStyles()
   const { id } = useParams()
-
-  
 
   const setError = e => {
     setPost(null)
     return _setError(e)
   }
 
+  const getPost = async (i) => (await get(`https://m.habr.com/kek/v1/articles/${i}/?fl=ru&hl=ru`)).data
+  const getComments = async (i) => (await get(`https://m.habr.com/kek/v2/articles/${i}/comments/?fl=ru&hl=ru`)).data
+
   useEffect(() => {
     const get = async () => {
-      let data
+      let postData, commentsData
 
       // Reset error state
       setError(null)
 
       try {
-        data = await getPost(id)
+        postData = await getPost(id)
+        setPost(postData.data)
       } catch (e) {
         if (e.statusCode === 404) return setError('Статья не найдена')
         else return setError(e.message)
       }
 
-      setPost(data.data)
+      try {
+        commentsData = await getComments(id)
+        setComments(commentsData.data)
+      } catch (e) {
+        return commentsData = { error: e.message }
+      }
     }
     get()
-  }, [])
+  }, [id])
 
   if (post) document.title = post.article.title
 
@@ -176,11 +183,30 @@ const Post = props => {
     },
   }
 
+  const Comment = () => {
+
+  }
+
+  const Comments = () => {
+    const c = useCommentsStyles()
+
+    if (!comments) return <p>no data yet...</p>
+    if (comments.error) return <p>error {comments.error.message}</p>
+    return (
+      <div className={c.commentsRoot}>
+        <Container>
+          <Typography className={c.commentsHeader}>Комментарии</Typography>
+        </Container>
+        {comments.map((e, i) => <Comment data={e} key={i} />)}
+      </div>
+    )
+  }
+
   if (fetchError) return <ErrorComponent message={fetchError} />
   if (!post) return <PostViewSkeleton />
 
   return (
-    <div className={classes.root + ' ' + classes.container}>
+    <div className={classes.root}>
       <Scrollbar>
         <Container className={classes.hubs}>
           {post.article.hubs.map((hub, i) => (
@@ -214,10 +240,14 @@ const Post = props => {
           <Typography className={classes.title}>
             {post.article.title}
           </Typography>
+
+          {/* Article text */}
           <div className={classes.text}>
             {parse(post.article.text_html, options)}
           </div>
         </Container>
+        <Divider />
+        <Comments />
       </Scrollbar>
     </div>
   )

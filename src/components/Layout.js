@@ -10,16 +10,16 @@ import { MIN_WIDTH as minWidth } from '../config/constants'
 import isMobile from 'is-mobile'
 
 const chromeAddressBarHeight = 56
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   app: {
     display: 'flex',
     height: `calc(100vh - 48px - ${isMobile() ? chromeAddressBarHeight : 0}px)`,
     borderRadius: 0,
     flexDirection: 'column',
-    maxWidth: minWidth, 
+    maxWidth: minWidth,
     margin: '0px auto 0 auto'
   }
-}))
+})
 
 const Layout = () => {
   const classes = useStyles()
@@ -32,7 +32,7 @@ const Layout = () => {
   return (
     <ThemeProvider theme={createMuiTheme(state.theme)}>
       <Router>
-        <AppBar />
+        <AppBar setState={setState} />
         <div className={classes.app}>
           <AppRouter state={state} setState={setState} />
         </div>
