@@ -35,14 +35,14 @@ const useStyles = makeStyles(theme => ({
   },
   expansionPanelDetails: {
     padding: 0,
-    background: fade(theme.palette.background.default, 0.4)
+    background: fade(theme.palette.background.default, 0.4),
   },
   modeText: {
     fontSize: 14,
-    fontWeight: 500
+    fontWeight: 500,
   },
   modeListItem: {
-    width: '100%'
+    width: '100%',
   },
   modeTextSelected: {
     fontSize: 14,
@@ -53,14 +53,15 @@ const useStyles = makeStyles(theme => ({
 
 const Home = ({ state, setState }) => {
   document.title = 'habra.'
-  
+
   const location = useLocation()
   const params = useParams()
-  
+
   const getMode = () => {
     const loc = location.pathname.split('/').slice(1)
     if (loc[0] === 'all') return 'all'
-    else if (loc[0] === 'top' && ['day', 'week', 'month'].includes(loc[1])) return loc[1]
+    else if (loc[0] === 'top' && ['day', 'week', 'month'].includes(loc[1]))
+      return loc[1]
     else return false
   }
 
@@ -72,7 +73,7 @@ const Home = ({ state, setState }) => {
   const classes = useStyles()
   const postsRef = useRef()
   const [mode, setMode] = useState(getMode())
-  
+
   /* eslint-disable indent */
   const postsComponents = posts
     ? posts.articleIds.map((id, i) => {
@@ -82,40 +83,43 @@ const Home = ({ state, setState }) => {
     : [...new Array(7)].map((_, i) => <PostSkeleton key={i} />)
   /* eslint-enable indent */
   let currentPage = Number(params.page)
-  
+
   const modes = [
-      {
-        text: 'Все подряд',
-        to: '/all',
-        mode: 'all'
-      },
-      {
-        text: 'Лучшее за день',
-        to: '/top/day',
-        mode: 'day'
-      },
-      {
-        text: 'Лучшее за неделю',
-        to: '/top/week',
-        mode: 'week'
-      },
-      {
-        text: 'Лучшее за месяц',
-        to: '/top/month',
-        mode: 'month'
-      },
-    ]
-  const modeUrls = { 
-    all: 'sort=rating', 
+    {
+      text: 'Все подряд',
+      to: '/all',
+      mode: 'all',
+    },
+    {
+      text: 'Лучшее за день',
+      to: '/top/day',
+      mode: 'day',
+    },
+    {
+      text: 'Лучшее за неделю',
+      to: '/top/week',
+      mode: 'week',
+    },
+    {
+      text: 'Лучшее за месяц',
+      to: '/top/month',
+      mode: 'month',
+    },
+  ]
+  const modeUrls = {
+    all: 'sort=rating',
     day: 'date=day&sort=date',
     week: 'date=week&sort=date',
-    month: 'date=month&sort=date'
+    month: 'date=month&sort=date',
   }
-  
-  const getPosts = async (page, m) => (await axios.get(
-      `https://m.habr.com/kek/v1/articles/?${modeUrls[m]}&page=${page}&fl=ru&hl=ru`
-    )).data
-  
+
+  const getPosts = async (page, m) =>
+    (
+      await axios.get(
+        `https://m.habr.com/kek/v1/articles/?${modeUrls[m]}&page=${page}&fl=ru&hl=ru`
+      )
+    ).data
+
   const DotStepperComponent = () =>
     state.pagesCount ? (
       <DotStepper
@@ -138,19 +142,27 @@ const Home = ({ state, setState }) => {
         localStorage.setItem('mode', e.mode)
         history.push(e.to + '/page/1')
       }
-      
+
       return (
-      <ListItem onClick={handleClick} button={!isCurrent} className={classes.modeListItem}>
-        <ListItemText
-          primaryTypographyProps={{
-            className: isCurrent ? classes.modeTextSelected : classes.modeText
-          }}
+        <ListItem
+          onClick={handleClick}
+          button={!isCurrent}
+          key={i}
+          className={classes.modeListItem}
         >
-          {e.text}
-        </ListItemText>
-      </ListItem>
-    )})
-    
+          <ListItemText
+            primaryTypographyProps={{
+              className: isCurrent
+                ? classes.modeTextSelected
+                : classes.modeText,
+            }}
+          >
+            {e.text}
+          </ListItemText>
+        </ListItem>
+      )
+    })
+
     return (
       <>
         <ExpansionPanel
@@ -159,15 +171,18 @@ const Home = ({ state, setState }) => {
           TransitionProps={{ unmountOnExit: true }}
         >
           <Container>
-            <ExpansionPanelSummary className={classes.expansionPanelSummary} expandIcon={<ExpandIcon />}>
-              <Typography className={classes.modeText}>{current.text}</Typography>
+            <ExpansionPanelSummary
+              className={classes.expansionPanelSummary}
+              expandIcon={<ExpandIcon />}
+            >
+              <Typography className={classes.modeText}>
+                {current.text}
+              </Typography>
               <Divider />
             </ExpansionPanelSummary>
           </Container>
           <ExpansionPanelDetails className={classes.expansionPanelDetails}>
-            <List style={{ width: '100%', paddingTop: 0 }}>
-              {buttonList}
-            </List>
+            <List style={{ width: '100%', paddingTop: 0 }}>{buttonList}</List>
           </ExpansionPanelDetails>
         </ExpansionPanel>
         <Divider />
@@ -190,33 +205,34 @@ const Home = ({ state, setState }) => {
   useEffect(() => {
     const get = async () => {
       let data
-  
+
       // Reset error state
       setError(null)
-  
+
       try {
         data = await getPosts(currentPage, mode)
       } catch (e) {
-        if (e.statusCode === 404 || e.statusCode === 400) return setError('Нет такой страницы!')
+        if (e.statusCode === 404 || e.statusCode === 400)
+          return setError('Нет такой страницы!')
         else return setError(e.message)
       }
-  
+
       // Set component's posts data
       setPosts(data.data)
-  
+
       // Set application state's posts data
       setState(prev => ({ ...prev, posts: data.data }))
-      
+
       console.log(postsRef.current.scrollTop)
       postsRef.current.scrollTo(0, 0)
-  
+
       // Set the amount of pages to the state so DotStepper will always have
       // static number of steps
       setState(prev => ({ ...prev, pagesCount: data.data.pagesCount }))
     }
-  
+
     if (!state.posts.articleIds) get()
-    
+
     // eslint-disable-next-line
   }, [currentPage, mode])
 
