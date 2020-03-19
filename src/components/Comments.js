@@ -28,46 +28,60 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Thread = ({ posts }) => {
-  return posts.map()
-}
-
 const Comments = ({ postId }) => {
   const [comments, setComments] = useState()
-  const [threads, setThreads] = useState()
   const [fetchError, setError] = useState()
   const classes = useStyles()
+  let rootComment = { children: [] }
 
   const getComments = async i =>
     (await get(`https://m.habr.com/kek/v2/articles/${i}/comments/?fl=ru&hl=ru`))
       .data
 
+  const parseComments = (nodes) => {
+    for (const id in nodes) {
+      const comment = nodes[id]       
+      comment.children = []
+
+      const parent = (comment.parentId != 0) ? nodes[comment.parentId] : rootComment
+      parent.children.push(comment) 
+    }
+
+    return nodes
+  }
+
+  
+  const drawComments = (node, depth) => {
+    
+
+    node.children.forEach(child => {
+      drawComments(child, depth + 1)
+    })
+  }
+
   useEffect(() => {
     const get = async () => {
-      let commentsData
+      let d
 
       // Reset error state
       setError(null)
 
       try {
-        commentsData = await getComments(postId)
-        console.log(commentsData)
+        d = await getComments(postId)
+        const commentsData = d.data.comments
 
-        let commentsArray = []
-        for (const comment in commentsData.data.comments) {
-          if (commentsData.data.threads.includes(comment.id)) {
-            commentsArray.push(commentsData.data.comments.filter(e => e.parentId === comment.id))
-          }
-          commentsArray.push(commentsData.data.comments[comment])
-        }
-        setComments(commentsArray)
-        setThreads(commentsData.data.threads)
+        setComments(parseComments(commentsData))
+
+        rootComment.children.forEach(comment => {
+          drawComments(comment, 0)
+        })
       } catch (e) {
         return setError(e.message)
       }
     }
     get()
   }, [postId])
+
 
   if (fetchError) return <p>error {fetchError}</p>
   if (!comments) return <p>no data yet...</p>
@@ -81,9 +95,6 @@ const Comments = ({ postId }) => {
         </Typography>
       </Container>
       <Container className={classes.comments}>
-        {comments.map((e, i) => (
-          <Comment data={e} key={i} />
-        ))}
       </Container>
     </div>
   )

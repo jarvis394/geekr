@@ -58,7 +58,7 @@ const Comment = ({ data }) => {
   const ts = moment(data.timePublished).fromNow()
   
   return (
-    <Box className={classes.root} style={{ marginLeft: 16 * data.level }}>
+    <Box className={classes.root} style={{ marginLeft: 32 * data.level }}>
       {/* Top bar */}
       <Grid alignItems="center" container direction="row">
         <Avatar src={avatarUrl} className={classes.avatar} />
