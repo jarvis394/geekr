@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
       margin: '12px 0',
       padding: '0 12px',
       display: 'block',
-      borderLeft: '2px solid ' + theme.palette.primary.main,
+      borderLeft: '2px solid ' + theme.palette.primary.light,
       color: fade(theme.palette.text.primary, 0.8),
       fontStyle: 'italic'
     }
@@ -58,7 +58,7 @@ const Comment = ({ data }) => {
   const ts = moment(data.timePublished).fromNow()
   
   return (
-    <Box className={classes.root}>
+    <Box className={classes.root} style={{ marginLeft: 16 * data.level }}>
       {/* Top bar */}
       <Grid alignItems="center" container direction="row">
         <Avatar src={avatarUrl} className={classes.avatar} />
@@ -71,7 +71,7 @@ const Comment = ({ data }) => {
           </Link>
         </Typography>
         <Typography className={classes.ts} variant="caption">
-          {ts}
+          {ts} | ID: {data.id} | Parent: {data.parentId}
         </Typography>
       </Grid>
 

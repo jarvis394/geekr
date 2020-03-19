@@ -215,7 +215,6 @@ const Post = props => {
             {parse(post.article.text_html, options)}
           </div>
         </Container>
-        <Divider />
 
         {/* Comments section */}
         <Comments postId={id} />
