@@ -5,4 +5,4 @@ export const WS_RECONNECT_TIMEOUT = 3000
 /**
  * Minimal application width to stay with the drawer
  */
-export const MIN_WIDTH = 882
+export const MIN_WIDTH = 820
