@@ -7,7 +7,7 @@ import Settings from '../pages/Settings'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.type === 'dark' ? '#0d0d0d' : '#f2f4f6',
     color: theme.palette.text.primary,
     margin: 0,
     fontFamily: '-apple-system, BlinkMacSystemFont, Arial, sans-serif',
@@ -23,10 +23,10 @@ const Router = ({ state, setState }) => {
 
   const getCachedMode = () => {
     const modes = {
-      all: "all",
-      day: "top/day",
-      week: "top/week",
-      month: "top/month"
+      all: 'all',
+      day: 'top/day',
+      week: 'top/week',
+      month: 'top/month'
     }
     const mode = localStorage.getItem('mode')
 
@@ -50,7 +50,7 @@ const Router = ({ state, setState }) => {
         </Route>
 
         {/* PageView */}
-        <Route exact path={["/all/page/:page", "/top/day/page/:page", "/top/week/page/:page", "/top/month/page/:page"]}>
+        <Route exact path={['/all/page/:page', '/top/day/page/:page', '/top/week/page/:page', '/top/month/page/:page']}>
           <Home state={state} setState={setState} />
         </Route>
 

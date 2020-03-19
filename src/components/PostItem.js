@@ -9,6 +9,8 @@ import VisibilityIcon from '@material-ui/icons/Visibility'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
 import { makeStyles } from '@material-ui/core/styles'
+import formatNumber from '../utils/formatNumber'
+import GreenRedNumber from './GreenRedNumber'
 import moment from 'moment'
 
 const useStyles = makeStyles(theme => ({
@@ -45,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     width: theme.spacing(2.5),
     height: theme.spacing(2.5),
     marginRight: theme.spacing(1),
-    borderRadius: 2,
+    borderRadius: theme.shape.borderRadius,
   },
   postBottomRow: {
     marginTop: theme.spacing(2),
@@ -58,17 +60,14 @@ const useStyles = makeStyles(theme => ({
     fontSize: 16,
     marginRight: theme.spacing(1),
   },
-  redText: { color: theme.palette.error.main },
-  greenText: { color: theme.palette.success.main },
 }))
 
-export const formatNumber = n =>
-  n >= 1000 ? (Math.ceil(n / 100) / 10 + 'k').replace('.', ',') : n
-
-export default ({ post }) => {
+export const PostItem = ({ post }) => {
   const classes = useStyles()
-  const ts = moment(post.time_published).calendar().toLowerCase()
-  const { login, id: authorId, avatar } = post.author
+  const ts = moment(post.time_published)
+    .calendar()
+    .toLowerCase()
+  const { login, avatar } = post.author
   const {
     title,
     id,
@@ -84,45 +83,32 @@ export default ({ post }) => {
   const bottomRow = [
     {
       icon: <ThumbsUpDownIcon className={classes.postBottomRowItemIcon} />,
-      text: score,
+      count: score,
       coloredText: true,
     },
     {
       icon: <VisibilityIcon className={classes.postBottomRowItemIcon} />,
-      text: reads,
+      count: reads,
     },
     {
       icon: <BookmarkIcon className={classes.postBottomRowItemIcon} />,
-      text: favorites,
+      count: favorites,
     },
     {
       icon: <ChatBubbleIcon className={classes.postBottomRowItemIcon} />,
-      text: comments,
+      count: comments,
     },
   ]
-
-  const getFormattedText = n => {
-    let className = 'postBottomRowItem'
-    let text = n.toString()
-    if (n > 0) {
-      text = '+' + text
-      className = 'greenText'
-    } else if (n < 0) {
-      className = 'redText'
-    }
-    
-    return <Typography style={{ fontSize: 12, fontWeight: 600 }} className={classes[className]}>{text}</Typography>
-  }
 
   return (
     <ListItem className={classes.paper}>
       <Grid container>
-        <Grid alignItems="center" container xs={12} direction="row">
+        <Grid alignItems="center" container direction="row">
           <Avatar src={avatar} className={classes.postAvatar} />
           <Typography variant="caption">
             <Link
               className={classes.noDeco + ' ' + classes.postAuthor}
-              to={'/user/' + authorId}
+              to={'/user/' + login}
             >
               {login}
             </Link>
@@ -140,7 +126,7 @@ export default ({ post }) => {
           </Link>
         </Grid>
         <Grid className={classes.postBottomRow} container xs={12}>
-          {bottomRow.map(({ icon, text, coloredText }, i) => (
+          {bottomRow.map(({ icon, count, coloredText }, i) => (
             <Grid
               container
               direction="row"
@@ -152,7 +138,15 @@ export default ({ post }) => {
             >
               {icon}
               <div style={{ fontSize: 12, fontWeight: 600 }}>
-                {coloredText ? getFormattedText(text) : text}
+                {coloredText ? (
+                  <GreenRedNumber
+                    number={count}
+                    defaultClass={classes.postBottomRowItem}
+                    style={{ fontSize: 12, fontWeight: 600 }}
+                  />
+                ) : (
+                  count
+                )}
               </div>
             </Grid>
           ))}
@@ -161,3 +155,5 @@ export default ({ post }) => {
     </ListItem>
   )
 }
+
+export default PostItem

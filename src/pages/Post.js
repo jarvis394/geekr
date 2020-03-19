@@ -14,6 +14,7 @@ import parse from 'html-react-parser'
 import PostViewSkeleton from '../components/skeletons/PostView'
 import ErrorComponent from '../components/Error'
 import Scrollbar from '../components/Scrollbar'
+import Comments from '../components/Comments'
 import moment from 'moment'
 
 const useStyles = makeStyles(theme => ({
@@ -68,6 +69,8 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
   },
   text: {
+    marginBottom: theme.spacing(4),
+    lineHeight: '1.56',
     color: theme.palette.type === 'dark' ? '#eee' : theme.palette.text.primary,
     '& img': {
       maxWidth: '100%',
@@ -116,15 +119,8 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const useCommentsStyles = makeStyles(theme =>({
-  commentsRoot: {
-    background: theme.palette.background.default
-  }
-}))
-
 const Post = props => {
   const [post, setPost] = useState()
-  const [comments, setComments] = useState()
   const [fetchError, _setError] = useState()
   const classes = useStyles()
   const { id } = useParams()
@@ -135,11 +131,10 @@ const Post = props => {
   }
 
   const getPost = async (i) => (await get(`https://m.habr.com/kek/v1/articles/${i}/?fl=ru&hl=ru`)).data
-  const getComments = async (i) => (await get(`https://m.habr.com/kek/v2/articles/${i}/comments/?fl=ru&hl=ru`)).data
 
   useEffect(() => {
     const get = async () => {
-      let postData, commentsData
+      let postData
 
       // Reset error state
       setError(null)
@@ -150,13 +145,6 @@ const Post = props => {
       } catch (e) {
         if (e.statusCode === 404) return setError('Статья не найдена')
         else return setError(e.message)
-      }
-
-      try {
-        commentsData = await getComments(id)
-        setComments(commentsData.data)
-      } catch (e) {
-        return commentsData = { error: e.message }
       }
     }
     get()
@@ -181,25 +169,6 @@ const Post = props => {
         )
       }
     },
-  }
-
-  const Comment = () => {
-
-  }
-
-  const Comments = () => {
-    const c = useCommentsStyles()
-
-    if (!comments) return <p>no data yet...</p>
-    if (comments.error) return <p>error {comments.error.message}</p>
-    return (
-      <div className={c.commentsRoot}>
-        <Container>
-          <Typography className={c.commentsHeader}>Комментарии</Typography>
-        </Container>
-        {comments.map((e, i) => <Comment data={e} key={i} />)}
-      </div>
-    )
   }
 
   if (fetchError) return <ErrorComponent message={fetchError} />
@@ -247,7 +216,9 @@ const Post = props => {
           </div>
         </Container>
         <Divider />
-        <Comments />
+
+        {/* Comments section */}
+        <Comments postId={id} />
       </Scrollbar>
     </div>
   )
