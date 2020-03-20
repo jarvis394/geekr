@@ -45,20 +45,21 @@ const useStyles = makeStyles(theme => ({
       padding: '0 12px',
       display: 'block',
       borderLeft: '2px solid ' + theme.palette.primary.light,
-      color: fade(theme.palette.text.primary, 0.8),
+      color: fade(theme.palette.text.primary, 0.9),
       fontStyle: 'italic'
     }
-  }
+  },
+  children: { marginLeft: 32 }
 }))
 
-const Comment = ({ data }) => {
+const Comment = ({ data, children }) => {
   const classes = useStyles()
   const { avatarUrl, login } = data.author
   const { message } = data
   const ts = moment(data.timePublished).fromNow()
   
   return (
-    <Box className={classes.root} style={{ marginLeft: 32 * data.level }}>
+    <Box className={classes.root} style={{  }}>
       {/* Top bar */}
       <Grid alignItems="center" container direction="row">
         <Avatar src={avatarUrl} className={classes.avatar} />
@@ -71,12 +72,16 @@ const Comment = ({ data }) => {
           </Link>
         </Typography>
         <Typography className={classes.ts} variant="caption">
-          {ts} | ID: {data.id} | Parent: {data.parentId}
+          {ts}
         </Typography>
       </Grid>
 
       {/* Message */}
       <div className={classes.text}>{parse(message)}</div>
+      
+      <div className={classes.children}>
+        {children}
+      </div>
     </Box>
   )
 }

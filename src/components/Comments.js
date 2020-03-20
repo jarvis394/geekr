@@ -24,15 +24,17 @@ const useStyles = makeStyles(theme => ({
   },
   comments: {
     backgroundColor: theme.palette.background.paper,
-    paddingTop: theme.spacing(2)
+    paddingTop: theme.spacing(2),
+    overflowX: 'auto'
   }
 }))
 
 const Comments = ({ postId }) => {
   const [comments, setComments] = useState()
+  const [commentsLength, setCommentsLength] = useState()
   const [fetchError, setError] = useState()
   const classes = useStyles()
-  let rootComment = { children: [] }
+  const [rootComment, setRootComment] = useState({ children: [] })
 
   const getComments = async i =>
     (await get(`https://m.habr.com/kek/v2/articles/${i}/comments/?fl=ru&hl=ru`))
@@ -43,21 +45,26 @@ const Comments = ({ postId }) => {
       const comment = nodes[id]       
       comment.children = []
 
-      const parent = (comment.parentId != 0) ? nodes[comment.parentId] : rootComment
-      parent.children.push(comment) 
+      const parent = (comment.parentId !== 0) ? nodes[comment.parentId] : rootComment
+      
+      if (parent === rootComment) {
+        setRootComment(prev => ({
+          children: [...prev.children, comment]
+        }))
+      } else {
+        parent.children.push(comment) 
+      }
     }
 
     return nodes
   }
 
   
-  const drawComments = (node, depth) => {
-    
-
-    node.children.forEach(child => {
-      drawComments(child, depth + 1)
-    })
-  }
+  const renderComment = (node, depth = 0) => (
+      <Comment key={node.id} data={node}>
+        {node.children.map(e => renderComment(e, depth + 1))}
+      </Comment>
+    )
 
   useEffect(() => {
     const get = async () => {
@@ -71,10 +78,7 @@ const Comments = ({ postId }) => {
         const commentsData = d.data.comments
 
         setComments(parseComments(commentsData))
-
-        rootComment.children.forEach(comment => {
-          drawComments(comment, 0)
-        })
+        setCommentsLength(Object.keys(commentsData).length)
       } catch (e) {
         return setError(e.message)
       }
@@ -91,10 +95,11 @@ const Comments = ({ postId }) => {
       <Container>
         <Typography className={classes.header}>
           Комментарии&nbsp;
-          <span className={classes.commentsNumber}>{comments.length}</span>
+          <span className={classes.commentsNumber}>{commentsLength}</span>
         </Typography>
       </Container>
       <Container className={classes.comments}>
+        {rootComment.children.map(comment => renderComment(comment, 0))}
       </Container>
     </div>
   )
