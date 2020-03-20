@@ -4,9 +4,10 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Avatar from '@material-ui/core/Avatar'
 import Divider from '@material-ui/core/Divider'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, fade } from '@material-ui/core/styles'
 import { useParams } from 'react-router'
 import { get } from 'axios'
+import { PhotoSwipe } from 'react-photoswipe'
 import { Link } from 'react-router-dom'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
@@ -91,9 +92,9 @@ const useStyles = makeStyles(theme => ({
       borderRadius: theme.shape.borderRadius,
     },
     '& table': {
-      margin: '1.5em 0',
+      overflow: 'auto',
+      display: 'block',
       width: '100%',
-      border: '1px solid ' + theme.palette.text.hint,
       borderCollapse: 'collapse',
     },
     '& table td': {
@@ -104,6 +105,14 @@ const useStyles = makeStyles(theme => ({
     },
     '& h1, h2, h3, h4, h5, h6': {
       margin: theme.spacing(2) + 'px 0 0 0',
+    },
+    '& blockquote': {
+      margin: '12px 0',
+      padding: '0 12px',
+      display: 'block',
+      borderLeft: '2px solid ' + theme.palette.primary.light,
+      color: fade(theme.palette.text.primary, 0.9),
+      fontStyle: 'italic',
     },
   },
   syntaxHighlighter: {
@@ -119,7 +128,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const Post = props => {
+const Post = () => {
   const [post, setPost] = useState()
   const [fetchError, _setError] = useState()
   const classes = useStyles()
@@ -130,7 +139,8 @@ const Post = props => {
     return _setError(e)
   }
 
-  const getPost = async (i) => (await get(`https://m.habr.com/kek/v1/articles/${i}/?fl=ru&hl=ru`)).data
+  const getPost = async i =>
+    (await get(`https://m.habr.com/kek/v1/articles/${i}/?fl=ru&hl=ru`)).data
 
   useEffect(() => {
     const get = async () => {
@@ -153,7 +163,7 @@ const Post = props => {
   if (post) document.title = post.article.title
 
   const options = {
-    replace: ({ name, children }) => {
+    replace: ({ name, children, attribs }) => {
       if (name === 'pre') {
         const language = children[0].attribs.class || null
         const data = children[0].children[0].data || ''
@@ -168,6 +178,19 @@ const Post = props => {
           </SyntaxHighlighter>
         )
       }
+      // if (name === 'img') {
+      //   const PS = () => {
+      //     const [isOpen, setOpenState] = useState(true)
+      //     return (
+      //       <PhotoSwipe
+      //         items={[{ src: attribs.src, w: 500, h: 500 }]}
+      //         isOpen={isOpen}
+      //         onClose={() => setOpenState(false)}
+      //       />
+      //     )
+      //   }
+      //   return <PS />
+      // }
     },
   }
 

@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import Container from '@material-ui/core/Container'
+import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Avatar from '@material-ui/core/Avatar'
@@ -46,10 +45,21 @@ const useStyles = makeStyles(theme => ({
       display: 'block',
       borderLeft: '2px solid ' + theme.palette.primary.light,
       color: fade(theme.palette.text.primary, 0.9),
-      fontStyle: 'italic'
-    }
+      fontStyle: 'italic',
+    },
+    '& a': {
+      color: theme.palette.primary.main,
+      textDecoration: 'none',
+    },
+    '& a:hover': {
+      color: theme.palette.primary.dark,
+      textDecoration: 'underline',
+    },
+    '& img': {
+      maxWidth: '100%',
+    },
   },
-  children: { marginLeft: 32 }
+  children: { marginLeft: theme.spacing(4) },
 }))
 
 const Comment = ({ data, children }) => {
@@ -57,9 +67,9 @@ const Comment = ({ data, children }) => {
   const { avatarUrl, login } = data.author
   const { message } = data
   const ts = moment(data.timePublished).fromNow()
-  
+
   return (
-    <Box className={classes.root} style={{  }}>
+    <Box className={classes.root}>
       {/* Top bar */}
       <Grid alignItems="center" container direction="row">
         <Avatar src={avatarUrl} className={classes.avatar} />
@@ -78,10 +88,8 @@ const Comment = ({ data, children }) => {
 
       {/* Message */}
       <div className={classes.text}>{parse(message)}</div>
-      
-      <div className={classes.children}>
-        {children}
-      </div>
+
+      {children.length !== 0 && <div className={classes.children}>{children}</div>}
     </Box>
   )
 }

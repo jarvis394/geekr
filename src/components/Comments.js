@@ -38,26 +38,6 @@ const Comments = ({ postId }) => {
   const getComments = async i =>
     (await get(`https://m.habr.com/kek/v2/articles/${i}/comments/?fl=ru&hl=ru`))
       .data
-
-  const parseComments = (nodes) => {
-    for (const id in nodes) {
-      const comment = nodes[id]       
-      comment.children = []
-
-      const parent = (comment.parentId !== 0) ? nodes[comment.parentId] : rootComment
-      
-      if (parent === rootComment) {
-        setRootComment(prev => ({
-          children: [...prev.children, comment]
-        }))
-      } else {
-        parent.children.push(comment) 
-      }
-    }
-
-    return nodes
-  }
-
   
   const renderComment = (node, depth = 0) => (
     <Comment key={node.id} data={node}>
@@ -66,6 +46,25 @@ const Comments = ({ postId }) => {
   )
 
   useEffect(() => {
+    const parseComments = (nodes) => {
+      for (const id in nodes) {
+        const comment = nodes[id]       
+        comment.children = []
+  
+        const parent = (comment.parentId !== 0) ? nodes[comment.parentId] : rootComment
+        
+        if (parent === rootComment) {
+          setRootComment(prev => ({
+            children: [...prev.children, comment]
+          }))
+        } else {
+          parent.children.push(comment) 
+        }
+      }
+  
+      return nodes
+    }
+
     const get = async () => {
       let d
 
@@ -83,6 +82,7 @@ const Comments = ({ postId }) => {
       }
     }
     get()
+    // eslint-disable-next-line
   }, [postId])
 
 

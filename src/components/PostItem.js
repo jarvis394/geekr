@@ -27,9 +27,9 @@ const useStyles = makeStyles(theme => ({
     background: theme.palette.background.paper,
   },
   postTitle: {
-    fontWeight: '800',
+    fontWeight: 800,
     fontFamily: 'Google Sans',
-    fontSize: 18,
+    fontSize: 20,
     marginTop: theme.spacing(1),
   },
   postAuthor: {

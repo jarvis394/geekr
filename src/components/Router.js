@@ -4,6 +4,7 @@ import makeStyles from '@material-ui/styles/makeStyles'
 import Home from '../pages/Home'
 import Post from '../pages/Post'
 import Settings from '../pages/Settings'
+import NotFound from '../pages/NotFound'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -57,6 +58,10 @@ const Router = ({ state, setState }) => {
         {/* Redirect from home to the PageView */}
         <Route exact path="/">
           <Redirect to={`/${getCachedMode()}/page/1`} />
+        </Route>
+
+        <Route path="*">
+          <NotFound />
         </Route>
       </Switch>
     </>

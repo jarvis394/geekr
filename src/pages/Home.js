@@ -17,6 +17,7 @@ import ErrorComponent from '../components/Error'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import News from '../components/News'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -223,9 +224,6 @@ const Home = ({ state, setState }) => {
       // Set application state's posts data
       setState(prev => ({ ...prev, posts: data.data }))
 
-      console.log(postsRef.current.scrollTop)
-      postsRef.current.scrollTo(0, 0)
-
       // Set the amount of pages to the state so DotStepper will always have
       // static number of steps
       setState(prev => ({ ...prev, pagesCount: data.data.pagesCount }))
@@ -250,7 +248,9 @@ const Home = ({ state, setState }) => {
       <Scrollbar>
         <SwitcherComponent />
         <List ref={postsRef} className={classes.root}>
-          {postsComponents}
+          {postsComponents[0]}
+          <News />
+          {postsComponents.slice(1)}
         </List>
       </Scrollbar>
       <DotStepperComponent />
