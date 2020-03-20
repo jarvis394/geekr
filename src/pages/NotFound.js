@@ -31,6 +31,9 @@ const useStyles = makeStyles(theme => ({
   },
   svg: {
     marginTop: theme.spacing(4),
+    width: '75%',
+    display: 'flex',
+    justifyContent: 'center',
     '& svg': { maxWidth: 500, width: '100%', height: '100%' }
   }
 }))
