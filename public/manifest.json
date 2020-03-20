@@ -1,25 +1,15 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "habra.",
+  "name": "habra.",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "logo.png",
+      "src": "favicon-32x32.png",
       "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "32x32"
     }
   ],
-  "start_url": ".",
+  "start_url": "/top/day/page/1",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#2979ff",
   "background_color": "#ffffff"
 }
