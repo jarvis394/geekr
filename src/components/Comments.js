@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import Container from '@material-ui/core/Container'
-import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { get } from 'axios'
@@ -61,10 +60,10 @@ const Comments = ({ postId }) => {
 
   
   const renderComment = (node, depth = 0) => (
-      <Comment key={node.id} data={node}>
-        {node.children.map(e => renderComment(e, depth + 1))}
-      </Comment>
-    )
+    <Comment key={node.id} data={node}>
+      {node.children.map(e => renderComment(e, depth + 1))}
+    </Comment>
+  )
 
   useEffect(() => {
     const get = async () => {
