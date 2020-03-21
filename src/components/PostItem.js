@@ -33,10 +33,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1),
   },
   postAuthor: {
-    color:
-      theme.palette.type === 'light'
-        ? theme.palette.primary.light
-        : theme.palette.primary.dark,
+    color: theme.palette.primary.light,
     marginRight: theme.spacing(1),
     fontWeight: 800,
   },

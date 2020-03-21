@@ -15,11 +15,11 @@ const useStyles = makeStyles(theme => ({
   title: {
     fontFamily: 'Google Sans',
     fontWeight: 800,
-    fontSize: 28
+    fontSize: 28,
   },
   text: {
     fontFamily: 'Google Sans',
-    fontSize: 16
+    fontSize: 16,
   },
   link: {
     textDecoration: 'none',
@@ -27,15 +27,15 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       textDecoration: 'underline',
       color: theme.palette.primary.light,
-    }
+    },
   },
   svg: {
     marginTop: theme.spacing(4),
     width: '75%',
     display: 'flex',
     justifyContent: 'center',
-    '& svg': { maxWidth: 500, width: '100%', height: '100%' }
-  }
+    '& svg': { maxWidth: 500, width: '100%', height: '100%' },
+  },
 }))
 
 const NotFound = () => {
@@ -44,8 +44,14 @@ const NotFound = () => {
   return (
     <div className={classes.root}>
       <Typography className={classes.title}>four-o-four</Typography>
-      <Typography className={classes.text}>content not found, maybe <Link to="/" className={classes.link}>go home</Link>?</Typography>
-      <ReactSVG className={classes.svg} src="notfound.svg" />
+      <Typography className={classes.text}>
+        content not found, maybe{' '}
+        <Link to="/" className={classes.link}>
+          go home
+        </Link>
+        ?
+      </Typography>
+      <ReactSVG className={classes.svg} src="/notfound.svg" />
     </div>
   )
 }

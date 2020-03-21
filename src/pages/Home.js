@@ -17,7 +17,7 @@ import ErrorComponent from '../components/Error'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
-import News from '../components/News'
+import NewsBlock from '../components/NewsBlock'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -186,7 +186,6 @@ const Home = ({ state, setState }) => {
             <List style={{ width: '100%', paddingTop: 0 }}>{buttonList}</List>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-        <Divider />
       </>
     )
   }
@@ -249,11 +248,11 @@ const Home = ({ state, setState }) => {
         <SwitcherComponent />
         <List ref={postsRef} className={classes.root}>
           {postsComponents[0]}
-          <News />
+          {posts && currentPage === 1 && <NewsBlock />}
           {postsComponents.slice(1)}
         </List>
+        <DotStepperComponent />
       </Scrollbar>
-      <DotStepperComponent />
     </>
   )
 }

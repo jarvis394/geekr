@@ -4,6 +4,7 @@ import makeStyles from '@material-ui/styles/makeStyles'
 import Home from '../pages/Home'
 import Post from '../pages/Post'
 import Settings from '../pages/Settings'
+import Search from '../pages/Search'
 import NotFound from '../pages/NotFound'
 
 const useStyles = makeStyles(theme => ({
@@ -48,6 +49,11 @@ const Router = ({ state, setState }) => {
         {/* Settings */}
         <Route exact path="/settings">
           <Settings state={state} setState={setState} />
+        </Route>
+
+        {/* Searhc */}
+        <Route exact path="/search">
+          <Search state={state} setState={setState} />
         </Route>
 
         {/* PageView */}

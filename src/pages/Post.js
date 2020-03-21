@@ -45,13 +45,11 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 2,
   },
   author: {
-    color:
-      theme.palette.type === 'light'
-        ? theme.palette.primary.light
-        : theme.palette.primary.dark,
+    color: theme.palette.primary.light,
     marginRight: theme.spacing(1),
     fontWeight: 500,
     fontSize: 14,
+    textDecoration: 'none'
   },
   ts: {
     color: theme.palette.text.hint,
@@ -221,7 +219,7 @@ const Post = () => {
               src={post.article.author.avatar}
               className={classes.avatar}
             />
-            <Typography className={classes.author}>
+            <Typography component={Link} to={'/user/' + post.article.author.login} className={classes.author}>
               {post.article.author.login}
             </Typography>
             <Typography className={classes.ts}>

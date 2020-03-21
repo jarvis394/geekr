@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import { Switch, List, ListItem, ListItemText, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { makeBackgroundColors } from '../config/theme'
+import { makeBackgroundColors, makePrimaryColors } from '../config/theme'
 
 const useStyles = makeStyles(theme => ({
   root: { width: '100%', height: '100%', maxWidth: '100vw' },
@@ -35,10 +35,11 @@ const Settings = ({ state, setState }) => {
 
   const setTheme = () => {
     const newThemeType = theme.palette.type === 'light' ? 'dark' : 'light'
-    const newTheme = theme
-    newTheme.palette.type = newThemeType
-    newTheme.palette.background = makeBackgroundColors(newThemeType)
-    setState(prev => ({ ...prev, theme: newTheme }))
+    theme.palette.type = newThemeType
+    theme.palette.background = makeBackgroundColors(newThemeType)
+    theme.palette.primary = makePrimaryColors(newThemeType)
+
+    setState(prev => ({ ...prev, theme }))
     localStorage.setItem('theme', newThemeType)
   }
 

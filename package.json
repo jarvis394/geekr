@@ -19,6 +19,7 @@
     "is-mobile": "^2.2.1",
     "jscodeshift": "^0.7.0",
     "moment": "^2.24.0",
+    "number-to-words-ru": "^2.0.2",
     "react": "^16.13.0",
     "react-app-rewired": "^2.1.5",
     "react-custom-scrollbars": "^4.2.1",

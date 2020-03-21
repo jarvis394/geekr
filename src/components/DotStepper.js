@@ -10,7 +10,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     color: disabled => disabled ? theme.palette.text.hint : theme.palette.text.main,
-    fontWeight: 800,
+    fontFamily: 'Google Sans',
+    fontWeight: 500,
     fontSize: 14,
     background: theme.palette.background.paper
   },
@@ -39,7 +40,6 @@ const DotStepper = ({
 
   return (
     <>
-      <Divider />
       <MobileStepper
         variant="text"
         steps={steps}
