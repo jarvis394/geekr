@@ -8,6 +8,7 @@ import {
   ListItem,
   ListItemText,
   IconButton,
+  Paper
 } from '@material-ui/core'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import PostItem from '../components/PostItem'
@@ -17,15 +18,12 @@ import { ReactSVG } from 'react-svg'
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(2),
-    background: theme.palette.background.paper,
   },
   search: {
     position: 'relative',
     width: '100%',
     alignItems: 'center',
     display: 'flex',
-    border: '1px solid ' + theme.palette.divider,
-    borderRadius: theme.shape.borderRadius,
   },
   searchIcon: {
     padding: theme.spacing(1),
@@ -36,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     flex: 1,
   },
   inputInput: {
-    padding: theme.spacing(1, 1, 1, 1),
+    padding: theme.spacing(1, 1, 1, 2),
     width: '100%',
   },
   svgHolder: {
@@ -61,7 +59,7 @@ const Search = () => {
   return (
     <>
       <div className={classes.root}>
-        <div className={classes.search}>
+        <Paper elevation={1} className={classes.search}>
           <InputBase
             placeholder="Search…"
             classes={{
@@ -73,9 +71,10 @@ const Search = () => {
           <IconButton className={classes.searchIcon}>
             <SearchIcon />
           </IconButton>
-        </div>
+        </Paper>
       </div>
       <div className={classes.svgHolder}>
+        <Typography>Попробуйте поискать что-нибудь!</Typography>
         <ReactSVG className={classes.svg} src="search.svg" />
       </div>
     </>
