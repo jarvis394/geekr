@@ -8,4 +8,4 @@ import ru from 'moment/locale/ru'
 moment.updateLocale('ru', ru)
 
 ReactDOM.render(<Layout />, document.getElementById('root'))
-serviceWorker.unregister()
+serviceWorker.register()

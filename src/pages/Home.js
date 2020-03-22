@@ -10,7 +10,7 @@ import axios from 'axios'
 import PostSkeleton from '../components/skeletons/Post'
 import ExpandIcon from '@material-ui/icons/ArrowDropDown'
 import PostItem from '../components/PostItem'
-import DotStepper from '../components/DotStepper'
+import DotStepper from '../components/Pagination'
 import { useHistory, useParams, useLocation } from 'react-router-dom'
 import Scrollbar from '../components/Scrollbar'
 import ErrorComponent from '../components/Error'
@@ -121,14 +121,13 @@ const Home = ({ state, setState }) => {
       )
     ).data
 
-  const DotStepperComponent = () =>
+  const PaginationComponent = () =>
     state.pagesCount ? (
       <DotStepper
         disabled={!posts}
-        handleBack={handleClick}
-        handleNext={handleClick}
+        handleChange={handlePagination}
         steps={state.pagesCount}
-        currentStep={currentPage - 1}
+        currentStep={currentPage}
       />
     ) : null
 
@@ -196,10 +195,12 @@ const Home = ({ state, setState }) => {
     return _setError(e)
   }
 
-  const handleClick = i => {
+  const handlePagination = (_, i) => {
+    if (i === currentPage) return
+    
     setState(prev => ({ ...prev, posts: {} }))
     setPosts(null)
-    history.push(modes.find(e => e.mode === mode).to + '/page/' + (i + 1))
+    history.push(modes.find(e => e.mode === mode).to + '/page/' + i)
   }
 
   useEffect(() => {
@@ -251,7 +252,7 @@ const Home = ({ state, setState }) => {
           {posts && currentPage === 1 && <NewsBlock />}
           {postsComponents.slice(1)}
         </List>
-        <DotStepperComponent />
+        <PaginationComponent />
       </Scrollbar>
     </>
   )

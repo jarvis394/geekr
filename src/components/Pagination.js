@@ -4,43 +4,33 @@ import MobileStepper from '@material-ui/core/MobileStepper'
 import Button from '@material-ui/core/Button'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
-import Divider from '@material-ui/core/Divider'
+import MUIPagination from '@material-ui/lab/Pagination'
 
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    color: disabled => disabled ? theme.palette.text.hint : theme.palette.text.main,
+    color: disabled =>
+      disabled ? theme.palette.text.hint : theme.palette.text.main,
     fontFamily: 'Google Sans',
     fontWeight: 500,
     fontSize: 14,
-    background: theme.palette.background.paper
+    marginBottom: theme.spacing(2),
+    display: 'flex',
+    justifyContent: 'center',
   },
 }))
 
-const DotStepper = ({
+const Pagination = ({
   disabled = false,
   steps,
-  handleNext: handleNextComp,
-  handleBack: handleBackComp,
-  currentStep,
+  handleChange,
+  currentStep = 1,
 }) => {
   const classes = useStyles(disabled)
-  const theme = useTheme()
-  const [activeStep, setActiveStep] = React.useState(currentStep * 1)
-
-  const handleNext = () => {
-    setActiveStep(prevActiveStep => prevActiveStep + 1)
-    handleNextComp && handleNextComp(activeStep + 1)
-  }
-
-  const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1)
-    handleBackComp && handleBackComp(activeStep - 1)
-  }
 
   return (
     <>
-      <MobileStepper
+      {/* <MobileStepper
         variant="text"
         steps={steps}
         position="static"
@@ -72,9 +62,18 @@ const DotStepper = ({
             )}
           </Button>
         }
+      /> */}
+      <MUIPagination
+        onChange={handleChange}
+        className={classes.root}
+        disabled={disabled}
+        count={steps}
+        defaultPage={currentStep}
+        variant="outlined"
+        shape="rounded"
       />
     </>
   )
 }
 
-export default DotStepper
+export default Pagination

@@ -45,9 +45,9 @@ const NotFound = () => {
     <div className={classes.root}>
       <Typography className={classes.title}>four-o-four</Typography>
       <Typography className={classes.text}>
-        content not found, maybe{' '}
+        Упс! Может,{' '}
         <Link to="/" className={classes.link}>
-          go home
+          вернёмся домой
         </Link>
         ?
       </Typography>

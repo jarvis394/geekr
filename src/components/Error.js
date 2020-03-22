@@ -2,6 +2,7 @@ import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import makeStyles from '@material-ui/styles/makeStyles'
 import { Link } from 'react-router-dom'
+import { ReactSVG } from 'react-svg'
 
 const useStyles = makeStyles(theme => ({
   centered: {
@@ -17,6 +18,12 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.primary.main,
     fontWeight: 500,
   },
+  svg: {
+    '& svg': { height: '100%', width: '100%' },
+    width: '65%',
+    marginTop: theme.spacing(4),
+    maxWidth: 300,
+  }
 }))
 
 const ErrorComponent = ({ message, onHomeClick }) => {
@@ -31,6 +38,7 @@ const ErrorComponent = ({ message, onHomeClick }) => {
           Домой
         </Link>
       </Typography>
+      <ReactSVG src="/error.svg" className={classes.svg} />
     </div>
   )
 }

@@ -3,7 +3,6 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
 import { Link } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
 import Container from '@material-ui/core/Container'
@@ -20,6 +19,7 @@ const useStyles = makeStyles(theme => ({
     height: 48,
     position: 'relative',
     flexGrow: 1,
+    borderBottom: '1px solid ' + theme.palette.divider
   },
   container: { maxWidth, padding: 0 },
   link: {
@@ -53,7 +53,6 @@ const Component = ({ setState }) => {
           </IconButton>
         </Toolbar>
       </Container>
-      <Divider />
     </AppBar>
   )
 }

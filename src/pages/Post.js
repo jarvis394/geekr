@@ -87,6 +87,7 @@ const useStyles = makeStyles(theme => ({
       background: theme.palette.background.default,
       padding: theme.spacing(0.25),
       borderRadius: theme.shape.borderRadius,
+      wordBreak: 'break-word'
     },
     '& table': {
       overflow: 'auto',

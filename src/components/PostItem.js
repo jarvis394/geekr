@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import formatNumber from '../utils/formatNumber'
 import GreenRedNumber from './GreenRedNumber'
 import moment from 'moment'
+import parse from 'html-react-parser'
 
 const useStyles = makeStyles(theme => ({
   noDeco: {
@@ -31,6 +32,16 @@ const useStyles = makeStyles(theme => ({
     fontFamily: 'Google Sans',
     fontSize: 20,
     marginTop: theme.spacing(1),
+    // Highlight the search query in post's title
+    '& .searched-item': {
+      color: theme.palette.primary.light,
+    },
+  },
+  previewHTML: {
+    marginTop: theme.spacing(1),
+    '& .searched-item': {
+      color: theme.palette.primary.light,
+    },
   },
   postAuthor: {
     color: theme.palette.primary.light,
@@ -59,20 +70,22 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const PostItem = ({ post }) => {
+export const PostItem = ({ post, showPreview }) => {
   const classes = useStyles()
   const ts = moment(post.time_published)
     .calendar()
     .toLowerCase()
   const { login, avatar } = post.author
   const {
-    title,
+    title: unparsedTitle,
     id,
     score: sc,
     reading_count,
     favorites_count,
     comments_count,
+    preview_html: previewHTML,
   } = post
+  const title = parse(unparsedTitle)
   const reads = formatNumber(reading_count)
   const score = formatNumber(sc)
   const favorites = formatNumber(favorites_count)
@@ -122,6 +135,11 @@ export const PostItem = ({ post }) => {
             <Typography className={classes.postTitle}>{title}</Typography>
           </Link>
         </Grid>
+        {showPreview && (
+          <Grid className={classes.previewHTML} item>
+            <Typography>{parse(previewHTML)}</Typography>
+          </Grid>
+        )}
         <Grid className={classes.postBottomRow} container xs={12}>
           {bottomRow.map(({ icon, count, coloredText }, i) => (
             <Grid
