@@ -122,7 +122,7 @@ const News = () => {
           size="small"
           component={Link}
           color="primary"
-          to="/news/page/1"
+          to="/news/p/1"
           className={classes.link}
           endIcon={<RightIcon />}
         >

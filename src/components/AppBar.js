@@ -10,6 +10,8 @@ import { MIN_WIDTH as maxWidth } from '../config/constants'
 import PermIdentityRoundedIcon from '@material-ui/icons/PermIdentityRounded'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
+import useScrollTrigger from '@material-ui/core/useScrollTrigger'
+import Slide from '@material-ui/core/Slide'
 import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
@@ -29,31 +31,43 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+const HideOnScroll = ({ children }) => {
+  const trigger = useScrollTrigger({ target: window })
+  
+  return (
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children}
+    </Slide>
+  )
+}
+
 const Component = ({ setState }) => {
   const classes = useStyles()
   const history = useHistory()
 
   return (
-    <AppBar className={classes.root} elevation={0}>
-      <Container className={classes.container}>
-        <Toolbar style={{ minHeight: 'unset', height: 48 }}>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            <Link onClick={() => setState(prev => ({ ...prev, posts: {} }))} to="/" className={classes.link}>
-              habra.
-            </Link>
-          </Typography>
-          <IconButton onClick={() => history.push('/search')}>
-            <SearchRoundedIcon />
-          </IconButton>
-          <IconButton onClick={() => history.push('/settings')}>
-            <SettingsOutlinedIcon />
-          </IconButton>
-          <IconButton>
-            <PermIdentityRoundedIcon />
-          </IconButton>
-        </Toolbar>
-      </Container>
-    </AppBar>
+    <HideOnScroll>
+      <AppBar className={classes.root} elevation={0}>
+        <Container className={classes.container}>
+          <Toolbar style={{ minHeight: 'unset', height: 48 }}>
+            <Typography variant="h6" style={{ flexGrow: 1 }}>
+              <Link onClick={() => setState(prev => ({ ...prev, posts: {} }))} to="/" className={classes.link}>
+                habra.
+              </Link>
+            </Typography>
+            <IconButton onClick={() => history.push('/search')}>
+              <SearchRoundedIcon />
+            </IconButton>
+            <IconButton onClick={() => history.push('/settings')}>
+              <SettingsOutlinedIcon />
+            </IconButton>
+            <IconButton>
+              <PermIdentityRoundedIcon />
+            </IconButton>
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </HideOnScroll>
   )
 }
 

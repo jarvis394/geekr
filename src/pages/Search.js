@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
 import InputBase from '@material-ui/core/InputBase'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { Paper, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import PostItem from '../components/PostItem'
 import { ReactSVG } from 'react-svg'
 import axios from 'axios'
-import Scrollbar from '../components/Scrollbar'
 import PostSkeleton from '../components/skeletons/Post'
+import Pagintaion from '../components/Pagination'
 
 /**
  * Custom hook for getting query from the URL
@@ -99,7 +99,7 @@ const SearchInput = ({ q }) => {
 
   const onSubmit = e => {
     e.preventDefault()
-    history.push('/search?q=' + e.target.q.value)
+    history.push('/search/p/1?q=' + e.target.q.value)
   }
 
   return (
@@ -141,37 +141,54 @@ const NoResults = () => {
 }
 
 const SearchResultsScreen = ({ q }) => {
+  const params = useParams()
+  const location = useLocation()
+  const history = useHistory()
   const [data, setData] = useState()
   const [fetchError, setError] = useState()
+  const [currentPage, setCurrentPage] = useState(params.page)
+  const [pagesCount, setPagesCount] = useState()
 
   const getSearchResults = async q =>
     (
       await axios.get(
-        `https://m.habr.com/kek/v1/articles/?query=${q}&fl=ru&hl=ru`
+        `https://m.habr.com/kek/v1/articles/?query=${q}&fl=ru&hl=ru&page=${currentPage}`
       )
     ).data
 
+  const handleChange = (_, i) => {
+    if (i === currentPage) return
+    
+    setCurrentPage(i)
+    setData(null)
+    setError(null)
+    history.push('/search/p/' + i + location.search)
+  }
+
   useEffect(() => {
     setError(null)
+    setData(null)
     const get = async () => {
       try {
         const d = await getSearchResults(q)
         setData(d.data)
+        if (!pagesCount) setPagesCount(d.data.pagesCount)
       } catch (e) {
         setError(e.message)
       }
     }
     get()
-  }, [q])
+  }, [q, currentPage])
 
   if (fetchError) return <NoResults />
-  if (!data) return [...new Array(7)].map((_, i) => <PostSkeleton key={i} />)
 
   return (
     <div>
-      {data.articleIds.map((e, i) => (
+      {!data && [...new Array(7)].map((_, i) => <PostSkeleton key={i} />)}
+      {data && data.articleIds.map((e, i) => (
         <PostItem showPreview post={data.articleRefs[e]} key={i} />
       ))}
+      <Pagintaion disabled={!data} steps={pagesCount} handleChange={handleChange} />
     </div>
   )
 }

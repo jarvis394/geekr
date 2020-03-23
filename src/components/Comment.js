@@ -3,7 +3,6 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Avatar from '@material-ui/core/Avatar'
 import { makeStyles, fade } from '@material-ui/core/styles'
-import { Box } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import parse from 'html-react-parser'
@@ -64,12 +63,14 @@ const useStyles = makeStyles(theme => ({
 
 const Comment = ({ data, children }) => {
   const classes = useStyles()
+  if (!data.id) return null
+
   const { avatarUrl, login } = data.author
   const { message } = data
   const ts = moment(data.timePublished).fromNow()
-
+  
   return (
-    <Box className={classes.root}>
+    <div className={classes.root}>
       {/* Top bar */}
       <Grid alignItems="center" container direction="row">
         <Avatar src={avatarUrl} className={classes.avatar} />
@@ -90,7 +91,7 @@ const Comment = ({ data, children }) => {
       <div className={classes.text}>{parse(message)}</div>
 
       {children.length !== 0 && <div className={classes.children}>{children}</div>}
-    </Box>
+    </div>
   )
 }
 

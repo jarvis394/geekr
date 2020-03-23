@@ -3,14 +3,22 @@ import Skeleton from '@material-ui/lab/Skeleton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
+import Divider from '@material-ui/core/Divider'
 import Scrollbar from '../Scrollbar'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(2),
     background: theme.palette.background.paper,
     borderRadius: 0,
     overflow: 'auto',
+  },
+  hubs: {
+    background: theme.palette.background.default,
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    height: 40,
+    display: 'flex',
+    alignItems: 'center'
   },
   skeleton: {
     maxWidth: '100%',
@@ -28,16 +36,17 @@ const PostSkeleton = () => {
 
   return (
     <Scrollbar>
+      <Container className={classes.hubs}>
+        <Skeleton
+          variant="text"
+          width={256}
+          height={18}
+          className={classes.skeleton}
+        />
+      </Container>
+      <Divider />
       <Container className={classes.root}>
         <Grid container>
-          <Grid item>
-            <Skeleton
-              variant="text"
-              width={256}
-              height={18}
-              className={classes.skeleton}
-            />
-          </Grid>
           <Grid container direction="row" style={{ marginTop: 28 }}>
             <Grid item>
               <Skeleton

@@ -32,6 +32,7 @@
     "react-svg": "^11.0.14",
     "react-syntax-highlighter": "^12.1.0",
     "react-virtualized-auto-sizer": "^1.0.2",
+    "react-vtree": "^1.0.2",
     "react-window": "^1.8.5",
     "serve": "^11.3.0"
   },

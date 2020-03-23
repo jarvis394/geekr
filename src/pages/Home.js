@@ -140,7 +140,7 @@ const Home = ({ state, setState }) => {
         setPosts(null)
         setState(prev => ({ ...prev, posts: {} }))
         localStorage.setItem('mode', e.mode)
-        history.push(e.to + '/page/1')
+        history.push(e.to + '/p/1')
       }
 
       return (
@@ -200,7 +200,7 @@ const Home = ({ state, setState }) => {
     
     setState(prev => ({ ...prev, posts: {} }))
     setPosts(null)
-    history.push(modes.find(e => e.mode === mode).to + '/page/' + i)
+    history.push(modes.find(e => e.mode === mode).to + '/p/' + i)
   }
 
   useEffect(() => {

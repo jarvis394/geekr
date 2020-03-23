@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Router = ({ state, setState }) => {
+const Router = ({ state, setState, appRef }) => {
   const classes = useStyles()
 
   // Set root classes
@@ -51,19 +51,24 @@ const Router = ({ state, setState }) => {
           <Settings state={state} setState={setState} />
         </Route>
 
-        {/* Searhc */}
+        {/* Search */}
+        <Route exact path="/search/p/:page">
+          <Search state={state} setState={setState} />
+        </Route>
+
+        {/* Search */}
         <Route exact path="/search">
           <Search state={state} setState={setState} />
         </Route>
 
         {/* PageView */}
-        <Route exact path={['/all/page/:page', '/top/day/page/:page', '/top/week/page/:page', '/top/month/page/:page']}>
+        <Route exact path={['/all/p/:page', '/top/day/p/:page', '/top/week/p/:page', '/top/month/p/:page']}>
           <Home state={state} setState={setState} />
         </Route>
 
         {/* Redirect from home to the PageView */}
         <Route exact path="/">
-          <Redirect to={`/${getCachedMode()}/page/1`} />
+          <Redirect to={`/${getCachedMode()}/p/1`} />
         </Route>
 
         <Route path="*">
