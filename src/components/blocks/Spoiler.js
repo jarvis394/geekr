@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import FormattedText from './FormattedText'
+import FormattedText from '../formatters/FormattedText'
 import ReactDOMServer from 'react-dom/server'
 import { makeStyles } from '@material-ui/core'
 

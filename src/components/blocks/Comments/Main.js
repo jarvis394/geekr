@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-import { getComments } from '../api'
+import { getComments } from '../../../api'
 import Comment from './Comment'
 
 const useStyles = makeStyles(theme => ({

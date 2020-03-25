@@ -2,7 +2,7 @@ import React from 'react'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
-import Spoiler from './Spoiler'
+import Spoiler from '../blocks/Spoiler'
 import parse, { domToReact } from 'html-react-parser'
 
 const useStyles = makeStyles(theme => ({

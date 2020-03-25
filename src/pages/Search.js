@@ -5,11 +5,11 @@ import { useLocation, useParams } from 'react-router-dom'
 import { Paper, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
-import PostItem from '../components/PostItem'
+import PostItem from '../components/blocks/PostItem'
 import { ReactSVG } from 'react-svg'
 import { getSearchResults } from '../api'
 import PostSkeleton from '../components/skeletons/Post'
-import Pagintaion from '../components/Pagination'
+import Pagintaion from '../components/blocks/Pagination'
 
 /**
  * Custom hook for getting query from the URL

@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
 import numToWord from 'number-to-words-ru'
 import { Link } from 'react-router-dom'
-import { getNewsPromo } from '../api'
+import { getNewsPromo } from '../../api'
 import moment from 'moment'
 
 const useStyles = makeStyles(theme => ({

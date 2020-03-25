@@ -9,11 +9,11 @@ import { useParams } from 'react-router'
 import { getPost } from '../api'
 import { Link } from 'react-router-dom'
 import PostViewSkeleton from '../components/skeletons/PostView'
-import ErrorComponent from '../components/Error'
+import ErrorComponent from '../components/blocks/Error'
 import Scrollbar from '../components/Scrollbar'
-import Comments from '../components/Comments'
+import Comments from '../components/blocks/Comments/Main'
 import moment from 'moment'
-import FormattedText from '../components/FormattedText'
+import FormattedText from '../components/formatters/FormattedText'
 
 const useStyles = makeStyles(theme => ({
   root: {
