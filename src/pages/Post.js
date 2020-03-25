@@ -4,13 +4,10 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Avatar from '@material-ui/core/Avatar'
 import Divider from '@material-ui/core/Divider'
-import { makeStyles, fade } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { useParams } from 'react-router'
 import { getPost } from '../api'
 import { Link } from 'react-router-dom'
-import SyntaxHighlighter from 'react-syntax-highlighter'
-import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
-import parse from 'html-react-parser'
 import PostViewSkeleton from '../components/skeletons/PostView'
 import ErrorComponent from '../components/Error'
 import Scrollbar from '../components/Scrollbar'
@@ -144,7 +141,7 @@ const Post = () => {
           </Typography>
 
           {/* Article text */}
-          {/* <FormattedText className={classes.text}>{post.article.text_html}</FormattedText> */}
+          <FormattedText className={classes.text}>{post.article.text_html}</FormattedText>
         </Container>
 
         {/* Comments section */}

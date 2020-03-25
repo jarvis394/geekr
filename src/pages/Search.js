@@ -172,6 +172,7 @@ const SearchResultsScreen = ({ q }) => {
       }
     }
     get()
+    // eslint-disable-next-line
   }, [q, currentPage])
 
   if (fetchError) return <NoResults />

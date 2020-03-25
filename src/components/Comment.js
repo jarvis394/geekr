@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { Avatar, Grid, IconButton, Typography } from '@material-ui/core'
+import { Avatar, Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import CircleFilledIcon from '@material-ui/icons/Adjust'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import FormattedText from './FormattedText'
