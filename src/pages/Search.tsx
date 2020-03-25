@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import * as React from 'react'
+import { useState, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
 import InputBase from '@material-ui/core/InputBase'
 import { useLocation, useParams } from 'react-router-dom'

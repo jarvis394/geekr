@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import * as React from 'react'
+import { useState } from 'react'
 import ThemeProvider from '@material-ui/styles/ThemeProvider'
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
 import makeStyles from '@material-ui/styles/makeStyles'

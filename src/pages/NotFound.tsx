@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { ReactSVG } from 'react-svg'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'

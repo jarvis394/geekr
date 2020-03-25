@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import * as React from 'react'
+import { useState } from 'react'
 import { Avatar, Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
@@ -74,7 +75,6 @@ const Comment = ({ data, children }) => {
   const [isOpen, setOpenState] = useState(true)
   const { message } = data
   const ts = moment(data.timePublished).fromNow()
-  console.log(data)
 
   if (!data.author) {
     return (

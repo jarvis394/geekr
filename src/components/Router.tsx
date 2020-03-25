@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import makeStyles from '@material-ui/styles/makeStyles'
 import Home from '../pages/Home'
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Router = ({ state, setState, appRef }) => {
+const Router = ({ state, setState }) => {
   const classes = useStyles()
 
   // Set root classes

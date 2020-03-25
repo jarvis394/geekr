@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import * as React from 'react'
+import { useState, useEffect } from 'react'
 import { Paper, Grid, Typography, Box, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
