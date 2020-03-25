@@ -8,18 +8,22 @@ import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, darken, lighten } from '@material-ui/core/styles'
 import formatNumber from '../utils/formatNumber'
 import GreenRedNumber from './GreenRedNumber'
 import moment from 'moment'
 import parse from 'html-react-parser'
 
+const ld = { lighten, darken}
 const useStyles = makeStyles(theme => ({
   noDeco: {
     textDecoration: 'none !important',
   },
   postLink: {
     color: theme.palette.text.primary,
+    '&:visited > p': {
+      color: ld[theme.palette.type + 'en'](theme.palette.text.primary, 0.4)
+    },
   },
   paper: {
     padding: theme.spacing(2),
