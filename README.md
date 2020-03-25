@@ -1,4 +1,4 @@
-<a href="https://habra.cf" align="center"><img width=512 src="https://raw.githubusercontent.com/jarvis394/habra/ts/images/logo.png" alt="habra logo" /></a>
+<p align="center"><a href="https://habra.cf"><img width=512 src="https://raw.githubusercontent.com/jarvis394/habra/ts/images/logo.png" alt="habra logo" /></a></p>
 <h5 align="center">✨🎉 Habrahabr, but with a new client</h5>
 
 ## Usage
