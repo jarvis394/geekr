@@ -1,11 +1,10 @@
-import React from 'react'
-import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid'
-import Avatar from '@material-ui/core/Avatar'
-import { makeStyles, fade } from '@material-ui/core/styles'
+import React, { useState } from 'react'
+import { Avatar, Grid, IconButton, Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import CircleFilledIcon from '@material-ui/icons/Adjust'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
-import parse from 'html-react-parser'
+import FormattedText from './FormattedText'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,49 +36,106 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1),
     lineHeight: '22px',
     fontSize: 15,
-    '& p': { margin: 0, padding: 0 },
-    '& blockquote': {
-      margin: '12px 0',
-      padding: '0 12px',
-      display: 'block',
-      borderLeft: '2px solid ' + theme.palette.primary.light,
-      color: fade(theme.palette.text.primary, 0.9),
-      fontStyle: 'italic',
-    },
-    '& a': {
-      color: theme.palette.primary.main,
-      textDecoration: 'none',
-    },
-    '& a:hover': {
-      color: theme.palette.primary.dark,
-      textDecoration: 'underline',
-    },
-    '& img': {
-      maxWidth: '100%',
-    },
+  },
+  ufo: {
+    fontWeight: 500,
+    fontFamily: 'Google Sans'
   },
   children: { marginLeft: theme.spacing(4) },
+  collapseHolder: {
+    position: 'absolute',
+    left: -40,
+    cursor: 'pointer',
+    padding: 16,
+  },
+  collapseButton: {
+    border: '2px solid ' + theme.palette.text.hint,
+    borderRadius: '50%',
+    height: 4,
+    width: 4,
+  },
+  collapsedButton: {},
+  collapsedTitle: {
+    color: theme.palette.text.hint,
+    fontSize: 14,
+    fontWeight: 500,
+    fontFamily: 'Google Sans',
+  },
+  collapsedLine: {
+    borderBottom: ' 1px dashed ' + theme.palette.text.hint,
+    flexGrow: 1,
+    height: 1,
+    marginLeft: 16,
+    position: 'relative',
+  },
 }))
 
 const Comment = ({ data, children }) => {
-  const classes = useStyles()
-  if (!data.id) return null
-
-  const { avatarUrl, login } = data.author
+  const classes = useStyles(data.level)
+  const [isOpen, setOpenState] = useState(true)
   const { message } = data
   const ts = moment(data.timePublished).fromNow()
-  
+
+  if (!data.author) {
+    return (
+      <div className={classes.root}>
+        <FormattedText className={classes.text + ' ' + classes.ufo}>{message}</FormattedText>
+        
+        {children.length !== 0 && (
+          <div className={classes.children}>{children}</div>
+        )}
+      </div>
+    )
+  }
+
+  if (!isOpen)
+    return (
+      <div
+        title="Развернуть дерево комментариев"
+        onClick={() => setOpenState(true)}
+        style={{
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          marginTop: 16,
+          cursor: 'pointer',
+        }}
+      >
+        <div className={classes.collapseHolder}>
+          <div className={classes.collapseButton}></div>
+        </div>
+        <Typography className={classes.collapsedTitle}>
+          Раскрыть ветку
+        </Typography>
+        <div className={classes.collapsedLine}></div>
+      </div>
+    )
+
   return (
     <div className={classes.root}>
       {/* Top bar */}
-      <Grid alignItems="center" container direction="row">
-        <Avatar src={avatarUrl} className={classes.avatar} />
+      <Grid
+        style={{ position: 'relative' }}
+        alignItems="center"
+        container
+        direction="row"
+      >
+        {children.length !== 0 && data.level !== 0 && (
+          <div
+            title="Свернуть дерево комментариев"
+            onClick={() => setOpenState(false)}
+            className={classes.collapseHolder}
+          >
+            <div className={classes.collapseButton}></div>
+          </div>
+        )}
+        <Avatar src={data.author.avatarUrl} className={classes.avatar} />
         <Typography variant="caption">
           <Link
             className={classes.noDeco + ' ' + classes.authorLink}
-            to={'/user/' + login}
+            to={'/user/' + data.author.login}
           >
-            {login}
+            {data.author.login}
           </Link>
         </Typography>
         <Typography className={classes.ts} variant="caption">
@@ -88,9 +144,11 @@ const Comment = ({ data, children }) => {
       </Grid>
 
       {/* Message */}
-      <div className={classes.text}>{parse(message)}</div>
+      <FormattedText className={classes.text}>{message}</FormattedText>
 
-      {children.length !== 0 && <div className={classes.children}>{children}</div>}
+      {children.length !== 0 && (
+        <div className={classes.children}>{children}</div>
+      )}
     </div>
   )
 }

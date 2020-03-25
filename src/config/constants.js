@@ -1,6 +1,4 @@
-export const API_URL = 'https://awk-backend.glitch.me'
-export const WS_URL = 'ws://awk-backend.glitch.me'
-export const WS_RECONNECT_TIMEOUT = 3000
+export const API_URL = 'https://m.habr.com/kek/'
 
 /**
  * Minimal application width to stay with the drawer

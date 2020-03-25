@@ -99,7 +99,7 @@ const PostSkeleton = () => {
               <Grid key={i} item xs={12}>
                 <Skeleton
                   variant="rect"
-                  width={random(75, 100) + '%'}
+                  width={random(90, 100) + '%'}
                   style={{ marginTop: 8 }}
                   className={classes.skeleton}
                   height={12}

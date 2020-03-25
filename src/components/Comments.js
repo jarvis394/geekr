@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-import { get } from 'axios'
-import { VariableSizeTree as Tree } from 'react-vtree'
-import AutoSizer from 'react-virtualized-auto-sizer'
+import { getComments } from '../api'
 import Comment from './Comment'
 
 const useStyles = makeStyles(theme => ({
@@ -27,29 +25,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     paddingTop: theme.spacing(2),
     overflowX: 'auto',
-    height: '100vh',
   },
 }))
-
-const tree = {
-  name: 'Root #1',
-  id: 'root-1',
-  children: [
-    {
-      children: [
-        { id: 'child-2', name: 'Child #2' },
-        { id: 'child-3', name: 'Child #3' },
-      ],
-      id: 'child-1',
-      name: 'Child #1',
-    },
-    {
-      children: [{ id: 'child-5', name: 'Child #5' }],
-      id: 'child-4',
-      name: 'Child #4',
-    },
-  ],
-}
 
 const Comments = ({ postId }) => {
   const [comments, setComments] = useState()
@@ -59,10 +36,6 @@ const Comments = ({ postId }) => {
   const [rootComment, setRootComment] = useState({
     children: [],
   })
-
-  const getComments = async i =>
-    (await get(`https://m.habr.com/kek/v2/articles/${i}/comments/?fl=ru&hl=ru`))
-      .data
 
   const renderComment = (node, depth = 0) => (
     <Comment key={node.id} data={node}>

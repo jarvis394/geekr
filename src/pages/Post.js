@@ -6,7 +6,7 @@ import Avatar from '@material-ui/core/Avatar'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import { useParams } from 'react-router'
-import { get } from 'axios'
+import { getPost } from '../api'
 import { Link } from 'react-router-dom'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
@@ -16,6 +16,7 @@ import ErrorComponent from '../components/Error'
 import Scrollbar from '../components/Scrollbar'
 import Comments from '../components/Comments'
 import moment from 'moment'
+import FormattedText from '../components/FormattedText'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -70,60 +71,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(4),
     lineHeight: '1.56',
     color: theme.palette.type === 'dark' ? '#eee' : theme.palette.text.primary,
-    '& img': {
-      maxWidth: '100%',
-    },
-    '& a': {
-      color: theme.palette.primary.main,
-      textDecoration: 'none',
-    },
-    '& a:hover': {
-      color: theme.palette.primary.dark,
-      textDecoration: 'underline',
-    },
-    '& p': { margin: 0 },
-    '& em': { color: theme.palette.text.hint },
-    '& code': {
-      background: theme.palette.background.default,
-      padding: theme.spacing(0.25),
-      borderRadius: theme.shape.borderRadius,
-      wordBreak: 'break-word'
-    },
-    '& table': {
-      overflow: 'auto',
-      display: 'block',
-      width: '100%',
-      borderCollapse: 'collapse',
-    },
-    '& table td': {
-      padding: '6px 12px 9px',
-      border: '1px solid ' + theme.palette.text.hint,
-      verticalAlign: 'top',
-      lineHeight: '1.5',
-    },
-    '& h1, h2, h3, h4, h5, h6': {
-      margin: theme.spacing(2) + 'px 0 0 0',
-    },
-    '& blockquote': {
-      margin: '12px 0',
-      padding: '0 12px',
-      display: 'block',
-      borderLeft: '2px solid ' + theme.palette.primary.light,
-      color: fade(theme.palette.text.primary, 0.9),
-      fontStyle: 'italic',
-    },
-  },
-  syntaxHighlighter: {
-    margin: 0,
-    display: 'block',
-    tabSize: 4,
-    overflow: 'auto',
-    border: '1px solid ' + theme.palette.divider,
-    borderRadius: theme.shape.borderRadius,
-    padding: theme.spacing(2) + 'px !important',
-    background: theme.palette.background.default + ' !important',
-    color: theme.palette.text.primary + ' !important',
-  },
+  }
 }))
 
 const Post = () => {
@@ -136,9 +84,6 @@ const Post = () => {
     setPost(null)
     return _setError(e)
   }
-
-  const getPost = async i =>
-    (await get(`https://m.habr.com/kek/v1/articles/${i}/?fl=ru&hl=ru`)).data
 
   useEffect(() => {
     const get = async () => {
@@ -159,39 +104,6 @@ const Post = () => {
   }, [id])
 
   if (post) document.title = post.article.title
-
-  const options = {
-    replace: ({ name, children, attribs }) => {
-      if (name === 'pre') {
-        const language = children[0].attribs.class || null
-        const data = children[0].children[0].data || ''
-
-        return (
-          <SyntaxHighlighter
-            style={style}
-            language={language}
-            className={classes.syntaxHighlighter}
-          >
-            {data}
-          </SyntaxHighlighter>
-        )
-      }
-      // if (name === 'img') {
-      //   const PS = () => {
-      //     const [isOpen, setOpenState] = useState(true)
-      //     return (
-      //       <PhotoSwipe
-      //         items={[{ src: attribs.src, w: 500, h: 500 }]}
-      //         isOpen={isOpen}
-      //         onClose={() => setOpenState(false)}
-      //       />
-      //     )
-      //   }
-      //   return <PS />
-      // }
-    },
-  }
-
   if (fetchError) return <ErrorComponent message={fetchError} />
   if (!post) return <PostViewSkeleton />
 
@@ -232,9 +144,7 @@ const Post = () => {
           </Typography>
 
           {/* Article text */}
-          <div className={classes.text}>
-            {parse(post.article.text_html, options)}
-          </div>
+          {/* <FormattedText className={classes.text}>{post.article.text_html}</FormattedText> */}
         </Container>
 
         {/* Comments section */}

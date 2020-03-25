@@ -6,7 +6,7 @@ import { makeStyles, fade } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import Divider from '@material-ui/core/Divider'
-import axios from 'axios'
+import { getPosts } from '../api'
 import PostSkeleton from '../components/skeletons/Post'
 import ExpandIcon from '@material-ui/icons/ArrowDropDown'
 import PostItem from '../components/PostItem'
@@ -107,19 +107,6 @@ const Home = ({ state, setState }) => {
       mode: 'month',
     },
   ]
-  const modeUrls = {
-    all: 'sort=rating',
-    day: 'date=day&sort=date',
-    week: 'date=week&sort=date',
-    month: 'date=month&sort=date',
-  }
-
-  const getPosts = async (page, m) =>
-    (
-      await axios.get(
-        `https://m.habr.com/kek/v1/articles/?${modeUrls[m]}&page=${page}&fl=ru&hl=ru`
-      )
-    ).data
 
   const PaginationComponent = () =>
     state.pagesCount ? (
@@ -211,7 +198,7 @@ const Home = ({ state, setState }) => {
       setError(null)
 
       try {
-        data = await getPosts(currentPage, mode)
+        data = await getPosts(mode, currentPage)
       } catch (e) {
         if (e.statusCode === 404 || e.statusCode === 400)
           return setError('Нет такой страницы!')

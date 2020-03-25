@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import PostItem from '../components/PostItem'
 import { ReactSVG } from 'react-svg'
-import axios from 'axios'
+import { getSearchResults } from '../api'
 import PostSkeleton from '../components/skeletons/Post'
 import Pagintaion from '../components/Pagination'
 
@@ -149,13 +149,6 @@ const SearchResultsScreen = ({ q }) => {
   const [currentPage, setCurrentPage] = useState(params.page)
   const [pagesCount, setPagesCount] = useState()
 
-  const getSearchResults = async q =>
-    (
-      await axios.get(
-        `https://m.habr.com/kek/v1/articles/?query=${q}&fl=ru&hl=ru&page=${currentPage}`
-      )
-    ).data
-
   const handleChange = (_, i) => {
     if (i === currentPage) return
     
@@ -168,9 +161,10 @@ const SearchResultsScreen = ({ q }) => {
   useEffect(() => {
     setError(null)
     setData(null)
+    
     const get = async () => {
       try {
-        const d = await getSearchResults(q)
+        const d = await getSearchResults(q, currentPage)
         setData(d.data)
         if (!pagesCount) setPagesCount(d.data.pagesCount)
       } catch (e) {

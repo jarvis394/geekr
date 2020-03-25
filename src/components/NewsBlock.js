@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
 import numToWord from 'number-to-words-ru'
 import { Link } from 'react-router-dom'
-import { get } from 'axios'
+import { getNewsPromo } from '../api'
 import moment from 'moment'
 
 const useStyles = makeStyles(theme => ({
@@ -97,13 +97,10 @@ const News = () => {
   const [news, setNews] = useState()
   const classes = useStyles()
 
-  const getNews = async () =>
-    (await get('https://m.habr.com/kek/v1/news/promolist?fl=ru&hl=ru')).data
-
   useEffect(() => {
     const get = async () => {
       try {
-        setNews((await getNews()).data.items)
+        setNews((await getNewsPromo()).data.items)
       } catch (e) {
         console.error('Could not fetch news:', e)
       }
