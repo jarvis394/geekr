@@ -1,6 +1,7 @@
 import makeRequest from './makeRequest'
 
-export default async (query, page) =>
+// TODO: Needs an interface for the returning data
+export default async (query: string, page: number): Promise<unknown> =>
   (
     await makeRequest({
       path: 'articles',
