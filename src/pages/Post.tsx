@@ -6,16 +6,17 @@ import Grid from '@material-ui/core/Grid'
 import Avatar from '@material-ui/core/Avatar'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/core/styles'
-import { useParams } from 'react-router'
+import { useParams, useHistory } from 'react-router'
 import { getPost } from '../api'
 import { Link } from 'react-router-dom'
 import PostViewSkeleton from '../components/skeletons/PostView'
 import ErrorComponent from '../components/blocks/Error'
 import Scrollbar from '../components/Scrollbar'
-import Comments from '../components/blocks/Comments/Main'
 import moment from 'moment'
 import FormattedText from '../components/formatters/FormattedText'
 import { Theme } from '@material-ui/core/styles'
+import { Post as IPost } from 'src/interfaces'
+import { Button } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -49,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: theme.spacing(1),
     fontWeight: 500,
     fontSize: 14,
-    textDecoration: 'none'
+    textDecoration: 'none',
   },
   ts: {
     color: theme.palette.text.hint,
@@ -74,8 +75,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 const Post = () => {
-  const [post, setPost] = useState<any>()
+  const [post, setPost] = useState<IPost.PostResponse>()
   const [fetchError, _setError] = useState()
+  const history = useHistory()
   const classes = useStyles()
   const { id } = useParams()
 
@@ -131,7 +133,11 @@ const Post = () => {
               src={post.article.author.avatar}
               className={classes.avatar}
             />
-            <Typography component={Link} to={'/user/' + post.article.author.login} className={classes.author}>
+            <Typography
+              component={Link}
+              to={'/user/' + post.article.author.login}
+              className={classes.author}
+            >
               {post.article.author.login}
             </Typography>
             <Typography className={classes.ts}>
@@ -143,11 +149,20 @@ const Post = () => {
           </Typography>
 
           {/* Article text */}
-          <FormattedText className={classes.text}>{post.article.text_html}</FormattedText>
+          <FormattedText className={classes.text}>
+            {post.article.text_html}
+          </FormattedText>
         </Container>
-
-        {/* Comments section */}
-        <Comments postId={id} />
+        {/* Button to Comments */}
+        <Button
+          disableElevation
+          variant="contained"
+          fullWidth
+          color="primary"
+          onClick={() => history.push('/article/' + id + '/comments')}
+        >
+          Комментарии
+        </Button>
       </Scrollbar>
     </div>
   )

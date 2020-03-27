@@ -7,6 +7,7 @@ import numToWord from 'number-to-words-ru'
 import { Link } from 'react-router-dom'
 import { getNewsPromo } from '../../api'
 import moment from 'moment'
+import { NewsItem as INewsItem } from 'src/interfaces/News'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -94,19 +95,31 @@ const NewsItem = ({ data }): React.ReactElement => {
   )
 }
 
-const News = () => {
-  const [news, setNews] = useState<any>()
+const News = ({ setState, state }) => {
+  const [news, setNews] = useState<INewsItem[]>(state.cache.news.block)
   const classes = useStyles()
 
   useEffect(() => {
     const get = async () => {
       try {
-        setNews((await getNewsPromo()).data.items)
+        const data = (await getNewsPromo()).data.items
+        setState(prev => ({
+          ...prev,
+          cache: {
+            ...prev.cache,
+            news: {
+              ...prev.cache.news,
+              block: data
+            }
+          }
+        }))
+        setNews(data)
       } catch (e) {
         console.error('Could not fetch news:', e)
       }
     }
-    get()
+    if (!news) get()
+    // eslint-disable-next-line
   }, [])
 
   return news ? (

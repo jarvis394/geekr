@@ -34,7 +34,7 @@ export interface PostAuthor {
   common_tags: string[]
 }
 
-export default interface Post {
+export interface Post {
   id: string | number
   is_corporative: string | number | boolean
   is_tutorial: boolean
@@ -48,6 +48,7 @@ export default interface Post {
   tags_string: string
   title: string
   preview_html: string
+  text_html: string
   text_cut: string
   is_comments_hide: string | number | boolean
   editor_version: string | number
@@ -84,4 +85,8 @@ export default interface Post {
   is_favorite: false
   comments_new: null | number
   images: string[]
+}
+
+export interface PostResponse {
+  article: Post
 }

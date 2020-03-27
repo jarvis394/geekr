@@ -1,6 +1,7 @@
 import { UserSettings } from '../interfaces'
+import { DEFAULT_USER_SETTINGS } from '../config/constants'
 
-export default (): UserSettings | false => {
+export const get = (): UserSettings | false => {
   const data = localStorage.getItem('habra_userSettings')
   let res: UserSettings
 
@@ -14,4 +15,11 @@ export default (): UserSettings | false => {
   }
 
   return res
+}
+
+export const set = (key: string, value: string): void => {
+  const data = get() || DEFAULT_USER_SETTINGS
+  data[key] = value
+
+  localStorage.setItem('habra_userSettings', JSON.stringify(data))
 }

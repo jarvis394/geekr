@@ -11,5 +11,5 @@ export interface NewsItem {
 }
 
 export default interface News {
-  items: NewsItem
+  items: NewsItem[]
 }

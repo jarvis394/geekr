@@ -13,8 +13,9 @@ import formatNumber from '../../utils/formatNumber'
 import GreenRedNumber from '../formatters/GreenRedNumber'
 import moment from 'moment'
 import parse from 'html-react-parser'
+import { Post } from '../../interfaces'
 
-const ld = { lighten, darken}
+const ld = { lighten, darken }
 const useStyles = makeStyles(theme => ({
   noDeco: {
     textDecoration: 'none !important',
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   postLink: {
     color: theme.palette.text.primary,
     '&:visited > p': {
-      color: ld[theme.palette.type + 'en'](theme.palette.text.primary, 0.4)
+      color: ld[theme.palette.type + 'en'](theme.palette.text.primary, 0.4),
     },
   },
   paper: {
@@ -67,6 +68,7 @@ const useStyles = makeStyles(theme => ({
   postBottomRowItem: {
     color: theme.palette.text.hint,
     fontSize: 8,
+    textDecoration: 'none',
   },
   postBottomRowItemIcon: {
     fontSize: 16,
@@ -74,7 +76,15 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const PostItem = ({ post, showPreview }: { post: any; showPreview?: boolean}) => {
+export const PostItem = ({
+  post,
+  showPreview,
+  style,
+}: {
+  post: Post.Post
+  showPreview?: boolean
+  style?: Record<string, any>
+}) => {
   const classes = useStyles()
   const ts = moment(post.time_published)
     .calendar()
@@ -84,16 +94,16 @@ export const PostItem = ({ post, showPreview }: { post: any; showPreview?: boole
     title: unparsedTitle,
     id,
     score: sc,
-    reading_count,
-    favorites_count,
-    comments_count,
+    reading_count: readingCount,
+    favorites_count: favoritesCount,
+    comments_count: commentsCount,
     preview_html: previewHTML,
   } = post
   const title = parse(unparsedTitle)
-  const reads = formatNumber(reading_count)
-  const score = formatNumber(sc)
-  const favorites = formatNumber(favorites_count)
-  const comments = formatNumber(comments_count)
+  const reads = formatNumber(readingCount)
+  const score = formatNumber(Number(sc))
+  const favorites = formatNumber(Number(favoritesCount))
+  const comments = formatNumber(Number(commentsCount))
   const bottomRow = [
     {
       icon: <ThumbsUpDownIcon className={classes.postBottomRowItemIcon} />,
@@ -111,11 +121,12 @@ export const PostItem = ({ post, showPreview }: { post: any; showPreview?: boole
     {
       icon: <ChatBubbleIcon className={classes.postBottomRowItemIcon} />,
       count: comments,
+      to: '/article/' + id + '/comments',
     },
   ]
 
   return (
-    <ListItem className={classes.paper}>
+    <ListItem className={classes.paper} style={style}>
       <Grid container>
         <Grid alignItems="center" container direction="row">
           <Avatar src={avatar} className={classes.postAvatar} />
@@ -145,7 +156,7 @@ export const PostItem = ({ post, showPreview }: { post: any; showPreview?: boole
           </Grid>
         )}
         <Grid className={classes.postBottomRow} container xs={12}>
-          {bottomRow.map(({ icon, count, coloredText }, i) => (
+          {bottomRow.map(({ icon, count, coloredText, to }, i) => (
             <Grid
               container
               direction="row"
@@ -153,6 +164,8 @@ export const PostItem = ({ post, showPreview }: { post: any; showPreview?: boole
               justify="center"
               xs={3}
               key={i}
+              to={to}
+              component={to ? Link : Grid}
               className={classes.postBottomRowItem}
             >
               {icon}

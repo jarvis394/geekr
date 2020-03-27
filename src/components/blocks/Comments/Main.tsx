@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const Comments = ({ postId }) => {
+const Comments = ({ postId, authorId }) => {
   const [comments, setComments] = useState()
   const [commentsLength, setCommentsLength] = useState<number>()
   const [fetchError, setError] = useState()
@@ -39,7 +39,7 @@ const Comments = ({ postId }) => {
   })
 
   const renderComment = (node, depth = 0) => (
-    <Comment key={node.id} data={node}>
+    <Comment key={node.id} data={node} isAuthor={authorId === node.author.id}>
       {node.children.map(e => renderComment(e, depth + 1))}
     </Comment>
   )

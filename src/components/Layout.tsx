@@ -7,7 +7,7 @@ import theme from '../config/theme'
 import AppRouter from './Router'
 import AppBar from './blocks/AppBar'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { MIN_WIDTH as minWidth } from '../config/constants'
+import { MIN_WIDTH as minWidth, MODES } from '../config/constants'
 import isMobile from 'is-mobile'
 
 const chromeAddressBarHeight = 56
@@ -18,17 +18,49 @@ const useStyles = makeStyles({
     borderRadius: 0,
     flexDirection: 'column',
     maxWidth: minWidth,
-    margin: '0px auto 0 auto'
-  }
+    margin: '0px auto 0 auto',
+  },
 })
 
 const Layout = (): React.ReactElement => {
-  const classes = useStyles()
-  const [state, setState] = useState({
+  let initialState = {
     theme,
-    posts: {},
-    pagesCount: null
+    cache: {
+      posts: {},
+      news: {
+        block: null,
+        data: {},
+        pagesCount: null,
+        lastUpdateTS: null,
+      },
+    },
+  }
+
+  // The data structure for the state's cache is the following:
+  // [one of the modes]: {
+  //   data: {   <- Here posts will be stored with page number as a key
+  //     1: Post,
+  //     8: Post
+  //   },
+  //   pagesCount: number,
+  //   lastUpdateTS: Date
+  // }
+  MODES.forEach(mode => {
+    initialState = {
+      ...initialState,
+      cache: {
+        ...initialState.cache,
+        [mode.mode]: {
+          data: {},
+          pagesCount: null,
+          lastUpdateTS: null,
+        },
+      },
+    }
   })
+
+  const classes = useStyles()
+  const [state, setState] = useState(initialState)
 
   return (
     <ThemeProvider theme={createMuiTheme(state.theme)}>

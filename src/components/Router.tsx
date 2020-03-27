@@ -1,19 +1,20 @@
 import * as React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import makeStyles from '@material-ui/styles/makeStyles'
-import Home from '../pages/Home'
+import Home from '../pages/Home/index'
 import Post from '../pages/Post'
 import Settings from '../pages/Settings'
 import Search from '../pages/Search'
 import NotFound from '../pages/NotFound'
 import { Theme } from '@material-ui/core/styles'
+import CommentsPage from '../pages/Comments'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     backgroundColor: theme.palette.type === 'dark' ? '#0d0d0d' : '#f2f4f6',
     color: theme.palette.text.primary,
     margin: 0,
-    fontFamily: '-apple-system, BlinkMacSystemFont, Arial, sans-serif',
+    fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif',
     lineHeight: 1.5
   }
 }))
@@ -42,6 +43,11 @@ const Router = ({ state, setState }) => {
   return (
     <>
       <Switch>
+        {/* Comments */}
+        <Route exact path="/article/:id/comments">
+          <CommentsPage />
+        </Route>
+
         {/* Article */}
         <Route exact path="/article/:id">
           <Post />

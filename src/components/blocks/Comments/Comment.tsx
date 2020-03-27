@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useState } from 'react'
 import { Avatar, Grid, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, fade } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import FormattedText from '../../formatters/FormattedText'
@@ -14,6 +14,11 @@ const useStyles = makeStyles(theme => ({
   },
   noDeco: {
     textDecoration: 'none !important',
+  },
+  author: {
+    backgroundColor: isAuthor =>
+      isAuthor ? fade(theme.palette.primary.light, 0.1) : 'transparent',
+    borderRadius: theme.shape.borderRadius
   },
   authorLink: {
     color:
@@ -39,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   },
   ufo: {
     fontWeight: 500,
-    fontFamily: 'Google Sans'
+    fontFamily: 'Google Sans',
   },
   children: { marginLeft: theme.spacing(4) },
   collapseHolder: {
@@ -70,8 +75,8 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const Comment = ({ data, children }) => {
-  const classes = useStyles(data.level)
+const Comment = ({ data, children, isAuthor }) => {
+  const classes = useStyles(isAuthor)
   const [isOpen, setOpenState] = useState(true)
   const { message } = data
   const ts = moment(data.timePublished).fromNow()
@@ -79,8 +84,10 @@ const Comment = ({ data, children }) => {
   if (!data.author) {
     return (
       <div className={classes.root}>
-        <FormattedText className={classes.text + ' ' + classes.ufo}>{message}</FormattedText>
-        
+        <FormattedText className={classes.text + ' ' + classes.ufo}>
+          {message}
+        </FormattedText>
+
         {children.length !== 0 && (
           <div className={classes.children}>{children}</div>
         )}
@@ -119,6 +126,7 @@ const Comment = ({ data, children }) => {
         alignItems="center"
         container
         direction="row"
+        className={classes.author}
       >
         {children.length !== 0 && data.level !== 0 && (
           <div
