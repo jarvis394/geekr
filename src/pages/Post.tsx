@@ -15,8 +15,9 @@ import Scrollbar from '../components/Scrollbar'
 import Comments from '../components/blocks/Comments/Main'
 import moment from 'moment'
 import FormattedText from '../components/formatters/FormattedText'
+import { Theme } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: '100%',
     height: '100%',
@@ -55,8 +56,13 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 500,
     fontSize: 14,
   },
+  text: {
+    marginBottom: theme.spacing(4),
+    lineHeight: '1.56',
+    color: theme.palette.type === 'dark' ? '#eee' : theme.palette.text.primary,
+  },
   title: {
-    fontWeight: '800',
+    fontWeight: 800,
     fontFamily: 'Google Sans',
     fontSize: 28,
     lineHeight: '34px',
@@ -65,15 +71,10 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(3),
     marginTop: theme.spacing(2),
   },
-  text: {
-    marginBottom: theme.spacing(4),
-    lineHeight: '1.56',
-    color: theme.palette.type === 'dark' ? '#eee' : theme.palette.text.primary,
-  }
 }))
 
 const Post = () => {
-  const [post, setPost] = useState()
+  const [post, setPost] = useState<any>()
   const [fetchError, _setError] = useState()
   const classes = useStyles()
   const { id } = useParams()

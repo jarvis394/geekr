@@ -3,7 +3,7 @@ import { makeStyles, fade } from '@material-ui/core/styles'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import Spoiler from '../blocks/Spoiler'
-import parse, { domToReact } from 'html-react-parser'
+import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser'
 
 const useStyles = makeStyles(theme => ({
   text: {
@@ -65,8 +65,8 @@ const useStyles = makeStyles(theme => ({
 
 const FormattedText = ({ children, className, ...props }) => {
   const classes = useStyles()
-  const options = {
-    replace: ({ name, children, attribs }) => {
+  const options: HTMLReactParserOptions = {
+    replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === 'pre') {
         const language = children[0].attribs.class || null
         const data = children[0].children[0].data || ''

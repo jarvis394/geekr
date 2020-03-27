@@ -7,7 +7,13 @@ const useStyles = makeStyles(theme => ({
   greenText: { color: theme.palette.success.main },
 }))
 
-const GreenRedNumber = ({ number, defaultClass, style, classes: additionalClasses, ...props }) => {
+const GreenRedNumber = ({
+  number,
+  defaultClass,
+  style,
+  classes: additionalClasses,
+  ...props
+}: Partial<any>) => {
   const classes = useStyles()
 
   let className = defaultClass

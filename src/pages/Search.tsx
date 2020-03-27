@@ -142,13 +142,13 @@ const NoResults = () => {
 }
 
 const SearchResultsScreen = ({ q }) => {
-  const params = useParams()
+  const params = useParams() as { page: string }
   const location = useLocation()
   const history = useHistory()
-  const [data, setData] = useState()
+  const [data, setData] = useState<any>()
   const [fetchError, setError] = useState()
-  const [currentPage, setCurrentPage] = useState(params.page)
-  const [pagesCount, setPagesCount] = useState()
+  const [currentPage, setCurrentPage] = useState<number>(Number(params.page))
+  const [pagesCount, setPagesCount] = useState<number>()
 
   const handleChange = (_, i) => {
     if (i === currentPage) return

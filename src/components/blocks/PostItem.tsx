@@ -74,7 +74,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const PostItem = ({ post, showPreview }) => {
+export const PostItem = ({ post, showPreview }: { post: any; showPreview?: boolean}) => {
   const classes = useStyles()
   const ts = moment(post.time_published)
     .calendar()

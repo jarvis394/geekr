@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const NewsItem = ({ data }) => {
+const NewsItem = ({ data }): React.ReactElement => {
   const classes = useStyles()
   const ts = moment(data.time_published).calendar()
   const commentsCount = numToWord.convert(data.comments_count, {
@@ -95,7 +95,7 @@ const NewsItem = ({ data }) => {
 }
 
 const News = () => {
-  const [news, setNews] = useState()
+  const [news, setNews] = useState<any>()
   const classes = useStyles()
 
   useEffect(() => {

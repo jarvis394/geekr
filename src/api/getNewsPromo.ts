@@ -1,7 +1,7 @@
 import makeRequest from './makeRequest'
+import { APIResponse, News } from '../interfaces'
 
-// TODO: Needs an interface for the returning data
-export default async (): Promise<unknown> =>
+export default async (): Promise<APIResponse<News>> =>
   (await makeRequest({
     path: 'news/promolist',
     version: 1,

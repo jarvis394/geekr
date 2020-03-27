@@ -1,7 +1,7 @@
 import makeRequest from './makeRequest'
+import { APIResponse, Comments } from '../interfaces'
 
-// TODO: Needs an interface for the returning data
-export default async (id: number): Promise<unknown> => (await makeRequest({
+export default async (id: number): Promise<APIResponse<Comments.Comments>> => (await makeRequest({
   path: `articles/${id}/comments`,
   version: 2
 })).data

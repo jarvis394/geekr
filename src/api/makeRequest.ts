@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosPromise } from 'axios'
 import { API_URL } from '../config/constants'
-import { APIResponse } from '../interfaces'
 
 const CancelToken = axios.CancelToken
 const source = CancelToken.source()
@@ -28,7 +27,7 @@ export default async ({
   params,
   requestOptions,
   version = 2,
-}: Arguments): Promise<AxiosPromise<APIResponse>> =>
+}: Arguments): Promise<AxiosPromise> =>
   await axios({
     method: requestOptions?.method || 'get', // Fancy TS v3.8
     url: API_URL + `v${version}/` + path,

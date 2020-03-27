@@ -6,8 +6,9 @@ import Post from '../pages/Post'
 import Settings from '../pages/Settings'
 import Search from '../pages/Search'
 import NotFound from '../pages/NotFound'
+import { Theme } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     backgroundColor: theme.palette.type === 'dark' ? '#0d0d0d' : '#f2f4f6',
     color: theme.palette.text.primary,
@@ -43,7 +44,7 @@ const Router = ({ state, setState }) => {
       <Switch>
         {/* Article */}
         <Route exact path="/article/:id">
-          <Post state={state} setState={setState} />
+          <Post />
         </Route>
 
         {/* Settings */}
@@ -53,12 +54,12 @@ const Router = ({ state, setState }) => {
 
         {/* Search */}
         <Route exact path="/search/p/:page">
-          <Search state={state} setState={setState} />
+          <Search />
         </Route>
 
         {/* Search */}
         <Route exact path="/search">
-          <Search state={state} setState={setState} />
+          <Search />
         </Route>
 
         {/* PageView */}

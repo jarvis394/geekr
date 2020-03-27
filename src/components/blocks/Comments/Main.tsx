@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 
 const Comments = ({ postId }) => {
   const [comments, setComments] = useState()
-  const [commentsLength, setCommentsLength] = useState()
+  const [commentsLength, setCommentsLength] = useState<number>()
   const [fetchError, setError] = useState()
   const classes = useStyles()
   const [rootComment, setRootComment] = useState({

@@ -22,7 +22,7 @@ const useStyles = makeStyles({
   }
 })
 
-const Layout = () => {
+const Layout = (): React.ReactElement => {
   const classes = useStyles()
   const [state, setState] = useState({
     theme,

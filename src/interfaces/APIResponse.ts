@@ -1,4 +1,4 @@
-export default interface APIResponse {
-  data: Record<never, never>
+export default interface APIResponse<T> {
+  data: T
   success: boolean
 }

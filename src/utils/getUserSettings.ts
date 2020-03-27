@@ -1,15 +1,17 @@
-import { IUserSettings } from '../interfaces'
+import { UserSettings } from '../interfaces'
 
-export default (): IUserSettings => {
-  let data = localStorage.getItem('habra_userSettings')
+export default (): UserSettings | false => {
+  const data = localStorage.getItem('habra_userSettings')
+  let res: UserSettings
 
-  if (!data) return null
+  if (!data) return false
 
   try {
-    data = JSON.parse(data)
+    res = JSON.parse(data)
   } catch (e) {
     console.error('Cannot parse user settings:', e, '\nGot:', data)
+    return false
   }
 
-  return data
+  return res
 }

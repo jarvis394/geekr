@@ -19,6 +19,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import NewsBlock from '../components/blocks/NewsBlock'
+import { Mode } from '../api/getPosts'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -57,14 +58,14 @@ const Home = ({ state, setState }) => {
   document.title = 'habra.'
 
   const location = useLocation()
-  const params = useParams()
+  const params = useParams() as { page: string }
 
-  const getMode = () => {
+  const getMode = (): Mode => {
     const loc = location.pathname.split('/').slice(1)
     if (loc[0] === 'all') return 'all'
     else if (loc[0] === 'top' && ['day', 'week', 'month'].includes(loc[1]))
-      return loc[1]
-    else return false
+      return loc[1] as Mode
+    else return 'day'
   }
 
   const [posts, setPosts] = useState(
@@ -74,7 +75,7 @@ const Home = ({ state, setState }) => {
   const history = useHistory()
   const classes = useStyles()
   const postsRef = useRef()
-  const [mode, setMode] = useState(getMode())
+  const [mode, setMode] = useState<Mode>(getMode())
 
   /* eslint-disable indent */
   const postsComponents = posts
@@ -86,7 +87,7 @@ const Home = ({ state, setState }) => {
   /* eslint-enable indent */
   let currentPage = Number(params.page)
 
-  const modes = [
+  const modes: { text: string; to: string; mode: Mode }[] = [
     {
       text: 'Все подряд',
       to: '/all',
@@ -124,6 +125,8 @@ const Home = ({ state, setState }) => {
     const buttonList = modes.map((e, i) => {
       const isCurrent = e.mode === current.mode
       const handleClick = () => {
+        if (isCurrent) return
+
         setMode(e.mode)
         setPosts(null)
         setState(prev => ({ ...prev, posts: {} }))
@@ -134,7 +137,7 @@ const Home = ({ state, setState }) => {
       return (
         <ListItem
           onClick={handleClick}
-          button={!isCurrent}
+          button={!isCurrent as true | undefined}
           key={i}
           className={classes.modeListItem}
         >
@@ -185,7 +188,7 @@ const Home = ({ state, setState }) => {
 
   const handlePagination = (_, i) => {
     if (i === currentPage) return
-    
+
     setState(prev => ({ ...prev, posts: {} }))
     setPosts(null)
     history.push(modes.find(e => e.mode === mode).to + '/p/' + i)
@@ -200,6 +203,7 @@ const Home = ({ state, setState }) => {
 
       try {
         data = await getPosts(mode, currentPage)
+        console.log(data)
       } catch (e) {
         if (e.statusCode === 404 || e.statusCode === 400)
           return setError('Нет такой страницы!')

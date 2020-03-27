@@ -3,8 +3,9 @@ import Typography from '@material-ui/core/Typography'
 import makeStyles from '@material-ui/styles/makeStyles'
 import { Link } from 'react-router-dom'
 import { ReactSVG } from 'react-svg'
+import { Theme } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
   centered: {
     height: 'calc(100% - 48px)',
     display: 'flex',
@@ -26,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const ErrorComponent = ({ message, onHomeClick }) => {
+const ErrorComponent = ({ message, onHomeClick }: { message: string; onHomeClick?: () => void}) => {
   const classes = useStyles()
   return (
     <div className={classes.centered}>

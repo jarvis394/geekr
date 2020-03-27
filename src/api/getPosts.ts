@@ -1,16 +1,16 @@
 import makeRequest from './makeRequest'
+import { APIResponse, Posts } from '../interfaces'
 
-type Mode = 'all' | 'day' | 'week' | 'month'
+export type Mode = 'all' | 'day' | 'week' | 'month'
 
-const modeParams = {
+export const modeParams = {
   all: { sort: 'rating', date: '' },
   day: { date: 'day', sort: 'date' },
   week: { date: 'week', sort: 'date' },
   month: { date: 'month', sort: 'date' },
 }
 
-// TODO: Needs an interface for the returning data
-export default async (mode: Mode, page: number): Promise<unknown> =>
+export default async (mode: Mode, page: number): Promise<APIResponse<Posts>> =>
   (
     await makeRequest({
       path: 'articles',

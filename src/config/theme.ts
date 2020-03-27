@@ -1,21 +1,29 @@
 import { blue } from '@material-ui/core/colors'
-import { darken } from '@material-ui/core/styles'
+import { darken, ThemeOptions } from '@material-ui/core/styles'
+import { PaletteType } from '@material-ui/core'
 
 const localStorageThemeType = localStorage.getItem('theme')
-const type = localStorageThemeType || 'light'
+const type = (localStorageThemeType || 'light') as PaletteType
 
-export const makeBackgroundColors = t => ({
+export const makeBackgroundColors = (t: PaletteType): {
+  default: string
+  paper: string
+} => ({
   default: t === 'dark' ? '#121212' : '#fafafa',
   paper: t === 'dark' ? '#212121' : '#fff',
 })
 
-export const makePrimaryColors = t => ({
+export const makePrimaryColors = (t: PaletteType): {
+  main: string
+  light: string
+  dark: string
+} => ({
   main: t === 'dark' ? blue.A100 : blue.A400,
   light: t === 'dark' ? blue.A100 : blue.A400,
   dark: t === 'dark' ? darken(blue.A100, 0.1) : blue.A700,
 })
 
-export default {
+const theme: ThemeOptions = {
   palette: {
     type,
     primary: makePrimaryColors(type),
@@ -29,3 +37,5 @@ export default {
     }
   }
 }
+
+export default theme
