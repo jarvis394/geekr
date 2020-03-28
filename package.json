@@ -33,10 +33,10 @@
     "react-svg": "^11.0.14",
     "react-syntax-highlighter": "^12.1.0",
     "serve": "^11.3.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.0-beta"
   },
   "scripts": {
-    "start": "npm run start:dev",
+    "start": "npm run start:prod",
     "start:prod": "serve -s build",
     "start:dev": "react-scripts start",
     "build": "react-scripts-ts build",
