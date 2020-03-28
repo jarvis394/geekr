@@ -7,11 +7,12 @@ import { Paper, Button } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import PostItem from '../components/blocks/PostItem'
-import { ReactSVG } from 'react-svg'
 import { getSearchResults } from '../api'
 import PostSkeleton from '../components/skeletons/Post'
 import Pagintaion from '../components/blocks/Pagination'
+import EmptySVG from '../components/svg/Empty'
 import SearchSVG from '../components/svg/Search'
+import { Posts } from '../interfaces'
 
 /**
  * Custom hook for getting query from the URL
@@ -137,7 +138,7 @@ const NoResults = () => {
   return (
     <div className={classes.root}>
       <Typography className={classes.title}>К сожалению, здесь пока нет ни одной публикации</Typography>
-      <ReactSVG className={classes.svg} src="/empty.svg" />
+      <EmptySVG className={classes.svg} />
     </div>
   )
 }
@@ -146,7 +147,7 @@ const SearchResultsScreen = ({ q }) => {
   const params = useParams() as { page: string }
   const location = useLocation()
   const history = useHistory()
-  const [data, setData] = useState<any>()
+  const [data, setData] = useState<Posts>()
   const [fetchError, setError] = useState()
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page))
   const [pagesCount, setPagesCount] = useState<number>()

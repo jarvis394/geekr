@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ReactSVG } from 'react-svg'
+import NotFoundSVG from '../components/svg/NotFound'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
 import { Link } from 'react-router-dom'
@@ -51,7 +51,7 @@ const NotFound = () => {
         </Link>
         ?
       </Typography>
-      <ReactSVG className={classes.svg} src="/notfound.svg" />
+      <NotFoundSVG className={classes.svg} />
     </div>
   )
 }

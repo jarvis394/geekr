@@ -1,12 +1,9 @@
 import React from 'react'
-
-interface Props {
-  svgProps?: React.SVGProps<SVGSVGElement>
-  className: string
-  theme?: 'light' | 'dark'
-}
+import Props from '../../interfaces/SVGProps'
 
 const SearchSVG = ({ svgProps, ...props }: Props) => {
+  const isLight = props.theme === 'light'
+
   return (
     <div {...props}>
       <svg
@@ -134,7 +131,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
             y2="425.15"
           ></linearGradient>
         </defs>
-        <title>file searching</title>
+        <title>Search</title>
         <g opacity="0.5">
           <rect
             x="154.15"
@@ -149,14 +146,14 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           y="138.39"
           width="434.43"
           height="581.58"
-          fill="#f2f2f2"
+          fill={isLight ? '#f2f2f2' : '#333'}
         ></rect>
         <rect
           x="193.86"
           y="162.91"
           width="149.48"
           height="4.67"
-          fill="#e0e0e0"
+          fill={isLight ? '#e0e0e0' : '#888'}
         ></rect>
         <rect
           x="193.86"
@@ -229,7 +226,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           y="251.67"
           width="156.32"
           height="154.15"
-          fill="#f5f5f5"
+          fill={isLight ? '#f5f5f5' : '#555'}
         ></rect>
         <g opacity="0.5">
           <rect
@@ -247,19 +244,19 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           y="262.18"
           width="143.79"
           height="96.93"
-          fill="#fff"
+          fill={isLight ? '#fff' : '#666'}
         ></rect>
         <g clipPath="url(#42e7b1d1-2be2-47b0-aacb-a853df270819)">
           <polygon
             points="190.35 355.61 226.56 299.55 241.74 324.07 274.44 290.21 302.47 324.07 326.99 273.86 390.05 374.29 185.68 367.28 190.35 355.61"
-            fill="#2979ff"
+            fill={isLight ? '#2979ff' : '#aaa'}
             opacity="0.4"
           ></polygon>
           <circle
             cx="218.38"
             cy="276.19"
             r="10.51"
-            fill="#2979ff"
+            fill={isLight ? '#2979ff' : '#aaa'}
             opacity="0.4"
           ></circle>
         </g>
@@ -277,7 +274,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           y="458.37"
           width="156.32"
           height="154.15"
-          fill="#f5f5f5"
+          fill={isLight ? '#f5f5f5' : '#555'}
         ></rect>
         <g opacity="0.5">
           <rect
@@ -295,12 +292,12 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           y="468.88"
           width="143.79"
           height="96.93"
-          fill="#fff"
+          fill={isLight ? '#fff' : '#666'}
         ></rect>
         <g clipPath="url(#f66b8fac-771d-49bf-85c7-4ce29a79f723)">
           <polygon
             points="190.35 562.31 226.56 506.25 241.74 530.78 274.44 496.91 302.47 530.78 326.99 480.56 390.05 580.99 185.68 573.99 190.35 562.31"
-            fill="#bdbdbd"
+            fill={isLight ? '#bdbdbd' : '#666'}
             opacity="0.4"
           ></polygon>
           <circle
@@ -327,7 +324,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           width="581.58"
           height="434.43"
           transform="translate(-122.17 1004.12) rotate(-78.76)"
-          fill="#fff"
+          fill={isLight ? '#fff' : '#444'}
         ></rect>
         <rect
           x="542.89"
@@ -335,7 +332,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           width="308.31"
           height="4.67"
           transform="translate(-119.81 -191.93) rotate(11.24)"
-          fill="#e0e0e0"
+          fill={isLight ? '#e0e0e0' : '#666'}
         ></rect>
         <rect
           x="456.83"
@@ -343,7 +340,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           width="308.31"
           height="4.67"
           transform="translate(-37.05 -166.84) rotate(11.24)"
-          fill="#e0e0e0"
+          fill={isLight ? '#e0e0e0' : '#666'}
         ></rect>
         <rect
           x="452.26"
@@ -351,7 +348,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           width="238.24"
           height="4.67"
           transform="translate(-34.01 -158.75) rotate(11.24)"
-          fill="#e0e0e0"
+          fill={isLight ? '#e0e0e0' : '#777'}
         ></rect>
         <rect
           x="448.46"
@@ -377,7 +374,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           width="277.94"
           height="4.67"
           transform="translate(-110.6 -186.03) rotate(11.24)"
-          fill="#e0e0e0"
+          fill={isLight ? '#e0e0e0' : '#666'}
         ></rect>
         <rect
           x="529.49"
@@ -394,7 +391,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           width="308.31"
           height="4.67"
           transform="translate(-99.67 -185.82) rotate(11.24)"
-          fill="#e0e0e0"
+          fill={isLight ? '#e0e0e0' : '#666'}
         ></rect>
         <g opacity="0.5">
           <rect
@@ -412,7 +409,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           width="273.27"
           height="155.32"
           transform="translate(-64.02 -181.59) rotate(11.24)"
-          fill="#fff"
+          fill={isLight ? '#fff' : '#555'}
         ></rect>
         <rect
           x="516.71"
@@ -420,7 +417,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           width="308.31"
           height="4.67"
           transform="translate(-94.63 -184.29) rotate(11.24)"
-          fill="#e0e0e0"
+          fill={isLight ? '#e0e0e0' : '#777'}
         ></rect>
         <rect
           x="566.14"

@@ -2,7 +2,7 @@ import * as React from 'react'
 import Typography from '@material-ui/core/Typography'
 import makeStyles from '@material-ui/styles/makeStyles'
 import { Link } from 'react-router-dom'
-import { ReactSVG } from 'react-svg'
+import ErrorSVG from '../svg/Error'
 import { Theme } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -39,7 +39,7 @@ const ErrorComponent = ({ message, onHomeClick }: { message: string; onHomeClick
           Домой
         </Link>
       </Typography>
-      <ReactSVG src="/error.svg" className={classes.svg} />
+      <ErrorSVG className={classes.svg} />
     </div>
   )
 }
