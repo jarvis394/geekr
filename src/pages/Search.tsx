@@ -4,13 +4,14 @@ import Typography from '@material-ui/core/Typography'
 import InputBase from '@material-ui/core/InputBase'
 import { useLocation, useParams } from 'react-router-dom'
 import { Paper, Button } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import PostItem from '../components/blocks/PostItem'
 import { ReactSVG } from 'react-svg'
 import { getSearchResults } from '../api'
 import PostSkeleton from '../components/skeletons/Post'
 import Pagintaion from '../components/blocks/Pagination'
+import SearchSVG from '../components/svg/Search'
 
 /**
  * Custom hook for getting query from the URL
@@ -191,13 +192,14 @@ const SearchResultsScreen = ({ q }) => {
 
 const SvgScreen = () => {
   const classes = useSvgStyles()
+  const theme = useTheme()
 
   return (
     <div className={classes.svgHolder}>
       <Typography className={classes.svgTitle}>
         Попробуй что-нибудь поискать!
       </Typography>
-      <ReactSVG className={classes.svg} src="search.svg" />
+      <SearchSVG theme={theme.palette.type} className={classes.svg} />
     </div>
   )
 }
