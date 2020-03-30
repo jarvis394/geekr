@@ -13,6 +13,7 @@ import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 import Slide from '@material-ui/core/Slide'
 import { useHistory } from 'react-router-dom'
+import getCachedMode from '../../utils/getCachedMode'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -51,7 +52,7 @@ const Component = ({ setState }) => {
         <Container className={classes.container}>
           <Toolbar style={{ minHeight: 'unset', height: 48 }}>
             <Typography variant="h6" style={{ flexGrow: 1 }}>
-              <Link onClick={() => setState(prev => ({ ...prev, posts: {} }))} to="/" className={classes.link}>
+              <Link onClick={() => setState(prev => ({ ...prev, posts: {} }))} to={`/${getCachedMode()}/p/1`} className={classes.link}>
                 habra.
               </Link>
             </Typography>

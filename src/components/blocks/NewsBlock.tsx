@@ -7,6 +7,7 @@ import numToWord from 'number-to-words-ru'
 import { Link } from 'react-router-dom'
 import { getNewsPromo } from '../../api'
 import moment from 'moment'
+import NewsItemSkeleton from '../skeletons/NewsItem'
 import { NewsItem as INewsItem } from 'src/interfaces/News'
 
 const useStyles = makeStyles(theme => ({
@@ -55,6 +56,10 @@ const useStyles = makeStyles(theme => ({
   article: {
     textDecoration: 'none'
   },
+  error: {
+    color: theme.palette.error.light,
+    fontWeight: 800,
+  }
 }))
 
 const NewsItem = ({ data }): React.ReactElement => {
@@ -97,10 +102,12 @@ const NewsItem = ({ data }): React.ReactElement => {
 
 const News = ({ setState, state }) => {
   const [news, setNews] = useState<INewsItem[]>(state.cache.news.block)
+  const [fetchError, setError] = useState<null | string>()
   const classes = useStyles()
 
   useEffect(() => {
     const get = async () => {
+      setError(null)
       try {
         const data = (await getNewsPromo()).data.items
         setState(prev => ({
@@ -113,19 +120,22 @@ const News = ({ setState, state }) => {
             }
           }
         }))
-        setNews(data)
+      setNews(data)
       } catch (e) {
         console.error('Could not fetch news:', e)
+        setError(e.message)
       }
     }
     if (!news) get()
     // eslint-disable-next-line
   }, [])
 
-  return news ? (
+  return (
     <Paper className={classes.root} elevation={0}>
       <Typography className={classes.header}>Новости</Typography>
-      {news.map((e, i) => (
+      {fetchError && <Typography className={classes.error}>Произошла ошибка при выполнении запроса</Typography>}
+      {!news && !fetchError && [...Array(5)].map((_, i) => <NewsItemSkeleton key={i} />)}
+      {news && news.map((e, i) => (
         <NewsItem data={e} key={i} />
       ))}
       <Box className={classes.linkBox}>
@@ -141,7 +151,7 @@ const News = ({ setState, state }) => {
         </Button>
       </Box>
     </Paper>
-  ) : null
+  )
 }
 
 export default News
