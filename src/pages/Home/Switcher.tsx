@@ -41,14 +41,12 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Switcher = ({ handleClick, mode, setMode }) => {
-  const classes = useStyles()
-  const current = modes.find(e => e.mode === mode)
-  const buttonList = modes.map((e, i) => {
-    const isNotCurrent = e.mode !== current.mode
+  const ListButton = ({ data }) => {
+    const isNotCurrent = data.mode !== current.mode
     const handleClickWrapped = () => {
       if (isNotCurrent) {
-        setMode(e.mode)
-        handleClick(e)
+        setMode(data.mode)
+        handleClick(data)
       }
     }
 
@@ -56,7 +54,6 @@ const Switcher = ({ handleClick, mode, setMode }) => {
       <ListItem
         onClick={handleClickWrapped}
         button={isNotCurrent as true | undefined}
-        key={i}
         className={classes.item}
       >
         <ListItemText
@@ -64,12 +61,17 @@ const Switcher = ({ handleClick, mode, setMode }) => {
             className: isNotCurrent ? classes.text : classes.textSelected,
           }}
         >
-          {e.text}
+          {data.text}
         </ListItemText>
       </ListItem>
     )
-  })
+  }
+  const ListButtonMemoized = React.memo(ListButton)
 
+  const classes = useStyles()
+  const current = modes.find(e => e.mode === mode)
+  const buttonList = modes.map((e, i) => <ListButtonMemoized data={e} key={i} />)
+  
   return (
     <>
       <ExpansionPanel
@@ -94,4 +96,4 @@ const Switcher = ({ handleClick, mode, setMode }) => {
   )
 }
 
-export default Switcher
+export default React.memo(Switcher)

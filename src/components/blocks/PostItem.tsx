@@ -2,7 +2,6 @@ import * as React from 'react'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { Link } from 'react-router-dom'
-import Avatar from '@material-ui/core/Avatar'
 import ListItem from '@material-ui/core/ListItem'
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import VisibilityIcon from '@material-ui/icons/Visibility'
@@ -14,6 +13,7 @@ import GreenRedNumber from '../formatters/GreenRedNumber'
 import moment from 'moment'
 import parse from 'html-react-parser'
 import { Post } from '../../interfaces'
+import UserAvatar from './UserAvatar'
 
 const ld = { lighten, darken }
 const useStyles = makeStyles(theme => ({
@@ -83,7 +83,7 @@ export const PostItem = ({
 }: {
   post: Post.Post
   showPreview?: boolean
-  style?: Record<string, any>
+  style?: Record<string, unknown>
 }) => {
   const classes = useStyles()
   const ts = moment(post.time_published)
@@ -129,7 +129,7 @@ export const PostItem = ({
     <ListItem className={classes.paper} style={style}>
       <Grid container>
         <Grid alignItems="center" container direction="row">
-          <Avatar src={avatar} className={classes.postAvatar} />
+          <UserAvatar src={avatar} login={login} className={classes.postAvatar} />
           <Typography variant="caption">
             <Link
               className={classes.noDeco + ' ' + classes.postAuthor}

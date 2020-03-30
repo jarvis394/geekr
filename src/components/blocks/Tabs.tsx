@@ -24,12 +24,25 @@ const validPaths = [
   '/authors',
   '/companies'
 ]
+const isValidPath = (path: string): boolean => validPaths.some(e => path.startsWith(e))
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function LinkTab(props: any) {
+  return (
+    <Tab
+      component={Link}
+      {...props}
+    />
+  )
+}
+
+const LinkTabMemoized = React.memo(LinkTab)
 
 const TabsComponent = ({ children }) => {
   const classes = useStyles()
   const location = useLocation()
-  const [value, setValue] = useState(0)
-  const shouldShow = validPaths.some(e => location.pathname.startsWith(e))
+  const [value, setValue] = useState<number>(0)
+  const shouldShow = isValidPath(location.pathname)
   const handleChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue)
   }
@@ -43,17 +56,6 @@ const TabsComponent = ({ children }) => {
     { label: 'Авторы', to: () => '/authors', tab: 'authors' },
     { label: 'Компании', to: () => '/companies', tab: 'companies' },
   ]
-  
-  // Magically doesn't work with the arrow syntax :p
-  // No anonymous functions for today.
-  function LinkTab(props) {
-    return (
-      <Tab
-        component={Link}
-        {...props}
-      />
-    )
-  }
 
   return (
     <Scrollbar>
@@ -65,7 +67,7 @@ const TabsComponent = ({ children }) => {
           textColor="primary"
           variant="scrollable"
         >
-          {tabs.map(({ to, label }, i) => <LinkTab to={to()} label={label} key={i} />)}
+          {tabs.map(({ to, label }, i) => <LinkTabMemoized to={to()} label={label} key={i} />)}
         </Tabs>
       </Paper>
       {children}
@@ -73,4 +75,4 @@ const TabsComponent = ({ children }) => {
   )
 }
 
-export default TabsComponent
+export default React.memo(TabsComponent)

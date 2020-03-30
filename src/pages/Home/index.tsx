@@ -1,18 +1,18 @@
 import * as React from 'react'
 import { useState, useEffect, useRef } from 'react'
-import List from '@material-ui/core/List'
-import { makeStyles } from '@material-ui/core/styles'
-import { getPosts } from '../../api'
-import PostSkeleton from '../../components/skeletons/Post'
-import PostItem from '../../components/blocks/PostItem'
-import Pagination from '../../components/blocks/Pagination'
 import { useHistory, useParams } from 'react-router-dom'
-import ErrorComponent from '../../components/blocks/Error'
-import NewsBlock from '../../components/blocks/NewsBlock'
-import { Mode } from '../../api/getPosts'
-import useLastMode from '../../utils/useLastMode'
-import { Posts } from '../../interfaces'
-import { MODES as modes } from '../../config/constants'
+import { List } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import { getPosts } from 'src/api'
+import PostSkeleton from 'src/components/skeletons/Post'
+import PostItem from 'src/components/blocks/PostItem'
+import Pagination from 'src/components/blocks/Pagination'
+import ErrorComponent from 'src/components/blocks/Error'
+import NewsBlock from 'src/components/blocks/NewsBlock'
+import { Mode } from 'src/api/getPosts'
+import useLastMode from 'src/utils/useLastMode'
+import { Posts } from 'src/interfaces'
+import { MODES as modes } from 'src/config/constants'
 import Switcher from './Switcher'
 
 const useStyles = makeStyles(theme => ({
@@ -37,7 +37,7 @@ const Home = ({ state, setState }) => {
   const [posts, setPosts] = useState<Posts>(
     cache[mode].data[currentPage] || false
   )
-  const [fetchError, _setError] = useState()
+  const [fetchError, _setError] = useState<string>()
   const history = useHistory()
   const classes = useStyles()
   const postsRef = useRef()
@@ -60,7 +60,7 @@ const Home = ({ state, setState }) => {
       />
     ) : null
 
-  const setError = e => {
+  const setError = (e: string) => {
     setPosts(null)
     return _setError(e)
   }
@@ -111,7 +111,7 @@ const Home = ({ state, setState }) => {
                 [currentPage]: {
                   articleIds: data.data.articleIds,
                   articleRefs: data.data.articleRefs,
-                }
+                },
               },
               pagesCount: data.data.pagesCount,
             },
@@ -141,8 +141,8 @@ const Home = ({ state, setState }) => {
         {postsComponents[0]}
         {currentPage === 1 && <NewsBlock state={state} setState={setState} />}
         {postsComponents.slice(1)}
+        <PaginationComponent />
       </List>
-      <PaginationComponent />
     </>
   )
 }
