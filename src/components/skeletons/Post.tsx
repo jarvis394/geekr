@@ -53,6 +53,15 @@ const PostSkeleton = () => {
             height={14}
           />
         </Grid>
+        <Grid item xs={12}>
+          <Skeleton
+            variant="rect"
+            width="75%"
+            className={classes.skeleton}
+            height={14}
+            style={{ marginTop: 16 }}
+          />
+        </Grid>
         <Grid container xs={12} direction="row">
           {Array(4)
             .fill(null)

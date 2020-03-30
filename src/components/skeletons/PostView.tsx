@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
 import Divider from '@material-ui/core/Divider'
 import Scrollbar from '../Scrollbar'
+import random from '../../utils/random'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,10 +27,6 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 4,
   },
 }))
-
-const random = (min = 0, max = 1) => {
-  return Math.round(min - 0.5 + Math.random() * (max - min + 1))
-}
 
 const PostSkeleton = () => {
   const classes = useStyles()

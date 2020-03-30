@@ -5,6 +5,7 @@ import PostItem from '../components/blocks/PostItem'
 import { Typography } from '@material-ui/core'
 import { getPost } from '../api'
 import { Post } from '../interfaces'
+import PostSkeleton from '../components/skeletons/Post'
 import Scrollbar from '../components/Scrollbar'
 
 const CommentsPage = () => {
@@ -28,12 +29,12 @@ const CommentsPage = () => {
   }, [id])
 
   if (error) return <Typography>error: {error}</Typography>
-  if (!post) return <Typography>loading...</Typography>
   
   return (
     <Scrollbar>
-      <PostItem style={{ marginBottom: 0 }} post={post} />
-      <Comments authorId={Number(post.author.id)} postId={id} />
+      {!post && <PostSkeleton />}
+      {post &&<PostItem style={{ marginBottom: 0 }} post={post} />}
+      <Comments authorId={Number(post?.author?.id || 0)} postId={id} />
     </Scrollbar>
   )
 }

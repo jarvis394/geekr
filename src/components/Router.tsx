@@ -5,9 +5,12 @@ import Home from '../pages/Home/index'
 import Post from '../pages/Post'
 import Settings from '../pages/Settings'
 import Search from '../pages/Search'
+import News from '../pages/News'
 import NotFound from '../pages/NotFound'
 import { Theme } from '@material-ui/core/styles'
 import CommentsPage from '../pages/Comments'
+import Tabs from './blocks/Tabs'
+import getCachedMode from '../utils/getCachedMode'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -25,23 +28,8 @@ const Router = ({ state, setState }) => {
   // Set root classes
   document.body.className = classes.root
 
-  const getCachedMode = () => {
-    const modes = {
-      all: 'all',
-      day: 'top/day',
-      week: 'top/week',
-      month: 'top/month'
-    }
-    const mode = localStorage.getItem('mode')
-
-    if (!mode) {
-      localStorage.setItem('mode', 'all')
-      return 'all'
-    } else return modes[mode]
-  }
-
   return (
-    <>
+    <Tabs>
       <Switch>
         {/* Comments */}
         <Route exact path="/article/:id/comments">
@@ -59,21 +47,21 @@ const Router = ({ state, setState }) => {
         </Route>
 
         {/* Search */}
-        <Route exact path="/search/p/:page">
+        <Route exact path={["/search", "/search/p/:page"]}>
           <Search />
         </Route>
-
-        {/* Search */}
-        <Route exact path="/search">
-          <Search />
+        
+        {/* News */}
+        <Route exact path="/news/p/:page">
+            <News state={state} setState={setState} />
         </Route>
 
-        {/* PageView */}
+        {/* Home */}
         <Route exact path={['/all/p/:page', '/top/day/p/:page', '/top/week/p/:page', '/top/month/p/:page']}>
-          <Home state={state} setState={setState} />
+            <Home state={state} setState={setState} />
         </Route>
 
-        {/* Redirect from home to the PageView */}
+        {/* Redirect from home to the Home component */}
         <Route exact path="/">
           <Redirect to={`/${getCachedMode()}/p/1`} />
         </Route>
@@ -82,7 +70,7 @@ const Router = ({ state, setState }) => {
           <NotFound />
         </Route>
       </Switch>
-    </>
+    </Tabs>
   )
 }
 

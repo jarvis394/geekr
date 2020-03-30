@@ -2,18 +2,13 @@ import * as React from 'react'
 import { useState, useEffect, useRef } from 'react'
 import List from '@material-ui/core/List'
 import { makeStyles } from '@material-ui/core/styles'
-import { getPosts } from '../../api'
-import PostSkeleton from '../../components/skeletons/Post'
-import PostItem from '../../components/blocks/PostItem'
-import Pagination from '../../components/blocks/Pagination'
+import { getNews } from '../api'
+import PostSkeleton from '../components/skeletons/Post'
+import PostItem from '../components/blocks/PostItem'
+import Pagination from '../components/blocks/Pagination'
 import { useHistory, useParams } from 'react-router-dom'
-import ErrorComponent from '../../components/blocks/Error'
-import NewsBlock from '../../components/blocks/NewsBlock'
-import { Mode } from '../../api/getPosts'
-import useLastMode from '../../utils/useLastMode'
-import { Posts } from '../../interfaces'
-import { MODES as modes } from '../../config/constants'
-import Switcher from './Switcher'
+import ErrorComponent from '../components/blocks/Error'
+import { Posts } from '../interfaces'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,18 +19,14 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-type HomePathParams = { page: string }
+type NewsPathParams = { page: string }
 
-const Home = ({ state, setState }) => {
-  document.title = 'habra.'
-
+const News = ({ state, setState }) => {
   const { cache } = state
-  const params = useParams() as HomePathParams
-  const lastSelectedMode = useLastMode()
-  const [mode, setMode] = useState<Mode>(lastSelectedMode)
+  const params = useParams() as NewsPathParams
   let currentPage = Number(params.page)
   const [posts, setPosts] = useState<Posts>(
-    cache[mode].data[currentPage] || false
+    cache.news.data[currentPage] || false
   )
   const [fetchError, _setError] = useState()
   const history = useHistory()
@@ -51,11 +42,11 @@ const Home = ({ state, setState }) => {
   /* eslint-enable indent */
 
   const PaginationComponent = () =>
-    cache[mode].pagesCount ? (
+    cache.news.pagesCount ? (
       <Pagination
         disabled={!posts}
         handleChange={handlePagination}
-        steps={cache[mode].pagesCount}
+        steps={cache.news.pagesCount}
         currentStep={currentPage}
       />
     ) : null
@@ -68,15 +59,8 @@ const Home = ({ state, setState }) => {
   const handlePagination = (_, i) => {
     if (i === currentPage) return
 
-    setPosts(cache[mode].data[i])
-    history.push(modes.find(e => e.mode === mode).to + '/p/' + i)
-  }
-
-  const handleSwitcher = ({ mode: newMode, to }) => {
-    localStorage.setItem('mode', newMode)
-    history.push(to + '/p/1')
-    setPosts(cache[newMode].data[1])
-    setMode(newMode)
+    setPosts(cache.news.data[i])
+    history.push('/news/p/' + i)
   }
 
   useEffect(() => {
@@ -87,7 +71,7 @@ const Home = ({ state, setState }) => {
       setError(null)
 
       try {
-        data = await getPosts(mode, currentPage)
+        data = await getNews(currentPage)
       } catch (e) {
         if (e.statusCode === 404 || e.statusCode === 400)
           return setError('Нет такой страницы!')
@@ -99,15 +83,15 @@ const Home = ({ state, setState }) => {
 
       // Set application state's posts data and the amount of pages to the state
       // so Pagination component will always have a static number of steps
-      if (!cache[mode].data[currentPage]) {
+      if (!cache.news.data[currentPage]) {
         setState(prev => ({
           ...prev,
           cache: {
             ...prev.cache,
-            [mode]: {
-              ...prev.cache[mode],
+            news: {
+              ...prev.cache.news,
               data: {
-                ...prev.cache[mode].data,
+                ...prev.cache.news.data,
                 [currentPage]: {
                   articleIds: data.data.articleIds,
                   articleRefs: data.data.articleRefs,
@@ -120,10 +104,10 @@ const Home = ({ state, setState }) => {
       }
     }
 
-    if (!cache[mode].data[currentPage]) get()
+    if (!cache.news.data[currentPage]) get()
 
     // eslint-disable-next-line
-  }, [currentPage, mode])
+  }, [currentPage])
 
   return fetchError ? (
     <ErrorComponent
@@ -136,15 +120,12 @@ const Home = ({ state, setState }) => {
     />
   ) : (
     <>
-      <Switcher setMode={setMode} mode={mode} handleClick={handleSwitcher} />
       <List ref={postsRef} className={classes.root}>
-        {postsComponents[0]}
-        {currentPage === 1 && <NewsBlock state={state} setState={setState} />}
-        {postsComponents.slice(1)}
+        {postsComponents}
       </List>
       <PaginationComponent />
     </>
   )
 }
 
-export default Home
+export default News
