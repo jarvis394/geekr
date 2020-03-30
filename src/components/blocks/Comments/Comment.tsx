@@ -1,10 +1,11 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { Avatar, Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import FormattedText from '../../formatters/FormattedText'
+import UserAvatar from '../UserAvatar'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,8 +33,6 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.hint,
   },
   avatar: {
-    width: theme.spacing(2.5),
-    height: theme.spacing(2.5),
     marginRight: theme.spacing(1),
     borderRadius: theme.shape.borderRadius,
   },
@@ -137,7 +136,7 @@ const Comment = ({ data, children, isAuthor }) => {
             <div className={classes.collapseButton}></div>
           </div>
         )}
-        <Avatar src={data.author.avatarUrl} className={classes.avatar} />
+        <UserAvatar src={data.author.avatarUrl} login={data.author.login} className={classes.avatar} />
         <Typography variant="caption">
           <Link
             className={classes.noDeco + ' ' + classes.authorLink}

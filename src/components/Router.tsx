@@ -47,18 +47,18 @@ const Router = ({ state, setState }) => {
         </Route>
 
         {/* Search */}
-        <Route exact path={["/search", "/search/p/:page"]}>
+        <Route exact path={['/search', '/search/p/:page']}>
           <Search />
         </Route>
         
         {/* News */}
         <Route exact path="/news/p/:page">
-            <News state={state} setState={setState} />
+          <News state={state} setState={setState} />
         </Route>
 
         {/* Home */}
         <Route exact path={['/all/p/:page', '/top/day/p/:page', '/top/week/p/:page', '/top/month/p/:page']}>
-            <Home state={state} setState={setState} />
+          <Home state={state} setState={setState} />
         </Route>
 
         {/* Redirect from home to the Home component */}

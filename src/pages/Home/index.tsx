@@ -141,8 +141,8 @@ const Home = ({ state, setState }) => {
         {postsComponents[0]}
         {currentPage === 1 && <NewsBlock state={state} setState={setState} />}
         {postsComponents.slice(1)}
+        <PaginationComponent />
       </List>
-      <PaginationComponent />
     </>
   )
 }
