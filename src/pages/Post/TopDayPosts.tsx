@@ -111,7 +111,7 @@ const TopDayPosts = () => {
       }
     }
     get()
-  })
+  }, [])
 
   return (
     <Paper elevation={0} className={classes.root}>
