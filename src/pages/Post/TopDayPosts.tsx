@@ -5,14 +5,10 @@ import BookmarkIcon from '@material-ui/icons/BookmarkBorderRounded'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
-import { Post } from 'src/interfaces'
+import { Posts } from 'src/interfaces'
 import DensePostsSkeleton from 'src/components/skeletons/DensePostsSkeleton'
-import getSimilar from 'src/api/getSimilar'
 import moment from 'moment'
-
-interface Props {
-  id: number | string
-}
+import { getPosts } from 'src/api'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -68,7 +64,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const SimilarPost = ({ data }) => {
+const Post = ({ data }) => {
   const [isBookmarked, setBookmarkedState] = useState<boolean>(false)
   const classes = useStyles(isBookmarked)
   const { score, id, title, time_published: tsUnparsed } = data
@@ -100,36 +96,38 @@ const SimilarPost = ({ data }) => {
   )
 }
 
-const SimilarPosts = (props: Props) => {
-  const { id } = props
+const TopDayPosts = () => {
   const classes = useStyles()
-  const [data, setData] = useState<Post.Post[]>()
+  const [data, setData] = useState<Posts>()
   const [error, setError] = useState<string>()
 
   useEffect(() => {
     const get = async () => {
       try {
-        setData((await getSimilar(Number(id))).data.articles)
+        setData((await getPosts('day', 1)).data)
       } catch (e) {
-        console.warn('Could not fetch similar posts:', e.message)
+        console.warn('Could not fetch top day posts:', e.message)
         setError(e.message)
       }
     }
     get()
-  }, [id])
+  })
 
   return (
     <Paper elevation={0} className={classes.root}>
-      <Typography className={classes.header}>Похожие статьи</Typography>
+      <Typography className={classes.header}>Лучшее за день</Typography>
       {error && (
         <Typography className={classes.error}>
           Произошла ошибка при запросе
         </Typography>
       )}
-      {!data && <DensePostsSkeleton n={3} />}
-      {data && data.map((e, i) => <SimilarPost data={e} key={i} />)}
+      {!data && <DensePostsSkeleton n={5} />}
+      {data &&
+        data.articleIds
+          .slice(0, 5)
+          .map((id, i) => <Post data={data.articleRefs[id]} key={i} />)}
     </Paper>
   )
 }
 
-export default SimilarPosts
+export default TopDayPosts

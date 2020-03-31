@@ -18,6 +18,7 @@ import { Post as IPost } from 'src/interfaces'
 import UserAvatar from 'src/components/blocks/UserAvatar'
 import CommentsButton from './CommentsButton'
 import SimilarPosts from './SimilarPosts'
+import TopDayPosts from './TopDayPosts'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -83,33 +84,8 @@ const Post = () => {
   const [fetchError, _setError] = useState<string>()
   const classes = useStyles()
   const { id } = useParams()
-
-  const setError = (e: string) => {
-    setPost(null)
-    return _setError(e)
-  }
-
-  useEffect(() => {
-    const get = async () => {
-      // Reset error state
-      setError(null)
-
-      try {
-        setPost((await getPost(id)).data)
-      } catch (e) {
-        if (e.statusCode === 404) return setError('Статья не найдена')
-        else return setError(e.message)
-      }
-    }
-    get()
-  }, [id])
-
-  if (post) document.title = post.article.title
-  if (fetchError) return <ErrorComponent message={fetchError} />
-  if (!post) return <PostViewSkeleton />
-
-  return (
-    <Scrollbar className={classes.root}>
+  const contents = post ? (
+    <>
       <Container className={classes.hubs}>
         {post.article.hubs.map((hub, i) => (
           <Typography key={i} variant="caption">
@@ -151,12 +127,44 @@ const Post = () => {
           {post.article.text_html}
         </FormattedText>
       </Container>
+    </>
+  ) : <PostViewSkeleton />
+
+  const setError = (e: string) => {
+    setPost(null)
+    return _setError(e)
+  }
+
+  useEffect(() => {
+    const get = async () => {
+      // Reset error state
+      setError(null)
+
+      try {
+        setPost((await getPost(id)).data)
+      } catch (e) {
+        if (e.statusCode === 404) return setError('Статья не найдена')
+        else return setError(e.message)
+      }
+    }
+    get()
+  }, [id])
+
+  if (post) document.title = post.article.title
+  if (fetchError) return <ErrorComponent message={fetchError} />
+
+  return (
+    <Scrollbar className={classes.root}>
+      {contents}
 
       {/* Button to Comments page */}
       <CommentsButton id={id} />
 
       {/* Similar */}
       <SimilarPosts id={id} />
+
+      {/* Top day */}
+      <TopDayPosts />
     </Scrollbar>
   )
 }

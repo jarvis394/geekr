@@ -13,7 +13,6 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 0,
   },
   skeleton: {
-    maxWidth: 512,
     backgroundColor: theme.palette.action.hover,
     borderRadius: 4,
   },

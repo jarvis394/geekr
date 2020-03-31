@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   },
   offline: {
     color: theme.palette.text.disabled,
-    marginLeft: theme.spacing(2),
+    marginLeft: theme.spacing(1),
     display: 'flex',
     alignItems: 'center',
   },
