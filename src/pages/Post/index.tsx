@@ -156,7 +156,7 @@ const Post = () => {
       <CommentsButton id={id} />
 
       {/* Similar */}
-      <SimilarPosts />
+      <SimilarPosts id={id} />
     </Scrollbar>
   )
 }

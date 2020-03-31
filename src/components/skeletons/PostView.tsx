@@ -44,7 +44,7 @@ const PostSkeleton = () => {
       <Divider />
       <Container className={classes.root}>
         <Grid container>
-          <Grid container direction="row" style={{ marginTop: 28 }}>
+          <Grid container direction="row" style={{ marginTop: 16 }}>
             <Grid item>
               <Skeleton
                 variant="circle"
