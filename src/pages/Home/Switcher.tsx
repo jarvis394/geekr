@@ -41,10 +41,12 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Switcher = ({ handleClick, mode, setMode }) => {
+  const [isExpanded, setExpanded] = React.useState(false)
   const ListButton = ({ data }) => {
     const isNotCurrent = data.mode !== current.mode
     const handleClickWrapped = () => {
       if (isNotCurrent) {
+        setExpanded(false)
         setMode(data.mode)
         handleClick(data)
       }
@@ -76,6 +78,8 @@ const Switcher = ({ handleClick, mode, setMode }) => {
     <>
       <ExpansionPanel
         elevation={0}
+        expanded={isExpanded}
+        onChange={() => setExpanded(prev => !prev)}
         className={classes.expansionPanel}
         TransitionProps={{ unmountOnExit: true }}
       >

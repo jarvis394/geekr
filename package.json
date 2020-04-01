@@ -31,6 +31,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1",
     "react-syntax-highlighter": "^12.1.0",
+    "react-virtualized": "^9.21.2",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-promise-middleware": "^6.1.2",
@@ -42,9 +43,9 @@
     "start": "npm run start:prod",
     "start:prod": "serve -s build",
     "start:dev": "react-scripts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test",
-    "eject": "react-scripts-ts eject",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
     "lint:fix": "eslint ./src/**/*.{ts,tsx} --fix"
   },
   "eslintConfig": {

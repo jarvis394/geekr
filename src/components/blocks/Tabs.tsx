@@ -35,27 +35,30 @@ function LinkTab(props: any) {
     />
   )
 }
-
 const LinkTabMemoized = React.memo(LinkTab)
+
+const tabs = [
+  { label: 'Статьи', to: () => `/${getCachedMode()}/p/1`, tab: 'home' },
+  { label: 'Новости', to: () => '/news/p/1', tab: 'news' },
+  { label: 'Хабы', to: () => '/hubs', tab: 'hubs' },
+  { label: 'Авторы', to: () => '/authors', tab: 'authors' },
+  { label: 'Компании', to: () => '/companies', tab: 'companies' },
+]
+const findPathValue = (path: string): number => {
+  const res = tabs.findIndex(e => path.startsWith(e.to()))
+  return res < 0 ? 0 : res
+}
 
 const TabsComponent = ({ children }) => {
   const classes = useStyles()
   const location = useLocation()
-  const [value, setValue] = useState<number>(0)
   const shouldShow = isValidPath(location.pathname)
+  const [value, setValue] = useState<number>(findPathValue(location.pathname))
   const handleChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue)
   }
   
   if (!shouldShow) return children
-
-  const tabs = [
-    { label: 'Статьи', to: () => `/${getCachedMode()}/p/1`, tab: 'home' },
-    { label: 'Новости', to: () => '/news/p/1', tab: 'news' },
-    { label: 'Хабы', to: () => '/hubs', tab: 'hubs' },
-    { label: 'Авторы', to: () => '/authors', tab: 'authors' },
-    { label: 'Компании', to: () => '/companies', tab: 'companies' },
-  ]
 
   return (
     <Scrollbar>

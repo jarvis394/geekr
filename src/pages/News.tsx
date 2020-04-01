@@ -9,6 +9,7 @@ import Pagination from '../components/blocks/Pagination'
 import { useHistory, useParams } from 'react-router-dom'
 import ErrorComponent from '../components/blocks/Error'
 import { Posts } from '../interfaces'
+import { WindowScroller, AutoSizer, List as VirtualList, CellMeasurer, CellMeasurerCache } from 'react-virtualized'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -108,6 +109,32 @@ const News = ({ state, setState }) => {
 
     // eslint-disable-next-line
   }, [currentPage])
+  
+  const cellsCache = new CellMeasurerCache({
+    defaultHeight: 100,
+    fixedWidth: true
+  })
+  
+  const rowRenderer = ({index, parent, isVisible, key, style}) => {
+    const id = posts ? posts.articleIds[index] : 0
+    
+    if (!isVisible) return null
+    
+    return (
+      <CellMeasurer
+        cache={cellsCache}
+        key={key}
+        parent={parent}
+        columnIndex={0}
+        rowIndex={index}
+      >
+        <div style={style}>
+          {posts && <PostItem post={posts.articleRefs[id]} />}
+          {!posts && <PostSkeleton />}
+        </div>
+      </CellMeasurer>
+    )
+  }
 
   return fetchError ? (
     <ErrorComponent
@@ -121,7 +148,30 @@ const News = ({ state, setState }) => {
   ) : (
     <>
       <List ref={postsRef} className={classes.root}>
-        {postsComponents}
+        <WindowScroller
+          scrollElement={postsRef.current}>
+          {({height, isScrolling, onChildScroll, scrollTop}) => (
+            <AutoSizer disableHeight>
+              {({width}) => (
+                <VirtualList
+                  autoHeight
+                  height={height}
+                  isScrolling={isScrolling}
+                  onScroll={onChildScroll}
+                  overscanRowCount={2}
+                  rowCount={posts ? posts.articleIds.length : 7}
+                  deferredMeasurementCache={cellsCache}
+                  rowHeight={cellsCache.rowHeight}
+                  rowRenderer={rowRenderer}
+                  scrollToIndex={0}
+                  scrollTop={scrollTop}
+                  width={width}
+                />
+              )}
+            </AutoSizer>
+          )}
+        </WindowScroller>
+        {/*postsComponents*/}
       </List>
       <PaginationComponent />
     </>
