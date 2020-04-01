@@ -32,6 +32,6 @@ export interface Comment {
   isPostAuthor: boolean
   isCanEdit: boolean
   timeEditAllowedTill: string | Date | null
-  children: Comment[] | number[]
+  children: Comment[]
   isNew: false
 }

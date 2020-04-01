@@ -8,8 +8,7 @@ import PostItem from '../components/blocks/PostItem'
 import Pagination from '../components/blocks/Pagination'
 import { useHistory, useParams } from 'react-router-dom'
 import ErrorComponent from '../components/blocks/Error'
-import { Posts } from '../interfaces'
-import { WindowScroller, AutoSizer, List as VirtualList, CellMeasurer, CellMeasurerCache } from 'react-virtualized'
+import { Posts, APIResponse } from '../interfaces'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,7 +31,7 @@ const News = ({ state, setState }) => {
   const [fetchError, _setError] = useState()
   const history = useHistory()
   const classes = useStyles()
-  const postsRef = useRef()
+  const listRef = useRef()
 
   /* eslint-disable indent */
   const postsComponents = posts
@@ -57,7 +56,7 @@ const News = ({ state, setState }) => {
     return _setError(e)
   }
 
-  const handlePagination = (_, i) => {
+  const handlePagination = (_: never, i: number) => {
     if (i === currentPage) return
 
     setPosts(cache.news.data[i])
@@ -66,7 +65,7 @@ const News = ({ state, setState }) => {
 
   useEffect(() => {
     const get = async () => {
-      let data
+      let data: APIResponse<Posts>
 
       // Reset error state
       setError(null)
@@ -96,7 +95,7 @@ const News = ({ state, setState }) => {
                 [currentPage]: {
                   articleIds: data.data.articleIds,
                   articleRefs: data.data.articleRefs,
-                }
+                },
               },
               pagesCount: data.data.pagesCount,
             },
@@ -109,32 +108,6 @@ const News = ({ state, setState }) => {
 
     // eslint-disable-next-line
   }, [currentPage])
-  
-  const cellsCache = new CellMeasurerCache({
-    defaultHeight: 100,
-    fixedWidth: true
-  })
-  
-  const rowRenderer = ({index, parent, isVisible, key, style}) => {
-    const id = posts ? posts.articleIds[index] : 0
-    
-    if (!isVisible) return null
-    
-    return (
-      <CellMeasurer
-        cache={cellsCache}
-        key={key}
-        parent={parent}
-        columnIndex={0}
-        rowIndex={index}
-      >
-        <div style={style}>
-          {posts && <PostItem post={posts.articleRefs[id]} />}
-          {!posts && <PostSkeleton />}
-        </div>
-      </CellMeasurer>
-    )
-  }
 
   return fetchError ? (
     <ErrorComponent
@@ -146,35 +119,10 @@ const News = ({ state, setState }) => {
       }}
     />
   ) : (
-    <>
-      <List ref={postsRef} className={classes.root}>
-        <WindowScroller
-          scrollElement={postsRef.current}>
-          {({height, isScrolling, onChildScroll, scrollTop}) => (
-            <AutoSizer disableHeight>
-              {({width}) => (
-                <VirtualList
-                  autoHeight
-                  height={height}
-                  isScrolling={isScrolling}
-                  onScroll={onChildScroll}
-                  overscanRowCount={2}
-                  rowCount={posts ? posts.articleIds.length : 7}
-                  deferredMeasurementCache={cellsCache}
-                  rowHeight={cellsCache.rowHeight}
-                  rowRenderer={rowRenderer}
-                  scrollToIndex={0}
-                  scrollTop={scrollTop}
-                  width={width}
-                />
-              )}
-            </AutoSizer>
-          )}
-        </WindowScroller>
-        {/*postsComponents*/}
-      </List>
+    <List className={classes.root} ref={listRef}>
+      {postsComponents}
       <PaginationComponent />
-    </>
+    </List>
   )
 }
 

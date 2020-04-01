@@ -7,6 +7,7 @@ import { getComments } from '../../../api'
 import Comment from './Comment'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Fade from '@material-ui/core/Fade'
+import { Comments as IComments } from 'src/interfaces'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Comments = ({ postId, authorId }) => {
-  const [comments, setComments] = useState<any[]>()
+  const [comments, setComments] = useState<Map<number, IComments.Comment>>()
   const [commentsLength, setCommentsLength] = useState<number>()
   const [fetchError, setError] = useState()
   const classes = useStyles()
@@ -43,15 +44,15 @@ const Comments = ({ postId, authorId }) => {
     children: [],
   })
 
-  const renderComment = (node, depth = 0) => (
+  const renderComment = (node: IComments.Comment, depth = 0) => (
     <Comment key={node.id} data={node} isAuthor={node.author ? authorId === node.author.id : false}>
-      {node.children.map(e => renderComment(e, depth + 1))}
+      {node.children.map((e: IComments.Comment) => renderComment(e, depth + 1))}
     </Comment>
   )
 
   useEffect(() => {
-    const parseComments = nodes => {
-      let root = []
+    const parseComments = (nodes: Map<number, IComments.Comment>) => {
+      const root = []
       for (const id in nodes) {
         const comment = nodes[id]
         comment.children = []
@@ -69,41 +70,13 @@ const Comments = ({ postId, authorId }) => {
       setRootComment({ children: root })
       return nodes
     }
-    
-    /*const parseComments = nodes => {
-      const getChildren = n => n.map(e => {
-        if (isNaN(e)) return e
-        
-        const i = nodes[e]
-        if (i.children.length !== 0) i.children = getChildren(i.children)
-          
-        return i
-      })
-        
-      
-      let root = []
-      
-      for (const id in nodes) {
-        if (nodes[id].parentId === 0) {
-          if (nodes[id].children.length !== 0) nodes[id].children = getChildren(nodes[id].children)
-          root.push(nodes[id])
-        }
-      }
-      
-      root.filter(e => e.parentId === 0)
-      setRootComment({ children: root })
-      
-      return root
-    }*/
 
     const get = async () => {
-      let d
-
       // Reset error state
       setError(null)
 
       try {
-        d = await getComments(postId)
+        const d = await getComments(postId)
         const commentsData = d.data.comments
 
         setCommentsLength(Object.keys(commentsData).length)
