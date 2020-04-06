@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const FormattedText = ({ children, className, ...props }) => {
+const FormattedText = ({ children, className = '', ...props }) => {
   const classes = useStyles()
   const options: HTMLReactParserOptions = {
     replace: ({ name, children, attribs }): void | React.ReactElement => {

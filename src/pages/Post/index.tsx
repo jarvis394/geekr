@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: '100%',
     maxWidth: '100vw',
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.background.default,
   },
   hubs: {
     paddingTop: theme.spacing(1),
@@ -61,7 +61,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: 14,
   },
   text: {
-    marginBottom: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     lineHeight: '1.56',
     wordBreak: 'break-word',
@@ -78,13 +77,28 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: theme.spacing(3),
     marginTop: theme.spacing(2),
   },
+  commentsButton: {
+    marginTop: theme.spacing(2),
+  },
 }))
 
 const Post = () => {
   const [post, setPost] = useState<IPost.PostResponse>()
   const [fetchError, _setError] = useState<string>()
+  const [isBottomBarSticky, setBottomBarStickyState] = useState<boolean>(false)
   const classes = useStyles()
   const { id } = useParams()
+  const articleEndRef = useRef()
+  const isInViewport = (ref, offset = 0) => {
+    if (!ref.current) return false
+
+    const top = ref.current.getBoundingClientRect().top
+    return top + offset >= 0 && top - offset <= window.innerHeight
+  }
+  const onScroll = useCallback(() => {
+    if (isInViewport(articleEndRef, 48)) setBottomBarStickyState(false)
+    else setBottomBarStickyState(true)
+  }, [])
   const contents = post ? (
     <>
       <Container className={classes.hubs}>
@@ -128,9 +142,14 @@ const Post = () => {
           {post.article.text_html}
         </FormattedText>
       </Container>
-      <BottomBar post={post.article} />
+
+      {/* Bottom bar with some article info */}
+      <BottomBar sticky={isBottomBarSticky} post={post.article} />
+      <div ref={articleEndRef} />
     </>
-  ) : <PostViewSkeleton />
+  ) : (
+    <PostViewSkeleton />
+  )
 
   const setError = (e: string) => {
     setPost(null)
@@ -142,6 +161,7 @@ const Post = () => {
       // Reset error state
       setError(null)
       window.scrollTo(0, 0)
+      window.addEventListener('scroll', onScroll)
 
       try {
         setPost((await getPost(id)).data)
@@ -151,7 +171,9 @@ const Post = () => {
       }
     }
     get()
-  }, [id])
+
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [id, onScroll])
 
   if (post) document.title = post.article.title
   if (fetchError) return <ErrorComponent message={fetchError} />
@@ -161,7 +183,7 @@ const Post = () => {
       {contents}
 
       {/* Button to Comments page */}
-      <CommentsButton id={id} />
+      <CommentsButton className={classes.commentsButton} id={id} />
 
       {/* Similar */}
       <SimilarPosts id={id} />

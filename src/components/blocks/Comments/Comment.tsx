@@ -5,21 +5,25 @@ import { makeStyles, fade } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import FormattedText from '../../formatters/FormattedText'
+import GreenRedNumber from '../../formatters/GreenRedNumber'
 import UserAvatar from '../UserAvatar'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
     marginTop: theme.spacing(2),
+    '&:hover': {
+      opacity: '1 !important',
+    },
   },
   noDeco: {
     textDecoration: 'none !important',
   },
   author: {
-    backgroundColor: isAuthor =>
+    backgroundColor: (isAuthor) =>
       isAuthor ? fade(theme.palette.primary.light, 0.1) : 'transparent',
-    borderRadius: theme.shape.borderRadius
+    borderRadius: theme.shape.borderRadius,
   },
   authorLink: {
     color:
@@ -76,11 +80,18 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+const toPercent = (value: number, max: number, maxPercent: number) => {
+  const res = (value * 100) / max
+  return res > maxPercent ? maxPercent : res
+}
+
 const Comment = ({ data, children, isAuthor }) => {
   const classes = useStyles(isAuthor)
   const [isOpen, setOpenState] = useState(true)
   const { message } = data
   const ts = moment(data.timePublished).fromNow()
+  const commentOpacity =
+    data.score < 0 ? 1 - toPercent(data.score, -5, 50) / 100 : 1
 
   if (!data.author) {
     return (
@@ -120,45 +131,57 @@ const Comment = ({ data, children, isAuthor }) => {
     )
 
   return (
-    <div className={classes.root}>
-      {/* Top bar */}
-      <Grid
-        style={{ position: 'relative' }}
-        alignItems="center"
-        container
-        direction="row"
-        className={classes.author}
-      >
-        {children.length !== 0 && data.level !== 0 && (
-          <div
-            title="Свернуть дерево комментариев"
-            onClick={() => setOpenState(false)}
-            className={classes.collapseHolder}
-          >
-            <div className={classes.collapseButton}></div>
-          </div>
-        )}
-        <UserAvatar src={data.author.avatarUrl} login={data.author.login} className={classes.avatar} />
-        <Typography variant="caption">
-          <Link
-            className={classes.noDeco + ' ' + classes.authorLink}
-            to={'/user/' + data.author.login}
-          >
-            {data.author.login}
-          </Link>
-        </Typography>
-        <Typography className={classes.ts} variant="caption">
-          {ts}
-        </Typography>
-      </Grid>
+    <>
+      <div style={{ opacity: commentOpacity }} className={classes.root}>
+        {/* Top bar */}
+        <Grid
+          style={{ position: 'relative' }}
+          alignItems="center"
+          container
+          direction="row"
+          className={classes.author}
+        >
+          {children.length !== 0 && data.level !== 0 && (
+            <div
+              title="Свернуть дерево комментариев"
+              onClick={() => setOpenState(false)}
+              className={classes.collapseHolder}
+            >
+              <div className={classes.collapseButton}></div>
+            </div>
+          )}
+          <UserAvatar
+            src={data.author.avatarUrl}
+            login={data.author.login}
+            className={classes.avatar}
+          />
+          <Typography variant="caption">
+            <Link
+              className={classes.noDeco + ' ' + classes.authorLink}
+              to={'/user/' + data.author.login}
+            >
+              {data.author.login}
+            </Link>
+          </Typography>
+          <Typography className={classes.ts} variant="caption">
+            {ts}
+          </Typography>
+          <GreenRedNumber
+            style={{ position: 'absolute', right: 0 }}
+            number={data.score}
+          />
+        </Grid>
 
-      {/* Message */}
-      <FormattedText className={classes.text}>{message}</FormattedText>
+        {/* Message */}
+        <FormattedText className={classes.text}>{message}</FormattedText>
+      </div>
 
       {children.length !== 0 && (
-        <div className={classes.children}>{children}</div>
+        <div className={data.level >= 8 ? '' : classes.children}>
+          {children}
+        </div>
       )}
-    </div>
+    </>
   )
 }
 

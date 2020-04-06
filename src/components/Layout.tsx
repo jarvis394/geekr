@@ -8,14 +8,14 @@ import AppRouter from './Router'
 import AppBar from './blocks/AppBar'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { MIN_WIDTH as minWidth, MODES } from '../config/constants'
-// import isMobile from 'is-mobile'
+import isMobile from 'is-mobile'
 import Footer from './blocks/Footer'
 
-// const chromeAddressBarHeight = 56
+const chromeAddressBarHeight = 56
 const useStyles = makeStyles({
   app: {
     display: 'flex',
-    // height: `calc(100vh - 48px - ${isMobile() ? chromeAddressBarHeight : 0}px - 195px)`,
+    minHeight: `calc(100vh - 48px - ${isMobile() ? chromeAddressBarHeight : 0}px - 196px)`,
     borderRadius: 0,
     flexDirection: 'column',
     maxWidth: minWidth,

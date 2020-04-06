@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   },
   comments: {
     backgroundColor: theme.palette.background.paper,
-    paddingBottom: theme.spacing(1),
+    paddingBottom: theme.spacing(2),
     paddingTop: 0.05
   },
   progress: {

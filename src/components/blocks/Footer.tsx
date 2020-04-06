@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import { MIN_WIDTH as minWidth } from 'src/config/constants'
 import GitHubIcon from '@material-ui/icons/GitHub'
@@ -9,8 +9,7 @@ import VKIcon from 'src/components/svg/VKIcon'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   container: {
     padding: `${theme.spacing(3)}px ${theme.spacing(2)}px ${theme.spacing(
@@ -34,11 +33,17 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: 'underline',
     },
   },
+  icon: {
+    WebkitTapHighlightColor: 'transparent'
+  }
 }))
 
 const Footer = () => {
   const classes = useStyles()
-  const theme = useTheme()
+  const buttons = [
+    { href: 'https://github.com/jarvis394/habra', icon: GitHubIcon },
+    { href: 'https://vk.com/tarnatovski', icon: VKIcon },
+  ]
 
   return (
     <div className={classes.root}>
@@ -48,28 +53,20 @@ const Footer = () => {
         </Link>
 
         <Grid spacing={1} container alignItems="center" justify="center">
-          <Grid item>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://github.com/jarvis394/habra"
-            >
-              <IconButton>
-                <GitHubIcon />
-              </IconButton>
-            </a>
-          </Grid>
-          <Grid item>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://vk.com/tarnatovski"
-            >
-              <IconButton>
-                <VKIcon color={theme.palette.primary.main} />
-              </IconButton>
-            </a>
-          </Grid>
+          {buttons.map((e, i) => (
+            <Grid item key={i}>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={e.href}
+                className={classes.icon}
+              >
+                <IconButton>
+                  <e.icon />
+                </IconButton>
+              </a>
+            </Grid>
+          ))}
         </Grid>
 
         <div style={{ marginTop: 16 }}>

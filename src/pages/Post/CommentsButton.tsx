@@ -2,23 +2,29 @@ import React from 'react'
 import { Button, makeStyles } from '@material-ui/core'
 import { useHistory } from 'react-router'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    height: theme.spacing(6)
+    height: theme.spacing(6),
   },
   button: {
     height: '100%',
-    borderRadius: 0
-  }
+    borderRadius: 0,
+  },
 }))
 
-const CommentsButton = ({ id }: { id: number | string }) => {
+const CommentsButton = ({
+  id,
+  className,
+}: {
+  id: number | string
+  className?: string
+}) => {
   const history = useHistory()
   const classes = useStyles()
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root + ' ' + className}>
       <Button
         disableElevation
         fullWidth

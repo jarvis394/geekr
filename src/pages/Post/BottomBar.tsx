@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
     backgroundColor: theme.palette.background.paper,
     color: theme.palette.text.primary,
-    position: 'fixed',
+    position: 'sticky',
     bottom: 0,
     height: 48,
     flexGrow: 1,
@@ -27,14 +27,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    zIndex: 999
+    zIndex: 999,
   },
   item: {
     color: theme.palette.text.hint,
     fontSize: 8,
     textDecoration: 'none',
     padding: 0,
-    height: '100%'
+    height: '100%',
   },
   icon: {
     fontSize: 16,
@@ -48,20 +48,29 @@ const useStyles = makeStyles((theme) => ({
 
 interface HideOnScrollProps {
   children: React.ReactElement
+  disabled?: boolean
 }
 
 const HideOnScroll = (props: HideOnScrollProps) => {
-  const { children } = props
+  const { children, disabled } = props
   const trigger = useScrollTrigger({ target: window })
 
-  return (
+  return disabled ? (
+    children
+  ) : (
     <Slide appear={false} direction="up" in={!trigger}>
       {children}
     </Slide>
   )
 }
 
-const Component = ({ post }: { post: Post.Post }) => {
+const Component = ({
+  post,
+  sticky = false,
+}: {
+  post: Post.Post
+  sticky?: boolean
+}) => {
   const {
     id,
     title,
@@ -110,7 +119,7 @@ const Component = ({ post }: { post: Post.Post }) => {
   }
 
   return (
-    <HideOnScroll>
+    <HideOnScroll disabled={!sticky}>
       <Container className={classes.container}>
         {bottomRow.map((item, i) => (
           <Grid

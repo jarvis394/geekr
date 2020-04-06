@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTheme } from '@material-ui/core/styles'
 
-const VKIcon = ({ color }) => {
+const VKIcon = () => {
   const theme = useTheme()
 
   return (
@@ -22,7 +22,7 @@ const VKIcon = ({ color }) => {
         style={{
           fillRule: 'evenodd',
           clipRule: 'evenodd',
-          fill: color || theme.palette.primary.main,
+          fill: theme.palette.type === 'light' ? '#0000008a' : 'white',
         }}
         d="M120,70.9h43.5c39.7,0,49.1,9.4,49.1,49.1v43.5c0,39.7-9.4,49.1-49.1,49.1H120c-39.7,0-49.1-9.4-49.1-49.1V120
 	C70.9,80.3,80.3,70.9,120,70.9"
