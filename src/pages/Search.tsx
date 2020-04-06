@@ -209,6 +209,9 @@ const Search = () => {
   const searchParams = useQuery()
   const classes = useStyles()
   const query = searchParams.get('q')
+  
+  // Scroll to the page's top
+  window.scrollTo(0, 0)
 
   return (
     <div className={classes.root}>

@@ -15,7 +15,6 @@ const useStyles = makeStyles(theme => ({
     background: theme.palette.background.default,
     padding: 0,
     width: '100%',
-    paddingTop: theme.spacing(2),
   },
 }))
 
@@ -69,6 +68,9 @@ const News = ({ state, setState }) => {
 
       // Reset error state
       setError(null)
+
+      // Scroll to the page's top
+      window.scrollTo(0, 0)
 
       try {
         data = await getNews(currentPage)

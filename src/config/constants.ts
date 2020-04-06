@@ -9,6 +9,8 @@ export const API_URL = 'https://m.habr.com/kek/'
  */
 export const MIN_WIDTH = 900
 
+export const POST_IMAGE_HEIGHT = 212
+
 export const MODES: { text: string; to: string; mode: Mode }[] = [
   {
     text: 'Все подряд',

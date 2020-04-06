@@ -10,12 +10,12 @@ import { getPost } from '../../api'
 import { Link } from 'react-router-dom'
 import PostViewSkeleton from '../../components/skeletons/PostView'
 import ErrorComponent from '../../components/blocks/Error'
-import Scrollbar from '../../components/Scrollbar'
 import moment from 'moment'
 import FormattedText from '../../components/formatters/FormattedText'
 import { Theme } from '@material-ui/core/styles'
 import { Post as IPost } from 'src/interfaces'
 import UserAvatar from 'src/components/blocks/UserAvatar'
+import BottomBar from './BottomBar'
 import CommentsButton from './CommentsButton'
 import SimilarPosts from './SimilarPosts'
 import TopDayPosts from './TopDayPosts'
@@ -23,9 +23,8 @@ import TopDayPosts from './TopDayPosts'
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: '100%',
-    height: '100%',
     maxWidth: '100vw',
-    overflow: 'auto',
+    backgroundColor: theme.palette.background.default
   },
   hubs: {
     paddingTop: theme.spacing(1),
@@ -65,6 +64,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     lineHeight: '1.56',
+    wordBreak: 'break-word',
+    hyphens: 'auto',
     color: theme.palette.type === 'dark' ? '#eee' : theme.palette.text.primary,
   },
   title: {
@@ -127,6 +128,7 @@ const Post = () => {
           {post.article.text_html}
         </FormattedText>
       </Container>
+      <BottomBar post={post.article} />
     </>
   ) : <PostViewSkeleton />
 
@@ -139,6 +141,7 @@ const Post = () => {
     const get = async () => {
       // Reset error state
       setError(null)
+      window.scrollTo(0, 0)
 
       try {
         setPost((await getPost(id)).data)
@@ -154,7 +157,7 @@ const Post = () => {
   if (fetchError) return <ErrorComponent message={fetchError} />
 
   return (
-    <Scrollbar className={classes.root}>
+    <div className={classes.root}>
       {contents}
 
       {/* Button to Comments page */}
@@ -165,7 +168,7 @@ const Post = () => {
 
       {/* Top day */}
       <TopDayPosts />
-    </Scrollbar>
+    </div>
   )
 }
 

@@ -15,6 +15,7 @@ import { MODES as modes } from '../../config/constants'
 const useStyles = makeStyles(theme => ({
   expansionPanel: {
     margin: '0 !important',
+    borderBottom: '1px solid ' + fade(theme.palette.divider, 0.05),
     '&::before': { display: 'none' }
   },
   expansionPanelSummary: {

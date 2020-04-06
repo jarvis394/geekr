@@ -13,13 +13,14 @@ const useStyles = makeStyles(theme => ({
   root: {
     background: theme.palette.background.default,
     paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
+  },
+  headerContainer: {
+    marginBottom: theme.spacing(1),
   },
   header: {
     fontFamily: 'Google Sans',
     fontWeight: 800,
     fontSize: 20,
-    marginBottom: theme.spacing(1),
   },
   commentsNumber: {
     color: theme.palette.primary.main,
@@ -28,9 +29,10 @@ const useStyles = makeStyles(theme => ({
   comments: {
     backgroundColor: theme.palette.background.paper,
     paddingBottom: theme.spacing(1),
-    overflowX: 'auto',
+    paddingTop: 0.05
   },
   progress: {
+    marginTop: theme.spacing(1),
     borderRadius: theme.shape.borderRadius
   }
 }))
@@ -93,7 +95,7 @@ const Comments = ({ postId, authorId }) => {
 
   return (
     <div className={classes.root}>
-      <Container>
+      <Container className={classes.headerContainer}>
         <Typography className={classes.header}>
           Комментарии&nbsp;
           {commentsLength && (

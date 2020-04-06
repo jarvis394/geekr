@@ -40,6 +40,8 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1),
     lineHeight: '22px',
     fontSize: 15,
+    wordBreak: 'break-word',
+    hyphens: 'auto',
   },
   ufo: {
     fontWeight: 500,

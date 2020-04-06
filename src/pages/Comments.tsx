@@ -6,7 +6,6 @@ import { Typography } from '@material-ui/core'
 import { getPost } from '../api'
 import { Post } from '../interfaces'
 import PostSkeleton from '../components/skeletons/Post'
-import Scrollbar from '../components/Scrollbar'
 
 const CommentsPage = () => {
   const [post, setPost] = useState<Post.Post>()
@@ -17,6 +16,9 @@ const CommentsPage = () => {
     const get = async () => {
       // Reset error state
       setError(null)
+
+      // Scroll to the page's top
+      window.scrollTo(0, 0)
 
       try {
         setPost((await getPost(id)).data.article)
@@ -31,11 +33,11 @@ const CommentsPage = () => {
   if (error) return <Typography>error: {error}</Typography>
   
   return (
-    <Scrollbar>
+    <>
       {!post && <PostSkeleton />}
-      {post &&<PostItem style={{ marginBottom: 0 }} post={post} />}
+      {post && <PostItem style={{ marginBottom: 0 }} post={post} />}
       <Comments authorId={Number(post?.author?.id || 0)} postId={id} />
-    </Scrollbar>
+    </>
   )
 }
 

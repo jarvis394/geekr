@@ -4,7 +4,6 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
 import Divider from '@material-ui/core/Divider'
-import Scrollbar from '../Scrollbar'
 import random from '../../utils/random'
 
 const useStyles = makeStyles(theme => ({
@@ -32,7 +31,7 @@ const PostSkeleton = () => {
   const classes = useStyles()
 
   return (
-    <Scrollbar>
+    <div>
       <Container className={classes.hubs}>
         <Skeleton
           variant="text"
@@ -105,7 +104,7 @@ const PostSkeleton = () => {
             ))}
         </Grid>
       </Container>
-    </Scrollbar>
+    </div>
   )
 }
 

@@ -118,7 +118,7 @@ const SimilarPosts = (props: Props) => {
     get()
   }, [id])
 
-  return (
+  return data && data.length !== 0 ? (
     <Paper elevation={0} className={classes.root}>
       <Typography className={classes.header}>Похожие статьи</Typography>
       {error && (
@@ -129,7 +129,7 @@ const SimilarPosts = (props: Props) => {
       {!data && <DensePostsSkeleton n={3} />}
       {data && data.map((e, i) => <SimilarPost data={e} key={i} />)}
     </Paper>
-  )
+  ) : null
 }
 
 export default SimilarPosts

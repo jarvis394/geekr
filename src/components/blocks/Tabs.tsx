@@ -4,7 +4,6 @@ import Paper from '@material-ui/core/Paper'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { Link, useLocation } from 'react-router-dom'
-import div from '../Scrollbar'
 import getCachedMode from '../../utils/getCachedMode'
 
 const useStyles = makeStyles(theme => ({
@@ -61,7 +60,7 @@ const TabsComponent = ({ children }) => {
   if (!shouldShow) return children
 
   return (
-    <div>
+    <>
       <Paper elevation={0} className={classes.root}>
         <Tabs
           value={value}
@@ -74,7 +73,7 @@ const TabsComponent = ({ children }) => {
         </Tabs>
       </Paper>
       {children}
-    </div>
+    </>
   )
 }
 

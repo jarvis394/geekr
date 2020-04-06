@@ -14,12 +14,13 @@ import { useHistory } from 'react-router-dom'
 import getCachedMode from '../../utils/getCachedMode'
 import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
+import { useScrollTrigger, Slide } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.paper,
     color: theme.palette.text.primary,
-    position: 'relative',
+    position: 'fixed',
     height: 48,
     flexGrow: 1,
     borderBottom: '1px solid ' + theme.palette.divider,
@@ -47,38 +48,55 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+interface HideOnScrollProps {
+  children: React.ReactElement
+}
+
+const HideOnScroll = (props: HideOnScrollProps) => {
+  const { children } = props
+  const trigger = useScrollTrigger({ target: window })
+
+  return (
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children}
+    </Slide>
+  )
+}
+
 const Component = ({ setState }) => {
   const classes = useStyles()
   const history = useHistory()
 
   return (
-    <AppBar className={classes.root} elevation={0}>
-      <Container className={classes.container}>
-        <Toolbar style={{ minHeight: 'unset', height: 48 }}>
-          <Typography variant="h6" className={classes.linkTypography}>
-            <Link
-              onClick={() => setState(prev => ({ ...prev, posts: {} }))}
-              to={`/${getCachedMode()}/p/1`}
-              className={classes.link}
-            >
-              habra.
-              <Offline>
-                <WifiOffRoundedIcon className={classes.offline} />
-              </Offline>
-            </Link>
-          </Typography>
-          <IconButton onClick={() => history.push('/search')}>
-            <SearchRoundedIcon />
-          </IconButton>
-          <IconButton onClick={() => history.push('/settings')}>
-            <SettingsOutlinedIcon />
-          </IconButton>
-          <IconButton>
-            <PermIdentityRoundedIcon />
-          </IconButton>
-        </Toolbar>
-      </Container>
-    </AppBar>
+    <HideOnScroll>
+      <AppBar className={classes.root} elevation={0}>
+        <Container className={classes.container}>
+          <Toolbar style={{ minHeight: 'unset', height: 48 }}>
+            <Typography variant="h6" className={classes.linkTypography}>
+              <Link
+                onClick={() => setState(prev => ({ ...prev, posts: {} }))}
+                to={`/${getCachedMode()}/p/1`}
+                className={classes.link}
+              >
+                habra.
+                <Offline>
+                  <WifiOffRoundedIcon className={classes.offline} />
+                </Offline>
+              </Link>
+            </Typography>
+            <IconButton onClick={() => history.push('/search')}>
+              <SearchRoundedIcon />
+            </IconButton>
+            <IconButton onClick={() => history.push('/settings')}>
+              <SettingsOutlinedIcon />
+            </IconButton>
+            <IconButton>
+              <PermIdentityRoundedIcon />
+            </IconButton>
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </HideOnScroll>
   )
 }
 

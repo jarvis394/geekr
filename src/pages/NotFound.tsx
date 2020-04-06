@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    height: '100%',
+    height: 'calc(100vh - 48px)',
   },
   title: {
     fontFamily: 'Google Sans',
@@ -34,12 +34,14 @@ const useStyles = makeStyles(theme => ({
     width: '75%',
     display: 'flex',
     justifyContent: 'center',
-    '& svg': { maxWidth: 500, width: '100%', height: '100%' },
+    '& svg': { maxWidth: 300, width: '100%', height: '100%' },
   },
 }))
 
 const NotFound = () => {
   const classes = useStyles()
+
+  React.useEffect(() => window.scrollTo(0, 0), [])
 
   return (
     <div className={classes.root}>

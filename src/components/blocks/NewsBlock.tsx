@@ -10,11 +10,11 @@ import moment from 'moment'
 import NewsItemSkeleton from '../skeletons/NewsItem'
 import { NewsItem as INewsItem } from 'src/interfaces/News'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
     padding: theme.spacing(2),
+    borderRadius: 0,
   },
   header: {
     fontFamily: 'Google Sans',
@@ -25,17 +25,21 @@ const useStyles = makeStyles(theme => ({
   },
   item: {
     padding: `${theme.spacing(1)}px 0 ${theme.spacing(1)}px 0`,
+    flexWrap: 'nowrap',
+    alignItems: 'center',
   },
   title: {
     fontFamily: 'Google Sans',
     fontWeight: 500,
-    fontSize: 17,
+    fontSize: 16,
     color: theme.palette.text.primary,
   },
   ts: {
     fontWeight: 500,
-    fontSize: 12,
+    fontSize: 14,
     color: theme.palette.text.hint,
+    fontFamily: 'Google Sans',
+    paddingTop: 2,
   },
   linkBox: { marginTop: theme.spacing(2) },
   link: {
@@ -44,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: 14,
     fontFamily: 'Google Sans',
     fontWeight: 500,
-    textTransform: 'none'
+    textTransform: 'none',
   },
   dot: {
     marginLeft: theme.spacing(1),
@@ -54,12 +58,12 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.hint,
   },
   article: {
-    textDecoration: 'none'
+    textDecoration: 'none',
   },
   error: {
     color: theme.palette.error.light,
     fontWeight: 800,
-  }
+  },
 }))
 
 const NewsItem = ({ data }): React.ReactElement => {
@@ -71,8 +75,8 @@ const NewsItem = ({ data }): React.ReactElement => {
       fractionalPartNameCases: ['', '', ''],
       currencyNounGender: {
         integer: 0,
-        fractionalPart: 0
-      }
+        fractionalPart: 0,
+      },
     },
     showNumberParts: {
       integer: true,
@@ -81,19 +85,24 @@ const NewsItem = ({ data }): React.ReactElement => {
     convertNumbertToWords: {
       integer: false,
       fractional: false,
-    }
+    },
   })
 
   return (
     <Link to={'/article/' + data.id} className={classes.article}>
-      <Grid container direction="column" className={classes.item}>
-        <Grid item>
-          <Typography className={classes.title}>{data.title}</Typography>
+      <Grid container direction="row" className={classes.item}>
+        <Grid container direction="column">
+          <Grid item>
+            <Typography className={classes.title}>{data.title}</Typography>
+          </Grid>
+          <Grid container direction="row" alignItems="center">
+            <Typography className={classes.ts}>{ts}</Typography>
+            <span className={classes.dot}>•</span>
+            <Typography className={classes.ts}>{commentsCount}</Typography>
+          </Grid>
         </Grid>
-        <Grid container direction="row">
-          <Typography className={classes.ts}>{ts}</Typography>
-          <span className={classes.dot}>•</span>
-          <Typography className={classes.ts}>{commentsCount}</Typography>
+        <Grid item>
+          <RightIcon color="disabled" />
         </Grid>
       </Grid>
     </Link>
@@ -110,17 +119,17 @@ const News = ({ setState, state }) => {
       setError(null)
       try {
         const data = (await getNewsPromo()).data.items
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           cache: {
             ...prev.cache,
             news: {
               ...prev.cache.news,
-              block: data
-            }
-          }
+              block: data,
+            },
+          },
         }))
-      setNews(data)
+        setNews(data)
       } catch (e) {
         console.error('Could not fetch news:', e)
         setError(e.message)
@@ -133,11 +142,15 @@ const News = ({ setState, state }) => {
   return (
     <Paper className={classes.root} elevation={0}>
       <Typography className={classes.header}>Новости</Typography>
-      {fetchError && <Typography className={classes.error}>Произошла ошибка при выполнении запроса</Typography>}
-      {!news && !fetchError && [...Array(5)].map((_, i) => <NewsItemSkeleton key={i} />)}
-      {news && news.map((e, i) => (
-        <NewsItem data={e} key={i} />
-      ))}
+      {fetchError && (
+        <Typography className={classes.error}>
+          Произошла ошибка при выполнении запроса
+        </Typography>
+      )}
+      {!news &&
+        !fetchError &&
+        [...Array(5)].map((_, i) => <NewsItemSkeleton key={i} />)}
+      {news && news.map((e, i) => <NewsItem data={e} key={i} />)}
       <Box className={classes.linkBox}>
         <Button
           size="small"
