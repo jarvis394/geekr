@@ -19,6 +19,7 @@ import BottomBar from './BottomBar'
 import CommentsButton from './CommentsButton'
 import SimilarPosts from './SimilarPosts'
 import TopDayPosts from './TopDayPosts'
+import isInViewport from 'src/utils/isInViewport'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -89,12 +90,6 @@ const Post = () => {
   const classes = useStyles()
   const { id } = useParams()
   const articleEndRef = useRef()
-  const isInViewport = (ref, offset = 0) => {
-    if (!ref.current) return false
-
-    const top = ref.current.getBoundingClientRect().top
-    return top + offset >= 0 && top - offset <= window.innerHeight
-  }
   const onScroll = useCallback(() => {
     if (isInViewport(articleEndRef, 48)) setBottomBarStickyState(false)
     else setBottomBarStickyState(true)

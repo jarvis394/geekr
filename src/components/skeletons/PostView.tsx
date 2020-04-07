@@ -6,7 +6,7 @@ import Container from '@material-ui/core/Container'
 import Divider from '@material-ui/core/Divider'
 import random from '../../utils/random'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.paper,
     borderRadius: 0,
@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(1),
     height: 40,
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   skeleton: {
     maxWidth: '100%',

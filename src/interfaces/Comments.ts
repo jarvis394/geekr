@@ -25,7 +25,7 @@ export interface Comment {
   author: User
   isAuthor: boolean
   isFavorite: boolean
-  vote: { 
+  vote: {
     value: null | number
     isCanVote: boolean
   }

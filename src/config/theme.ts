@@ -5,7 +5,9 @@ import { PaletteType } from '@material-ui/core'
 const localStorageThemeType = localStorage.getItem('theme')
 const type = (localStorageThemeType || 'light') as PaletteType
 
-export const makeBackgroundColors = (t: PaletteType): {
+export const makeBackgroundColors = (
+  t: PaletteType
+): {
   default: string
   paper: string
 } => ({
@@ -13,7 +15,9 @@ export const makeBackgroundColors = (t: PaletteType): {
   paper: t === 'dark' ? '#212121' : '#fff',
 })
 
-export const makePrimaryColors = (t: PaletteType): {
+export const makePrimaryColors = (
+  t: PaletteType
+): {
   main: string
   light: string
   dark: string
@@ -34,8 +38,8 @@ const theme: ThemeOptions = {
   overrides: {
     MuiListItem: {
       button: { '&:hover': { background: 'transparent !important' } },
-    }
-  }
+    },
+  },
 }
 
 export default theme

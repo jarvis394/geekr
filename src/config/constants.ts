@@ -40,5 +40,5 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   theme: 'light',
   separateCommentsPage: true,
   primaryColor: blue,
-  cacheUpdateInterval: HOUR
+  cacheUpdateInterval: HOUR,
 }

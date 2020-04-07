@@ -6,7 +6,7 @@ import { Switch, List, ListItem, ListItemText, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { makeBackgroundColors, makePrimaryColors } from '../config/theme'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: { width: '100%', height: '100%', maxWidth: '100vw' },
   title: {
     paddingTop: theme.spacing(1),
@@ -39,7 +39,7 @@ const Settings = ({ state, setState }) => {
     theme.palette.background = makeBackgroundColors(newThemeType)
     theme.palette.primary = makePrimaryColors(newThemeType)
 
-    setState(prev => ({ ...prev, theme }))
+    setState((prev) => ({ ...prev, theme }))
     localStorage.setItem('theme', newThemeType)
   }
 

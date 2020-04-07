@@ -19,7 +19,7 @@ import { Posts } from '../interfaces'
  */
 const useQuery = () => new URLSearchParams(useLocation().search)
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     height: '100%',
     display: 'flex',
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const useSearchStyles = makeStyles(theme => ({
+const useSearchStyles = makeStyles((theme) => ({
   search: {
     alignItems: 'center',
     display: 'flex',
@@ -53,7 +53,7 @@ const useSearchStyles = makeStyles(theme => ({
   },
 }))
 
-const useSvgStyles = makeStyles(theme => ({
+const useSvgStyles = makeStyles((theme) => ({
   svgHolder: {
     display: 'flex',
     alignItems: 'center',
@@ -74,7 +74,7 @@ const useSvgStyles = makeStyles(theme => ({
   },
 }))
 
-const useNoResultsStyles = makeStyles(theme => ({
+const useNoResultsStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     alignItems: 'center',
@@ -85,7 +85,7 @@ const useNoResultsStyles = makeStyles(theme => ({
   title: {
     fontFamily: 'Google Sans',
     fontSize: 18,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   svg: {
     marginTop: theme.spacing(4),
@@ -100,13 +100,13 @@ const SearchInput = ({ q }) => {
   const classes = useSearchStyles()
   const history = useHistory()
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault()
     history.push('/search/p/1?q=' + e.target.q.value)
   }
 
   return (
-    <form onSubmit={e => onSubmit(e)}>
+    <form onSubmit={(e) => onSubmit(e)}>
       <Paper elevation={0} className={classes.search}>
         <InputBase
           autoFocus
@@ -137,7 +137,9 @@ const NoResults = () => {
   const classes = useNoResultsStyles()
   return (
     <div className={classes.root}>
-      <Typography className={classes.title}>К сожалению, здесь пока нет ни одной публикации</Typography>
+      <Typography className={classes.title}>
+        К сожалению, здесь пока нет ни одной публикации
+      </Typography>
       <EmptySVG className={classes.svg} />
     </div>
   )
@@ -154,7 +156,7 @@ const SearchResultsScreen = ({ q }) => {
 
   const handleChange = (_, i) => {
     if (i === currentPage) return
-    
+
     setCurrentPage(i)
     setData(null)
     setError(null)
@@ -164,7 +166,7 @@ const SearchResultsScreen = ({ q }) => {
   useEffect(() => {
     setError(null)
     setData(null)
-    
+
     const get = async () => {
       try {
         const d = await getSearchResults(q, currentPage)
@@ -183,10 +185,15 @@ const SearchResultsScreen = ({ q }) => {
   return (
     <div>
       {!data && [...new Array(7)].map((_, i) => <PostSkeleton key={i} />)}
-      {data && data.articleIds.map((e, i) => (
-        <PostItem showPreview post={data.articleRefs[e]} key={i} />
-      ))}
-      <Pagintaion disabled={!data} steps={pagesCount} handleChange={handleChange} />
+      {data &&
+        data.articleIds.map((e, i) => (
+          <PostItem showPreview post={data.articleRefs[e]} key={i} />
+        ))}
+      <Pagintaion
+        disabled={!data}
+        steps={pagesCount}
+        handleChange={handleChange}
+      />
     </div>
   )
 }
@@ -209,7 +216,7 @@ const Search = () => {
   const searchParams = useQuery()
   const classes = useStyles()
   const query = searchParams.get('q')
-  
+
   // Scroll to the page's top
   window.scrollTo(0, 0)
 

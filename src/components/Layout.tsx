@@ -15,7 +15,9 @@ const chromeAddressBarHeight = 56
 const useStyles = makeStyles({
   app: {
     display: 'flex',
-    minHeight: `calc(100vh - 48px - ${isMobile() ? chromeAddressBarHeight : 0}px - 196px)`,
+    minHeight: `calc(100vh - 48px - ${
+      isMobile() ? chromeAddressBarHeight : 0
+    }px - 196px)`,
     borderRadius: 0,
     flexDirection: 'column',
     maxWidth: minWidth,
@@ -46,7 +48,7 @@ const Layout = (): React.ReactElement => {
   //   pagesCount: number,
   //   lastUpdateTS: Date
   // }
-  MODES.forEach(mode => {
+  MODES.forEach((mode) => {
     initialState = {
       ...initialState,
       cache: {

@@ -2,10 +2,10 @@ import * as React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import MUIPagination from '@material-ui/lab/Pagination'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    color: disabled =>
+    color: (disabled) =>
       disabled ? theme.palette.text.hint : theme.palette.text.primary,
     fontFamily: 'Google Sans',
     fontWeight: 500,

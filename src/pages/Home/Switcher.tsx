@@ -12,11 +12,11 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import { MODES as modes } from '../../config/constants'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   expansionPanel: {
     margin: '0 !important',
     borderBottom: '1px solid ' + fade(theme.palette.divider, 0.05),
-    '&::before': { display: 'none' }
+    '&::before': { display: 'none' },
   },
   expansionPanelSummary: {
     padding: 0,
@@ -72,15 +72,17 @@ const Switcher = ({ handleClick, mode, setMode }) => {
   const ListButtonMemoized = React.memo(ListButton)
 
   const classes = useStyles()
-  const current = modes.find(e => e.mode === mode)
-  const buttonList = modes.map((e, i) => <ListButtonMemoized data={e} key={i} />)
-  
+  const current = modes.find((e) => e.mode === mode)
+  const buttonList = modes.map((e, i) => (
+    <ListButtonMemoized data={e} key={i} />
+  ))
+
   return (
     <>
       <ExpansionPanel
         elevation={0}
         expanded={isExpanded}
-        onChange={() => setExpanded(prev => !prev)}
+        onChange={() => setExpanded((prev) => !prev)}
         className={classes.expansionPanel}
         TransitionProps={{ unmountOnExit: true }}
       >

@@ -15,7 +15,7 @@ import { Posts } from 'src/interfaces'
 import { MODES as modes } from 'src/config/constants'
 import Switcher from './Switcher'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
     padding: 0,
@@ -69,7 +69,7 @@ const Home = ({ state, setState }) => {
     if (i === currentPage) return
 
     setPosts(cache[mode].data[i])
-    history.push(modes.find(e => e.mode === mode).to + '/p/' + i)
+    history.push(modes.find((e) => e.mode === mode).to + '/p/' + i)
   }
 
   const handleSwitcher = ({ mode: newMode, to }) => {
@@ -103,7 +103,7 @@ const Home = ({ state, setState }) => {
       // Set application state's posts data and the amount of pages to the state
       // so Pagination component will always have a static number of steps
       if (!cache[mode].data[currentPage]) {
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           cache: {
             ...prev.cache,

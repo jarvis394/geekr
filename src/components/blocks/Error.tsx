@@ -24,10 +24,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '65%',
     marginTop: theme.spacing(4),
     maxWidth: 300,
-  }
+  },
 }))
 
-const ErrorComponent = ({ message, onHomeClick }: { message: string; onHomeClick?: () => void}) => {
+const ErrorComponent = ({
+  message,
+  onHomeClick,
+}: {
+  message: string
+  onHomeClick?: () => void
+}) => {
   const classes = useStyles()
   return (
     <div className={classes.centered}>

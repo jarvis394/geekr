@@ -10,7 +10,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import ErrorComponent from '../components/blocks/Error'
 import { Posts, APIResponse } from '../interfaces'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
     padding: 0,
@@ -50,7 +50,7 @@ const News = ({ state, setState }) => {
       />
     ) : null
 
-  const setError = e => {
+  const setError = (e) => {
     setPosts(null)
     return _setError(e)
   }
@@ -86,7 +86,7 @@ const News = ({ state, setState }) => {
       // Set application state's posts data and the amount of pages to the state
       // so Pagination component will always have a static number of steps
       if (!cache.news.data[currentPage]) {
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           cache: {
             ...prev.cache,

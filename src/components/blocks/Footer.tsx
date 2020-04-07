@@ -34,8 +34,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   icon: {
-    WebkitTapHighlightColor: 'transparent'
-  }
+    WebkitTapHighlightColor: 'transparent',
+  },
 }))
 
 const Footer = () => {

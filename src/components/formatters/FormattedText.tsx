@@ -5,7 +5,7 @@ import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import Spoiler from '../blocks/Spoiler'
 import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   text: {
     '& img': {
       maxWidth: '100%',
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
       background: theme.palette.background.default,
       padding: theme.spacing(0.25),
       borderRadius: theme.shape.borderRadius,
-      wordBreak: 'break-word'
+      wordBreak: 'break-word',
     },
     '& table': {
       overflow: 'auto',
@@ -70,7 +70,7 @@ const FormattedText = ({ children, className = '', ...props }) => {
       if (name === 'pre') {
         const language = children[0].attribs.class || null
         const data = children[0].children[0].data || ''
-  
+
         return (
           <SyntaxHighlighter
             style={style}
@@ -85,8 +85,10 @@ const FormattedText = ({ children, className = '', ...props }) => {
         return <img alt="Картинка" src={attribs['data-src']} />
       }
       if (name === 'div' && attribs.class === 'spoiler') {
-        const title = children.find(e => e.attribs.class === 'spoiler_title').children[0].data
-        const data = children.find(e => e.attribs.class === 'spoiler_text').children
+        const title = children.find((e) => e.attribs.class === 'spoiler_title')
+          .children[0].data
+        const data = children.find((e) => e.attribs.class === 'spoiler_text')
+          .children
 
         return <Spoiler title={title}>{domToReact(data)}</Spoiler>
       }

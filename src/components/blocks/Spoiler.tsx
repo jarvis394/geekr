@@ -4,7 +4,7 @@ import FormattedText from '../formatters/FormattedText'
 import ReactDOMServer from 'react-dom/server'
 import { makeStyles } from '@material-ui/core'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   title: {
     borderBottom: '1px dashed',
     color: theme.palette.primary.light,
@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
       left: -12,
       position: 'absolute',
       top: '50%',
-      transform: isOpen =>
+      transform: (isOpen) =>
         isOpen ? 'rotate(90deg) translateX(-4px)' : 'translateY(-5px)',
       transition: 'transform .2s ease-out,-webkit-transform .2s ease-out',
       verticalAlign: 'middle',
@@ -40,7 +40,10 @@ const Spoiler = ({ children, title }) => {
 
   return (
     <div>
-      <b onClick={() => setOpenState(prev => !prev)} className={classes.title}>
+      <b
+        onClick={() => setOpenState((prev) => !prev)}
+        className={classes.title}
+      >
         {title}
       </b>
       {isOpen && (

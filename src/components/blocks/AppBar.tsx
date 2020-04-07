@@ -16,7 +16,7 @@ import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
 import { useScrollTrigger, Slide } from '@material-ui/core'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
     color: theme.palette.text.primary,
@@ -74,7 +74,7 @@ const Component = ({ setState }) => {
           <Toolbar style={{ minHeight: 'unset', height: 48 }}>
             <Typography variant="h6" className={classes.linkTypography}>
               <Link
-                onClick={() => setState(prev => ({ ...prev, posts: {} }))}
+                onClick={() => setState((prev) => ({ ...prev, posts: {} }))}
                 to={`/${getCachedMode()}/p/1`}
                 className={classes.link}
               >

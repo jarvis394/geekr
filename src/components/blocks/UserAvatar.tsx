@@ -3,7 +3,7 @@ import { Avatar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import UserPlaceholder from '../svg/UserPlaceholder'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: 20,
     height: 20,
@@ -25,7 +25,7 @@ const UserAvatar = ({
   const state = [
     'habr.com/images/avatars/stub-user',
     'habr.com/images/stub-user',
-  ].some(e => src.split('//')[1].startsWith(e))
+  ].some((e) => src.split('//')[1].startsWith(e))
 
   return (
     <div {...props} className={className + ' ' + classes.root}>

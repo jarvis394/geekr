@@ -6,10 +6,10 @@ import Tab from '@material-ui/core/Tab'
 import { Link, useLocation } from 'react-router-dom'
 import getCachedMode from '../../utils/getCachedMode'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.background.default,
   },
 }))
 
@@ -21,18 +21,14 @@ const validPaths = [
   '/news/p/',
   '/hubs',
   '/authors',
-  '/companies'
+  '/companies',
 ]
-const isValidPath = (path: string): boolean => validPaths.some(e => path.startsWith(e))
+const isValidPath = (path: string): boolean =>
+  validPaths.some((e) => path.startsWith(e))
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function LinkTab(props: any) {
-  return (
-    <Tab
-      component={Link}
-      {...props}
-    />
-  )
+  return <Tab component={Link} {...props} />
 }
 const LinkTabMemoized = React.memo(LinkTab)
 
@@ -44,7 +40,7 @@ const tabs = [
   { label: 'Компании', to: () => '/companies', tab: 'companies' },
 ]
 const findPathValue = (path: string): number => {
-  const res = tabs.findIndex(e => path.startsWith(e.to()))
+  const res = tabs.findIndex((e) => path.startsWith(e.to()))
   return res < 0 ? 0 : res
 }
 
@@ -56,7 +52,7 @@ const TabsComponent = ({ children }) => {
   const handleChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue)
   }
-  
+
   if (!shouldShow) return children
 
   return (
@@ -69,7 +65,9 @@ const TabsComponent = ({ children }) => {
           textColor="primary"
           variant="scrollable"
         >
-          {tabs.map(({ to, label }, i) => <LinkTabMemoized to={to()} label={label} key={i} />)}
+          {tabs.map(({ to, label }, i) => (
+            <LinkTabMemoized to={to()} label={label} key={i} />
+          ))}
         </Tabs>
       </Paper>
       {children}

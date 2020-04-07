@@ -8,8 +8,9 @@ import Comment from './Comment'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Fade from '@material-ui/core/Fade'
 import { Comments as IComments } from 'src/interfaces'
+import isInViewport from 'src/utils/isInViewport'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
     paddingTop: theme.spacing(1),
@@ -29,20 +30,24 @@ const useStyles = makeStyles(theme => ({
   comments: {
     backgroundColor: theme.palette.background.paper,
     paddingBottom: theme.spacing(2),
-    paddingTop: 0.05
+    paddingTop: 0.05,
   },
   progress: {
     marginTop: theme.spacing(2),
-    borderRadius: theme.shape.borderRadius
-  }
+    borderRadius: theme.shape.borderRadius,
+  },
 }))
 
 const MIN_COMMENTS_SLICE = 25
 
 const Comments = ({ postId, authorId }) => {
-  const [comments, setComments] = useState<any[]>()
-  const [commentsSliceEnd, setCommentsSliceEnd] = useState<number>(MIN_COMMENTS_SLICE)
-  const [isLoadingNewComments, setIsLoadingNewComments] = useState<boolean>(true)
+  const [comments, setComments] = useState<IComments.Comment[]>()
+  const [commentsSliceEnd, setCommentsSliceEnd] = useState<number>(
+    MIN_COMMENTS_SLICE
+  )
+  const [isLoadingNewComments, setIsLoadingNewComments] = useState<boolean>(
+    true
+  )
   const [commentsLength, setCommentsLength] = useState<number>()
   const [fetchError, setError] = useState()
   const classes = useStyles()
@@ -50,22 +55,15 @@ const Comments = ({ postId, authorId }) => {
   const [rootComment, setRootComment] = useState({
     children: [],
   })
-  
-  const isInViewport = (ref, offset = 0) => {
-    if (!ref.current) return false
 
-    const top = ref.current.getBoundingClientRect().top
-    return top + offset >= 0 && top - offset <= window.innerHeight
-  }
-  
   const onScroll = useCallback(() => {
     if (commentsSliceEnd >= commentsLength) {
       if (isLoadingNewComments) setIsLoadingNewComments(false)
       return
     }
-  
+
     if (isInViewport(commentsEndRef) && !isLoadingNewComments) {
-      setCommentsSliceEnd(prev => prev + MIN_COMMENTS_SLICE)
+      setCommentsSliceEnd((prev) => prev + MIN_COMMENTS_SLICE)
       setIsLoadingNewComments(true)
     } else {
       if (isLoadingNewComments) setIsLoadingNewComments(false)
@@ -73,7 +71,7 @@ const Comments = ({ postId, authorId }) => {
   }, [commentsSliceEnd, isLoadingNewComments, commentsLength])
 
   const flatten = useCallback((nodes, a = []) => {
-    for (let i = 0; i < nodes.length; i++) { 
+    for (let i = 0; i < nodes.length; i++) {
       a.push(nodes[i])
       flatten(nodes[i].children, a)
     }
@@ -96,11 +94,11 @@ const Comments = ({ postId, authorId }) => {
           parent.children.push(comment)
         }
       }
-      
+
       setRootComment({ children: root })
       return root
     }
-    
+
     window.addEventListener('scroll', onScroll)
 
     const get = async () => {
@@ -112,15 +110,15 @@ const Comments = ({ postId, authorId }) => {
         const commentsData = d.data.comments
         const parsedComments = parseComments(commentsData)
         const flat = flatten(parsedComments)
-        
+
         setCommentsLength(Object.keys(commentsData).length)
-        setComments(flat.map(x => delete x.children && x))
+        setComments(flat.map((x: IComments.Comment) => delete x.children && x))
       } catch (e) {
         return setError(e.message)
       }
     }
     get()
-    
+
     return () => window.removeEventListener('scroll', onScroll)
   }, [postId, onScroll, flatten])
 
@@ -139,9 +137,20 @@ const Comments = ({ postId, authorId }) => {
         </Typography>
       </Container>
       <Container className={classes.comments}>
-        {comments && comments.slice(0, commentsSliceEnd).map((node) => <Comment key={node.id} data={node} isAuthor={node.author ? authorId === node.author.id : false} />)}
-        {(!comments || isLoadingNewComments) && <LinearProgress className={classes.progress} />}
-        <span ref={commentsEndRef} />
+        {comments &&
+          comments
+            .slice(0, commentsSliceEnd)
+            .map((node) => (
+              <Comment
+                key={node.id}
+                data={node}
+                isAuthor={node.author ? authorId === node.author.id : false}
+              />
+            ))}
+        {(!comments || isLoadingNewComments) && (
+          <LinearProgress className={classes.progress} />
+        )}
+        <div ref={commentsEndRef} />
       </Container>
     </div>
   )

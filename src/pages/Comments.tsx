@@ -31,7 +31,7 @@ const CommentsPage = () => {
   }, [id])
 
   if (error) return <Typography>error: {error}</Typography>
-  
+
   return (
     <>
       {!post && <PostSkeleton />}

@@ -3,7 +3,7 @@ export default () => {
     all: 'all',
     day: 'top/day',
     week: 'top/week',
-    month: 'top/month'
+    month: 'top/month',
   }
   const mode = localStorage.getItem('mode')
 

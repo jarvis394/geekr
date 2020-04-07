@@ -14,7 +14,7 @@ interface Props {
   id: number | string
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
     marginTop: theme.spacing(2),
@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
   iconButton: {
     padding: 10,
     marginRight: theme.spacing(1),
-    color: isBookmarked =>
+    color: (isBookmarked) =>
       isBookmarked ? theme.palette.primary.main : theme.palette.text.hint,
   },
 }))
@@ -78,7 +78,7 @@ const SimilarPost = ({ data }) => {
     <Grid className={classes.post}>
       <Grid item>
         <IconButton
-          onClick={() => setBookmarkedState(prev => !prev)}
+          onClick={() => setBookmarkedState((prev) => !prev)}
           className={classes.iconButton}
         >
           {isBookmarked ? <BookmarkIconActive /> : <BookmarkIcon />}

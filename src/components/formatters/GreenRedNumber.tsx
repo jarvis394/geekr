@@ -2,10 +2,17 @@ import * as React from 'react'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   redText: { color: theme.palette.error.main },
   greenText: { color: theme.palette.success.main },
 }))
+
+interface Props {
+  number: number
+  defaultClass?: string
+  style?: React.CSSProperties
+  classes?: string
+}
 
 const GreenRedNumber = ({
   number,
@@ -13,7 +20,7 @@ const GreenRedNumber = ({
   style,
   classes: additionalClasses,
   ...props
-}: Partial<any>) => {
+}: Props) => {
   const classes = useStyles()
 
   let className = defaultClass

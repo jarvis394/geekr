@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.text.primary,
     margin: 0,
     fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif',
-    lineHeight: 1.5
-  }
+    lineHeight: 1.5,
+  },
 }))
 
 const Router = ({ state, setState }) => {
@@ -50,14 +50,22 @@ const Router = ({ state, setState }) => {
         <Route exact path={['/search', '/search/p/:page']}>
           <Search />
         </Route>
-        
+
         {/* News */}
         <Route exact path="/news/p/:page">
           <News state={state} setState={setState} />
         </Route>
 
         {/* Home */}
-        <Route exact path={['/all/p/:page', '/top/day/p/:page', '/top/week/p/:page', '/top/month/p/:page']}>
+        <Route
+          exact
+          path={[
+            '/all/p/:page',
+            '/top/day/p/:page',
+            '/top/week/p/:page',
+            '/top/month/p/:page',
+          ]}
+        >
           <Home state={state} setState={setState} />
         </Route>
 

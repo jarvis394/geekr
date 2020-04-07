@@ -84,8 +84,8 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 14,
   },
   scoreColor: {
-    color: theme.palette.text.hint
-  }
+    color: theme.palette.text.hint,
+  },
 }))
 
 const getOpacity = (value: number) => {
@@ -98,8 +98,7 @@ const Comment = ({ data, isAuthor }) => {
   const classes = useStyles(isAuthor)
   const { message } = data
   const ts = moment(data.timePublished).fromNow()
-  const commentOpacity =
-    data.score < 0 ? getOpacity(data.score) : 1
+  const commentOpacity = data.score < 0 ? getOpacity(data.score) : 1
   const margin = data.level > 6 ? 6 * 16 : data.level * 16
 
   if (!data.author) {
@@ -113,7 +112,10 @@ const Comment = ({ data, isAuthor }) => {
   }
 
   return (
-    <div style={{ marginLeft: margin, opacity: commentOpacity }} className={classes.root}>
+    <div
+      style={{ marginLeft: margin, opacity: commentOpacity }}
+      className={classes.root}
+    >
       {/* Top bar */}
       <Grid
         style={{ position: 'relative' }}
@@ -139,7 +141,7 @@ const Comment = ({ data, isAuthor }) => {
           {ts}
         </Typography>
         <GreenRedNumber
-          classes={[ classes.score ]}
+          classes={classes.score}
           defaultClass={classes.scoreColor}
           number={data.score}
         />

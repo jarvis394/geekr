@@ -17,7 +17,7 @@ import UserAvatar from './UserAvatar'
 import { POST_IMAGE_HEIGHT } from 'src/config/constants'
 
 const ld = { lighten, darken }
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   noDeco: {
     textDecoration: 'none !important',
   },
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   paper: {
     background: theme.palette.background.paper,
     borderRadius: 0,
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
   },
   padding: {
     padding: theme.spacing(2),
@@ -41,8 +41,8 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     display: 'flex',
     backgroundColor: theme.palette.action.hover,
-    height: hasImage => hasImage ? POST_IMAGE_HEIGHT : '100%',
-    marginBottom: hasImage => hasImage ? theme.spacing(2) : 0
+    height: (hasImage) => (hasImage ? POST_IMAGE_HEIGHT : '100%'),
+    marginBottom: (hasImage) => (hasImage ? theme.spacing(2) : 0),
   },
   image: {
     maxWidth: '100%',
@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 800,
     fontFamily: 'Google Sans',
     fontSize: 20,
-    marginTop: hasImage => hasImage ? 0 : theme.spacing(1),
+    marginTop: (hasImage) => (hasImage ? 0 : theme.spacing(1)),
     '& .searched-item': {
       color: theme.palette.primary.light, // Highlight the search query in post's title
     },
@@ -86,7 +86,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.hint,
     fontSize: 8,
     textDecoration: 'none',
-    padding: 0
+    padding: 0,
   },
   postBottomRowItemIcon: {
     fontSize: 16,
@@ -96,8 +96,8 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     padding: theme.spacing(2),
     textDecoration: 'none !important',
-    paddingBottom: hasImage => hasImage ? theme.spacing(2) : 0
-  }
+    paddingBottom: (hasImage) => (hasImage ? theme.spacing(2) : 0),
+  },
 }))
 
 export const PostItem = ({
@@ -110,9 +110,7 @@ export const PostItem = ({
   style?: Record<string, unknown>
 }) => {
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
-  const ts = moment(post.time_published)
-    .calendar()
-    .toLowerCase()
+  const ts = moment(post.time_published).calendar().toLowerCase()
   const { login, avatar } = post.author
   const {
     title: unparsedTitle,
@@ -122,13 +120,15 @@ export const PostItem = ({
     favorites_count: favoritesCount,
     comments_count: commentsCount,
     preview_html: previewHTML,
-    metadata
+    metadata,
   } = post
   const { meta_image: metaImage, description } = metadata
   const title = parse(unparsedTitle)
   const reads = formatNumber(readingCount)
   const score = formatNumber(Number(sc))
-  const favorites = formatNumber(Number(favoritesCount) + (isBookmarked ? 1 : 0))
+  const favorites = formatNumber(
+    Number(favoritesCount) + (isBookmarked ? 1 : 0)
+  )
   const comments = formatNumber(Number(commentsCount))
   const bottomRow = [
     {
@@ -146,7 +146,7 @@ export const PostItem = ({
       isButton: true,
       isActive: isBookmarked,
       action: () => {
-        setBookmarkState(prev => !prev)
+        setBookmarkState((prev) => !prev)
       },
     },
     {
@@ -157,7 +157,7 @@ export const PostItem = ({
   ]
   const hasImage = !!metaImage
   const classes = useStyles(hasImage)
-  
+
   return (
     <Paper elevation={0} className={classes.paper} style={style}>
       <Grid container>
@@ -168,13 +168,26 @@ export const PostItem = ({
               login={login}
               className={classes.postAvatar}
             />
-            <Typography className={classes.postAuthor} variant="caption">{login}</Typography>
-            <Typography className={classes.postTs} variant="caption">{ts}</Typography>
+            <Typography className={classes.postAuthor} variant="caption">
+              {login}
+            </Typography>
+            <Typography className={classes.postTs} variant="caption">
+              {ts}
+            </Typography>
           </Grid>
         </Link>
         <Grid item className={classes.imageHolder}>
-          <Link style={{ display: 'flex', width: '100%' }} to={'/article/' + id}>
-            {hasImage && <img className={classes.image} src={metaImage} alt={description} />}
+          <Link
+            style={{ display: 'flex', width: '100%' }}
+            to={'/article/' + id}
+          >
+            {hasImage && (
+              <img
+                className={classes.image}
+                src={metaImage}
+                alt={description}
+              />
+            )}
           </Link>
         </Grid>
         <div style={{ paddingTop: 0 }} className={classes.padding}>
