@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
@@ -32,25 +32,53 @@ const useStyles = makeStyles(theme => ({
     paddingTop: 0.05
   },
   progress: {
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(2),
     borderRadius: theme.shape.borderRadius
   }
 }))
 
+const MIN_COMMENTS_SLICE = 25
+
 const Comments = ({ postId, authorId }) => {
-  const [comments, setComments] = useState<Map<number, IComments.Comment>>()
+  const [comments, setComments] = useState<any[]>()
+  const [commentsSliceEnd, setCommentsSliceEnd] = useState<number>(MIN_COMMENTS_SLICE)
+  const [isLoadingNewComments, setIsLoadingNewComments] = useState<boolean>(true)
   const [commentsLength, setCommentsLength] = useState<number>()
   const [fetchError, setError] = useState()
   const classes = useStyles()
+  const commentsEndRef = useRef()
   const [rootComment, setRootComment] = useState({
     children: [],
   })
+  
+  const isInViewport = (ref, offset = 0) => {
+    if (!ref.current) return false
 
-  const renderComment = (node: IComments.Comment, depth = 0) => (
-    <Comment key={node.id} data={node} isAuthor={node.author ? authorId === node.author.id : false}>
-      {node.children.map((e: IComments.Comment) => renderComment(e, depth + 1))}
-    </Comment>
-  )
+    const top = ref.current.getBoundingClientRect().top
+    return top + offset >= 0 && top - offset <= window.innerHeight
+  }
+  
+  const onScroll = useCallback(() => {
+    if (commentsSliceEnd >= commentsLength) {
+      if (isLoadingNewComments) setIsLoadingNewComments(false)
+      return
+    }
+  
+    if (isInViewport(commentsEndRef) && !isLoadingNewComments) {
+      setCommentsSliceEnd(prev => prev + MIN_COMMENTS_SLICE)
+      setIsLoadingNewComments(true)
+    } else {
+      if (isLoadingNewComments) setIsLoadingNewComments(false)
+    }
+  }, [commentsSliceEnd, isLoadingNewComments, commentsLength])
+
+  const flatten = useCallback((nodes, a = []) => {
+    for (let i = 0; i < nodes.length; i++) { 
+      a.push(nodes[i])
+      flatten(nodes[i].children, a)
+    }
+    return a
+  }, [])
 
   useEffect(() => {
     const parseComments = (nodes: Map<number, IComments.Comment>) => {
@@ -70,8 +98,10 @@ const Comments = ({ postId, authorId }) => {
       }
       
       setRootComment({ children: root })
-      return nodes
+      return root
     }
+    
+    window.addEventListener('scroll', onScroll)
 
     const get = async () => {
       // Reset error state
@@ -80,16 +110,19 @@ const Comments = ({ postId, authorId }) => {
       try {
         const d = await getComments(postId)
         const commentsData = d.data.comments
-
+        const parsedComments = parseComments(commentsData)
+        const flat = flatten(parsedComments)
+        
         setCommentsLength(Object.keys(commentsData).length)
-        setComments(parseComments(commentsData))
+        setComments(flat.map(x => delete x.children && x))
       } catch (e) {
         return setError(e.message)
       }
     }
     get()
-    // eslint-disable-next-line
-  }, [postId])
+    
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [postId, onScroll, flatten])
 
   if (fetchError) return <p>error {fetchError}</p>
 
@@ -106,8 +139,9 @@ const Comments = ({ postId, authorId }) => {
         </Typography>
       </Container>
       <Container className={classes.comments}>
-        {!comments && <LinearProgress className={classes.progress} />}
-        {comments && rootComment.children.map(comment => renderComment(comment, 0))}
+        {comments && comments.slice(0, commentsSliceEnd).map((node) => <Comment key={node.id} data={node} isAuthor={node.author ? authorId === node.author.id : false} />)}
+        {(!comments || isLoadingNewComments) && <LinearProgress className={classes.progress} />}
+        <span ref={commentsEndRef} />
       </Container>
     </div>
   )
