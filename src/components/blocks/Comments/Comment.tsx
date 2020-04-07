@@ -30,14 +30,15 @@ const useStyles = makeStyles((theme) => ({
       right: 0,
       width: 500,
       height: 5,
-      backgroundImage: 'linear-gradient(to right, black 33%, rgba(255,255,255,0) 0%)',
+      backgroundImage:
+        'linear-gradient(to right, black 33%, rgba(255,255,255,0) 0%)',
       backgroundPosition: 'bottom',
       backgroundSize: '20px 1px',
       backgroundRepeat: 'repeat-x',
       content: 'no-open-quote',
       opacity: 0.4,
-      filter: theme.palette.type === 'dark' ? 'invert(1)' : 'none'
-    }
+      filter: theme.palette.type === 'dark' ? 'invert(1)' : 'none',
+    },
   },
   noDeco: {
     textDecoration: 'none !important',
@@ -125,7 +126,10 @@ const Comment = ({ data, isAuthor }) => {
   const { message } = data
   const ts = moment(data.timePublished).fromNow()
   const commentOpacity = data.score < 0 ? getOpacity(data.score) : 1
-  const margin = data.level > MAX_LEVEL ? MAX_LEVEL * MARGIN_LEVEL : data.level * MARGIN_LEVEL
+  const margin =
+    data.level > MAX_LEVEL
+      ? MAX_LEVEL * MARGIN_LEVEL
+      : data.level * MARGIN_LEVEL
 
   if (!data.author) {
     return (

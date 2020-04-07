@@ -204,14 +204,21 @@ export const PostItem = ({
               <Typography>{parse(previewHTML)}</Typography>
             </Grid>
           )}
-          <Grid className={classes.postBottomRow} container xs={12}>
+          <Grid
+            className={classes.postBottomRow}
+            container
+            style={{ width: '100%' }}
+          >
             {bottomRow.map((item, i) => (
               <Grid
                 container
                 direction="row"
                 alignItems="center"
                 justify="center"
-                xs={3}
+                style={{
+                  width: '25%',
+                  cursor: item.isButton || item.to ? 'pointer' : 'inherit',
+                }}
                 key={i}
                 to={item.to}
                 color={item.isActive ? 'primary' : 'default'}

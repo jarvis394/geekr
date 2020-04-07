@@ -14,15 +14,17 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case NEWS_PREFIX + 'FETCH': {
-      const { page } = payload
-      state.data.pages[page] = {}
       return { ...state, fetching: true, error: null, fetched: false }
     }
 
     case NEWS_PREFIX + 'FETCH_FULFILLED': {
       const { page, pagesCount, data } = payload
 
-      state.data.pages[page] = data
+      state.data.pages[page] = {
+        articleIds: data.articleIds,
+        articleRefs: data.articleRefs,
+        lastUpdate: Date.now(),
+      }
       state.data.pagesCount = pagesCount
 
       return { ...state, fetching: false, fetched: true, error: null }

@@ -27,8 +27,7 @@ const PostSkeleton = () => {
           direction="row"
           alignItems="center"
           container
-          xs={12}
-          style={{ marginBottom: 14 }}
+          style={{ marginBottom: 14, width: '100%' }}
         >
           <Skeleton
             variant="circle"
@@ -61,11 +60,11 @@ const PostSkeleton = () => {
             style={{ marginTop: 16 }}
           />
         </Grid>
-        <Grid container xs={12} direction="row">
+        <Grid container style={{ width: '100%' }} direction="row">
           {Array(4)
             .fill(null)
             .map((_, i) => (
-              <Grid justify="center" container xs={3} key={i}>
+              <Grid justify="center" style={{ width: '25%' }} container key={i}>
                 <Skeleton
                   variant="rect"
                   width={64}

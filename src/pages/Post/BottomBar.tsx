@@ -55,8 +55,16 @@ const HideOnScroll = (props: HideOnScrollProps) => {
   const { children, disabled } = props
   const trigger = useScrollTrigger({ target: window })
 
-  return disabled ? children : (
-    <Slide mountOnEnter unmountOnExit appear={false} direction="up" in={!trigger}>
+  return disabled ? (
+    children
+  ) : (
+    <Slide
+      mountOnEnter
+      unmountOnExit
+      appear={false}
+      direction="up"
+      in={!trigger}
+    >
       {children}
     </Slide>
   )
@@ -64,7 +72,7 @@ const HideOnScroll = (props: HideOnScrollProps) => {
 
 const Component = ({
   post,
-  sticky = false
+  sticky = false,
 }: {
   post: Post.Post
   sticky?: boolean

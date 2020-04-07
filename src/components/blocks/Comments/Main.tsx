@@ -83,8 +83,7 @@ const Comments = ({ postId, authorId }) => {
         const comment = nodes[id]
         comment.children = []
 
-        const parent =
-          comment.parentId !== 0 ? nodes[comment.parentId] : null
+        const parent = comment.parentId !== 0 ? nodes[comment.parentId] : null
 
         if (!parent) {
           root.push(comment)

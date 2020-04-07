@@ -53,7 +53,7 @@ const Router = ({ state, setState }) => {
 
         {/* News */}
         <Route exact path="/news/p/:page">
-          <News state={state} setState={setState} />
+          <News />
         </Route>
 
         {/* Home */}

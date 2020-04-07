@@ -13,36 +13,60 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const validPaths = [
-  '/all',
-  '/top/day/p/',
-  '/top/week/p/',
-  '/top/month/p',
-  '/news/p/',
-  '/hubs',
-  '/authors',
-  '/companies',
+interface TabObject {
+  label: string
+  to: () => string
+  match: RegExp
+  tab: string
+}
+
+const tabs: TabObject[] = [
+  {
+    label: 'Статьи',
+    to: () => `/${getCachedMode()}/p/1`,
+    match: /\/(all|top\/day|top\/week|top\/month)\/p\/([0-9]+)\/?$/,
+    tab: 'home',
+  },
+  {
+    label: 'Новости',
+    to: () => '/news/p/1',
+    tab: 'news',
+    match: /\/news\/p\/([0-9]+)\/?$/,
+  },
+  {
+    label: 'Хабы',
+    to: () => '/hubs',
+    match: /\/hubs\/?$/,
+    tab: 'hubs',
+  },
+  {
+    label: 'Авторы',
+    to: () => '/authors',
+    match: /\/authors\/?$/,
+    tab: 'authors',
+  },
+  {
+    label: 'Компании',
+    to: () => '/companies',
+    match: /\/companies\/?$/,
+    tab: 'companies',
+  },
 ]
-const isValidPath = (path: string): boolean =>
-  validPaths.some((e) => path.startsWith(e))
+
+const findPath = (path: string): TabObject => {
+  return tabs.find((e) => path.match(e.match))
+}
+const findPathValue = (path: string): number => {
+  const res = tabs.findIndex((e) => path.match(e.match))
+  return res < 0 ? 0 : res
+}
+const isValidPath = (path: string): boolean => !!findPath(path)
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function LinkTab(props: any) {
   return <Tab component={Link} {...props} />
 }
 const LinkTabMemoized = React.memo(LinkTab)
-
-const tabs = [
-  { label: 'Статьи', to: () => `/${getCachedMode()}/p/1`, tab: 'home' },
-  { label: 'Новости', to: () => '/news/p/1', tab: 'news' },
-  { label: 'Хабы', to: () => '/hubs', tab: 'hubs' },
-  { label: 'Авторы', to: () => '/authors', tab: 'authors' },
-  { label: 'Компании', to: () => '/companies', tab: 'companies' },
-]
-const findPathValue = (path: string): number => {
-  const res = tabs.findIndex((e) => path.startsWith(e.to()))
-  return res < 0 ? 0 : res
-}
 
 const TabsComponent = ({ children }) => {
   const classes = useStyles()

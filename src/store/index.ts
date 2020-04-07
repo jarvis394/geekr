@@ -10,4 +10,5 @@ const middleware = applyMiddleware(
   createLogger({ collapsed: true })
 )
 
+export type RootState = ReturnType<typeof reducers>
 export default createStore(reducers, middleware)

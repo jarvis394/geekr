@@ -67,6 +67,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-redux": "^7.1.7",
     "@types/react-syntax-highlighter": "^11.0.4",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",

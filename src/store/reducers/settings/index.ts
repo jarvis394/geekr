@@ -9,9 +9,9 @@ export default (state = initialState, { type, payload }) => {
     case SET_THEME: {
       if (!(payload in ['light', 'dark'])) {
         console.warn(
-          'Could not set \'theme\' to ',
+          "Could not set 'theme' to ",
           payload,
-          '\nDefaulting to \'light\''
+          "\nDefaulting to 'light'"
         )
         return { ...state, theme: 'light' }
       } else {
