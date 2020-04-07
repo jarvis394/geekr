@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  number: number
+  number: string | number
   defaultClass?: string
   style?: React.CSSProperties
   classes?: string

@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const MIN_COMMENTS_SLICE = 25
+const SCROLL_OFFSET = 256
 
 const Comments = ({ postId, authorId }) => {
   const [comments, setComments] = useState<IComments.Comment[]>()
@@ -52,9 +53,6 @@ const Comments = ({ postId, authorId }) => {
   const [fetchError, setError] = useState()
   const classes = useStyles()
   const commentsEndRef = useRef()
-  const [rootComment, setRootComment] = useState({
-    children: [],
-  })
 
   const onScroll = useCallback(() => {
     if (commentsSliceEnd >= commentsLength) {
@@ -62,7 +60,7 @@ const Comments = ({ postId, authorId }) => {
       return
     }
 
-    if (isInViewport(commentsEndRef) && !isLoadingNewComments) {
+    if (isInViewport(commentsEndRef, SCROLL_OFFSET) && !isLoadingNewComments) {
       setCommentsSliceEnd((prev) => prev + MIN_COMMENTS_SLICE)
       setIsLoadingNewComments(true)
     } else {
@@ -86,16 +84,15 @@ const Comments = ({ postId, authorId }) => {
         comment.children = []
 
         const parent =
-          comment.parentId !== 0 ? nodes[comment.parentId] : rootComment
+          comment.parentId !== 0 ? nodes[comment.parentId] : null
 
-        if (parent === rootComment) {
+        if (!parent) {
           root.push(comment)
         } else {
           parent.children.push(comment)
         }
       }
 
-      setRootComment({ children: root })
       return root
     }
 

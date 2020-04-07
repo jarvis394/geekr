@@ -11,10 +11,33 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
+    position: 'relative',
     marginTop: theme.spacing(2),
     '&:hover': {
       opacity: '1 !important',
     },
+  },
+  dotHolder: {
+    display: 'block',
+    position: 'relative',
+    top: 0,
+    left: 0,
+    width: 1,
+    height: 1,
+    '&::before': {
+      position: 'absolute',
+      top: 8,
+      right: 0,
+      width: 500,
+      height: 5,
+      backgroundImage: 'linear-gradient(to right, black 33%, rgba(255,255,255,0) 0%)',
+      backgroundPosition: 'bottom',
+      backgroundSize: '20px 1px',
+      backgroundRepeat: 'repeat-x',
+      content: 'no-open-quote',
+      opacity: 0.4,
+      filter: theme.palette.type === 'dark' ? 'invert(1)' : 'none'
+    }
   },
   noDeco: {
     textDecoration: 'none !important',
@@ -94,12 +117,15 @@ const getOpacity = (value: number) => {
   return 1 - r
 }
 
+const MARGIN_LEVEL = 16
+const MAX_LEVEL = 10
+
 const Comment = ({ data, isAuthor }) => {
   const classes = useStyles(isAuthor)
   const { message } = data
   const ts = moment(data.timePublished).fromNow()
   const commentOpacity = data.score < 0 ? getOpacity(data.score) : 1
-  const margin = data.level > 6 ? 6 * 16 : data.level * 16
+  const margin = data.level > MAX_LEVEL ? MAX_LEVEL * MARGIN_LEVEL : data.level * MARGIN_LEVEL
 
   if (!data.author) {
     return (
@@ -116,6 +142,8 @@ const Comment = ({ data, isAuthor }) => {
       style={{ marginLeft: margin, opacity: commentOpacity }}
       className={classes.root}
     >
+      <span className={classes.dotHolder} />
+
       {/* Top bar */}
       <Grid
         style={{ position: 'relative' }}
