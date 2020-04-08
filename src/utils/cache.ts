@@ -1,26 +1,5 @@
 import { DEFAULT_UPDATE_INTERVAL } from 'src/config/constants'
 
-// localStorage: {
-//   habra_article_{id}: Post(id),  <- Cached article
-//   habra_posts: {                 <- Cached posts on the Home page
-//     [mode]: {
-//       data: {
-//         [page]: Posts(page)
-//       },
-//       pageCount: number,
-//       lastUpdateTS: Date
-//     }
-//   },
-//   habra_news: {                  <- Cached news
-//     data: {
-//       [page]: Posts(page)
-//     },
-//     pageCount: number,
-//     lastUpdateTS: Date,
-//     block: NewsItem[]
-//   }
-// }
-
 export const parse = (data: string) => {
   if (!data) return false
 
@@ -35,14 +14,18 @@ export const parse = (data: string) => {
 export const shouldUpdate = (storeData, cachedData) => {
   const now = Date.now()
   const shouldUpdateByTS = (d: number) => now - d >= DEFAULT_UPDATE_INTERVAL
-  const shouldUpdate = storeData ? shouldUpdateByTS(storeData.lastUpdate) : cachedData ? shouldUpdateByTS(cachedData.lastUpdate) : true
-  
-  console.log(storeData, cachedData)
-  
-  return shouldUpdate
+
+  if (storeData) {
+    return shouldUpdateByTS(storeData.lastUpdated)
+  } else if (cachedData) {
+    return shouldUpdateByTS(cachedData.lastUpdated)
+  } else return true
 }
 
 export const NEWS = 'habra_news'
-export const getNews = () => {
-  return parse(localStorage.getItem(NEWS))
-}
+export const NEWS_PROMO = NEWS + '_promo'
+export const getNews = () => parse(localStorage.getItem(NEWS))
+export const getNewsPromo = () => parse(localStorage.getItem(NEWS_PROMO))
+
+export const HOME = 'habra_home'
+export const getPosts = () => parse(localStorage.getItem(HOME))

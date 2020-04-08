@@ -4,8 +4,14 @@ const initialState = {
   fetching: false,
   fetched: false,
   error: null,
+  block: {
+    data: [],
+    fetching: false,
+    fetched: false,
+    error: null,
+    lastUpdated: null,
+  },
   data: {
-    block: [],
     pages: {},
     pagesCount: null,
   },
@@ -23,7 +29,7 @@ export default (state = initialState, { type, payload }) => {
       state.data.pages[page] = {
         articleIds: data.articleIds,
         articleRefs: data.articleRefs,
-        lastUpdate: Date.now(),
+        lastUpdated: Date.now(),
       }
       state.data.pagesCount = pagesCount
 
@@ -35,18 +41,28 @@ export default (state = initialState, { type, payload }) => {
     }
 
     case NEWS_PREFIX + 'PROMO_FETCH': {
-      return { ...state, fetching: true, error: null, fetched: false }
+      state.block.fetching = true
+      state.block.fetched = false
+      state.block.error = null
+      return state
     }
 
     case NEWS_PREFIX + 'PROMO_FETCH_FULFILLED': {
       const { data } = payload
-      state.data.block = data
+      state.block.fetching = false
+      state.block.fetched = true
+      state.block.error = null
+      state.block.data = data
+      state.block.lastUpdated = Date.now()
 
-      return { ...state, fetching: false, fetched: true, error: null }
+      return state
     }
 
     case NEWS_PREFIX + 'PROMO_FETCH_REJECTED': {
-      return { ...state, fetching: false, fetched: false, error: payload }
+      state.block.fetching = false
+      state.block.fetched = false
+      state.block.error = payload
+      return state
     }
 
     default:

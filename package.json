@@ -43,8 +43,8 @@
   "scripts": {
     "start": "npm run start:prod",
     "start:prod": "serve -s build",
-    "start:dev": "react-scripts start",
-    "build": "react-scripts build",
+    "start:dev": "react-scripts start && cra-append-sw ./src/sw-custom.js --mode dev",
+    "build": "react-scripts build && cra-append-sw ./src/sw-custom.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "npm run lint:eslint && npm run lint:prettier",
@@ -71,8 +71,10 @@
     "@types/react-syntax-highlighter": "^11.0.4",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
+    "cra-append-sw": "^2.7.0",
     "eslint": "^6.8.0",
     "eslint-plugin-react": "^7.19.0",
-    "prettier": "^2.0.4"
+    "prettier": "^2.0.4",
+    "workbox-build": "^5.1.2"
   }
 }

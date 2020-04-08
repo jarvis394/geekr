@@ -4,11 +4,7 @@
     "outDir": "./build",
     "module": "esnext",
     "target": "es5",
-    "lib": [
-      "es6",
-      "dom",
-      "es2018"
-    ],
+    "lib": ["es6", "dom", "es2018"],
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react",
@@ -29,7 +25,6 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"],
+  "exclude": ["src/sw*"]
 }

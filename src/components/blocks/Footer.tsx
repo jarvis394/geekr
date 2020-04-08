@@ -71,7 +71,7 @@ const Footer = () => {
 
         <div style={{ marginTop: 16 }}>
           <Link to={'/habra-faq'} className={classes.text}>
-            Как это работает
+            О проекте
           </Link>
         </div>
       </div>

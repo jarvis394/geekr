@@ -1,14 +1,15 @@
 import * as React from 'react'
-import { useState, useEffect } from 'react'
+import {  useEffect } from 'react'
 import { Paper, Grid, Typography, Box, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
 import numToWord from 'number-to-words-ru'
 import { Link } from 'react-router-dom'
-import { getNewsPromo } from '../../api'
 import moment from 'moment'
 import NewsItemSkeleton from '../skeletons/NewsItem'
-import { NewsItem as INewsItem } from 'src/interfaces/News'
+import { useDispatch } from 'react-redux'
+import { getNewsPromo } from 'src/store/actions/news'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -109,35 +110,18 @@ const NewsItem = ({ data }): React.ReactElement => {
   )
 }
 
-const News = ({ setState, state }) => {
-  const [news, setNews] = useState<INewsItem[]>(state.cache.news.block)
-  const [fetchError, setError] = useState<null | string>()
+const NewsBlock = () => {
   const classes = useStyles()
+  const dispatch = useDispatch()
+  const isFetched = useSelector((state) => state.news.block.fetched)
+  const isFetching = useSelector((state) => state.news.block.fetching)
+  const fetchError = useSelector((state) => state.news.block.error)
+  const news = useSelector((state) => state.news.block.data)
 
   useEffect(() => {
-    const get = async () => {
-      setError(null)
-      try {
-        const data = (await getNewsPromo()).data.items
-        setState((prev) => ({
-          ...prev,
-          cache: {
-            ...prev.cache,
-            news: {
-              ...prev.cache.news,
-              block: data,
-            },
-          },
-        }))
-        setNews(data)
-      } catch (e) {
-        console.error('Could not fetch news:', e)
-        setError(e.message)
-      }
-    }
-    if (!news) get()
-    // eslint-disable-next-line
-  }, [])
+    window.scrollTo(0, 0)
+    dispatch(getNewsPromo())
+  }, [dispatch])
 
   return (
     <Paper className={classes.root} elevation={0}>
@@ -147,10 +131,10 @@ const News = ({ setState, state }) => {
           Произошла ошибка при выполнении запроса
         </Typography>
       )}
-      {!news &&
+      {isFetching &&
         !fetchError &&
         [...Array(5)].map((_, i) => <NewsItemSkeleton key={i} />)}
-      {news && news.map((e, i) => <NewsItem data={e} key={i} />)}
+      {isFetched && news && news.map((e, i) => <NewsItem data={e} key={i} />)}
       <Box className={classes.linkBox}>
         <Button
           size="small"
@@ -167,4 +151,4 @@ const News = ({ setState, state }) => {
   )
 }
 
-export default News
+export default NewsBlock

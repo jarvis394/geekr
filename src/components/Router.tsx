@@ -11,6 +11,7 @@ import { Theme } from '@material-ui/core/styles'
 import CommentsPage from '../pages/Comments'
 import Tabs from './blocks/Tabs'
 import getCachedMode from '../utils/getCachedMode'
+import FAQ from 'src/pages/FAQ'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -46,6 +47,11 @@ const Router = ({ state, setState }) => {
           <Settings state={state} setState={setState} />
         </Route>
 
+        {/* FAQ */}
+        <Route exact path="/habra-faq">
+          <FAQ />
+        </Route>
+
         {/* Search */}
         <Route exact path={['/search', '/search/p/:page']}>
           <Search />
@@ -66,7 +72,7 @@ const Router = ({ state, setState }) => {
             '/top/month/p/:page',
           ]}
         >
-          <Home state={state} setState={setState} />
+          <Home />
         </Route>
 
         {/* Redirect from home to the Home component */}
