@@ -50,8 +50,7 @@ const News = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0)
-
-    if (!posts) dispatch(getNews(currentPage))
+    dispatch(getNews(currentPage))
   }, [currentPage, dispatch])
 
   return (

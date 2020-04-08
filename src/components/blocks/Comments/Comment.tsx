@@ -13,31 +13,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     position: 'relative',
     marginTop: theme.spacing(2),
+    transitionDuration: '0.1s',
     '&:hover': {
       opacity: '1 !important',
-    },
-  },
-  dotHolder: {
-    display: 'block',
-    position: 'relative',
-    top: 0,
-    left: 0,
-    width: 1,
-    height: 1,
-    '&::before': {
-      position: 'absolute',
-      top: 8,
-      right: 0,
-      width: 500,
-      height: 5,
-      backgroundImage:
-        'linear-gradient(to right, black 33%, rgba(255,255,255,0) 0%)',
-      backgroundPosition: 'bottom',
-      backgroundSize: '20px 1px',
-      backgroundRepeat: 'repeat-x',
-      content: 'no-open-quote',
-      opacity: 0.4,
-      filter: theme.palette.type === 'dark' ? 'invert(1)' : 'none',
     },
   },
   noDeco: {
@@ -146,8 +124,6 @@ const Comment = ({ data, isAuthor }) => {
       style={{ marginLeft: margin, opacity: commentOpacity }}
       className={classes.root}
     >
-      <span className={classes.dotHolder} />
-
       {/* Top bar */}
       <Grid
         style={{ position: 'relative' }}

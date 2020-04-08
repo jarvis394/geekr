@@ -35,6 +35,7 @@ export const MODES: { text: string; to: string; mode: Mode }[] = [
 ]
 
 export const HOUR = 1000 * 60 * 60
+export const DEFAULT_UPDATE_INTERVAL = 1000
 
 export const DEFAULT_USER_SETTINGS: UserSettings = {
   theme: 'light',

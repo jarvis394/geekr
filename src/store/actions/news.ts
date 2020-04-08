@@ -1,7 +1,14 @@
 import * as api from 'src/api'
 import { NEWS_PREFIX } from '../reducers/news/types'
+import { getNews as getCachedNews, shouldUpdate } from 'src/utils/cache'
 
-export const getNews = (page: number) => async (dispatch) => {
+export const getNews = (page: number) => async (dispatch, getState) => {
+  const cachedData = (getCachedNews())[page]
+  const storeData = getState().news.data.pages[page]
+  if (!shouldUpdate(storeData, cachedData)) {
+    return Promise.resolve()
+  }
+  
   const type = NEWS_PREFIX + 'FETCH'
   dispatch({ type, payload: { page } })
 
