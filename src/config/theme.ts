@@ -35,11 +35,6 @@ const theme: ThemeOptions = {
     background: makeBackgroundColors(type),
   },
   shape: { borderRadius: 4 },
-  overrides: {
-    MuiListItem: {
-      button: { '&:hover': { background: 'transparent !important' } },
-    },
-  },
 }
 
 export default theme

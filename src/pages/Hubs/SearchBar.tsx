@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Paper, InputBase, Button } from '@material-ui/core'
+import { Paper, InputBase } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useSearchStyles = makeStyles((theme) => ({
@@ -7,13 +7,6 @@ const useSearchStyles = makeStyles((theme) => ({
     alignItems: 'center',
     display: 'flex',
     margin: theme.spacing(2),
-  },
-  searchButton: {
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-    textTransform: 'none',
-    fontFamily: 'Google Sans',
-    fontSize: 16,
   },
   inputRoot: {
     color: 'inherit',
@@ -26,7 +19,7 @@ const useSearchStyles = makeStyles((theme) => ({
   },
 }))
 
-const SearchBar = () => {
+const SearchBar = ({ inputRef, onChange }) => {
   const classes = useSearchStyles()
 
   const onSubmit = (e) => {
@@ -39,22 +32,15 @@ const SearchBar = () => {
         <InputBase
           autoFocus
           name="q"
-          placeholder={'Поиск'}
+          onChange={onChange}
+          inputRef={inputRef}
+          placeholder={'Поиск среди хабов'}
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
           inputProps={{ 'aria-label': 'search' }}
         />
-        <Button
-          type="submit"
-          disableElevation
-          color="primary"
-          variant="contained"
-          className={classes.searchButton}
-        >
-          Найти
-        </Button>
       </Paper>
     </form>
   )

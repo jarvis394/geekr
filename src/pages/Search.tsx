@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'auto',
+    minHeight: 600,
     background: theme.palette.background.default,
   },
 }))
@@ -59,7 +59,7 @@ const useSvgStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    height: '100%',
+    height: '100%'
   },
   svgTitle: {
     fontFamily: 'Google Sans',

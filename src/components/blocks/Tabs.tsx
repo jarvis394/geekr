@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Tabs from '@material-ui/core/Tabs'
@@ -34,7 +34,7 @@ const tabs: TabObject[] = [
   },
   {
     label: 'Хабы',
-    to: () => '/hubs',
+    to: () => '/hubs/p/1',
     match: /\/hubs\/p\/([0-9]+)\/?$/,
     tab: 'hubs',
   },
@@ -68,14 +68,18 @@ function LinkTab(props: any) {
 const LinkTabMemoized = React.memo(LinkTab)
 
 const TabsComponent = ({ children }) => {
-  const classes = useStyles()
   const location = useLocation()
+  const classes = useStyles()
+  const [value, setValue] = useState<number>()
   const shouldShow = isValidPath(location.pathname)
-  const [value, setValue] = useState<number>(findPathValue(location.pathname))
   const handleChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue)
   }
 
+  useEffect(() => {
+    setValue(findPathValue(location.pathname))
+  }, [location.pathname])
+  
   if (!shouldShow) return children
 
   return (
