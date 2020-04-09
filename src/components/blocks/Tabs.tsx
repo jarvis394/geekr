@@ -8,7 +8,6 @@ import getCachedMode from '../../utils/getCachedMode'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
     backgroundColor: theme.palette.background.default,
   },
 }))
@@ -36,7 +35,7 @@ const tabs: TabObject[] = [
   {
     label: 'Хабы',
     to: () => '/hubs',
-    match: /\/hubs\/?$/,
+    match: /\/hubs\/p\/([0-9]+)\/?$/,
     tab: 'hubs',
   },
   {

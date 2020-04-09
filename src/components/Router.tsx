@@ -12,6 +12,7 @@ import CommentsPage from '../pages/Comments'
 import Tabs from './blocks/Tabs'
 import getCachedMode from '../utils/getCachedMode'
 import FAQ from 'src/pages/FAQ'
+import Hubs from 'src/pages/Hubs/index'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -55,6 +56,11 @@ const Router = ({ state, setState }) => {
         {/* Search */}
         <Route exact path={['/search', '/search/p/:page']}>
           <Search />
+        </Route>
+
+        {/* Hubs */}
+        <Route exact path="/hubs/p/:page">
+          <Hubs />
         </Route>
 
         {/* News */}
