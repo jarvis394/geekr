@@ -20,7 +20,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
   },
   pagination: {
-    marginTop: theme.spacing(2),
+    paddingTop: theme.spacing(2),
+    backgroundColor: theme.palette.background.default
   },
 }))
 

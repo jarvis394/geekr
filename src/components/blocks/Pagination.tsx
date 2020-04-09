@@ -23,7 +23,6 @@ const Pagination = ({
   currentStep = 1,
 }) => {
   const classes = useStyles(disabled)
-  console.log(steps, disabled, currentStep)
 
   return (
     <MUIPagination
