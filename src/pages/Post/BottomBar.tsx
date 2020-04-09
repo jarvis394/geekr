@@ -137,6 +137,7 @@ const Component = ({
             to={item.to}
             color={item.isActive ? 'primary' : 'default'}
             component={item.to ? Link : Grid}
+            style={{ cursor: item.isButton ? 'pointer' : 'default' }}
             onClick={item.action || null}
             className={classes.item}
           >
