@@ -67,7 +67,7 @@ const Layout = (): React.ReactElement => {
 
   return (
     <ThemeProvider theme={createMuiTheme(state.theme)}>
-      <Router basename="/habra">
+      <Router>
         <AppBar setState={setState} />
         <div className={classes.app}>
           <AppRouter state={state} setState={setState} />
