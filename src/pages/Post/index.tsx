@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
@@ -19,7 +19,6 @@ import BottomBar from './BottomBar'
 import CommentsButton from './CommentsButton'
 import SimilarPosts from './SimilarPosts'
 import TopDayPosts from './TopDayPosts'
-import isInViewport from 'src/utils/isInViewport'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -86,14 +85,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 const Post = () => {
   const [post, setPost] = useState<IPost.PostResponse>()
   const [fetchError, _setError] = useState<string>()
-  const [isBottomBarSticky, setBottomBarStickyState] = useState<boolean>(false)
   const classes = useStyles()
   const { id } = useParams()
-  const articleEndRef = useRef()
-  const onScroll = useCallback(() => {
-    if (isInViewport(articleEndRef, 48)) setBottomBarStickyState(false)
-    else setBottomBarStickyState(true)
-  }, [])
   const contents = post ? (
     <>
       <Container className={classes.hubs}>
@@ -139,8 +132,7 @@ const Post = () => {
       </Container>
 
       {/* Bottom bar with some article info */}
-      <BottomBar sticky={isBottomBarSticky} post={post.article} />
-      <div ref={articleEndRef} />
+      <BottomBar post={post.article} />
     </>
   ) : (
     <PostViewSkeleton />
@@ -156,7 +148,6 @@ const Post = () => {
       // Reset error state
       setError(null)
       window.scrollTo(0, 0)
-      window.addEventListener('scroll', onScroll)
 
       try {
         setPost((await getPost(id)).data)
@@ -166,9 +157,7 @@ const Post = () => {
       }
     }
     get()
-
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [id, onScroll])
+  }, [id])
 
   if (post) document.title = post.article.title
   if (fetchError) return <ErrorComponent message={fetchError} />

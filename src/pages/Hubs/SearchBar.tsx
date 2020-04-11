@@ -19,7 +19,7 @@ const useSearchStyles = makeStyles((theme) => ({
   },
 }))
 
-const SearchBar = ({ inputRef, onChange }) => {
+const SearchBar = ({ inputRef = null, onChange = null }) => {
   const classes = useSearchStyles()
 
   const onSubmit = (e) => {
