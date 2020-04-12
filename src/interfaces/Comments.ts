@@ -1,4 +1,4 @@
-import User from './User'
+import { User } from './User'
 
 export interface Comments {
   comments: Map<number, Comment>

@@ -29,7 +29,7 @@ const UserAvatar = ({
 
   return (
     <div {...props} className={className + ' ' + classes.root}>
-      {!state && <Avatar className={classes.root} src={src} />}
+      {!state && <Avatar className={className || classes.root} src={src} />}
       {state && <UserPlaceholder num={login.length} />}
     </div>
   )
