@@ -40,9 +40,9 @@ const tabs: TabObject[] = [
   },
 ]
 
-const findPath = (path: string): TabObject => {
+/*const findPath = (path: string): TabObject => {
   return tabs.find((e) => path.match(e.match))
-}
+}*/
 const findPathValue = (path: string): number => {
   const res = tabs.findIndex((e) => path.match(e.match))
   return res < 0 ? 0 : res
