@@ -19,7 +19,9 @@ jobs:
         node-version: '12.x'
         
     - name: Add CNAME
-      run: echo "habra.js.org" >> ./build/CNAME
+      run: |
+        mkdir build
+        echo "habra.js.org" >> ./build/CNAME
     
     - name: Github Pages Custom Deploy
       uses: sterlingwes/gh-pages-deploy-action@v1.1
