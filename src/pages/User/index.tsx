@@ -46,8 +46,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.hint,
   },
   headerContainer: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
   headerColumn: {
     flexDirection: 'column',
@@ -83,8 +83,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
   contactsItem: {
-    margin: theme.spacing(1)
-  }
+    margin: theme.spacing(1),
+  },
 }))
 
 interface ComponentWithUserParams {
@@ -101,7 +101,18 @@ const UserAvatarAndLogin = ({ user }: ComponentWithUserParams) => {
         login={user.login}
         src={user.avatar}
       />
-      <Typography className={classes.login}>{user.login}</Typography>
+      {user.fullname ? (
+        <>
+          <Typography className={classes.login}>
+            {user.fullname}
+          </Typography>
+          <Link to={'/user/' + user.login} className={classes.link}>
+            @{user.login}
+          </Link>
+        </>
+      ) : (
+        <Typography className={classes.login}>{user.login}</Typography>
+      )}
     </>
   )
 }
@@ -229,11 +240,15 @@ const Badges = ({ user }: ComponentWithUserParams) => {
 const Contacts = ({ user }: ComponentWithUserParams) => {
   const classes = useStyles()
   const options: HTMLReactParserOptions = {
-    replace: ({ children, attribs }): void | React.ReactElement => {
-      if (attribs.class === 'url') {
-        return <Link className={classes.link} to={attribs.href}>{children[0].data}</Link>
+    replace: ({ name, children, attribs }): void | React.ReactElement => {
+      if (name === 'a') {
+        return (
+          <Link className={classes.link} to={attribs.href}>
+            {children[0].data}
+          </Link>
+        )
       }
-    }
+    },
   }
 
   return user.contacts.length !== 0 ? (
