@@ -28,7 +28,11 @@ export interface UserExtended {
   rating: number
   time_invited: string
   invited_by_login: string
-  contacts: never[]
+  contacts: {
+    value: string
+    title: string
+    link: string
+  }[]
   rating_position: number
   display_children: boolean
   path: string

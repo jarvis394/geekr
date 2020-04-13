@@ -21,19 +21,25 @@ interface TabObject {
 
 const tabs: TabObject[] = [
   {
-    label: 'Статьи',
+    label: 'Профиль',
     to: () => `/${getCachedMode()}/p/1`,
     match: /\/(all|top\/day|top\/week|top\/month)\/p\/([0-9]+)\/?$/,
-    tab: 'home',
+    tab: 'profile',
   },
   {
-    label: 'Новости',
+    label: 'Публикации',
     to: () => '/news/p/1',
     tab: 'news',
     match: /\/news\/p\/([0-9]+)\/?$/,
   },
   {
-    label: 'Хабы',
+    label: 'Комментарии',
+    to: () => '/hubs/p/1',
+    match: /\/hubs\/p\/([0-9]+)\/?$/,
+    tab: 'hubs',
+  },
+  {
+    label: 'Закладки',
     to: () => '/hubs/p/1',
     match: /\/hubs\/p\/([0-9]+)\/?$/,
     tab: 'hubs',
