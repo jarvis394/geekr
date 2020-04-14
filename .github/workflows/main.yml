@@ -20,6 +20,8 @@ jobs:
         
     - name: Add CNAME
       run: |
+        pwd
+        ls -la
         mkdir build
         echo "habra.js.org" >> ./build/CNAME
     
