@@ -20,12 +20,15 @@ jobs:
         
     - name: Add CNAME
       run: |
+        pwd
+        ls -la
         mkdir build
         echo "habra.js.org" >> ./build/CNAME
     
     - name: Github Pages Custom Deploy
       uses: sterlingwes/gh-pages-deploy-action@v1.1
       with:
+        custom-domain: habra.js.org
         access-token: ${{ secrets.token }}
         source-directory: build
         build-command: npm run build
