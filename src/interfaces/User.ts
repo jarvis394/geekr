@@ -24,7 +24,8 @@ export interface UserExtended {
   score: number
   fullname: string
   specializm: string
-  sex: string | number
+  /** 1 - male, 0 - female */
+  sex: '1' | '0'
   rating: number
   time_invited: string
   invited_by_login: string

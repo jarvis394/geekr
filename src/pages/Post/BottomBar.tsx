@@ -78,6 +78,7 @@ const Component = ({ post }: { post: Post.Post }) => {
     {
       icon: ChatBubbleIcon,
       count: comments,
+      isButton: true,
       to: '/article/' + id + '/comments',
     },
   ]
@@ -105,7 +106,7 @@ const Component = ({ post }: { post: Post.Post }) => {
           to={item.to}
           color={item.isActive ? 'primary' : 'default'}
           component={item.to ? Link : Grid}
-          style={{ cursor: item.isButton ? 'pointer' : 'default' }}
+          style={{ cursor: item.isButton ? 'pointer' : 'inherit' }}
           onClick={item.action || null}
           className={classes.item}
         >

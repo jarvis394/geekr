@@ -1,0 +1,54 @@
+import React from 'react'
+import { Typography, Grid } from '@material-ui/core'
+import { Link } from 'react-router-dom'
+import parse, { HTMLReactParserOptions } from 'html-react-parser'
+import { ComponentWithUserParams } from './index'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles(theme => ({
+  link: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+    '&:hover': {
+      textDecoration: 'underline',
+      color: theme.palette.primary.dark,
+    },
+  },
+  blockTitle: {
+    fontSize: 24,
+    fontWeight: 500,
+    fontFamily: 'Google Sans',
+    marginBottom: theme.spacing(1),
+  },
+  contactsItem: {
+    margin: `0 ${theme.spacing(2)}px ${theme.spacing(1)}px 0`,
+  },
+}))
+
+export const Contacts = ({ user, classes: additionalClasses }: ComponentWithUserParams) => {
+  const classes = useStyles()
+  const options: HTMLReactParserOptions = {
+    replace: ({ name, children, attribs }): void | React.ReactElement => {
+      if (name === 'a') {
+        return (
+          <Link className={classes.link} to={attribs.href}>
+            {children[0].data}
+          </Link>
+        )
+      }
+    },
+  }
+  return user.contacts.length !== 0 ? (
+    <div className={additionalClasses}>
+      <Typography className={classes.blockTitle}>Контакты</Typography>
+      <Grid container>
+        {user.contacts.map((e, i) => (
+          <Grid key={i} item className={classes.contactsItem}>
+            <Typography>{e.title}</Typography>
+            {parse(e.link, options)}
+          </Grid>
+        ))}
+      </Grid>
+    </div>
+  ) : null
+}

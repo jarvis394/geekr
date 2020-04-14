@@ -41,4 +41,4 @@ const CommentsPage = () => {
   )
 }
 
-export default CommentsPage
+export default React.memo(CommentsPage)

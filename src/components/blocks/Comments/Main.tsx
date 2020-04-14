@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     borderRadius: theme.shape.borderRadius,
   },
+  nothingText: {
+    marginTop: theme.spacing(2)
+  }
 }))
 
 const MIN_COMMENTS_SLICE = 25
@@ -120,6 +123,8 @@ const Comments = ({ postId, authorId }) => {
 
   if (fetchError) return <p>error {fetchError}</p>
 
+  console.log(commentsLength, isLoadingNewComments)
+
   return (
     <div className={classes.root}>
       <Container className={classes.headerContainer}>
@@ -133,6 +138,7 @@ const Comments = ({ postId, authorId }) => {
         </Typography>
       </Container>
       <Container className={classes.comments}>
+        {commentsLength === 0 && <Typography className={classes.nothingText}>Пусто!</Typography>}
         {comments &&
           comments
             .slice(0, commentsSliceEnd)
@@ -143,7 +149,7 @@ const Comments = ({ postId, authorId }) => {
                 isAuthor={node.author ? authorId === node.author.id : false}
               />
             ))}
-        {(!comments || isLoadingNewComments) && (
+        {(commentsLength !== 0 && (!comments || isLoadingNewComments)) && (
           <LinearProgress className={classes.progress} />
         )}
         <div ref={commentsEndRef} />
