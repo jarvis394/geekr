@@ -9,11 +9,12 @@ import News from '../pages/News'
 import NotFound from '../pages/NotFound'
 import { Theme } from '@material-ui/core/styles'
 import CommentsPage from '../pages/Comments'
-import Tabs from './blocks/Tabs'
+import Tabs from './blocks/Tabs/RouterTabs'
 import getCachedMode from '../utils/getCachedMode'
 import FAQ from 'src/pages/FAQ'
 import Hubs from 'src/pages/Hubs/index'
 import User from 'src/pages/User/index'
+import UserArticles from 'src/pages/User/Articles'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -32,7 +33,8 @@ const Router = ({ state, setState }) => {
   document.body.className = classes.root
 
   return (
-    <Tabs>
+    <>
+      <Tabs />
       <Switch>
         {/* Comments */}
         <Route exact path="/article/:id/comments">
@@ -64,9 +66,29 @@ const Router = ({ state, setState }) => {
           <Hubs />
         </Route>
 
+        {/* User's favorites comments */}
+        <Route exact path="/user/:login/favorites/comments/:page">
+          <User path="favorites/comments" />
+        </Route>
+
+        {/* User's favorites articles */}
+        <Route exact path="/user/:login/favorites/articles/:page">
+          <User path="favorites/articles" />
+        </Route>
+
+        {/* User's comments */}
+        <Route exact path="/user/:login/comments/:page">
+          <User path="comments" />
+        </Route>
+
+        {/* User's articles */}
+        <Route exact path="/user/:login/articles/:page">
+          <User path="articles" />
+        </Route>
+
         {/* User */}
         <Route exact path="/user/:login">
-          <User />
+          <User path="profile" />
         </Route>
 
         {/* News */}
@@ -96,7 +118,7 @@ const Router = ({ state, setState }) => {
           <NotFound />
         </Route>
       </Switch>
-    </Tabs>
+    </>
   )
 }
 

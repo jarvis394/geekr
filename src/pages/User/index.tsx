@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router'
 import { UserExtended as UserObjectExtended } from 'src/interfaces/User'
+import Tabs from 'src/components/blocks/Tabs/UserTabs'
 import { getUser } from 'src/api'
 import UserPageSkeleton from 'src/components/skeletons/UserPage'
 import ErrorComponent from 'src/components/blocks/Error'
 import { makeStyles } from '@material-ui/core/styles'
-import Tabs from './Tabs'
 import { UserAvatarAndLogin } from './UserAvatarAndLogin'
 import { Statistics } from './Statistics'
 import { InvitedTime } from './InvitedTime'
@@ -44,11 +44,20 @@ interface UserParams {
   login: string
 }
 
-const User = () => {
+const routes = {
+  'profile': Profile,
+  'comments': Comments,
+  'articles': Articles,
+  'favorites/articles': FavArticles,
+  'favorites/comments': FavComments
+}
+
+const User = ({ path }) => {
   const [user, setUser] = useState<UserObjectExtended>()
   const [fetchError, setFetchError] = useState<string>()
   const { login } = useParams<UserParams>()
   const classes = useStyles()
+  const component = routes[path] || Profile
 
   useEffect(() => {
     const get = async () => {
@@ -67,32 +76,28 @@ const User = () => {
 
   if (fetchError) return <ErrorComponent message={fetchError} />
 
-  return (
+  return user ? (
     <>
-      <Tabs />
-      {user ? (
-        <>
-          <div className={classes.topBlock}>
-            {[
-              UserAvatarAndLogin,
-              Statistics,
-              FollowersCount,
-              InvitedTime,
-              RegisteredTime,
-            ].map((Component, i) => (
-              <Component key={i} user={user} />
-            ))}
-          </div>
-          <div className={classes.mainBlock}>
-            {[Specialisation, Badges, About, Contacts].map((Component, i) => (
-              <Component key={i} user={user} classes={classes.blockMargin} />
-            ))}
-          </div>
-        </>
-      ) : (
-        <UserPageSkeleton />
-      )}
+      <Tabs user={user} />
+      <div className={classes.topBlock}>
+        {[
+          UserAvatarAndLogin,
+          Statistics,
+          FollowersCount,
+          InvitedTime,
+          RegisteredTime,
+        ].map((Component, i) => (
+          <Component key={i} user={user} />
+        ))}
+      </div>
+      <div className={classes.mainBlock}>
+        {[Specialisation, Badges, About, Contacts].map((Component, i) => (
+          <Component key={i} user={user} classes={classes.blockMargin} />
+        ))}
+      </div>
     </>
+  ) : (
+    <UserPageSkeleton />
   )
 }
 

@@ -35,6 +35,13 @@ const theme: ThemeOptions = {
     background: makeBackgroundColors(type),
   },
   shape: { borderRadius: 4 },
+  overrides: {
+    MuiTab: {
+      wrapper: {
+        flexDirection: 'row'
+      }
+    }
+  }
 }
 
 export default theme
