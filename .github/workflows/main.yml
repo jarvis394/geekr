@@ -34,7 +34,7 @@ jobs:
       uses: sterlingwes/gh-pages-deploy-action@v1.1
       with:
         custom-domain: habra.js.org
-        access-token: ${{ github.token }}
+        access-token: ${{ secrets.token }}
         source-directory: build
         build-command: npm run build
         
