@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   pagination: {
     paddingTop: theme.spacing(2),
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.background.default,
   },
 }))
 
@@ -32,7 +32,7 @@ const useNoResultsStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     flexDirection: 'column',
     height: '100%',
-    minHeight: 600
+    minHeight: 600,
   },
   title: {
     fontFamily: 'Google Sans',

@@ -17,4 +17,3 @@ export default interface HubObject {
   icon: string
   path: string
 }
- 

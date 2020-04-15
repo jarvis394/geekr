@@ -28,7 +28,7 @@ export const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     paddingBottom: theme.spacing(2),
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.background.default,
   },
   blockMargin: {
     marginTop: theme.spacing(2),

@@ -79,7 +79,7 @@ const TabsComponent = ({ children }) => {
   useEffect(() => {
     setValue(findPathValue(location.pathname))
   }, [location.pathname])
-  
+
   if (!shouldShow) return children
 
   return (

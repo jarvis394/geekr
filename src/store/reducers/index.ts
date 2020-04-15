@@ -8,5 +8,5 @@ export default combineReducers({
   news,
   home,
   settings,
-  hubs
+  hubs,
 })

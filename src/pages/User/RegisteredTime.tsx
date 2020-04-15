@@ -4,7 +4,7 @@ import moment from 'moment'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   hintColor: {
     color: theme.palette.text.hint,
   },

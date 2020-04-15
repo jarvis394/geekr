@@ -4,7 +4,7 @@ import numToWord from 'number-to-words-ru'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   dot: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),

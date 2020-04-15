@@ -4,7 +4,7 @@ import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   headerContainer: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),

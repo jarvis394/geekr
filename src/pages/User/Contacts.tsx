@@ -5,7 +5,7 @@ import parse, { HTMLReactParserOptions } from 'html-react-parser'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   link: {
     textDecoration: 'none',
     color: theme.palette.primary.main,
@@ -25,7 +25,10 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const Contacts = ({ user, classes: additionalClasses }: ComponentWithUserParams) => {
+export const Contacts = ({
+  user,
+  classes: additionalClasses,
+}: ComponentWithUserParams) => {
   const classes = useStyles()
   const options: HTMLReactParserOptions = {
     replace: ({ name, children, attribs }): void | React.ReactElement => {

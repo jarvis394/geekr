@@ -71,7 +71,7 @@ const TabsComponent = () => {
   useEffect(() => {
     setValue(findPathValue(location.pathname))
   }, [location.pathname])
-  
+
   return (
     <Paper elevation={0} className={classes.root}>
       <Tabs

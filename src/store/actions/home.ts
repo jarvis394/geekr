@@ -3,9 +3,14 @@ import { Mode } from 'src/api/getPosts'
 import { HOME_PREFIX } from '../reducers/home/types'
 import { shouldUpdate, getPosts as getCachedPosts } from 'src/utils/cache'
 
-export const getPosts = (mode: Mode, page: number) => async (dispatch, getState) => {
+export const getPosts = (mode: Mode, page: number) => async (
+  dispatch,
+  getState
+) => {
   const cachedDataGlobal = getCachedPosts()
-  const cachedData = cachedDataGlobal ? cachedDataGlobal[mode].pages[page] : null
+  const cachedData = cachedDataGlobal
+    ? cachedDataGlobal[mode].pages[page]
+    : null
   const storeData = getState().home.data[mode].pages[page]
   if (!shouldUpdate(storeData, cachedData)) {
     return Promise.resolve()

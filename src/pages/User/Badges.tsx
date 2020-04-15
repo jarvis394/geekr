@@ -3,7 +3,7 @@ import { Typography, Chip, Grid } from '@material-ui/core'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   blockTitle: {
     fontSize: 24,
     fontWeight: 500,
@@ -15,7 +15,10 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const Badges = ({ user, classes: additionalClasses }: ComponentWithUserParams) => {
+export const Badges = ({
+  user,
+  classes: additionalClasses,
+}: ComponentWithUserParams) => {
   const classes = useStyles()
   return user.badges.length !== 0 ? (
     <div className={additionalClasses}>

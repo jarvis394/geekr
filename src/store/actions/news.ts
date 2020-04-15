@@ -7,7 +7,10 @@ import {
 } from 'src/utils/cache'
 import { RootState } from '..'
 
-export const getNews = (page: number) => async (dispatch, getState: () => RootState) => {
+export const getNews = (page: number) => async (
+  dispatch,
+  getState: () => RootState
+) => {
   const cachedData = getCachedNews()[page]
   const storeData = getState().news.data.pages[page]
   if (!shouldUpdate(storeData, cachedData)) {
@@ -32,7 +35,10 @@ export const getNews = (page: number) => async (dispatch, getState: () => RootSt
   }
 }
 
-export const getNewsPromo = () => async (dispatch, getState: () => RootState) => {
+export const getNewsPromo = () => async (
+  dispatch,
+  getState: () => RootState
+) => {
   const type = NEWS_PREFIX + 'PROMO_FETCH'
   const cachedData = getCachedNewsPromo()
   const storeData = getState().news.block

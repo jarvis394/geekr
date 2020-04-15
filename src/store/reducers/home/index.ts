@@ -13,7 +13,7 @@ MODES.forEach(({ mode }) => {
   modes[mode] = {
     pages: {},
     pagesCount: null,
-    lastUpdated: null
+    lastUpdated: null,
   }
 })
 

@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
   },
   primaryText: {
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
   },
 }))
 
