@@ -18,10 +18,15 @@ jobs:
       with:
         node-version: '12.x'
         
+    - uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+        
     - name: Add CNAME
       run: |
-        pwd
-        ls -la
         mkdir build
         echo "habra.js.org" >> ./build/CNAME
     
@@ -29,6 +34,12 @@ jobs:
       uses: sterlingwes/gh-pages-deploy-action@v1.1
       with:
         custom-domain: habra.js.org
-        access-token: ${{ secrets.token }}
+        access-token: ${{ github.token }}
         source-directory: build
         build-command: npm run build
+        
+    - name: ls
+      run: |
+        ls -la
+        ls ../ -la
+        ls build -la
