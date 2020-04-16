@@ -1,43 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router'
-import { UserExtended as UserObjectExtended } from 'src/interfaces/User'
+import { UserExtended as UserObjectExtended, UserChildren, UserCompanies } from 'src/interfaces/User'
 import Tabs from 'src/components/blocks/Tabs/UserTabs'
-import { getUser } from 'src/api'
+import { getUser } from 'src/api/user'
 import UserPageSkeleton from 'src/components/skeletons/UserPage'
 import ErrorComponent from 'src/components/blocks/Error'
-import { makeStyles } from '@material-ui/core/styles'
-import { UserAvatarAndLogin } from './UserAvatarAndLogin'
-import { Statistics } from './Statistics'
-import { InvitedTime } from './InvitedTime'
-import { RegisteredTime } from './RegisteredTime'
-import { FollowersCount } from './FollowersCount'
-import { About } from './About'
-import { Badges } from './Badges'
-import { Contacts } from './Contacts'
-import { Specialisation } from './Specialisation'
-
-export const useStyles = makeStyles((theme) => ({
-  topBlock: {
-    backgroundColor: theme.palette.background.paper,
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-    padding: theme.spacing(2),
-  },
-  mainBlock: {
-    paddingRight: theme.spacing(2),
-    paddingLeft: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-    backgroundColor: theme.palette.background.default,
-  },
-  blockMargin: {
-    marginTop: theme.spacing(2),
-  },
-}))
+import Profile from './pages/Profile'
+import Articles from './pages/Articles'
+import Comments from './pages/Comments'
+import FavArticles from './pages/FavArticles'
+import FavComments from './pages/FavComments'
 
 export interface ComponentWithUserParams {
   user: UserObjectExtended
   classes?: string
+  childrenData?: UserChildren
+  companies?: UserCompanies
 }
 
 interface UserParams {
@@ -56,21 +34,20 @@ const User = ({ path }) => {
   const [user, setUser] = useState<UserObjectExtended>()
   const [fetchError, setFetchError] = useState<string>()
   const { login } = useParams<UserParams>()
-  const classes = useStyles()
-  const component = routes[path] || Profile
+  const Component = routes[path] || Profile
 
   useEffect(() => {
     const get = async () => {
       try {
         const data = await getUser(login)
-        if (!data.success) return setFetchError('Пользователь не найден')
+        if (!data.success) return setFetchError('Произошла ошибка сервера')
         else setUser(data.data.user)
       } catch (e) {
-        setFetchError(e.message)
+        setFetchError('Пользователь не найден')
       }
     }
-    get()
-  }, [login])
+    if (!user || (user && user.login !== login)) get()
+  }, [login, user])
 
   console.log(user)
 
@@ -79,22 +56,7 @@ const User = ({ path }) => {
   return user ? (
     <>
       <Tabs user={user} />
-      <div className={classes.topBlock}>
-        {[
-          UserAvatarAndLogin,
-          Statistics,
-          FollowersCount,
-          InvitedTime,
-          RegisteredTime,
-        ].map((Component, i) => (
-          <Component key={i} user={user} />
-        ))}
-      </div>
-      <div className={classes.mainBlock}>
-        {[Specialisation, Badges, About, Contacts].map((Component, i) => (
-          <Component key={i} user={user} classes={classes.blockMargin} />
-        ))}
-      </div>
+      <Component user={user} />
     </>
   ) : (
     <UserPageSkeleton />

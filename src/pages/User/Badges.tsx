@@ -26,7 +26,13 @@ export const Badges = ({
       <Grid spacing={1} container className={classes.badges}>
         {user.badges.map((e, i) => (
           <Grid key={i} item>
-            <Chip variant="outlined" color="primary" label={e.title} />
+            <Chip
+              style={{ cursor: 'help' }}
+              title={e.description}
+              variant="outlined"
+              color="primary"
+              label={e.title}
+            />
           </Grid>
         ))}
       </Grid>

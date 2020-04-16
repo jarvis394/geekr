@@ -7,7 +7,7 @@ import { Theme } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme: Theme) => ({
   centered: {
-    height: 'calc(100% - 144px)',
+    height: 'calc(100vh - 48px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

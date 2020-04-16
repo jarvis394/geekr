@@ -1,4 +1,4 @@
-import { Badge } from '.'
+import { Badge, Hub, Company } from '.'
 
 export interface User {
   id: number
@@ -12,6 +12,18 @@ export interface User {
 export interface UserTag {
   name: string
   count: number
+}
+
+export interface UserCompanies {
+  companies: Company[]
+}
+
+export interface UserHubs {
+  hubs: Hub[]
+}
+
+export interface UserChildren {
+  users: UserExtended[]
 }
 
 export interface UserExtended {

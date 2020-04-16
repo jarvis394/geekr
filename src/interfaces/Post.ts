@@ -1,38 +1,6 @@
-import Badge from './Badge'
 import Flow from './Flow'
 import Hub from './Hub'
-
-export interface PostAuthor {
-  id: string | number
-  login: string
-  time_registered: string | Date
-  score: number
-  fullname: string
-  specializm: null | string
-  sex: string | number
-  rating: number
-  contacts: Array<never>
-  rating_position: string | number
-  path: string
-  geo: {
-    country: string
-    region: string
-    city: string
-  }
-  counters: {
-    posts: string | number
-    comments: string | number
-    followed: string | number
-    followers: string | number
-    favorites: string | number
-  }
-  badges: Badge[]
-  avatar: string
-  is_readonly: boolean
-  is_rc: boolean
-  is_subscribed: boolean
-  common_tags: string[]
-}
+import { UserExtended } from './User'
 
 export interface Post {
   id: string | number
@@ -63,7 +31,7 @@ export interface Post {
   reading_count: number
   path: string
   full_url: string
-  author: PostAuthor
+  author: UserExtended
   has_polls: boolean
   url: string
   post_type: string | number
