@@ -59,6 +59,7 @@ const Profile = ({ user }: { user: UserExtended }) => {
       message: string
     ) => {
       try {
+        setter(null)
         setError((prev) => ({ ...prev, [field]: '' }))
         const data = await func(user.login)
         setter(data.data)
