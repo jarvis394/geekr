@@ -57,12 +57,14 @@ const Hubs = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const { hubs } = useSelector((store) => store.user.profile.hubs.data)
   const isFetched = useSelector((store) => store.user.profile.hubs.fetched)
   const isFetching = useSelector((store) => store.user.profile.hubs.fetching)
-  const fetchError = useSelector((store) => store.user.profile.hubs.error)
+  // const fetchError = useSelector((store) => store.user.profile.hubs.error)
 
   useEffect(() => {
     setShowAll(false)
     dispatch(getUserHubs(user.login))
   }, [user.login, dispatch])
+
+  if (isFetching) return <Typography>загрузка...</Typography>
 
   return isFetched && hubs && hubs.length !== 0 ? (
     <div className={additionalClasses}>
