@@ -1,8 +1,8 @@
 import React from 'react'
 import { Typography } from '@material-ui/core'
 import numToWord from 'number-to-words-ru'
-import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   dot: {
@@ -11,8 +11,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const FollowersCount = ({ user }: ComponentWithUserParams) => {
+export const FollowersCount = () => {
   const classes = useStyles()
+  const { user } = useSelector((store) => store.user.profile.user.data)
   const followers = Number(user.counters.followers)
   const followed = Number(user.counters.followed)
   const followersCases = ['подписчик', 'подписчика', 'подписчиков']

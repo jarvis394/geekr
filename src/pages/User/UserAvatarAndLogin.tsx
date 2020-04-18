@@ -2,8 +2,8 @@ import React from 'react'
 import { Typography } from '@material-ui/core'
 import UserAvatar from 'src/components/blocks/UserAvatar'
 import { Link } from 'react-router-dom'
-import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -27,8 +27,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const UserAvatarAndLogin = ({ user }: ComponentWithUserParams) => {
+export const UserAvatarAndLogin = () => {
   const classes = useStyles()
+  const { user } = useSelector((store) => store.user.profile.user.data)
+
   return (
     <>
       <UserAvatar

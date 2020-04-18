@@ -1,8 +1,8 @@
 import React from 'react'
 import { Typography, Grid } from '@material-ui/core'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
-import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   headerContainer: {
@@ -27,14 +27,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const Statistics = ({ user }: ComponentWithUserParams) => {
-  /**
-   * 1. Title
-   * 2. Data
-   * 3. Should be colored
-   */
-  type Item = [string, string | number, boolean?]
+/**
+ * 1. Title
+ * 2. Data
+ * 3. Should be colored
+ */
+type Item = [string, string | number, boolean?]
+
+export const Statistics = () => {
+  const { user } = useSelector((store) => store.user.profile.user.data)
   const classes = useStyles()
+  
   const items: Item[] = [
     ['Карма', user.score, true],
     ['Рейтинг', user.rating],

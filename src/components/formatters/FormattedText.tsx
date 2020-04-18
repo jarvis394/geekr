@@ -85,9 +85,9 @@ const FormattedText = ({ children, className = '', ...props }) => {
         return <img alt="Картинка" src={attribs['data-src']} />
       }
       if (name === 'div' && attribs.class === 'spoiler') {
-        const title = children.find((e) => e.attribs.class === 'spoiler_title')
+        const title = children.find((e) => e.attribs && e.attribs.class === 'spoiler_title')
           .children[0].data
-        const data = children.find((e) => e.attribs.class === 'spoiler_text')
+        const data = children.find((e) => e.attribs && e.attribs.class === 'spoiler_text')
           .children
 
         return <Spoiler title={title}>{domToReact(data)}</Spoiler>

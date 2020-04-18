@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Typography, Grid, Button } from '@material-ui/core'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
 import UserAvatar from 'src/components/blocks/UserAvatar'
 import { UserExtended } from 'src/interfaces/User'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'src/hooks'
+import ProfileChildrenSkeleton from 'src/components/skeletons/ProfileChildren'
+import { useDispatch } from 'react-redux'
+import { getUserChildren } from 'src/store/actions/user'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -37,17 +41,33 @@ const useStyles = makeStyles((theme) => ({
   linkItem: {
     marginLeft: theme.spacing(0.5),
   },
+  errorText: {
+    color: theme.palette.error.main,
+    fontWeight: 500,
+    fontFamily: 'Google Sans',
+    marginTop: theme.spacing(2),
+  }
 }))
 
-const Children = ({
-  childrenData,
-  classes: additionalClasses,
-}: ComponentWithUserParams) => {
+const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const classes = useStyles()
+  const dispatch = useDispatch()
+  const { user } = useSelector((store) => store.user.profile.user.data)
+  const childrenData = useSelector((store) => store.user.profile.children.data)
+  const isFetched = useSelector((store) => store.user.profile.children.fetched)
+  const isFetching = useSelector(
+    (store) => store.user.profile.children.fetching
+  )
+  const fetchError = useSelector((store) => store.user.profile.children.error)
   const [showAll, setShowAll] = useState<boolean>()
   const sorted = (childrenData?.users || []).sort(
     (a, b) => Date.parse(a.time_registered) - Date.parse(b.time_registered)
   )
+
+  useEffect(() => {
+    setShowAll(false)
+    dispatch(getUserChildren(user.login))
+  }, [user.login, dispatch])
 
   const Item = ({ data }: { data: UserExtended }) => (
     <Grid container>
@@ -75,17 +95,30 @@ const Children = ({
     </Grid>
   )
 
-  return sorted.length !== 0 ? (
-    <div className={additionalClasses}>
-      <Typography className={classes.blockTitle}>
-        Пригласил на сайт
+  if (fetchError)
+    return (
+      <Typography className={classes.errorText}>
+        Не удалось загрузить список приглашённых пользователей
       </Typography>
+    )
+  if (isFetching) return <ProfileChildrenSkeleton />
+
+  return isFetched && sorted.length !== 0 ? (
+    <div className={additionalClasses}>
+      <Typography className={classes.blockTitle}>Пригласил на сайт</Typography>
       {sorted.slice(0, showAll ? sorted.length - 1 : 5).map((e, i) => (
         <Item data={e} key={i} />
       ))}
-      <Button size="small" style={{ marginTop: 8 }} onClick={() => setShowAll((prev) => !prev)} variant="outlined">
-        {showAll ? 'Скрыть часть' : 'Показать всех'}
-      </Button>
+      {sorted.length > 5 && (
+        <Button
+          size="small"
+          style={{ marginTop: 8 }}
+          onClick={() => setShowAll((prev) => !prev)}
+          variant="outlined"
+        >
+          {showAll ? 'Скрыть часть' : 'Показать всех'}
+        </Button>
+      )}
     </div>
   ) : null
 }

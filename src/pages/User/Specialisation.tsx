@@ -2,6 +2,7 @@ import React from 'react'
 import { Typography } from '@material-ui/core'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -13,10 +14,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const Specialisation = ({
-  user,
   classes: additionalClasses,
 }: ComponentWithUserParams) => {
   const classes = useStyles()
+  const { user } = useSelector((store) => store.user.profile.user.data)
+
   return user.description_html ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>Специализация</Typography>

@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Typography, Grid, Avatar } from '@material-ui/core'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import { Company } from 'src/interfaces'
+import { useSelector } from 'src/hooks'
+import ProfileCompaniesSkeleton from 'src/components/skeletons/ProfileCompanies'
+import { useDispatch } from 'react-redux'
+import { getUserCompanies } from 'src/store/actions/user'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -27,15 +31,31 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(4),
     height: theme.spacing(4),
     marginRight: theme.spacing(1),
-  }
+  },
+  errorText: {
+    color: theme.palette.error.main,
+    fontWeight: 500,
+    fontFamily: 'Google Sans',
+    marginTop: theme.spacing(2),
+  },
 }))
 
-const Companies = ({
-  companies: companiesData,
-  classes: additionalClasses,
-}: ComponentWithUserParams) => {
+const Companies = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const classes = useStyles()
-  const { companies } = companiesData || {}
+  const dispatch = useDispatch()
+  const { user } = useSelector((store) => store.user.profile.user.data)
+  const { companies } = useSelector(
+    (store) => store.user.profile.companies.data
+  )
+  const isFetched = useSelector((store) => store.user.profile.companies.fetched)
+  const isFetching = useSelector(
+    (store) => store.user.profile.companies.fetching
+  )
+  const fetchError = useSelector((store) => store.user.profile.companies.error)
+
+  useEffect(() => {
+    dispatch(getUserCompanies(user.login))
+  }, [user.login, dispatch])
 
   const Item = ({ data }: { data: Company }) => (
     <Grid container>
@@ -57,7 +77,15 @@ const Companies = ({
     </Grid>
   )
 
-  return companies && companies.length !== 0 ? (
+  if (fetchError)
+    return (
+      <Typography className={classes.errorText}>
+        Не удалось загрузить список любимых компаний
+      </Typography>
+    )
+  if (isFetching) return <ProfileCompaniesSkeleton />
+
+  return isFetched && companies && companies.length !== 0 ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>
         Подписан на компании

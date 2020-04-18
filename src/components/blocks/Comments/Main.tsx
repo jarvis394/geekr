@@ -123,8 +123,6 @@ const Comments = ({ postId, authorId }) => {
 
   if (fetchError) return <p>error {fetchError}</p>
 
-  console.log(commentsLength, isLoadingNewComments)
-
   return (
     <div className={classes.root}>
       <Container className={classes.headerContainer}>

@@ -2,8 +2,8 @@ import React from 'react'
 import { Typography } from '@material-ui/core'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
-import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -16,8 +16,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const InvitedTime = ({ user }: ComponentWithUserParams) => {
+export const InvitedTime = () => {
   const classes = useStyles()
+  const { user } = useSelector((store) => store.user.profile.user.data)
   const timeInvited = moment(user.time_invited).fromNow()
   const textTimeInvited = timeInvited[0].toUpperCase() + timeInvited.slice(1)
   const wasInvitedText = user.sex === '1' ? 'был приглашён' : 'была приглашена'

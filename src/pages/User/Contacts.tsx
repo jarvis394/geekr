@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import parse, { HTMLReactParserOptions } from 'html-react-parser'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -26,10 +27,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const Contacts = ({
-  user,
   classes: additionalClasses,
 }: ComponentWithUserParams) => {
   const classes = useStyles()
+  const { user } = useSelector((store) => store.user.profile.user.data)
   const options: HTMLReactParserOptions = {
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === 'a') {

@@ -2,6 +2,7 @@ import React from 'react'
 import { Typography, Chip, Grid } from '@material-ui/core'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -16,10 +17,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const Badges = ({
-  user,
   classes: additionalClasses,
 }: ComponentWithUserParams) => {
   const classes = useStyles()
+  const { user } = useSelector((store) => store.user.profile.user.data)
+  
   return user.badges.length !== 0 ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>Значки</Typography>
