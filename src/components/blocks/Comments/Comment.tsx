@@ -38,6 +38,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.hint,
   },
   avatar: {
+    width: 20,
+    height: 20,
     marginRight: theme.spacing(1),
     borderRadius: theme.shape.borderRadius,
   },
