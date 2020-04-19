@@ -14,9 +14,10 @@ import getCachedMode from '../utils/getCachedMode'
 import FAQ from 'src/pages/FAQ'
 import Hubs from 'src/pages/Hubs/index'
 import User from 'src/pages/User/index'
-import theme from 'src/config/theme'
+import generateTheme from 'src/config/theme'
 
-const isDarkTheme = (t: typeof theme) => t.palette.type === 'dark'
+const configTheme = generateTheme()
+const isDarkTheme = (t: typeof configTheme) => t.palette.type === 'dark'
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     backgroundColor: theme.palette.type === 'dark' ? '#0d0d0d' : '#f2f4f6',
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }))
 
-const Router = ({ state, setState }) => {
+const Router = () => {
   const classes = useStyles()
 
   // Set root classes
@@ -74,7 +75,7 @@ const Router = ({ state, setState }) => {
 
         {/* Settings */}
         <Route exact path="/settings">
-          <Settings state={state} setState={setState} />
+          <Settings />
         </Route>
 
         {/* FAQ */}

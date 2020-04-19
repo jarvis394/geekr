@@ -10,13 +10,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function LinkTab(props: any) {
-  return <Tab component={Link} {...props} />
+function LinkTab({ isLink, ...props }) {
+  return <Tab component={isLink ? Link : 'div'} {...props} />
 }
 const LinkTabMemoized = React.memo(LinkTab)
 
-const TabsComponent = ({ tabs, onChange, value, hidden }) => {
+export interface TabObject {
+  label: React.ReactElement | string
+  to: () => string
+  match: RegExp
+  tab: string
+}
+
+interface Params {
+  tabs: TabObject[]
+  onChange: (event: React.ChangeEvent<{}>, value: number) => void
+  value: number
+  hidden: boolean
+  shouldUseLinks?: boolean
+}
+
+const TabsComponent = ({
+  tabs,
+  onChange,
+  value,
+  hidden,
+  shouldUseLinks = true,
+}: Params) => {
   const classes = useStyles()
 
   if (hidden) return null
@@ -31,7 +51,7 @@ const TabsComponent = ({ tabs, onChange, value, hidden }) => {
       className={classes.root}
     >
       {tabs.map(({ to, label }, i: number) => (
-        <LinkTabMemoized to={to()} label={label} key={i} />
+        <LinkTabMemoized isLink={shouldUseLinks} to={to()} label={label} key={i} />
       ))}
     </Tabs>
   )

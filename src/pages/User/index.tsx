@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
 import Tabs from 'src/components/blocks/Tabs/UserTabs'
 import { getUser } from 'src/store/actions/user'
-import UserPageSkeleton from 'src/components/skeletons/UserPage'
+import UserPageSkeleton from 'src/components/skeletons/Profile'
 import ErrorComponent from 'src/components/blocks/Error'
 import Profile from './pages/Profile'
 import Articles from './pages/Articles'
@@ -30,7 +30,7 @@ const routes = {
 
 const User = ({ path }) => {
   const dispatch = useDispatch()
-  const { user } = useSelector((state) => state.user.profile.user.data)
+  const data = useSelector((state) => state.user.profile.user.data)
   const isUserFetched = useSelector((state) => state.user.profile.user.fetched)
   const isUserFetching = useSelector(
     (state) => state.user.profile.user.fetching
@@ -38,6 +38,7 @@ const User = ({ path }) => {
   const userFetchError = useSelector((state) => state.user.profile.user.error)
   const { login } = useParams<UserParams>()
   const Component = routes[path] || Profile
+  const user = data ? data.user : null
 
   useEffect(() => {
     if (user?.login !== login) dispatch(getUser(login))
@@ -45,10 +46,10 @@ const User = ({ path }) => {
 
   return (
     <>
+      {!userFetchError && <Tabs user={user} />}
       {userFetchError && <ErrorComponent message={userFetchError} />}
       {isUserFetched && (
         <>
-          <Tabs user={user} />
           <Component user={user} />
         </>
       )}

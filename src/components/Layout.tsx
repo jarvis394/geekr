@@ -1,15 +1,14 @@
 import * as React from 'react'
-import { useState } from 'react'
 import ThemeProvider from '@material-ui/styles/ThemeProvider'
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
 import makeStyles from '@material-ui/styles/makeStyles'
-import theme from '../config/theme'
 import AppRouter from './Router'
 import AppBar from './blocks/AppBar'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { MIN_WIDTH as minWidth } from '../config/constants'
 import isMobile from 'is-mobile'
 import Footer from './blocks/Footer'
+import { useSelector } from 'src/hooks'
 
 const chromeAddressBarHeight = 56
 const useStyles = makeStyles({
@@ -26,16 +25,15 @@ const useStyles = makeStyles({
 })
 
 const Layout = (): React.ReactElement => {
-  const initialState = { theme }
   const classes = useStyles()
-  const [state, setState] = useState(initialState)
+  const theme = useSelector(state => state.settings.theme)
 
   return (
-    <ThemeProvider theme={createMuiTheme(state.theme)}>
+    <ThemeProvider theme={createMuiTheme(theme)}>
       <Router>
-        <AppBar setState={setState} />
+        <AppBar />
         <div className={classes.app}>
-          <AppRouter state={state} setState={setState} />
+          <AppRouter />
         </div>
         <Footer />
       </Router>

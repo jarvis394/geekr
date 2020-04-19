@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Grid, Button } from '@material-ui/core'
+import {
+  Typography,
+  Button,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Collapse,
+  Fade,
+} from '@material-ui/core'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
 import UserAvatar from 'src/components/blocks/UserAvatar'
@@ -15,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 24,
     fontWeight: 500,
     fontFamily: 'Google Sans',
-    marginBottom: theme.spacing(1),
   },
   link: {
     textDecoration: 'none',
@@ -26,30 +34,33 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   avatar: {
-    width: theme.spacing(4),
-    height: theme.spacing(4),
-    marginRight: theme.spacing(1),
-  },
-  itemHolder: {
-    padding: theme.spacing(1),
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    textDecoration: 'none',
-    color: theme.palette.text.primary,
-  },
-  linkItem: {
-    marginLeft: theme.spacing(0.5),
+    width: theme.spacing(5),
+    height: theme.spacing(5),
   },
   errorText: {
     color: theme.palette.error.main,
     fontWeight: 500,
     fontFamily: 'Google Sans',
     marginTop: theme.spacing(2),
-  }
+  },
+  collapse: {
+    position: 'relative',
+  },
+  collapseShadow: {
+    position: 'absolute',
+    background:
+      'linear-gradient(0deg,' +
+      theme.palette.background.default +
+      ',transparent)',
+    bottom: 0,
+    pointerEvents: 'none',
+    height: 40,
+    width: '100%',
+  },
 }))
 
 const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
+  const [showAll, setShowAll] = useState<boolean>(false)
   const classes = useStyles()
   const dispatch = useDispatch()
   const { user } = useSelector((store) => store.user.profile.user.data)
@@ -59,7 +70,6 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
     (store) => store.user.profile.children.fetching
   )
   const fetchError = useSelector((store) => store.user.profile.children.error)
-  const [showAll, setShowAll] = useState<boolean>()
   const sorted = (childrenData?.users || []).sort(
     (a, b) => Date.parse(a.time_registered) - Date.parse(b.time_registered)
   )
@@ -70,29 +80,25 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   }, [user.login, dispatch])
 
   const Item = ({ data }: { data: UserExtended }) => (
-    <Grid container>
-      <Link className={classes.itemHolder} to={'/user/' + data.login}>
-        <Grid style={{ display: 'flex', alignItems: 'center' }}>
-          <UserAvatar
-            className={classes.avatar}
-            src={data.avatar}
-            login={data.login}
-          />
-        </Grid>
-        <Grid container justify="center" direction="column">
-          <Grid item style={{ display: 'flex', flexDirection: 'row' }}>
-            <Typography className={classes.link + ' ' + classes.linkItem}>
-              @{data.login}
-            </Typography>
-          </Grid>
-          <Grid item className={classes.linkItem}>
-            <Typography color="textSecondary" variant="caption">
-              {data.specializm}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Link>
-    </Grid>
+    <ListItem
+      style={{ paddingLeft: 0, paddingRight: 0 }}
+      component={Link}
+      to={'/user/' + data.login}
+    >
+      <ListItemAvatar>
+        <UserAvatar
+          className={classes.avatar}
+          src={data.avatar}
+          login={data.login}
+        />
+      </ListItemAvatar>
+      <ListItemText
+        style={{ margin: 0 }}
+        primaryTypographyProps={{ className: classes.link }}
+        primary={'@' + data.login}
+        secondary={data.specializm}
+      />
+    </ListItem>
   )
 
   if (fetchError)
@@ -106,9 +112,17 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   return isFetched && sorted.length !== 0 ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>Пригласил на сайт</Typography>
-      {sorted.slice(0, showAll ? sorted.length - 1 : 5).map((e, i) => (
-        <Item data={e} key={i} />
-      ))}
+      <Collapse className={classes.collapse} in={showAll} collapsedHeight={280}>
+        <List>
+          {sorted.map((e) => (
+            <Item data={e} key={e.id} />
+          ))}
+        </List>
+        <Fade appear={false} in={!showAll}>
+          <div className={classes.collapseShadow} />
+        </Fade>
+      </Collapse>
+
       {sorted.length > 5 && (
         <Button
           size="small"
@@ -116,7 +130,7 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
           onClick={() => setShowAll((prev) => !prev)}
           variant="outlined"
         >
-          {showAll ? 'Скрыть часть' : 'Показать всех'}
+          {showAll ? 'Скрыть' : 'Показать всех'}
         </Button>
       )}
     </div>

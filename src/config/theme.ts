@@ -27,12 +27,12 @@ export const makePrimaryColors = (
   dark: t === 'dark' ? darken(blue.A100, 0.1) : blue.A700,
 })
 
-const theme: ThemeOptions = {
+const generateTheme = (themeType?: PaletteType): ThemeOptions => ({
   palette: {
-    type,
-    primary: makePrimaryColors(type),
+    type: themeType ? themeType : type,
+    primary: makePrimaryColors(themeType ? themeType : type),
     secondary: { main: '#fff' },
-    background: makeBackgroundColors(type),
+    background: makeBackgroundColors(themeType ? themeType : type),
   },
   shape: { borderRadius: 4 },
   overrides: {
@@ -42,6 +42,6 @@ const theme: ThemeOptions = {
       }
     }
   }
-}
+})
 
-export default theme
+export default generateTheme

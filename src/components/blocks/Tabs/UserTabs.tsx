@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import Tabs from '.'
 import { UserExtended as UserExtendedObject } from 'src/interfaces/User'
-import { useTheme, Theme } from '@material-ui/core'
+import { useTheme, Fade } from '@material-ui/core'
 
 interface TabObject {
   label: React.ReactElement | string
@@ -13,20 +13,21 @@ interface TabObject {
 const Counter = ({ children }) => {
   const theme = useTheme()
   return (
-    <span
+    <Fade
+      in
       style={{
         color: theme.palette.primary.main,
         marginLeft: theme.spacing(1),
       }}
     >
-      {children}
-    </span>
+      <div>{children}</div>
+    </Fade>
   )
 }
-const generateTabs = (theme: Theme, user: UserExtendedObject): TabObject[] => [
+const generateTabs = (user: UserExtendedObject): TabObject[] => [
   {
     label: 'Профиль',
-    to: () => `/user/${user.login}/`,
+    to: () => user ? `/user/${user.login}/` : null,
     match: /\/user\/(\w|\d)+\/?$/,
     tab: 'profile',
   },
@@ -34,10 +35,10 @@ const generateTabs = (theme: Theme, user: UserExtendedObject): TabObject[] => [
     label: (
       <>
         Публикации
-        <Counter>{user.counters.posts}</Counter>
+        {user && <Counter>{user.counters.posts}</Counter>}
       </>
     ),
-    to: () => `/user/${user.login}/articles/1`,
+    to: () => user ? `/user/${user.login}/articles/1` : null,
     match: /\/user\/(\w|\d)+\/articles\/([0-9]+)\/?$/,
     tab: 'articles',
   },
@@ -45,10 +46,10 @@ const generateTabs = (theme: Theme, user: UserExtendedObject): TabObject[] => [
     label: (
       <>
         Комментарии
-        <Counter>{user.counters.comments}</Counter>
+        {user && <Counter>{user.counters.comments}</Counter>}
       </>
     ),
-    to: () => `/user/${user.login}/comments/1`,
+    to: () => user ? `/user/${user.login}/comments/1` : null,
     match: /\/user\/(\w|\d)+\/comments\/([0-9]+)\/?$/,
     tab: 'comments',
   },
@@ -56,18 +57,17 @@ const generateTabs = (theme: Theme, user: UserExtendedObject): TabObject[] => [
     label: (
       <>
         Закладки
-        <Counter>{user.counters.favorites}</Counter>
+        {user && <Counter>{user.counters.favorites}</Counter>}
       </>
     ),
-    to: () => `/user/${user.login}/favorites/articles/1`,
+    to: () => user ? `/user/${user.login}/favorites/articles/1` : null,
     match: /\/user\/(\w|\d)+\/favorites\/(articles|comments)\/([0-9]+)\/?$/,
     tab: 'favorites',
   },
 ]
 
 const UserTabs = ({ user }: { user: UserExtendedObject }) => {
-  const theme = useTheme()
-  const tabs = useMemo(() => generateTabs(theme, user), [theme, user])
+  const tabs = useMemo(() => generateTabs(user), [user])
   const findPath = (path: string): TabObject => {
     return tabs.find((e) => path.match(e.match))
   }
@@ -91,12 +91,14 @@ const UserTabs = ({ user }: { user: UserExtendedObject }) => {
     setValue(newValue)
   }
 
+  console.log(user?.login, user?.counters)
   useEffect(() => setValue(getValue()), [location.pathname, getValue])
 
   return (
     <Tabs
       onChange={handleChange}
       tabs={tabs}
+      shouldUseLinks={!!user}
       hidden={!shouldShow}
       value={value}
     />

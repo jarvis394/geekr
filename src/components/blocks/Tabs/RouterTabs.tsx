@@ -67,7 +67,7 @@ const RouterTabs = () => {
   ])
 
   return (
-    <Tabs onChange={handleChange} tabs={tabs} hidden={!shouldShow} value={value} />
+    <Tabs shouldUseLinks onChange={handleChange} tabs={tabs} hidden={!shouldShow} value={value} />
   )
 }
 

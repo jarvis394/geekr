@@ -37,12 +37,15 @@ type Item = [string, string | number, boolean?]
 export const Statistics = () => {
   const { user } = useSelector((store) => store.user.profile.user.data)
   const classes = useStyles()
-  
   const items: Item[] = [
     ['Карма', user.score, true],
     ['Рейтинг', user.rating],
-    ['Позиция', user.rating_position === 0 ? 'N/A' : user.rating_position],
   ]
+
+  if (user.rating_position !== 0) {
+    items.push(['Позиция', user.rating_position])
+  }
+
   return (
     <Grid className={classes.headerContainer} container justify="center">
       {items.map((e, i) => (

@@ -63,7 +63,7 @@ const HideOnScroll = (props: HideOnScrollProps) => {
   )
 }
 
-const Component = ({ setState }) => {
+const Component = () => {
   const classes = useStyles()
   const history = useHistory()
 
@@ -74,7 +74,6 @@ const Component = ({ setState }) => {
           <Toolbar style={{ minHeight: 'unset', height: 48 }}>
             <Typography variant="h6" className={classes.linkTypography}>
               <Link
-                onClick={() => setState((prev) => ({ ...prev, posts: {} }))}
                 to={`/${getCachedMode()}/p/1`}
                 className={classes.link}
               >

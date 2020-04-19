@@ -4,7 +4,7 @@ const initialState = {} as State
 ;['hubs', 'user', 'companies', 'children'].forEach(
   (e: string) =>
     (initialState[e] = {
-      data: [],
+      data: null,
       fetching: false,
       fetched: false,
       error: null,
@@ -21,6 +21,7 @@ export default (
         fetching: true,
         fetched: false,
         error: null,
+        data: null
       }
     } else if (type.endsWith('FULFILLED')) {
       return {

@@ -4,7 +4,9 @@ import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import { Switch, List, ListItem, ListItemText, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { makeBackgroundColors, makePrimaryColors } from '../config/theme'
+import { useSelector } from 'src/hooks'
+import { useDispatch } from 'react-redux'
+import { setTheme } from 'src/store/actions/settings'
 
 const useStyles = makeStyles((theme) => ({
   root: { width: '100%', height: '100%', maxWidth: '100vw' },
@@ -29,17 +31,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Settings = ({ state, setState }) => {
-  const { theme } = state
+const Settings = () => {
+  const theme = useSelector(state => state.settings.theme)
+  const dispatch = useDispatch()
   const classes = useStyles()
 
-  const setTheme = () => {
+  const themeChange = () => {
     const newThemeType = theme.palette.type === 'light' ? 'dark' : 'light'
-    theme.palette.type = newThemeType
-    theme.palette.background = makeBackgroundColors(newThemeType)
-    theme.palette.primary = makePrimaryColors(newThemeType)
-
-    setState((prev) => ({ ...prev, theme }))
+    dispatch(setTheme(newThemeType))
     localStorage.setItem('theme', newThemeType)
   }
 
@@ -58,7 +57,7 @@ const Settings = ({ state, setState }) => {
 
       <Grid style={{ overflow: 'auto' }} item>
         <List style={{ overflow: 'auto' }} className={classes.list}>
-          <ListItem button onClick={setTheme}>
+          <ListItem button onClick={themeChange}>
             <ListItemText
               secondary={
                 theme.palette.type === 'dark'
