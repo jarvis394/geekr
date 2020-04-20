@@ -59,14 +59,14 @@ const News = () => {
       {isFetched &&
         !fetchError &&
         posts &&
-        posts.articleIds.map((id, i) => (
-          <PostItem post={posts.articleRefs[id]} key={i} />
+        posts.articleIds.map((i: number) => (
+          <PostItem post={posts.articleRefs[i]} key={i} />
         ))}
       {fetchError && (
         <ErrorComponent
           message={fetchError.error.message}
           onHomeClick={() => {
-            history.push('/news/page/1')
+            history.push('/news/p/1')
           }}
         />
       )}

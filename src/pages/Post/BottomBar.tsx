@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    zIndex: 999,
+    zIndex: 5,
   },
   item: {
     color: theme.palette.text.hint,

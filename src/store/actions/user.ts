@@ -4,6 +4,7 @@ import {
   USER_PROFILE_CHILDREN,
   USER_PROFILE_COMPANIES,
   USER_PROFILE_HUBS,
+  USER_ARTICLES,
 } from '../reducers/user/types'
 
 export const request = async (
@@ -52,4 +53,21 @@ export const getUserChildren = (login: string) => async (dispatch) => {
 
 export const getUserHubs = (login: string) => async (dispatch) => {
   return await request('getUserHubs', USER_PROFILE_HUBS, [login], dispatch)
+}
+
+export const getUserArticles = (login: string, page: number) => async (dispatch) => {
+  const type = USER_ARTICLES + 'FETCH'
+  dispatch({ type })
+
+  try {
+    const data = await api.getUserArticles(login, page)
+    if (!data.success) throw new Error('did not fetch')
+
+    dispatch({
+      type: type + '_FULFILLED',
+      payload: { data: data.data, page, pagesCount: data.data.pagesCount },
+    })
+  } catch (error) {
+    dispatch({ type: type + '_REJECTED', payload: { error, page } })
+  }
 }

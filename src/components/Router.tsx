@@ -95,12 +95,12 @@ const Router = () => {
 
         {/* User's favorites comments */}
         <Route exact path="/user/:login/favorites/comments/:page">
-          <User path="favorites/comments" />
+          <User path="favoritesComments" />
         </Route>
 
         {/* User's favorites articles */}
         <Route exact path="/user/:login/favorites/articles/:page">
-          <User path="favorites/articles" />
+          <User path="favoritesArticles" />
         </Route>
 
         {/* User's comments */}

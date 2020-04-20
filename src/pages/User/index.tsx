@@ -11,6 +11,18 @@ import FavArticles from './pages/FavArticles'
 import FavComments from './pages/FavComments'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
+import { CircularProgress } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles(() => ({
+  centered: {
+    height: 'calc(100vh - 96px)',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+}))
 
 export interface ComponentWithUserParams {
   classes?: string
@@ -24,11 +36,12 @@ const routes = {
   profile: Profile,
   comments: Comments,
   articles: Articles,
-  'favorites/articles': FavArticles,
-  'favorites/comments': FavComments,
+  favoritesArticles: FavArticles,
+  favoritesComments: FavComments,
 }
 
 const User = ({ path }) => {
+  const classes = useStyles()
   const dispatch = useDispatch()
   const data = useSelector((state) => state.user.profile.user.data)
   const isUserFetched = useSelector((state) => state.user.profile.user.fetched)
@@ -53,7 +66,13 @@ const User = ({ path }) => {
           <Component user={user} />
         </>
       )}
-      {isUserFetching && <UserPageSkeleton />}
+      {isUserFetching && (Component === Profile ? (
+        <UserPageSkeleton />
+      ) : (
+        <div className={classes.centered}>
+          <CircularProgress />
+        </div>
+      ))}
     </>
   )
 }

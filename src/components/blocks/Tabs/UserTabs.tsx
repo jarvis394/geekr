@@ -91,7 +91,6 @@ const UserTabs = ({ user }: { user: UserExtendedObject }) => {
     setValue(newValue)
   }
 
-  console.log(user?.login, user?.counters)
   useEffect(() => setValue(getValue()), [location.pathname, getValue])
 
   return (

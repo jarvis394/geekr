@@ -6,6 +6,7 @@ import moment from 'moment'
 import ru from 'moment/locale/ru'
 import { Provider } from 'react-redux'
 import store from './store'
+import 'react-medium-image-zoom/dist/styles.css'
 
 moment.updateLocale('ru', ru)
 

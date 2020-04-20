@@ -7,6 +7,8 @@ export const USER_PROFILE_COMPANIES = USER_PROFILE + 'COMPANIES_'
 export const USER_PROFILE_CHILDREN = USER_PROFILE + 'CHILDREN_'
 export const USER_PROFILE_HUBS = USER_PROFILE + 'HUBS_'
 
+export const USER_ARTICLES = 'USER_ARTICLES_'
+
 export interface PromiseItem<T> {
   data: Record<string, T>
   fetching: boolean

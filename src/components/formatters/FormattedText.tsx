@@ -1,15 +1,17 @@
 import * as React from 'react'
-import { makeStyles, fade } from '@material-ui/core/styles'
+import { makeStyles, fade, useTheme } from '@material-ui/core/styles'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import Spoiler from '../blocks/Spoiler'
 import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser'
+import Zoom from 'react-medium-image-zoom'
 
 const useStyles = makeStyles((theme) => ({
+  img: {
+    maxWidth: '100%',
+    width: '100%',
+  },
   text: {
-    '& img': {
-      maxWidth: '100%',
-    },
     '& a': {
       color: theme.palette.primary.main,
       textDecoration: 'none',
@@ -49,6 +51,10 @@ const useStyles = makeStyles((theme) => ({
       color: fade(theme.palette.text.primary, 0.9),
       fontStyle: 'italic',
     },
+    '& hr': {
+      border: 'none',
+      borderBottom: '1px solid ' + theme.palette.divider,
+    },
   },
   syntaxHighlighter: {
     margin: 0,
@@ -65,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
 
 const FormattedText = ({ children, className = '', ...props }) => {
   const classes = useStyles()
+  const theme = useTheme()
   const options: HTMLReactParserOptions = {
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === 'pre') {
@@ -81,14 +88,28 @@ const FormattedText = ({ children, className = '', ...props }) => {
           </SyntaxHighlighter>
         )
       }
-      if (name === 'img' && attribs['data-src']) {
-        return <img alt="Картинка" src={attribs['data-src']} />
+      if (name === 'img') {
+        return (
+          <Zoom
+            overlayBgColorEnd={fade(theme.palette.background.paper, 0.9)}
+            zoomMargin={64}
+            zoomZindex={100}
+          >
+            <img
+              className={classes.img}
+              alt="Картинка"
+              src={attribs.src ? attribs.src : attribs['data-src']}
+            />
+          </Zoom>
+        )
       }
       if (name === 'div' && attribs.class === 'spoiler') {
-        const title = children.find((e) => e.attribs && e.attribs.class === 'spoiler_title')
-          .children[0].data
-        const data = children.find((e) => e.attribs && e.attribs.class === 'spoiler_text')
-          .children
+        const title = children.find(
+          (e) => e.attribs && e.attribs.class === 'spoiler_title'
+        ).children[0].data
+        const data = children.find(
+          (e) => e.attribs && e.attribs.class === 'spoiler_text'
+        ).children
 
         return <Spoiler title={title}>{domToReact(data)}</Spoiler>
       }
