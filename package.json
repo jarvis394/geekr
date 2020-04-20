@@ -15,6 +15,7 @@
     "html-react-parser": "^0.10.1",
     "is-mobile": "^2.2.1",
     "moment": "^2.24.0",
+    "nprogress": "^0.2.0",
     "number-to-words-ru": "^2.0.2",
     "react": "^16.13.0",
     "react-custom-scrollbars": "^4.2.1",

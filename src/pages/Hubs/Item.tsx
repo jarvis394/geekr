@@ -41,4 +41,4 @@ const Item = ({ data }: { data: HubObject }) => {
   )
 }
 
-export default Item
+export default React.memo(Item)

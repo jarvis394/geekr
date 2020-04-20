@@ -24,8 +24,10 @@ const useStyles = makeStyles((theme) => ({
 
 const FAQ = () => {
   const classes = useStyles()
-  const Text = ({ key, children, ...props }) => (
-    <Fade in timeout={1000} style={{ transitionDelay: `${200 + key * 100}ms` }}>
+  const Text = ({ index, children, ...props }) => (
+    <Fade in timeout={1000} style={{
+      transitionDelay: `${index}s`,
+    }}>
       <div>
         <Typography className={classes.text} {...props}>
           {children}
@@ -47,7 +49,7 @@ const FAQ = () => {
           </a>
           &nbsp;можно делать все то же самое, что и на оригинальном&nbsp;
           <a className={classes.link} href="https://habr.com">
-            Habrahabr{"'"}e
+            Habrahabr{'\''}e
           </a>
           . В чём разница, спросите вы? Удобство, красота и юзабилити - вот к
           чему стремится неофициальный клон одной из крупнейших площадок Рунета
@@ -93,7 +95,7 @@ const FAQ = () => {
   return (
     <Container>
       {text.map((e, i) => (
-        <Text key={i} {...e.props}>
+        <Text index={i} key={i} {...e.props}>
           {e.data}
         </Text>
       ))}
@@ -101,4 +103,4 @@ const FAQ = () => {
   )
 }
 
-export default FAQ
+export default React.memo(FAQ)

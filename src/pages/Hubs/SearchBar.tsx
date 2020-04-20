@@ -46,4 +46,4 @@ const SearchBar = ({ inputRef = null, onChange = null }) => {
   )
 }
 
-export default SearchBar
+export default React.memo(SearchBar)

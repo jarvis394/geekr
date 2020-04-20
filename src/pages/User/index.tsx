@@ -59,7 +59,7 @@ const User = ({ path }) => {
 
   return (
     <>
-      {!userFetchError && <Tabs user={user} />}
+      {!userFetchError && <Tabs />}
       {userFetchError && <ErrorComponent message={userFetchError} />}
       {isUserFetched && (
         <>
@@ -77,4 +77,4 @@ const User = ({ path }) => {
   )
 }
 
-export default User
+export default React.memo(User)

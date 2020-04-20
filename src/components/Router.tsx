@@ -1,20 +1,9 @@
 import * as React from 'react'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import makeStyles from '@material-ui/styles/makeStyles'
-import Home from '../pages/Home/index'
-import Post from '../pages/Post'
-import Settings from '../pages/Settings'
-import Search from '../pages/Search'
-import News from '../pages/News'
-import NotFound from '../pages/NotFound'
 import { Theme, lighten, darken } from '@material-ui/core/styles'
-import CommentsPage from '../pages/Comments'
-import Tabs from './blocks/Tabs/RouterTabs'
-import getCachedMode from '../utils/getCachedMode'
-import FAQ from 'src/pages/FAQ'
-import Hubs from 'src/pages/Hubs/index'
-import User from 'src/pages/User/index'
 import generateTheme from 'src/config/theme'
+import routes from 'src/config/routes'
 
 const configTheme = generateTheme()
 const isDarkTheme = (t: typeof configTheme) => t.palette.type === 'dark'
@@ -60,93 +49,14 @@ const Router = () => {
   document.body.className = classes.root
 
   return (
-    <>
-      <Tabs />
-      <Switch>
-        {/* Comments */}
-        <Route exact path="/article/:id/comments">
-          <CommentsPage />
+    <Switch>
+      {routes.map(({ path, component }, i) => (
+        <Route key={i} exact path={path}>
+          {component}
         </Route>
-
-        {/* Article */}
-        <Route exact path="/article/:id">
-          <Post />
-        </Route>
-
-        {/* Settings */}
-        <Route exact path="/settings">
-          <Settings />
-        </Route>
-
-        {/* FAQ */}
-        <Route exact path="/habra-faq">
-          <FAQ />
-        </Route>
-
-        {/* Search */}
-        <Route exact path={['/search', '/search/p/:page']}>
-          <Search />
-        </Route>
-
-        {/* Hubs */}
-        <Route exact path="/hubs/p/:page">
-          <Hubs />
-        </Route>
-
-        {/* User's favorites comments */}
-        <Route exact path="/user/:login/favorites/comments/:page">
-          <User path="favoritesComments" />
-        </Route>
-
-        {/* User's favorites articles */}
-        <Route exact path="/user/:login/favorites/articles/:page">
-          <User path="favoritesArticles" />
-        </Route>
-
-        {/* User's comments */}
-        <Route exact path="/user/:login/comments/:page">
-          <User path="comments" />
-        </Route>
-
-        {/* User's articles */}
-        <Route exact path="/user/:login/articles/:page">
-          <User path="articles" />
-        </Route>
-
-        {/* User */}
-        <Route exact path="/user/:login">
-          <User path="profile" />
-        </Route>
-
-        {/* News */}
-        <Route exact path="/news/p/:page">
-          <News />
-        </Route>
-
-        {/* Home */}
-        <Route
-          exact
-          path={[
-            '/all/p/:page',
-            '/top/day/p/:page',
-            '/top/week/p/:page',
-            '/top/month/p/:page',
-          ]}
-        >
-          <Home />
-        </Route>
-
-        {/* Redirect from home to the Home component */}
-        <Route exact path="/">
-          <Redirect to={`/${getCachedMode()}/p/1`} />
-        </Route>
-
-        <Route path="*">
-          <NotFound />
-        </Route>
-      </Switch>
-    </>
+      ))}
+    </Switch>
   )
 }
 
-export default Router
+export default React.memo(Router)
