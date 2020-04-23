@@ -1,51 +1,63 @@
 import * as React from 'react'
-import Typography from '@material-ui/core/Typography'
-import makeStyles from '@material-ui/styles/makeStyles'
-import { Link } from 'react-router-dom'
-import ErrorSVG from '../svg/Error'
-import { Theme } from '@material-ui/core/styles'
+import { Typography } from '@material-ui/core/'
+import { makeStyles } from '@material-ui/core/styles'
+import isMobile from 'is-mobile'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const chromeAddressBarHeight = 56
+const useStyles = makeStyles((theme) => ({
   centered: {
-    height: 'calc(100vh - 48px)',
+    height: `calc(100vh - 96px - 194px - ${isMobile() ? chromeAddressBarHeight : '0'}px)`,
+    minHeight: 600,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+    '@media (min-width: 768px)': {
+      flexDirection: 'row'
+    },
   },
-  googleFont: { fontFamily: 'Google Sans' },
-  link: {
-    textDecoration: 'underline',
-    color: theme.palette.primary.main,
+  code: {
+    paddingBottom: theme.spacing(2),
+    fontFamily: 'Google Sans',
+    fontSize: 28,
     fontWeight: 500,
+    width: 100,
+    textAlign: 'center',
+    borderBottom: '1px solid ' + theme.palette.divider,
+    '@media (min-width: 768px)': {
+      width: 'auto',
+      borderBottom: 0,
+      paddingRight: theme.spacing(2.5),
+      paddingBottom: 0,
+      borderRight: '1px solid ' + theme.palette.divider,
+      lineHeight: '48px'
+    },
   },
-  svg: {
-    '& svg': { height: '100%', width: '100%' },
-    width: '65%',
-    marginTop: theme.spacing(4),
-    maxWidth: 300,
-  },
+  message: {
+    fontFamily: 'Segoe UI',
+    fontSize: 16,
+    fontWeight: 400,
+    paddingTop: theme.spacing(3),
+    '@media (min-width: 768px)': {
+      paddingLeft: theme.spacing(2.5),
+      paddingTop: 0,
+    },
+  }
 }))
 
-const ErrorComponent = ({
-  message,
-  onHomeClick,
-}: {
+interface Params {
+  code?: number | string
   message: string
-  onHomeClick?: () => void
-}) => {
+  to?: string
+}
+
+const ErrorComponent = ({ code = 500, message, to = '/' }: Params) => {
   const classes = useStyles()
+
   return (
     <div className={classes.centered}>
-      <Typography className={classes.googleFont} variant="h6">
-        {message}
-      </Typography>
-      <Typography className={classes.googleFont} variant="h6">
-        <Link onClick={onHomeClick} to="/" className={classes.link}>
-          Домой
-        </Link>
-      </Typography>
-      <ErrorSVG className={classes.svg} />
+      <Typography className={classes.code}>{code}</Typography>
+      <Typography className={classes.message}>{message}</Typography>
     </div>
   )
 }

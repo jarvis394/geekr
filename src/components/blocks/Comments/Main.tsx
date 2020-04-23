@@ -39,6 +39,11 @@ const useStyles = makeStyles((theme) => ({
   nothingText: {
     marginTop: theme.spacing(2),
   },
+  errorText: {
+    color: theme.palette.error.main,
+    fontWeight: 500,
+    fontFamily: 'Google Sans',
+  },
 }))
 
 const MIN_COMMENTS_SLICE = 25
@@ -50,10 +55,10 @@ const Comments = ({ postId, authorId }) => {
     MIN_COMMENTS_SLICE
   )
   const [isLoadingNewComments, setIsLoadingNewComments] = useState<boolean>(
-    true
+    false
   )
   const [commentsLength, setCommentsLength] = useState<number>()
-  const [fetchError, setError] = useState()
+  const [fetchError, setError] = useState<string>()
   const classes = useStyles()
   const commentsEndRef = useRef()
 
@@ -67,15 +72,15 @@ const Comments = ({ postId, authorId }) => {
       setCommentsSliceEnd((prev) => prev + MIN_COMMENTS_SLICE)
       setIsLoadingNewComments(true)
     } else {
-      if (isLoadingNewComments) setIsLoadingNewComments(false)
+      setIsLoadingNewComments(false)
     }
   }, [commentsSliceEnd, isLoadingNewComments, commentsLength])
 
   const flatten = useCallback((nodes, a = []) => {
-    for (let i = 0; i < nodes.length; i++) {
-      a.push(nodes[i])
-      flatten(nodes[i].children, a)
-    }
+    nodes.forEach(e => {
+      a.push(e)
+      flatten(e.children, a)
+    })
     return a
   }, [])
 
@@ -106,14 +111,15 @@ const Comments = ({ postId, authorId }) => {
 
       try {
         const d = await getComments(postId)
-        const commentsData = d.data.comments
+        const commentsData = d.comments
         const parsedComments = parseComments(commentsData)
         const flat = flatten(parsedComments)
 
         setCommentsLength(Object.keys(commentsData).length)
         setComments(flat.map((x: IComments.Comment) => delete x.children && x))
       } catch (e) {
-        return setError(e.message)
+        console.error('On getting comments data:', e.message)
+        return setError('Произошла ошибка при запросе')
       }
     }
     get()
@@ -121,7 +127,8 @@ const Comments = ({ postId, authorId }) => {
     return () => window.removeEventListener('scroll', onScroll)
   }, [postId, onScroll, flatten])
 
-  if (fetchError) return <p>error {fetchError}</p>
+  if (fetchError)
+    return <Typography className={classes.errorText}>{fetchError}</Typography>
 
   return (
     <div className={classes.root}>

@@ -1,7 +1,7 @@
 import makeRequest from './makeRequest'
-import { APIResponse, SimilarPosts } from '../interfaces'
+import { APIResponse, Post } from '../interfaces'
 
-export default async (id: number): Promise<APIResponse<SimilarPosts>> =>
+export default async (id: number): Promise<APIResponse<Post[]>> =>
   (
     await makeRequest({
       path: `articles/${id}/similar`,

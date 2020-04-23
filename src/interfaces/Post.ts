@@ -2,7 +2,7 @@ import Flow from './Flow'
 import Hub from './Hub'
 import { UserExtended } from './User'
 
-export interface Post {
+export default interface Post {
   id: string | number
   is_corporative: string | number | boolean
   is_tutorial: boolean
@@ -53,8 +53,4 @@ export interface Post {
   is_favorite: false
   comments_new: null | number
   images: string[]
-}
-
-export interface PostResponse {
-  article: Post
 }

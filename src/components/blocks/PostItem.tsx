@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
   postTitle: {
     fontWeight: 800,
-    fontFamily: 'Google Sans',
+    fontFamily: '"Google Sans"',
     fontSize: 20,
     marginTop: (hasImage) => (hasImage ? 0 : theme.spacing(1)),
     '& .searched-item': {
@@ -105,7 +105,7 @@ export const PostItem = ({
   showPreview,
   style,
 }: {
-  post: Post.Post
+  post: Post
   showPreview?: boolean
   style?: Record<string, unknown>
 }) => {

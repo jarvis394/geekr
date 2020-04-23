@@ -103,13 +103,13 @@ const SimilarPost = ({ data }) => {
 const SimilarPosts = (props: Props) => {
   const { id } = props
   const classes = useStyles()
-  const [data, setData] = useState<Post.Post[]>()
+  const [data, setData] = useState<Post[]>()
   const [error, setError] = useState<string>()
 
   useEffect(() => {
     const get = async () => {
       try {
-        setData((await getSimilar(Number(id))).data.articles)
+        setData((await getSimilar(Number(id))).data)
       } catch (e) {
         console.warn('Could not fetch similar posts:', e.message)
         setError(e.message)

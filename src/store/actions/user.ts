@@ -61,7 +61,6 @@ export const getUserArticles = (login: string, page: number) => async (dispatch)
 
   try {
     const data = await api.getUserArticles(login, page)
-    if (!data.success) throw new Error('did not fetch')
 
     dispatch({
       type: type + '_FULFILLED',

@@ -22,11 +22,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const FAQ = () => {
+const AboutPage = () => {
   const classes = useStyles()
   const Text = ({ index, children, ...props }) => (
     <Fade in timeout={1000} style={{
-      transitionDelay: `${index}s`,
+      transitionDelay: `${index / 4}s`,
     }}>
       <div>
         <Typography className={classes.text} {...props}>
@@ -103,4 +103,4 @@ const FAQ = () => {
   )
 }
 
-export default React.memo(FAQ)
+export default React.memo(AboutPage)

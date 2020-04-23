@@ -83,19 +83,19 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 const Post = () => {
-  const [post, setPost] = useState<IPost.PostResponse>()
+  const [post, setPost] = useState<IPost>()
   const [fetchError, _setError] = useState<string>()
   const classes = useStyles()
   const { id } = useParams()
   const contents = post ? (
     <>
       <Container className={classes.hubs}>
-        {post.article.hubs.map((hub, i) => (
+        {post.hubs.map((hub, i) => (
           <Typography key={i} variant="caption">
             <Link className={classes.hubLink} to={'/hub/' + hub.alias}>
               {hub.title}
             </Link>
-            {post.article.hubs.length - 1 !== i && ', '}
+            {post.hubs.length - 1 !== i && ', '}
           </Typography>
         ))}
       </Container>
@@ -108,31 +108,31 @@ const Post = () => {
           alignItems="center"
         >
           <UserAvatar
-            login={post.article.author.login}
-            src={post.article.author.avatar}
+            login={post.author.login}
+            src={post.author.avatar}
             className={classes.avatar}
           />
           <Typography
             component={Link}
-            to={'/user/' + post.article.author.login}
+            to={'/user/' + post.author.login}
             className={classes.author}
           >
-            {post.article.author.login}
+            {post.author.login}
           </Typography>
           <Typography className={classes.ts}>
-            {moment(post.article.time_published).fromNow()}
+            {moment(post.time_published).fromNow()}
           </Typography>
         </Grid>
-        <Typography className={classes.title}>{post.article.title}</Typography>
+        <Typography className={classes.title}>{post.title}</Typography>
 
         {/* Article text */}
         <FormattedText className={classes.text}>
-          {post.article.text_html}
+          {post.text_html}
         </FormattedText>
       </Container>
 
       {/* Bottom bar with some article info */}
-      <BottomBar post={post.article} />
+      <BottomBar post={post} />
     </>
   ) : (
     <PostViewSkeleton />
@@ -159,7 +159,7 @@ const Post = () => {
     get()
   }, [id])
 
-  if (post) document.title = post.article.title
+  if (post) document.title = post.title
   if (fetchError) return <ErrorComponent message={fetchError} />
 
   return (

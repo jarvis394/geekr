@@ -12,11 +12,9 @@ export const getHubsList = (page: number) => async (dispatch, getState) => {
 
   try {
     const data = await api.getHubsList(page)
-    if (!data.success) throw new Error('did not fetch')
-
     dispatch({
       type: type + '_FULFILLED',
-      payload: { data: data.data, page },
+      payload: { data, page },
     })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: { error, page } })
@@ -29,8 +27,7 @@ export const getHubsSearchResults = (query: string) => async (dispatch) => {
 
   try {
     const data = await api.getHubsSearchResults(query)
-    if (!data.success) throw new Error('did not fetch')
-
+    
     dispatch({
       type: type + '_FULFILLED',
       payload: { data: data.data, query },

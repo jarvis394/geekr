@@ -105,12 +105,7 @@ const Hubs = () => {
   }, [currentPage, dispatch])
 
   return fetchError ? (
-    <ErrorComponent
-      message={fetchError.error.message}
-      onHomeClick={() => {
-        history.push('/')
-      }}
-    />
+    <ErrorComponent message={fetchError.error.message} />
   ) : (
     <div>
       <SearchBar inputRef={inputRef} onChange={search} />

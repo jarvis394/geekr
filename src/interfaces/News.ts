@@ -9,7 +9,3 @@ export interface NewsItem {
   full_url: string
   comments_new: number | null
 }
-
-export default interface News {
-  items: NewsItem[]
-}

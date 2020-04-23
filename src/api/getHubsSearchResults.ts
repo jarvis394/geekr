@@ -1,7 +1,7 @@
 import makeRequest from './makeRequest'
-import { APIResponse, Hubs } from '../interfaces'
+import { APIResponse, HubObject } from '../interfaces'
 
-export default async (q: string): Promise<APIResponse<Omit<Hubs, 'pages'>>> =>
+export default async (q: string): Promise<APIResponse<HubObject[]>> =>
   (
     await makeRequest({
       path: 'hubs/search',

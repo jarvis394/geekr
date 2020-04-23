@@ -21,7 +21,7 @@ export default (state = initialState, { type, payload }) => {
     case HUBS_PREFIX + 'FETCH_FULFILLED': {
       const { page, data } = payload
       state.data.pagesCount = data.pages
-      state.data.pages[page] = data.hubs
+      state.data.pages[page] = data.data
       return { ...state, fetching: false, fetched: true, error: null }
     }
 
@@ -52,7 +52,7 @@ export default (state = initialState, { type, payload }) => {
       const { data } = payload
       return {
         ...state,
-        searchResults: data.hubs,
+        searchResults: data,
         fetching: false,
         fetched: true,
         error: null,

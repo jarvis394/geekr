@@ -3,7 +3,7 @@ import { APIResponse, Post } from '../interfaces'
 
 export default async (
   id: number | string
-): Promise<APIResponse<Post.PostResponse>> =>
+): Promise<APIResponse<Post>> =>
   (
     await makeRequest({
       path: `articles/${id}`,

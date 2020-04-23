@@ -1,4 +1,6 @@
 export default interface APIResponse<T> {
   data: T
-  success: boolean
+  server_time: string
+  next_link?: string
+  pages?: number
 }

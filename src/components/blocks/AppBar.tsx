@@ -73,10 +73,7 @@ const Component = () => {
         <Container className={classes.container}>
           <Toolbar style={{ minHeight: 'unset', height: 48 }}>
             <Typography variant="h6" className={classes.linkTypography}>
-              <Link
-                to={`/${getCachedMode()}/p/1`}
-                className={classes.link}
-              >
+              <Link to={`/${getCachedMode()}/p/1`} className={classes.link}>
                 habra.
                 <Offline>
                   <WifiOffRoundedIcon className={classes.offline} />
@@ -89,7 +86,12 @@ const Component = () => {
             <IconButton onClick={() => history.push('/settings')}>
               <SettingsOutlinedIcon />
             </IconButton>
-            <IconButton>
+            <IconButton
+              target="_blank"
+              rel="noopener noreferrer"
+              component="a"
+              href="https://m.habr.com/kek/v1/auth/habrahabr/?back=/ru/all/&hl=ru"
+            >
               <PermIdentityRoundedIcon />
             </IconButton>
           </Toolbar>

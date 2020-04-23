@@ -12,7 +12,7 @@ export const makeBackgroundColors = (
   paper: string
 } => ({
   default: t === 'dark' ? '#121212' : '#fafafa',
-  paper: t === 'dark' ? '#212121' : '#fff',
+  paper: t === 'dark' ? '#1d1d1d' : '#fff',
 })
 
 export const makePrimaryColors = (
@@ -38,10 +38,10 @@ const generateTheme = (themeType?: PaletteType): ThemeOptions => ({
   overrides: {
     MuiTab: {
       wrapper: {
-        flexDirection: 'row'
-      }
-    }
-  }
+        flexDirection: 'row',
+      },
+    },
+  },
 })
 
 export default generateTheme

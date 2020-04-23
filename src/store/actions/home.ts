@@ -21,12 +21,11 @@ export const getPosts = (mode: Mode, page: number) => async (
 
   try {
     const data = await api.getPosts(mode, page)
-    const pagesCount = data?.data?.pagesCount || null
-    if (!data.success) throw new Error('did not fetch')
+    const pagesCount = data?.pagesCount
 
     dispatch({
       type: type + '_FULFILLED',
-      payload: { data: data.data, mode, page, pagesCount },
+      payload: { data: data, mode, page, pagesCount },
     })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: { error, mode, page } })

@@ -22,13 +22,12 @@ export const getNews = (page: number) => async (
 
   try {
     const data = await api.getNews(page)
-    const pagesCount = data?.data?.pagesCount || null
-    if (!data.success) throw new Error('did not fetch')
+    const pagesCount = data?.pagesCount
 
     // Dispatch an action
     dispatch({
       type: type + '_FULFILLED',
-      payload: { data: data.data, page, pagesCount },
+      payload: { data, page, pagesCount },
     })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: { error, page } })
@@ -50,12 +49,7 @@ export const getNewsPromo = () => async (
 
   try {
     const data = await api.getNewsPromo()
-    if (!data.success) {
-      console.error('Error on getting news promo:', data)
-      throw new Error('Возникла ошибка при получении блока новостей')
-    }
-
-    dispatch({ type: type + '_FULFILLED', payload: { data: data.data.items } })
+    dispatch({ type: type + '_FULFILLED', payload: { data: data.data } })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', error })
   }

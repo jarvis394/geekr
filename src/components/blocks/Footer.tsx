@@ -70,7 +70,7 @@ const Footer = () => {
         </Grid>
 
         <div style={{ marginTop: 16 }}>
-          <Link to={'/habra-faq'} className={classes.text}>
+          <Link to={'/habra-about'} className={classes.text}>
             О проекте
           </Link>
         </div>

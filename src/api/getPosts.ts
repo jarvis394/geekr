@@ -1,5 +1,5 @@
 import makeRequest from './makeRequest'
-import { APIResponse, Posts } from '../interfaces'
+import { Posts } from '../interfaces'
 
 export type Mode = 'all' | 'day' | 'week' | 'month'
 
@@ -10,7 +10,7 @@ export const modeParams = {
   month: { date: 'month', sort: 'date' },
 }
 
-export default async (mode: Mode, page: number): Promise<APIResponse<Posts>> =>
+export default async (mode: Mode, page: number): Promise<Posts> =>
   (
     await makeRequest({
       path: 'articles',

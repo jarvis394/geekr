@@ -1,7 +1,7 @@
 import makeRequest from './makeRequest'
-import { APIResponse, Posts } from '../interfaces'
+import { Posts } from '../interfaces'
 
-export default async (page: number): Promise<APIResponse<Posts>> =>
+export default async (page: number): Promise<Posts> =>
   (
     await makeRequest({
       path: 'articles',

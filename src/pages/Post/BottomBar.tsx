@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Component = ({ post }: { post: Post.Post }) => {
+const Component = ({ post }: { post: Post }) => {
   const {
     id,
     title,

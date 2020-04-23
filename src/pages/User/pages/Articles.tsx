@@ -64,9 +64,7 @@ const Articles = () => {
       {fetchError && (
         <ErrorComponent
           message={fetchError.error.message}
-          onHomeClick={() => {
-            history.push(`/user/${user.login}/articles/1`)
-          }}
+          to={`/user/${user.login}/articles/1`}
         />
       )}
       <PaginationComponent />

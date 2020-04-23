@@ -7,7 +7,7 @@ import News from 'src/pages/News'
 import NotFound from 'src/pages/NotFound'
 import CommentsPage from 'src/pages/Comments'
 import getCachedMode from 'src/utils/getCachedMode'
-import FAQ from 'src/pages/FAQ'
+import AboutPage from 'src/pages/AboutPage'
 import Hubs from 'src/pages/Hubs/index'
 import User from 'src/pages/User/index'
 import { Redirect } from 'react-router'
@@ -31,8 +31,8 @@ const routes: Route[] = [
     component: <Settings />,
   },
   {
-    path: '/habra-faq',
-    component: <FAQ />,
+    path: '/habra-about',
+    component: <AboutPage />,
   },
   {
     path: ['/search', '/search/p/:page'],

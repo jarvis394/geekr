@@ -88,14 +88,7 @@ const Home = () => {
             {postsComponents.slice(1)}
           </>
         )}
-        {fetchError && (
-          <ErrorComponent
-            message={fetchError.error.message}
-            onHomeClick={() => {
-              history.push('/')
-            }}
-          />
-        )}
+        {fetchError && <ErrorComponent message={fetchError.error.message} />}
         <PaginationComponent />
       </List>
     </>
