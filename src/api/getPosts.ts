@@ -14,7 +14,7 @@ export default async (mode: Mode, page: number): Promise<Posts> =>
   (
     await makeRequest({
       path: 'articles',
-      version: 1,
+      version: 2,
       params: {
         date: modeParams[mode].date,
         sort: modeParams[mode].sort,
