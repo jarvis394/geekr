@@ -9,6 +9,6 @@ export default async (page: number): Promise<Posts> =>
         news: 'true',
         page,
       },
-      version: 1,
+      version: 2,
     })
   ).data
