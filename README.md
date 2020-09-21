@@ -1,3 +1,9 @@
+### ⭕ Deprecated ⭕
+Habrahabr have changed their API, so it is hard to get this project work flawlessly. 
+Therefore it is being frozen for now.
+
+--------
+
 <p align="center"><a href="https://habra.cf"><img width=512 src="https://raw.githubusercontent.com/jarvis394/habra/master/images/logo.png" alt="habra logo" /></a></p>
 <h5 align="center">✨🎉 Habrahabr, but with a new client</h5>
 
