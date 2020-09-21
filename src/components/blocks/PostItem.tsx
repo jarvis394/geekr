@@ -110,19 +110,16 @@ export const PostItem = ({
   style?: Record<string, unknown>
 }) => {
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
-  const ts = moment(post.time_published).calendar().toLowerCase()
+  const ts = moment(post.timePublished).calendar().toLowerCase()
   const { login, avatar } = post.author
   const {
-    title: unparsedTitle,
+    titleHtml: unparsedTitle,
     id,
-    score: sc,
-    reading_count: readingCount,
-    favorites_count: favoritesCount,
-    comments_count: commentsCount,
-    preview_html: previewHTML,
-    metadata,
+    statistics,
+    leadData
   } = post
-  const { meta_image: metaImage, description } = metadata
+  const { readingCount, favoritesCount, commentsCount, score: sc } = statistics
+  const { textHtml } = leadData
   const title = parse(unparsedTitle)
   const reads = formatNumber(readingCount)
   const score = formatNumber(Number(sc))
@@ -155,6 +152,8 @@ export const PostItem = ({
       to: '/article/' + id + '/comments',
     },
   ]
+  const metaImage = textHtml.match(/<img (.+)>/g)[0].slice(10)
+  console.log(metaImage)
   const hasImage = !!metaImage
   const classes = useStyles(hasImage)
 
@@ -185,7 +184,6 @@ export const PostItem = ({
               <img
                 className={classes.image}
                 src={metaImage}
-                alt={description}
               />
             )}
           </Link>
@@ -201,7 +199,7 @@ export const PostItem = ({
           </Grid>
           {showPreview && (
             <Grid className={classes.previewHTML} item>
-              <Typography>{parse(previewHTML)}</Typography>
+              <Typography>{parse(textHtml)}</Typography>
             </Grid>
           )}
           <Grid
