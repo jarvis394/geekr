@@ -1,4 +1,7 @@
-### ⭕ Deprecated ⭕
+### ~~⭕ Deprecated ⭕~~
+
+**Currently recovering project state.**
+
 Habrahabr have changed their API, so it is hard to get this project work flawlessly. 
 Therefore it is being frozen for now.
 
