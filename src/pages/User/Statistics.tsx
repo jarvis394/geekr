@@ -55,7 +55,7 @@ export const Statistics = () => {
           </Typography>
           {e[2] ? (
             <GreenRedNumber
-              doNotAddPlus
+              noPlusSign
               number={e[1]}
               classes={classes.headerNumber}
             />

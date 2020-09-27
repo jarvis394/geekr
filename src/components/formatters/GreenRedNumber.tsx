@@ -12,7 +12,7 @@ interface Props {
   defaultClass?: string
   style?: React.CSSProperties
   classes?: string
-  doNotAddPlus?: boolean
+  noPlusSign?: boolean
 }
 
 const GreenRedNumber = ({
@@ -20,7 +20,7 @@ const GreenRedNumber = ({
   defaultClass,
   style,
   classes: additionalClasses,
-  doNotAddPlus = false,
+  noPlusSign = false,
   ...props
 }: Props) => {
   const classes = useStyles()
@@ -28,7 +28,7 @@ const GreenRedNumber = ({
   let className = defaultClass
   let text = number.toString()
   if (number > 0) {
-    text = (doNotAddPlus ? '' : '+') + text
+    text = (noPlusSign ? '' : '+') + text
     className = classes.greenText
   } else if (number < 0) {
     className = classes.redText
