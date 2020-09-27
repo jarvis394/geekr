@@ -46,9 +46,9 @@ export const Statistics = () => {
     items.push(['Позиция', user.rating_position])
   }
 
-  return (
+  return items && user && (
     <Grid className={classes.headerContainer} container justify="center">
-      {items && items.map((e, i) => (
+      {items.map((e, i) => (
         <div key={i} className={classes.headerColumn}>
           <Typography className={classes.headerTitle}>
             {e[0].toUpperCase()}
