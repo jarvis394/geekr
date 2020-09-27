@@ -1,4 +1,3 @@
-// eslint-disable
 import React from 'react'
 import { Typography, Grid } from '@material-ui/core'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
@@ -37,8 +36,6 @@ type Item = [string, string | number, boolean?]
 
 export const Statistics = () => {
   const { user } = useSelector((store) => store.user.profile.user.data)
-  if (!user) return null
-
   const classes = useStyles()
   const items: Item[] = [
     ['Карма', user.score, true],
@@ -51,7 +48,7 @@ export const Statistics = () => {
 
   return (
     <Grid className={classes.headerContainer} container justify="center">
-      {items.map((e, i) => (
+      {items && items.map((e, i) => (
         <div key={i} className={classes.headerColumn}>
           <Typography className={classes.headerTitle}>
             {e[0].toUpperCase()}
