@@ -37,6 +37,8 @@ type Item = [string, string | number, boolean?]
 
 export const Statistics = () => {
   const { user } = useSelector((store) => store.user.profile.user.data)
+  if (!user) return null
+
   const classes = useStyles()
   const items: Item[] = [
     ['Карма', user.score, true],
