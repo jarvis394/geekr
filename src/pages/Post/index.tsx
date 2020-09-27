@@ -85,8 +85,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 const Post = () => {
   const [post, setPost] = useState<IPost>()
   const [fetchError, _setError] = useState<string>()
+  const { id } = useParams<{ id: string }>()
   const classes = useStyles()
-  const { id } = useParams()
   const contents = post ? (
     <>
       <Container className={classes.hubs}>
@@ -120,14 +120,14 @@ const Post = () => {
             {post.author.login}
           </Typography>
           <Typography className={classes.ts}>
-            {moment(post.time_published).fromNow()}
+            {moment(post.timePublished).fromNow()}
           </Typography>
         </Grid>
-        <Typography className={classes.title}>{post.title}</Typography>
+        <Typography className={classes.title}>{post.titleHtml}</Typography>
 
         {/* Article text */}
         <FormattedText className={classes.text}>
-          {post.text_html}
+          {post.textHtml}
         </FormattedText>
       </Container>
 
@@ -150,7 +150,7 @@ const Post = () => {
       window.scrollTo(0, 0)
 
       try {
-        setPost((await getPost(id)).data)
+        setPost(await getPost(id))
       } catch (e) {
         if (e.statusCode === 404) return setError('Статья не найдена')
         else return setError(e.message)
@@ -159,7 +159,7 @@ const Post = () => {
     get()
   }, [id])
 
-  if (post) document.title = post.title
+  if (post) document.title = post.titleHtml
   if (fetchError) return <ErrorComponent message={fetchError} />
 
   return (

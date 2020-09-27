@@ -5,6 +5,6 @@ export default async (id: number): Promise<APIResponse<Post[]>> =>
   (
     await makeRequest({
       path: `articles/${id}/similar`,
-      version: 1,
+      version: 2,
     })
   ).data

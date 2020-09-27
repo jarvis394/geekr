@@ -4,13 +4,13 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
 import Divider from '@material-ui/core/Divider'
-import random from '../../utils/random'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.paper,
     borderRadius: 0,
     overflow: 'auto',
+    paddingBottom: theme.spacing(2)
   },
   hubs: {
     background: theme.palette.background.default,
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   skeleton: {
     maxWidth: '100%',
     backgroundColor: theme.palette.action.hover,
-    borderRadius: 4,
+    borderRadius: 4
   },
 }))
 
@@ -86,7 +86,7 @@ const PostSkeleton = () => {
               width="100%"
               className={classes.skeleton}
               style={{ marginTop: 24, marginBottom: 16 }}
-              height={164}
+              height={196}
             />
           </Grid>
           {Array(20)
@@ -95,7 +95,7 @@ const PostSkeleton = () => {
               <Grid key={i} item xs={12}>
                 <Skeleton
                   variant="rect"
-                  width={random(90, 100) + '%'}
+                  width={'100%'}
                   style={{ marginTop: 8 }}
                   className={classes.skeleton}
                   height={12}

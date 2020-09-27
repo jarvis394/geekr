@@ -22,10 +22,7 @@ const UserAvatar = ({
   className?: string
 }) => {
   const classes = useStyles()
-  const state = [
-    'habr.com/images/avatars/stub-user',
-    'habr.com/images/stub-user',
-  ].some((e) => src.split('//')[1].startsWith(e))
+  const state = !!src
 
   return (
     <div {...props} className={className + ' ' + classes.root}>

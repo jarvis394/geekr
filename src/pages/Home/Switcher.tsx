@@ -7,9 +7,9 @@ import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import Divider from '@material-ui/core/Divider'
 import ExpandIcon from '@material-ui/icons/ArrowDropDown'
-import ExpansionPanel from '@material-ui/core/ExpansionPanel'
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import Accordion from '@material-ui/core/Accordion'
+import AccordionSummary from '@material-ui/core/AccordionSummary'
+import AccordionDetails from '@material-ui/core/AccordionDetails'
 import { MODES as modes } from '../../config/constants'
 
 const useStyles = makeStyles((theme) => ({
@@ -79,7 +79,7 @@ const Switcher = ({ handleClick, mode, setMode }) => {
 
   return (
     <>
-      <ExpansionPanel
+      <Accordion
         elevation={0}
         expanded={isExpanded}
         onChange={() => setExpanded((prev) => !prev)}
@@ -87,18 +87,18 @@ const Switcher = ({ handleClick, mode, setMode }) => {
         TransitionProps={{ unmountOnExit: true }}
       >
         <Container>
-          <ExpansionPanelSummary
+          <AccordionSummary
             className={classes.expansionPanelSummary}
             expandIcon={<ExpandIcon />}
           >
             <Typography className={classes.text}>{current.text}</Typography>
             <Divider />
-          </ExpansionPanelSummary>
+          </AccordionSummary>
         </Container>
-        <ExpansionPanelDetails className={classes.expansionPanelDetails}>
+        <AccordionDetails className={classes.expansionPanelDetails}>
           <List style={{ width: '100%', paddingTop: 0 }}>{buttonList}</List>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+        </AccordionDetails>
+      </Accordion>
     </>
   )
 }

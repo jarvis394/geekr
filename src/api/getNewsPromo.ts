@@ -1,10 +1,16 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import makeRequest from './makeRequest'
-import { APIResponse, News } from '../interfaces'
+import { News } from '../interfaces'
 
-export default async (): Promise<APIResponse<News.NewsItem[]>> =>
+export default async (): Promise<News.NewsItem[]> =>
   (
     await makeRequest({
-      path: 'news/promolist',
-      version: 1,
+      path: 'news/context',
+      version: 2,
+      params: {
+        extend_context: 'true',
+        per_page: 5,
+        page_num: 1
+      }
     })
   ).data

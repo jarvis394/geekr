@@ -49,7 +49,7 @@ export const getNewsPromo = () => async (
 
   try {
     const data = await api.getNewsPromo()
-    dispatch({ type: type + '_FULFILLED', payload: { data: data.data } })
+    dispatch({ type: type + '_FULFILLED', payload: { data } })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', error })
   }

@@ -111,7 +111,7 @@ export const PostItem = ({
 }) => {
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
   const ts = moment(post.timePublished).calendar().toLowerCase()
-  const { login, avatar } = post.author
+  const { login, avatarUrl } = post.author
   const {
     titleHtml: unparsedTitle,
     id,
@@ -152,9 +152,9 @@ export const PostItem = ({
       to: '/article/' + id + '/comments',
     },
   ]
-  const metaImage = textHtml.match(/<img (.+)>/g)[0].slice(10)
-  console.log(metaImage)
-  const hasImage = !!metaImage
+  const imageURLRegEx = /<img[^>]+src="?([^"\s]+)"?\s*/g
+  const postFisrtImage = imageURLRegEx.exec(textHtml)
+  const hasImage = !!postFisrtImage
   const classes = useStyles(hasImage)
 
   return (
@@ -163,7 +163,7 @@ export const PostItem = ({
         <Link to={'/user/' + login} className={classes.avatarContainer}>
           <Grid alignItems="center" container direction="row">
             <UserAvatar
-              src={avatar}
+              src={avatarUrl}
               login={login}
               className={classes.postAvatar}
             />
@@ -182,8 +182,9 @@ export const PostItem = ({
           >
             {hasImage && (
               <img
+                alt={'Alt'}
                 className={classes.image}
-                src={metaImage}
+                src={postFisrtImage[1]}
               />
             )}
           </Link>

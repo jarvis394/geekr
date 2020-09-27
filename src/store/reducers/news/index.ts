@@ -52,7 +52,7 @@ export default (state = initialState, { type, payload }) => {
       state.block.fetching = false
       state.block.fetched = true
       state.block.error = null
-      state.block.data = data
+      state.block.data = Object.values(data.articleRefs)
       state.block.lastUpdated = Date.now()
 
       return state

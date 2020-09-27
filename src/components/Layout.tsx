@@ -10,7 +10,6 @@ import isMobile from 'is-mobile'
 import Footer from './blocks/Footer'
 import { useSelector } from 'src/hooks'
 import Tabs from './blocks/Tabs/RouterTabs'
-import { CssBaseline } from '@material-ui/core'
 
 const chromeAddressBarHeight = 56
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +39,6 @@ const Layout = (): React.ReactElement => {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <CssBaseline />
         <AppBar />
         <div className={classes.app}>
           <Tabs />

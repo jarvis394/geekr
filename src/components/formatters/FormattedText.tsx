@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.primary.dark,
       textDecoration: 'underline',
     },
-    '& p': { margin: 0 },
+    '& p': { margin: 0, marginTop: theme.spacing(3) },
     '& em': { color: theme.palette.text.hint },
     '& code': {
       background: theme.palette.background.default,
@@ -54,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
     '& hr': {
       border: 'none',
       borderBottom: '1px solid ' + theme.palette.divider,
+      marginTop: theme.spacing(4),
+      marginBottom: theme.spacing(4),
+      maxWidth: 256
     },
   },
   syntaxHighlighter: {

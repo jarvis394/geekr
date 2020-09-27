@@ -69,8 +69,8 @@ const useStyles = makeStyles((theme) => ({
 
 const NewsItem = ({ data }): React.ReactElement => {
   const classes = useStyles()
-  const ts = moment(data.time_published).calendar()
-  const commentsCount = numToWord.convert(data.comments_count, {
+  const ts = moment(data.timePublished).calendar()
+  const commentsCount = numToWord.convert(data.statistics.commentsCount, {
     currency: {
       currencyNameCases: ['комментарий', 'комментария', 'комментариев'],
       fractionalPartNameCases: ['', '', ''],
@@ -94,7 +94,7 @@ const NewsItem = ({ data }): React.ReactElement => {
       <Grid container direction="row" className={classes.item}>
         <Grid container direction="column">
           <Grid item>
-            <Typography className={classes.title}>{data.title}</Typography>
+            <Typography className={classes.title}>{data.titleHtml}</Typography>
           </Grid>
           <Grid container direction="row" alignItems="center">
             <Typography className={classes.ts}>{ts}</Typography>

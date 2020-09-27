@@ -67,7 +67,8 @@ const useStyles = makeStyles((theme) => ({
 const Post = ({ data }) => {
   const [isBookmarked, setBookmarkedState] = useState<boolean>(false)
   const classes = useStyles(isBookmarked)
-  const { score, id, title, time_published: tsUnparsed } = data
+  const { id, titleHtml: title, timePublished: tsUnparsed, statistics } = data
+  const { score } = statistics
   const ts = moment(tsUnparsed).calendar()
 
   return (

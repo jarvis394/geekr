@@ -45,14 +45,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Component = ({ post }: { post: Post }) => {
+const BottomBar = ({ post }: { post: Post }) => {
   const {
     id,
-    title,
-    score: sc,
-    favorites_count: favoritesCount,
-    comments_count: commentsCount,
+    titleHtml: title,
+    statistics
   } = post
+  const { favoritesCount, commentsCount, score: sc } = statistics
   const [isBookmarked, setBookmarkState] = React.useState<boolean>(false)
   const classes = useStyles()
   const score = formatNumber(Number(sc))
@@ -63,12 +62,12 @@ const Component = ({ post }: { post: Post }) => {
   const bottomRow = [
     {
       icon: ThumbsUpDownIcon,
-      count: score,
+      number: score,
       coloredText: true,
     },
     {
       icon: BookmarkIcon,
-      count: favorites,
+      number: favorites,
       isButton: true,
       isActive: isBookmarked,
       action: () => {
@@ -77,7 +76,7 @@ const Component = ({ post }: { post: Post }) => {
     },
     {
       icon: ChatBubbleIcon,
-      count: comments,
+      number: comments,
       isButton: true,
       to: '/article/' + id + '/comments',
     },
@@ -117,12 +116,12 @@ const Component = ({ post }: { post: Post }) => {
           <div style={{ fontSize: 12, fontWeight: 600 }}>
             {item.coloredText ? (
               <GreenRedNumber
-                number={item.count}
+                number={item.number}
                 defaultClass={classes.item}
                 style={{ fontSize: 12, fontWeight: 600 }}
               />
             ) : (
-              item.count
+              item.number
             )}
           </div>
         </Grid>
@@ -136,4 +135,4 @@ const Component = ({ post }: { post: Post }) => {
   )
 }
 
-export default React.memo(Component)
+export default React.memo(BottomBar)

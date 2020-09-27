@@ -1,12 +1,12 @@
 import makeRequest from './makeRequest'
-import { APIResponse, Post } from '../interfaces'
+import { Post } from '../interfaces'
 
 export default async (
   id: number | string
-): Promise<APIResponse<Post>> =>
+): Promise<Post> =>
   (
     await makeRequest({
       path: `articles/${id}`,
-      version: 1,
+      version: 2,
     })
   ).data

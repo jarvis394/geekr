@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 const CommentsPage = () => {
   const [post, setPost] = useState<Post>()
   const [error, setError] = useState<string>()
-  const { id } = useParams()
+  const { id } = useParams<{ id: string }>()
   const classes = useStyles()
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const CommentsPage = () => {
       window.scrollTo(0, 0)
 
       try {
-        setPost((await getPost(id)).data)
+        setPost(await getPost(id))
       } catch (e) {
         console.error('On getting article data in Comments:', e.message)
         if (e.statusCode === 404) return setError('Статья не найдена')

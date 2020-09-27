@@ -5,7 +5,7 @@ export interface User {
   login: string
   fullname: string
   avatar: string
-  avatar_url: string
+  avatarUrl: string
   speciality: string
 }
 
