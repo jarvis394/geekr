@@ -27,17 +27,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-/**
- * 1. Title
- * 2. Data
- * 3. Should be colored
- */
-type Item = [string, string | number, boolean?]
-
 export const Statistics = () => {
   const { user } = useSelector((store) => store.user.profile.user.data)
   const classes = useStyles()
-  const items: Item[] = [
+  const items = [
     ['Карма', user.score, true],
     ['Рейтинг', user.rating],
   ]
@@ -46,9 +39,9 @@ export const Statistics = () => {
     items.push(['Позиция', user.rating_position])
   }
 
-  return items && user && (
+  return (
     <Grid className={classes.headerContainer} container justify="center">
-      {items!.map((e, i) => (
+      {items.map((e, i) => (
         <div key={i} className={classes.headerColumn}>
           <Typography className={classes.headerTitle}>
             {e[0].toUpperCase()}
