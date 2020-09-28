@@ -31,12 +31,12 @@ export const Statistics = () => {
   const { user } = useSelector((store) => store.user.profile.user.data)
   const classes = useStyles()
   const items = [
-    ['Карма', user.score, true],
-    ['Рейтинг', user.rating],
+    { field: 'Карма', number: user.score, colored: true },
+    { field: 'Рейтинг', number: user.rating },
   ]
 
   if (user.rating_position !== 0) {
-    items.push(['Позиция', user.rating_position])
+    items.push({ field: 'Позиция', number: user.rating_position })
   }
 
   return (
@@ -44,12 +44,12 @@ export const Statistics = () => {
       {items.map((e, i) => (
         <div key={i} className={classes.headerColumn}>
           <Typography className={classes.headerTitle}>
-            {e[0].toUpperCase()}
+            {e.field.toUpperCase()}
           </Typography>
-          {e[2] ? (
+          {e.colored ? (
             <GreenRedNumber
               noPlusSign
-              number={e[1]}
+              number={e.number}
               classes={classes.headerNumber}
             />
           ) : (
