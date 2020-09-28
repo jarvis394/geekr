@@ -10,7 +10,7 @@ export const USER_PROFILE_HUBS = USER_PROFILE + 'HUBS_'
 export const USER_ARTICLES = 'USER_ARTICLES_'
 
 export interface PromiseItem<T> {
-  data: Record<string, T>
+  data: T
   fetching: boolean
   fetched: boolean
   error: null | string

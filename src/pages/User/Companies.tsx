@@ -31,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
 const Companies = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const user = useSelector((store) => store.user.profile.user.data?.user)
+  const user = useSelector((store) => store.user.profile.user.data)
   const companies = useSelector(
-    (store) => store.user.profile.companies.data?.companies
+    (store) => store.user.profile.companies.data
   )
   const isFetched = useSelector((store) => store.user.profile.companies.fetched)
   const isFetching = useSelector(

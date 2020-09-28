@@ -63,7 +63,7 @@ export const getUserArticles = (login: string, page: number) => async (dispatch)
 
     dispatch({
       type: type + '_FULFILLED',
-      payload: { data: data.data, page, pagesCount: data.data.pagesCount },
+      payload: { data, page, pagesCount: data.pagesCount },
     })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: { error, page } })

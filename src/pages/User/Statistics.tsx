@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const Statistics = () => {
-  const { user } = useSelector((store) => store.user.profile.user.data)
+  const user = useSelector((store) => store.user.profile.user.data)
   const classes = useStyles()
   const items = [
     { field: 'Карма', number: user.score, colored: true },
@@ -53,7 +53,7 @@ export const Statistics = () => {
               classes={classes.headerNumber}
             />
           ) : (
-            <Typography className={classes.headerNumber}>{e[1]}</Typography>
+            <Typography className={classes.headerNumber}>{e.number}</Typography>
           )}
         </div>
       ))}

@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const RegisteredTime = () => {
   const classes = useStyles()
-  const { user } = useSelector((store) => store.user.profile.user.data)
+  const user = useSelector((store) => store.user.profile.user.data)
   const text = user.sex === '1' ? 'Зарегестрировался' : 'Зарегестрировалась'
   const timeRegistered = (ti?: string, tr?: string) => {
     if (ti && ti === tr) {

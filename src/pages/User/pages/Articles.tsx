@@ -29,7 +29,7 @@ const Articles = () => {
   const isFetching = useSelector((state) => state.user.articles.fetching)
   const fetchError = useSelector((state) => state.user.articles.error)
   const data = useSelector((state) => state.user.articles.data.pages[currentPage])
-  const user = useSelector((state) => state.user.profile.user.data?.user)
+  const user = useSelector((state) => state.user.profile.user.data)
   const pagesCount = useSelector((state) => state.user.articles.data.pagesCount)
 
   const PaginationComponent = () =>
