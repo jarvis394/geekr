@@ -48,7 +48,7 @@ export const Statistics = () => {
 
   return items && user && (
     <Grid className={classes.headerContainer} container justify="center">
-      {items.map((e, i) => (
+      {items!.map((e, i) => (
         <div key={i} className={classes.headerColumn}>
           <Typography className={classes.headerTitle}>
             {e[0].toUpperCase()}
