@@ -43,7 +43,7 @@ const routes = {
 const User = ({ path }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const data = useSelector((state) => state.user.profile.user.data)
+  const user = useSelector((state) => state.user.profile.user.data)
   const isUserFetched = useSelector((state) => state.user.profile.user.fetched)
   const isUserFetching = useSelector(
     (state) => state.user.profile.user.fetching
@@ -51,11 +51,12 @@ const User = ({ path }) => {
   const userFetchError = useSelector((state) => state.user.profile.user.error)
   const { login } = useParams<UserParams>()
   const Component = routes[path] || Profile
-  const user = data ? data.user : null
 
   useEffect(() => {
     if (user?.login !== login) dispatch(getUser(login))
   }, [login, user, dispatch])
+
+  console.log(user)
 
   return (
     <>

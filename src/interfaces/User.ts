@@ -67,7 +67,3 @@ export interface UserExtended {
   is_rc: boolean
   is_subscribed: boolean
 }
-
-export interface UserResponse {
-  user: UserExtended
-}

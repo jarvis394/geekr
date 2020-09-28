@@ -1,8 +1,8 @@
 import makeRequest from 'src/api/makeRequest'
 import { APIResponse } from 'src/interfaces'
-import { UserResponse } from 'src/interfaces/User'
+import { UserExtended } from 'src/interfaces/User'
 
-export default async (login: string): Promise<APIResponse<UserResponse>> =>
+export default async (login: string): Promise<APIResponse<UserExtended>> =>
   (
     await makeRequest({
       path: `users/${login}/profile`,

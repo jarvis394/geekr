@@ -18,14 +18,13 @@ export const request = async (
 
   try {
     const data = await api[method](...params)
-    if (!data.success) throw new Error('did not fetch')
-
+    
     dispatch({
       type: type + '_FULFILLED',
-      payload: { data: data.data },
+      payload: { data: data?.data },
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error, ...params } })
+    dispatch({ type: type + '_REJECTED', payload: { error: error.message, ...params } })
   }
 }
 
