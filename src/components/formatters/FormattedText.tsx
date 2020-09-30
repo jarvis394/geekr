@@ -101,11 +101,7 @@ const FormattedText = ({ children, className = '', ...props }) => {
             <img
               className={classes.img}
               alt="Картинка"
-              src={
-                attribs.src && attribs.src !== '/img/image-loader.svg'
-                  ? attribs.src
-                  : attribs['data-src']
-              }
+              src={attribs['data-src']}
             />
           </Zoom>
         )

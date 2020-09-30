@@ -1,18 +1,20 @@
 import makeRequest from './makeRequest'
-import { APIResponse, Posts } from '../interfaces'
+import { Posts } from '../interfaces'
 
 // TODO: Needs an interface for the returning data
 export default async (
   query: string,
-  page: number
-): Promise<APIResponse<Posts>> =>
+  page: number,
+  order: 'relevance' | 'date' | 'rating'
+): Promise<Posts> =>
   (
     await makeRequest({
       path: 'articles',
-      version: 1,
+      version: 2,
       params: {
         query,
         page,
+        order,
       },
     })
   ).data

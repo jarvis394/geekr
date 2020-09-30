@@ -87,6 +87,7 @@ const Post = () => {
   const [fetchError, _setError] = useState<string>()
   const { id } = useParams<{ id: string }>()
   const classes = useStyles()
+  post && console.log(post.textHtml)
   const contents = post ? (
     <>
       <Container className={classes.hubs}>

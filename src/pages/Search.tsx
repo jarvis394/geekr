@@ -169,9 +169,9 @@ const SearchResultsScreen = ({ q }) => {
 
     const get = async () => {
       try {
-        const d = await getSearchResults(q, currentPage)
-        setData(d.data)
-        if (!pagesCount) setPagesCount(d.data.pagesCount)
+        const d = await getSearchResults(q, currentPage, 'relevance')
+        setData(d)
+        if (!pagesCount) setPagesCount(d.pagesCount)
       } catch (e) {
         setError(e.message)
       }
@@ -187,7 +187,7 @@ const SearchResultsScreen = ({ q }) => {
       {!data && [...new Array(7)].map((_, i) => <PostSkeleton key={i} />)}
       {data &&
         data.articleIds.map((e, i) => (
-          <PostItem showPreview post={data.articleRefs[e]} key={i} />
+          <PostItem post={data.articleRefs[e]} key={i} />
         ))}
       <Pagintaion
         disabled={!data}

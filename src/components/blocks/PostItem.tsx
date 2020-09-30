@@ -102,11 +102,9 @@ const useStyles = makeStyles((theme) => ({
 
 export const PostItem = ({
   post,
-  showPreview,
   style,
 }: {
   post: Post
-  showPreview?: boolean
   style?: Record<string, unknown>
 }) => {
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
@@ -198,11 +196,6 @@ export const PostItem = ({
               <Typography className={classes.postTitle}>{title}</Typography>
             </Link>
           </Grid>
-          {showPreview && (
-            <Grid className={classes.previewHTML} item>
-              <Typography>{parse(textHtml)}</Typography>
-            </Grid>
-          )}
           <Grid
             className={classes.postBottomRow}
             container
