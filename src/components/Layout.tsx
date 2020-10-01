@@ -23,12 +23,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: minWidth,
     margin: '48px auto 0 auto',
   },
-  loadingBar: {
-    position: 'fixed',
-    zIndex: 1500,
-    height: 2,
-    top: 0,
-  },
 }))
 
 const Layout = (): React.ReactElement => {

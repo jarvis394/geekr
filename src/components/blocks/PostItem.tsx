@@ -15,6 +15,7 @@ import parse from 'html-react-parser'
 import { Post } from 'src/interfaces'
 import UserAvatar from './UserAvatar'
 import { POST_IMAGE_HEIGHT } from 'src/config/constants'
+import LazyLoadImage from './LazyLoadImage'
 
 const ld = { lighten, darken }
 const useStyles = makeStyles((theme) => ({
@@ -117,7 +118,7 @@ export const PostItem = ({
     leadData
   } = post
   const { readingCount, favoritesCount, commentsCount, score: sc } = statistics
-  const { textHtml } = leadData
+  const { textHtml, imageUrl: leadImage } = leadData
   const title = parse(unparsedTitle)
   const reads = formatNumber(readingCount)
   const score = formatNumber(Number(sc))
@@ -151,9 +152,9 @@ export const PostItem = ({
     },
   ]
   const imageURLRegEx = /<img[^>]+src="?([^"\s]+)"?\s*/g
-  const postFisrtImage = imageURLRegEx.exec(textHtml)
-  const hasImage = !!postFisrtImage
-  const classes = useStyles(hasImage)
+  const imageURLRegExResults = imageURLRegEx.exec(textHtml)
+  const postFisrtImage = imageURLRegExResults ? imageURLRegExResults[1] : leadImage
+  const classes = useStyles(!!postFisrtImage)
 
   return (
     <Paper elevation={0} className={classes.paper} style={style}>
@@ -178,11 +179,11 @@ export const PostItem = ({
             style={{ display: 'flex', width: '100%' }}
             to={'/article/' + id}
           >
-            {hasImage && (
-              <img
-                alt={'Alt'}
+            {postFisrtImage && (
+              <LazyLoadImage
+                src={postFisrtImage}
+                alt={'Post header image'}
                 className={classes.image}
-                src={postFisrtImage[1]}
               />
             )}
           </Link>

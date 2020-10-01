@@ -49,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 15,
     wordBreak: 'break-word',
     hyphens: 'auto',
+    '& p': {
+      margin: 0
+    }
   },
   ufo: {
     fontWeight: 500,

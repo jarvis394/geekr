@@ -1,10 +1,11 @@
 import * as React from 'react'
-import { makeStyles, fade, useTheme } from '@material-ui/core/styles'
+import { makeStyles, fade } from '@material-ui/core/styles'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import Spoiler from '../blocks/Spoiler'
 import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser'
-import Zoom from 'react-medium-image-zoom'
+import LazyLoadImage from '../blocks/LazyLoadImage'
+import Details from '../blocks/Details'
 
 const useStyles = makeStyles((theme) => ({
   img: {
@@ -56,7 +57,11 @@ const useStyles = makeStyles((theme) => ({
       borderBottom: '1px solid ' + theme.palette.divider,
       marginTop: theme.spacing(4),
       marginBottom: theme.spacing(4),
-      maxWidth: 256
+      maxWidth: 256,
+    },
+    '& figure': {
+      margin: 0,
+      marginTop: theme.spacing(4)
     },
   },
   syntaxHighlighter: {
@@ -74,7 +79,6 @@ const useStyles = makeStyles((theme) => ({
 
 const FormattedText = ({ children, className = '', ...props }) => {
   const classes = useStyles()
-  const theme = useTheme()
   const options: HTMLReactParserOptions = {
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === 'pre') {
@@ -93,21 +97,22 @@ const FormattedText = ({ children, className = '', ...props }) => {
       }
       if (name === 'img') {
         return (
-          <Zoom
-            overlayBgColorEnd={fade(theme.palette.background.paper, 0.9)}
-            zoomMargin={64}
-            zoomZindex={100}
-          >
-            <img
-              className={classes.img}
-              alt="Картинка"
-              src={attribs['data-src']}
-            />
-          </Zoom>
+          <LazyLoadImage
+            placeholder={
+              <img
+                src={attribs.src}
+                alt={attribs.alt || 'Image'}
+                className={classes.img}
+              />
+            }
+            src={attribs['data-src']}
+            alt={attribs.alt || 'Image'}
+            className={classes.img}
+          />
         )
       }
       if (name === 'div' && attribs.class === 'spoiler') {
-        const title = children.find(
+        const title: string = children.find(
           (e) => e.attribs && e.attribs.class === 'spoiler_title'
         ).children[0].data
         const data = children.find(
@@ -116,7 +121,17 @@ const FormattedText = ({ children, className = '', ...props }) => {
 
         return <Spoiler title={title}>{domToReact(data)}</Spoiler>
       }
-    },
+      if (name === 'details' && attribs.class === 'spoiler') {
+        const title: string = children.find(
+          (e) => e.name === 'summary'
+        ).children[0].data
+        const data = children.find(
+          (e) => e.attribs && e.attribs.class === 'spoiler__content'
+        ).children
+
+        return <Details title={title}>{domToReact(data)}</Details>
+      }
+    }
   }
 
   return (
