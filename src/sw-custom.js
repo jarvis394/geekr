@@ -1,4 +1,4 @@
-const whitelist = ['https://m.habr', 'https://habr']
+const whitelist = ['https://m.habr']
 
 self.addEventListener('fetch', (event) => {
   return event.respondWith(
