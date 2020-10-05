@@ -56,7 +56,7 @@ const LanguagePage = () => {
       
       <Typography>Привет! Ты можешь выбрать язык, на котором будет приложение.</Typography>
 
-        {/* <FormControl component="fieldset">
+      {/* <FormControl component="fieldset">
           <RadioGroup name="language" value={value} onChange={handleChange}>
             <FormControlLabel
               value="russian"
