@@ -6,10 +6,11 @@ import {
 
 const LazyLoadImage = (props: LazyLoadImageProps) => {
   return (
-    <div style={{ overflow: 'hidden' }}>
+    <div style={{ overflow: 'hidden', width: '100%' }}>
       <LazyLoadImageComponent
-        style={{ transform: 'translate3d(0, 0, 0)' }}
+        style={{ width: '100%', transform: 'translate3d(0, 0, 0)' }}
         effect="blur"
+        wrapperProps={{ style: { width: '100%' } }}
         {...props}
       />
     </div>
