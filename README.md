@@ -1,12 +1,3 @@
-### ~~⭕ Deprecated ⭕~~
-
-**Currently recovering project state.**
-
-Habrahabr have changed their API, so it is hard to get this project work flawlessly. 
-Therefore it is being frozen for now.
-
---------
-
 <p align="center"><a href="https://habra.cf"><img width=512 src="https://raw.githubusercontent.com/jarvis394/habra/master/images/logo.png" alt="habra logo" /></a></p>
 <h5 align="center">✨🎉 Habrahabr, but with a new client</h5>
 
@@ -15,7 +6,7 @@ Go to the [habra.cf](habra.cf) site and fell yourself at home!
 
 ## Features
 - **Dark mode** 😲
-- Tons of customization settings
+- Tons of customization settings (planned)
 - Mobile friendly
 - Coded with React and <span style="text-decoration:underline">TypeScript</span>
 
