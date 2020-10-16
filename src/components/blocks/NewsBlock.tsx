@@ -134,7 +134,12 @@ const NewsBlock = () => {
       {isFetching &&
         !fetchError &&
         [...Array(5)].map((_, i) => <NewsItemSkeleton key={i} />)}
-      {isFetched && news && news.map((e, i) => <NewsItem data={e} key={i} />)}
+      {isFetched &&
+        news &&
+        news
+          // Sort news in a descending order based on their timePublished
+          .sort((a, b) => +moment(b.timePublished) - +moment(a.timePublished))
+          .map((e, i) => <NewsItem data={e} key={i} />)}
       <Box className={classes.linkBox}>
         <Button
           size="small"
