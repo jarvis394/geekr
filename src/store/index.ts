@@ -6,7 +6,7 @@ import userStore from './userStore'
 
 export default {
   newsStore,
-  NewsBlockStore: newsStore.NewsBlockStore,
+  newsBlockStore: newsStore.NewsBlockStore,
   postsStore,
   settingsStore,
   hubsStore,
