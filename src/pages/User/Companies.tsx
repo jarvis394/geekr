@@ -4,10 +4,7 @@ import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import { Company } from 'src/interfaces'
-import { useSelector } from 'src/hooks'
 import ProfileCompaniesSkeleton from 'src/components/skeletons/ProfileCompanies'
-import { useDispatch } from 'react-redux'
-import { getUserCompanies } from 'src/store/actions/user'
 import UserAvatar from 'src/components/blocks/UserAvatar'
 
 const useStyles = makeStyles((theme) => ({

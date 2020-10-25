@@ -3,7 +3,6 @@ import { Typography } from '@material-ui/core'
 import FormattedText from 'src/components/formatters/FormattedText'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
-import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {

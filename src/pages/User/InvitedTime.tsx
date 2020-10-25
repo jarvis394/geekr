@@ -3,7 +3,6 @@ import { Typography } from '@material-ui/core'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
-import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   link: {

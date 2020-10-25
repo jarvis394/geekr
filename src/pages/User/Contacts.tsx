@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import parse, { HTMLReactParserOptions } from 'html-react-parser'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
-import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   link: {

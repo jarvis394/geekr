@@ -4,9 +4,6 @@ import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import { Switch, List, ListItem, ListItemText, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { useSelector } from 'src/hooks'
-import { useDispatch } from 'react-redux'
-import { setTheme } from 'src/store/actions/settings'
 
 const useStyles = makeStyles((theme) => ({
   root: { width: '100%', height: '100%', maxWidth: '100vw' },

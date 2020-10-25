@@ -1,12 +1,16 @@
-import { createStore, applyMiddleware } from 'redux'
-import { createLogger } from 'redux-logger'
-import thunk from 'redux-thunk'
-import reducers from './reducers'
+import newsStore from './newsStore'
+import postsStore from './postsStore'
+import settingsStore from './settingsStore'
+import hubsStore from './hubsStore'
+import userStore from './userStore'
 
-const middleware = applyMiddleware(
-  thunk,
-  createLogger({ collapsed: true })
-)
-
-export type RootState = ReturnType<typeof reducers>
-export default createStore(reducers, middleware)
+export default {
+  newsStore,
+  NewsBlockStore: newsStore.NewsBlockStore,
+  postsStore,
+  settingsStore,
+  hubsStore,
+  userStore,
+  userProfileStore: userStore.profileStore,
+  userArticlesStore: userStore.articlesStore,
+}

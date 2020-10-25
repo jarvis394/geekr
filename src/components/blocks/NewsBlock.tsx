@@ -9,7 +9,6 @@ import moment from 'moment'
 import NewsItemSkeleton from '../skeletons/NewsItem'
 import { useDispatch } from 'react-redux'
 import { getNewsPromo } from 'src/store/actions/news'
-import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   root: {

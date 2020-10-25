@@ -14,10 +14,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import UserAvatar from 'src/components/blocks/UserAvatar'
 import { UserExtended } from 'src/interfaces/User'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'src/hooks'
 import ProfileChildrenSkeleton from 'src/components/skeletons/ProfileChildren'
-import { useDispatch } from 'react-redux'
-import { getUserChildren } from 'src/store/actions/user'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {

@@ -2,7 +2,6 @@ import React from 'react'
 import { Typography, Grid } from '@material-ui/core'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
 import { makeStyles } from '@material-ui/core/styles'
-import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   headerContainer: {

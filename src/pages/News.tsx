@@ -7,9 +7,6 @@ import PostItem from '../components/blocks/PostItem'
 import Pagination from '../components/blocks/Pagination'
 import { useHistory, useParams } from 'react-router-dom'
 import ErrorComponent from '../components/blocks/Error'
-import { useDispatch } from 'react-redux'
-import { getNews } from 'src/store/actions/news'
-import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   root: {

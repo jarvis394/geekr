@@ -10,9 +10,6 @@ import {
 import { ComponentWithUserParams } from './index'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { getUserHubs } from 'src/store/actions/user'
-import { useSelector } from 'src/hooks'
 import { HubObject } from 'src/interfaces'
 
 const useStyles = makeStyles((theme) => ({

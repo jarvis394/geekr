@@ -1,4 +1,4 @@
-import { Badge, Hub, Company } from '.'
+import { Badge, HubObject, Company } from '.'
 
 export interface User {
   id: number
@@ -19,7 +19,7 @@ export interface UserCompanies {
 }
 
 export interface UserHubs {
-  hubs: Hub[]
+  hubs: HubObject[]
 }
 
 export interface UserChildren {

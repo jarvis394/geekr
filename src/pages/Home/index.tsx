@@ -12,9 +12,6 @@ import { Mode } from 'src/api/getPosts'
 import useLastMode from 'src/utils/useLastMode'
 import { MODES as modes } from 'src/config/constants'
 import Switcher from './Switcher'
-import { useDispatch } from 'react-redux'
-import { getPosts } from 'src/store/actions/home'
-import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   root: {

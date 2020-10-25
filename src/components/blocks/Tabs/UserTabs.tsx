@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom'
 import Tabs from '.'
 import { UserExtended as UserExtendedObject } from 'src/interfaces/User'
 import { useTheme, Fade } from '@material-ui/core'
-import { useSelector } from 'src/hooks'
 
 interface TabObject {
   label: React.ReactElement | string
