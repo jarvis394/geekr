@@ -82,9 +82,10 @@ const FormattedText = ({ children, className = '', ...props }) => {
   const options: HTMLReactParserOptions = {
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === 'pre') {
-        const language = children[0].attribs.class || null
-        const data = children[0].children[0].data || ''
-
+        const firstChild = children[0]
+        const language = firstChild.attribs?.class || null
+        const data = firstChild.children ? firstChild.children[0].data : firstChild?.data
+        
         return (
           <SyntaxHighlighter
             style={style}
