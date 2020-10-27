@@ -1,8 +1,8 @@
-<p align="center"><a href="https://habra.cf"><img width=512 src="https://raw.githubusercontent.com/jarvis394/habra/master/images/logo.png" alt="habra logo" /></a></p>
+<p align="center"><a href="https://habra.js.org/"><img width=512 src="https://raw.githubusercontent.com/jarvis394/habra/master/images/logo.png" alt="habra logo" /></a></p>
 <h5 align="center">✨🎉 Habrahabr, but with a new client</h5>
 
 ## Usage
-Go to the [habra.cf](habra.cf) site and fell yourself at home!
+Go to the [habra.js.org](habra.js.org) site and fell yourself at home!
 
 ## Features
 - **Dark mode** 😲
