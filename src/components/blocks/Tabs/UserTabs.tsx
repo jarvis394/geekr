@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import Tabs from '.'
 import { UserExtended as UserExtendedObject } from 'src/interfaces/User'
@@ -74,10 +74,10 @@ const UserTabs = () => {
   const findPath = (path: string): TabObject => {
     return tabs.find((e) => path.match(e.match))
   }
-  const findPathValue = (path: string): number => {
+  const findPathValue = React.useCallback((path: string): number => {
     const res = tabs.findIndex((e) => path.match(e.match))
     return res < 0 ? 0 : res
-  }
+  }, [tabs])
   const isValidPath = (path: string): boolean => !!findPath(path)
   const location = useLocation()
   const shouldShow = isValidPath(location.pathname)
@@ -87,7 +87,7 @@ const UserTabs = () => {
   }
 
   useEffect(() => setValue(findPathValue(location.pathname)), [
-    location.pathname,
+    location.pathname, findPathValue
   ])
 
   return (

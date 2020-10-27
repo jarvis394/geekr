@@ -32,3 +32,10 @@ export interface Hub {
   alias: string
   commonTags: string[]
 }
+
+export interface HubPost {
+  title: string
+  alias: string
+  id: string
+  type: string
+}

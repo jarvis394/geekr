@@ -1,5 +1,5 @@
 import Flow from './Flow'
-import { Hub } from './Hub'
+import { HubPost } from './Hub'
 import { User } from './User'
 
 export default interface Post {
@@ -8,7 +8,7 @@ export default interface Post {
   commentsEnabled: boolean
 	editorVersion: string
 	flows: Flow[]
-	hubs: Hub[]
+	hubs: HubPost[]
 	isCorporative: boolean
 	isEditorial: boolean
 	lang: 'ru' | 'en'

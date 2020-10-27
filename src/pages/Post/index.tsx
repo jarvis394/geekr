@@ -93,7 +93,7 @@ const Post = () => {
         {post.hubs.map((hub, i) => (
           <Typography key={i} variant="caption">
             <Link className={classes.hubLink} to={'/hub/' + hub.alias}>
-              {hub.titleHtml}
+              {hub.title}
             </Link>
             {post.hubs.length - 1 !== i && ', '}
           </Typography>

@@ -95,7 +95,7 @@ const Hubs = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   useEffect(() => {
     setShowAll(false)
     if (!isFetched) dispatch(getUserHubs(user.login))
-  }, [user.login])
+  }, [user.login, dispatch, isFetched])
 
   if (fetchError)
     return (
