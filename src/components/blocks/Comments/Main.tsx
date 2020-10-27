@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
   progress: {
     marginTop: theme.spacing(2),
     borderRadius: theme.shape.borderRadius,
+    margin: theme.spacing(0, 2)
   },
   nothingText: {
     marginTop: theme.spacing(2),
@@ -49,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 const MIN_COMMENTS_SLICE = 25
 const SCROLL_OFFSET = 256
 
-const Comments = ({ postId, authorId }) => {
+const Comments = ({ postId }) => {
   const [comments, setComments] = useState<IComments.Comment[]>()
   const [commentsSliceEnd, setCommentsSliceEnd] = useState<number>(
     MIN_COMMENTS_SLICE
@@ -142,7 +143,7 @@ const Comments = ({ postId, authorId }) => {
           )}
         </Typography>
       </Container>
-      <Container className={classes.comments}>
+      <div className={classes.comments}>
         {commentsLength === 0 && (
           <Typography className={classes.nothingText}>Пусто!</Typography>
         )}
@@ -153,14 +154,13 @@ const Comments = ({ postId, authorId }) => {
               <Comment
                 key={node.id}
                 data={node}
-                isAuthor={node.author ? authorId === node.author.id : false}
               />
             ))}
         {commentsLength !== 0 && (!comments || isLoadingNewComments) && (
           <LinearProgress className={classes.progress} />
         )}
         <div ref={commentsEndRef} />
-      </Container>
+      </div>
     </div>
   )
 }

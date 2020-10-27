@@ -1,11 +1,18 @@
 import * as React from 'react'
-import { Grid, Typography } from '@material-ui/core'
+import { Button, Grid, Typography } from '@material-ui/core'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import FormattedText from '../../formatters/FormattedText'
 import GreenRedNumber from '../../formatters/GreenRedNumber'
 import UserAvatar from '../UserAvatar'
+import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
+import BookmarkIcon from '@material-ui/icons/Bookmark'
+
+interface Classes {
+  isAuthor: boolean
+  isFavorite: boolean
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,13 +24,15 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       opacity: '1 !important',
     },
+    borderBottom: '1px solid ' + fade(theme.palette.divider, 0.06),
+    padding: theme.spacing(0, 2, 1.5, 2),
   },
   noDeco: {
     textDecoration: 'none !important',
   },
   author: {
-    backgroundColor: (isAuthor) =>
-      isAuthor ? fade(theme.palette.primary.light, 0.1) : 'transparent',
+    backgroundColor: ({ isAuthor }: Classes) =>
+      isAuthor ? fade(theme.palette.primary.light, 0.2) : 'transparent',
     borderRadius: theme.shape.borderRadius,
   },
   authorLink: {
@@ -44,54 +53,58 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.shape.borderRadius,
   },
   text: {
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(1.5),
     lineHeight: '22px',
     fontSize: 15,
     wordBreak: 'break-word',
     hyphens: 'auto',
     '& p': {
-      margin: 0
-    }
+      margin: 0,
+    },
   },
   ufo: {
     fontWeight: 500,
     fontFamily: 'Google Sans',
   },
-  children: { marginLeft: theme.spacing(4) },
-  collapseHolder: {
-    position: 'absolute',
-    left: -40,
-    cursor: 'pointer',
-    padding: 16,
-  },
-  collapseButton: {
-    border: '2px solid ' + theme.palette.text.hint,
-    borderRadius: '50%',
-    height: 4,
-    width: 4,
-  },
-  collapsedButton: {},
-  collapsedTitle: {
-    color: theme.palette.text.hint,
-    fontSize: 14,
-    fontWeight: 500,
-    fontFamily: 'Google Sans',
-  },
-  collapsedLine: {
-    borderBottom: ' 1px dashed ' + theme.palette.text.hint,
-    flexGrow: 1,
-    height: 1,
-    marginLeft: 16,
-    position: 'relative',
-  },
   score: {
-    position: 'absolute',
-    right: 0,
+    position: 'relative',
     fontWeight: 800,
     fontSize: 14,
+    flexGrow: 1,
   },
   scoreColor: {
     color: theme.palette.text.hint,
+  },
+  bottomBar: {
+    marginTop: theme.spacing(1.5),
+    display: 'flex',
+    alignItems: 'center',
+  },
+  thumbsUpDownIcon: {
+    fontSize: 16,
+    marginRight: theme.spacing(1),
+    color: theme.palette.text.hint,
+  },
+  replyButton: {
+    borderRadius: 16,
+    backgroundColor: fade(theme.palette.primary.light, 0.1),
+    padding: theme.spacing(0.5, 1.5),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.primary.light, 0.1) + ' !important',
+    },
+  },
+  favoriteButton: {
+    borderRadius: '50%',
+    minWidth: 28,
+    padding: 5,
+    marginRight: theme.spacing(1),
+  },
+  favoriteIcon: {
+    fontSize: 20,
+    color: ({ isFavorite }: Classes) =>
+      isFavorite
+        ? theme.palette.primary.light
+        : fade(theme.palette.primary.main, 0.2),
   },
 }))
 
@@ -101,11 +114,15 @@ const getOpacity = (value: number) => {
   return 1 - r
 }
 
-const MARGIN_LEVEL = 16
-const MAX_LEVEL = 10
+const MARGIN_LEVEL = 32
+const MAX_LEVEL = 5
 
-const Comment = ({ data, isAuthor }) => {
-  const classes = useStyles(isAuthor)
+const Comment = ({ data }) => {
+  const [isFavorite, setIsFavorite] = React.useState(false)
+  const classes = useStyles({
+    isAuthor: data.isPostAuthor,
+    isFavorite,
+  })
   const { message } = data
   const ts = moment(data.timePublished).fromNow()
   const commentOpacity = data.score < 0 ? getOpacity(data.score) : 1
@@ -125,43 +142,58 @@ const Comment = ({ data, isAuthor }) => {
   }
 
   return (
-    <div
-      style={{ marginLeft: margin, opacity: commentOpacity }}
-      className={classes.root}
-    >
-      {/* Top bar */}
-      <Grid
-        style={{ position: 'relative' }}
-        alignItems="center"
-        container
-        direction="row"
-        className={classes.author}
-      >
-        <UserAvatar
-          src={data.author.avatarUrl}
-          login={data.author.login}
-          className={classes.avatar}
-        />
-        <Typography variant="caption">
-          <Link
-            className={classes.noDeco + ' ' + classes.authorLink}
-            to={'/user/' + data.author.login}
-          >
-            {data.author.login}
-          </Link>
-        </Typography>
-        <Typography className={classes.ts} variant="caption">
-          {ts}
-        </Typography>
-        <GreenRedNumber
-          classes={classes.score}
-          defaultClass={classes.scoreColor}
-          number={data.score}
-        />
-      </Grid>
+    <div style={{ opacity: commentOpacity }} className={classes.root}>
+      <div style={{ marginLeft: margin }}>
+        {/* Top bar */}
+        <Grid
+          style={{ position: 'relative' }}
+          alignItems="center"
+          container
+          direction="row"
+          className={classes.author}
+        >
+          <UserAvatar
+            src={data.author.avatarUrl}
+            login={data.author.login}
+            className={classes.avatar}
+          />
+          <Typography variant="caption">
+            <Link
+              className={[classes.noDeco, classes.authorLink].join(' ')}
+              to={'/user/' + data.author.login}
+            >
+              {data.author.login}
+            </Link>
+          </Typography>
+          <Typography className={classes.ts} variant="caption">
+            {ts}
+          </Typography>
+        </Grid>
 
-      {/* Message */}
-      <FormattedText className={classes.text}>{message}</FormattedText>
+        {/* Message */}
+        <FormattedText className={classes.text}>{message}</FormattedText>
+
+        {/* Bottom bar */}
+        <div className={classes.bottomBar}>
+          <ThumbsUpDownIcon className={classes.thumbsUpDownIcon} />
+          <GreenRedNumber
+            classes={classes.score}
+            defaultClass={classes.scoreColor}
+            number={data.score}
+          />
+          <Button
+            onClick={() => setIsFavorite((p) => !p)}
+            color="primary"
+            size="small"
+            className={classes.favoriteButton}
+          >
+            <BookmarkIcon className={classes.favoriteIcon} />
+          </Button>
+          <Button color="primary" size="small" className={classes.replyButton}>
+            Ответить
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }

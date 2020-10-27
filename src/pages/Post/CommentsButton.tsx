@@ -1,6 +1,7 @@
 import React from 'react'
-import { Button, makeStyles } from '@material-ui/core'
+import { Button, makeStyles, Typography } from '@material-ui/core'
 import { useHistory } from 'react-router'
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,14 +12,26 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     borderRadius: 0,
   },
+  count: {
+    marginLeft: theme.spacing(1),
+    fontWeight: 500,
+    fontSize: 14,
+  },
+  chatIcon: {
+    fontSize: 16,
+    marginRight: theme.spacing(1),
+    color: theme.palette.text.secondary
+  }
 }))
 
 const CommentsButton = ({
   id,
   className,
+  count
 }: {
   id: number | string
   className?: string
+  count: number
 }) => {
   const history = useHistory()
   const classes = useStyles()
@@ -29,10 +42,12 @@ const CommentsButton = ({
         disableElevation
         fullWidth
         className={classes.button}
-        color="primary"
+        color="default"
         onClick={() => history.push('/article/' + id + '/comments')}
       >
+        <ChatBubbleIcon className={classes.chatIcon} />
         Комментарии
+        <Typography className={classes.count} color="primary">{count}</Typography>
       </Button>
     </div>
   )

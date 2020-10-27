@@ -167,7 +167,7 @@ const Post = () => {
       {contents}
 
       {/* Button to Comments page */}
-      <CommentsButton className={classes.commentsButton} id={id} />
+      {post && <CommentsButton className={classes.commentsButton} id={id} count={post.statistics.commentsCount} />}
 
       {/* Similar */}
       <SimilarPosts id={id} />
