@@ -55,16 +55,12 @@ const isValidPath = (path: string): boolean => !!findPath(path)
 const RouterTabs = () => {
   const location = useLocation()
   const shouldShow = isValidPath(location.pathname)
-  const getValue = useCallback(() => findPathValue(location.pathname), [location.pathname])
-  const [value, setValue] = useState<number>(getValue())
+  const [value, setValue] = useState<number>(findPathValue(location.pathname))
   const handleChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue)
   }
 
-  useEffect(() => setValue(getValue()), [
-    location.pathname,
-    getValue
-  ])
+  useEffect(() => setValue(findPathValue(location.pathname)), [location.pathname])
 
   return (
     <Tabs shouldUseLinks onChange={handleChange} tabs={tabs} hidden={!shouldShow} value={value} />

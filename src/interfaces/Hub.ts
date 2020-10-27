@@ -1,19 +1,34 @@
-import Flow from './Flow'
+import { Flow } from '.'
 
-export default interface Hub {
+export interface HubsResponse {
+  hubIds: string[]
+  hubRefs: Record<string, Hub>
+  pagesCount: number
+}
+
+export interface HubsSearchResponse {
+  hubIds: string[]
+  hubRefs: Record<string, Hub>
+  pagesCount: number
+  searchStatistics: {
+    articlesCount: number
+    commentsCount: number
+    hubsCount: number
+    usersCount: number
+    companiesCount: number
+  }
+}
+
+export interface Hub {
   id: number
-  rating: string | number
-  is_profiled: boolean
-  title: string
+  statistics: {
+    rating: number
+    subscribersCount: number
+  }
+  titleHtml: string
+  relatedData: unknown
+  imageUrl: string
+  descriptionHtml: string
   alias: string
-  about_small: string
-  about: string
-  count_subscribers: string | number
-  count_posts: string | number
-  tags_string: string
-  is_membership: boolean
-  is_company: boolean
-  flow: Flow
-  icon: string
-  path: string
+  commonTags: string[]
 }

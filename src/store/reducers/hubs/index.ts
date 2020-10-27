@@ -20,8 +20,8 @@ export default (state = initialState, { type, payload }) => {
 
     case HUBS_PREFIX + 'FETCH_FULFILLED': {
       const { page, data } = payload
-      state.data.pagesCount = data.pages
-      state.data.pages[page] = data.data
+      state.data.pagesCount = data.pagesCount
+      state.data.pages[page] = data
       return { ...state, fetching: false, fetched: true, error: null }
     }
 

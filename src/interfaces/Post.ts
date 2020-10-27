@@ -1,5 +1,5 @@
 import Flow from './Flow'
-import Hub from './Hub'
+import { Hub } from './Hub'
 import { User } from './User'
 
 export default interface Post {

@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { getUserHubs } from 'src/store/actions/user'
 import { useSelector } from 'src/hooks'
-import { HubObject } from 'src/interfaces'
+import { Hub } from 'src/interfaces'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const HubsItem = ({ data }: { data: HubObject }) => {
+const HubsItem = ({ data }: { data: Hub.Hub }) => {
   const classes = useStyles()
   return (
     <Grid
@@ -71,11 +71,11 @@ const HubsItem = ({ data }: { data: HubObject }) => {
     >
       <Chip
         style={{ cursor: 'pointer' }}
-        title={data.about_small}
+        title={data.descriptionHtml}
         className={classes.itemChip}
         variant="default"
         color="primary"
-        label={data.title}
+        label={data.titleHtml}
       />
     </Grid>
   )
@@ -90,34 +90,43 @@ const Hubs = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const isFetched = useSelector((store) => store.user.profile.hubs.fetched)
   const isFetching = useSelector((store) => store.user.profile.hubs.fetching)
   const fetchError = useSelector((store) => store.user.profile.hubs.error)
+  const shouldCollapse = hubs ? hubs.hubIds.length > 17 : false
 
   useEffect(() => {
     setShowAll(false)
-    dispatch(getUserHubs(user.login))
-  }, [user.login, dispatch])
+    if (!isFetched) dispatch(getUserHubs(user.login))
+  }, [user.login])
 
   if (fetchError)
     return (
       <Typography className={classes.errorText}>
-        Не удалось загрузить список приглашённых пользователей
+        Не удалось загрузить список хабов
       </Typography>
     )
   if (isFetching) return <Typography>загрузка...</Typography>
 
-  return isFetched && hubs && hubs.length !== 0 ? (
+  return isFetched && hubs && hubs.hubIds.length !== 0 ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>Состоит в хабах</Typography>
-      <Collapse className={classes.collapse} in={showAll} collapsedHeight={148}>
+      <Collapse
+        className={classes.collapse}
+        in={showAll}
+        style={{ height: shouldCollapse ? 100 : '100%' }}
+        collapsedHeight={shouldCollapse ? 100 : '100%'}
+      >
         <Grid spacing={1} container className={classes.holder}>
-          {hubs.map((e, i) => (
-            <HubsItem data={e} key={i} />
+          {hubs.hubIds.map((e, i) => (
+            <HubsItem data={hubs.hubRefs[e]} key={i} />
           ))}
         </Grid>
-        <Fade appear={false} in={!showAll}>
-          <div className={classes.collapseShadow} />
-        </Fade>
+        {shouldCollapse && (
+          <Fade appear={false} in={!showAll}>
+            <div className={classes.collapseShadow} />
+          </Fade>
+        )}
       </Collapse>
-      {hubs.length > 17 && (
+
+      {shouldCollapse && (
         <Button
           size="small"
           style={{ marginTop: 8 }}

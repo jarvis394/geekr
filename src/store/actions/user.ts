@@ -7,21 +7,30 @@ import {
   USER_ARTICLES,
 } from '../reducers/user/types'
 
-export const request = async (
-  method: string,
-  storeType: string,
-  params: unknown[],
+interface RequestParams {
+  method: string
+  storeType: string
+  params: unknown[]
+  v2?: boolean
+  dispatch: (...params: unknown[]) => unknown
+}
+
+export const request = async ({
+  method,
+  storeType,
+  params,
+  v2 = false,
   dispatch
-) => {
+}: RequestParams) => {
   const type = storeType + 'FETCH'
   dispatch({ type })
 
   try {
     const data = await api[method](...params)
-    
+
     dispatch({
       type: type + '_FULFILLED',
-      payload: { data: data?.data },
+      payload: { data: v2 ? data : data?.data },
     })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: { error: error.message, ...params } })
@@ -29,29 +38,39 @@ export const request = async (
 }
 
 export const getUser = (login: string) => async (dispatch) => {
-  return await request('getUser', USER_PROFILE_DATA, [login], dispatch)
+  return await request({
+    method: 'getUser',
+    storeType: USER_PROFILE_DATA,
+    params: [login], dispatch
+  })
 }
 
 export const getUserCompanies = (login: string) => async (dispatch) => {
-  return await request(
-    'getUserCompanies',
-    USER_PROFILE_COMPANIES,
-    [login],
+  return await request({
+    method: 'getUserCompanies',
+    storeType: USER_PROFILE_COMPANIES,
+    params: [login],
     dispatch
-  )
+  })
 }
 
 export const getUserChildren = (login: string) => async (dispatch) => {
-  return await request(
-    'getUserChildren',
-    USER_PROFILE_CHILDREN,
-    [login],
+  return await request({
+    method: 'getUserChildren',
+    storeType: USER_PROFILE_CHILDREN,
+    params: [login],
     dispatch
-  )
+  })
 }
 
 export const getUserHubs = (login: string) => async (dispatch) => {
-  return await request('getUserHubs', USER_PROFILE_HUBS, [login], dispatch)
+  return await request({
+    method: 'getUserHubs',
+    storeType: USER_PROFILE_HUBS,
+    params: [login],
+    v2: true,
+    dispatch
+  })
 }
 
 export const getUserArticles = (login: string, page: number) => async (dispatch) => {

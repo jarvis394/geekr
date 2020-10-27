@@ -1,13 +1,13 @@
 import makeRequest from './makeRequest'
-import { APIResponse, HubObject } from '../interfaces'
+import { Hub } from '../interfaces'
 
-export default async (page: number): Promise<APIResponse<HubObject[]>> =>
+export default async (page: number): Promise<Hub.HubsResponse> =>
   (
     await makeRequest({
       path: 'hubs',
       params: {
         page,
       },
-      version: 1,
+      version: 2,
     })
   ).data

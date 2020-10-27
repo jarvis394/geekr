@@ -6,6 +6,6 @@ export default async (login: string): Promise<APIResponse<UserHubs>> =>
   (
     await makeRequest({
       path: `users/${login}/hubs`,
-      version: 1,
+      version: 2,
     })
   ).data

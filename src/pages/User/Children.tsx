@@ -73,6 +73,7 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const sorted = (childrenData || []).sort(
     (a, b) => Date.parse(a.time_registered) - Date.parse(b.time_registered)
   )
+  const shouldCollapse = sorted.length > 5
 
   useEffect(() => {
     setShowAll(false)
@@ -112,18 +113,25 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   return isFetched && sorted.length !== 0 ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>Пригласил на сайт</Typography>
-      <Collapse className={classes.collapse} in={showAll} collapsedHeight={280}>
+      <Collapse
+        className={classes.collapse}
+        in={showAll}
+        style={{ height: shouldCollapse ? 280 : '100%' }}
+        collapsedHeight={shouldCollapse ? 280 : '100%'}
+      >
         <List>
           {sorted.map((e) => (
             <Item data={e} key={e.id} />
           ))}
         </List>
-        <Fade appear={false} in={!showAll}>
-          <div className={classes.collapseShadow} />
-        </Fade>
+        {shouldCollapse && (
+          <Fade appear={false} in={!showAll}>
+            <div className={classes.collapseShadow} />
+          </Fade>
+        )}
       </Collapse>
 
-      {sorted.length > 5 && (
+      {shouldCollapse && (
         <Button
           size="small"
           style={{ marginTop: 8 }}

@@ -70,31 +70,25 @@ const generateTabs = (user: UserExtendedObject): TabObject[] => [
 
 const UserTabs = () => {
   const user = useSelector((state) => state.user.profile.user.data)
-  const tabs = useMemo(() => generateTabs(user), [user])
+  const tabs = generateTabs(user)
   const findPath = (path: string): TabObject => {
     return tabs.find((e) => path.match(e.match))
   }
-  const findPathValue = useCallback(
-    (path: string): number => {
-      const res = tabs.findIndex((e) => path.match(e.match))
-      return res < 0 ? 0 : res
-    },
-    [tabs]
-  )
+  const findPathValue = (path: string): number => {
+    const res = tabs.findIndex((e) => path.match(e.match))
+    return res < 0 ? 0 : res
+  }
   const isValidPath = (path: string): boolean => !!findPath(path)
-
   const location = useLocation()
   const shouldShow = isValidPath(location.pathname)
-  const getValue = useCallback(() => findPathValue(location.pathname), [
-    location.pathname,
-    findPathValue,
-  ])
-  const [value, setValue] = useState<number>(getValue())
+  const [value, setValue] = useState<number>(findPathValue(location.pathname))
   const handleChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue)
   }
 
-  useEffect(() => setValue(getValue()), [location.pathname, getValue])
+  useEffect(() => setValue(findPathValue(location.pathname)), [
+    location.pathname,
+  ])
 
   return (
     <Tabs

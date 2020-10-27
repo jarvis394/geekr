@@ -8,7 +8,7 @@ import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import { getHubsList } from 'src/store/actions/hubs'
 import { useParams, useHistory } from 'react-router-dom'
-import { HubObject } from 'src/interfaces'
+import { Hub } from 'src/interfaces'
 import ErrorComponent from 'src/components/blocks/Error'
 import EmptySVG from 'src/components/svg/Empty'
 import { getHubsSearchResults } from 'src/store/actions/hubs'
@@ -114,7 +114,7 @@ const Hubs = () => {
         {isFetched &&
           storeSearchQuery &&
           storeSearchResults.length !== 0 &&
-          storeSearchResults.map((e: HubObject, i: number) => (
+          storeSearchResults.map((e: Hub.Hub, i: number) => (
             <Item data={e} key={i} />
           ))}
         {isFetched && storeSearchQuery && storeSearchResults.length === 0 && (
@@ -123,7 +123,7 @@ const Hubs = () => {
         {isFetched &&
           !storeSearchQuery &&
           data &&
-          data.map((e: HubObject, i: number) => <Item data={e} key={i} />)}
+          data.hubIds.map((e: string, i: number) => <Item data={data.hubRefs[e]} key={i} />)}
       </List>
       {pagesCount && !storeSearchQuery && (
         <div className={classes.pagination}>

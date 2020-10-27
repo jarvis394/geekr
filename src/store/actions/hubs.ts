@@ -30,7 +30,7 @@ export const getHubsSearchResults = (query: string) => async (dispatch) => {
     
     dispatch({
       type: type + '_FULFILLED',
-      payload: { data: data.data, query },
+      payload: { data, query },
     })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: { error, query } })

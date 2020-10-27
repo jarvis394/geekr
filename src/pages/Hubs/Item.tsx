@@ -6,7 +6,7 @@ import {
   Avatar,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { HubObject } from 'src/interfaces'
+import { Hub } from 'src/interfaces'
 import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Item = ({ data }: { data: HubObject }) => {
+const Item = ({ data }: { data: Hub.Hub }) => {
   const classes = useStyles()
 
   return (
@@ -30,12 +30,12 @@ const Item = ({ data }: { data: HubObject }) => {
       to={'/hub/' + data.alias}
     >
       <ListItemAvatar>
-        <Avatar src={data.icon} alt={data.title} />
+        <Avatar src={data.imageUrl} alt={data.titleHtml} />
       </ListItemAvatar>
       <ListItemText
         primaryTypographyProps={{ className: classes.primaryText }}
-        primary={data.title}
-        secondary={data.about_small}
+        primary={data.titleHtml}
+        secondary={data.descriptionHtml}
       />
     </ListItem>
   )

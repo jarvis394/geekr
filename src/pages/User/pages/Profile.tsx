@@ -34,7 +34,6 @@ export const useStyles = makeStyles((theme) => ({
 
 const Profile = ({ user }) => {
   const classes = useStyles()
-  console.log(user)
   
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   useEffect(() => {}, [user.login])

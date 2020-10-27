@@ -54,9 +54,7 @@ const User = ({ path }) => {
 
   useEffect(() => {
     if (user?.login !== login) dispatch(getUser(login))
-  }, [login, user, dispatch])
-
-  console.log(user)
+  }, [login, user])
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { Company, HubObject } from 'src/interfaces'
+import { Company, Hub } from 'src/interfaces'
 import { UserExtended } from 'src/interfaces/User'
 
 export const USER_PROFILE = 'USER_PROFILE_'
@@ -16,7 +16,7 @@ export interface PromiseItem<T> {
   error: null | string
 }
 export interface State {
-  hubs: PromiseItem<HubObject[]>
+  hubs: PromiseItem<{ hubIds: string[]; hubRefs: Record<string, Hub.Hub>; pagesCount: number }>
   user: PromiseItem<UserExtended>
   companies: PromiseItem<Company[]>
   children: PromiseItem<UserExtended[]>
