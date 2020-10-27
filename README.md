@@ -2,7 +2,7 @@
 <h5 align="center">✨🎉 Habrahabr, but with a new client</h5>
 
 ## Usage
-Go to the [habra.js.org](habra.js.org) site and fell yourself at home!
+Go to the [habra.js.org](https://habra.js.org/) site and fell yourself at home!
 
 ## Features
 - **Dark mode** 😲
