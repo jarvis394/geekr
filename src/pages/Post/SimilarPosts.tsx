@@ -85,7 +85,7 @@ const SimilarPost = ({ data }) => {
         </IconButton>
       </Grid>
       <Grid item style={{ flexGrow: 1, marginRight: 8 }}>
-        <Link to={'/article/' + id} className={classes.link}>
+        <Link to={'/post/' + id} className={classes.link}>
           <Typography className={classes.postTitle}>{title}</Typography>
           <Typography className={classes.postTs}>{ts}</Typography>
         </Link>

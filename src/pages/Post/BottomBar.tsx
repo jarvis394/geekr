@@ -78,14 +78,14 @@ const BottomBar = ({ post }: { post: Post }) => {
       icon: ChatBubbleIcon,
       number: comments,
       isButton: true,
-      to: '/article/' + id + '/comments',
+      to: '/post/' + id + '/comments',
     },
   ]
 
   const share = () => {
     const shareData = {
       title,
-      url: process.env.PUBLIC_URL + '/article/' + id,
+      url: process.env.PUBLIC_URL + '/post/' + id,
     }
 
     navigator

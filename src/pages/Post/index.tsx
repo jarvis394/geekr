@@ -13,12 +13,13 @@ import ErrorComponent from '../../components/blocks/Error'
 import moment from 'moment'
 import FormattedText from '../../components/formatters/FormattedText'
 import { Theme } from '@material-ui/core/styles'
-import { Post as IPost } from 'src/interfaces'
+import { Post as IPost, Company as ICompany } from 'src/interfaces'
 import UserAvatar from 'src/components/blocks/UserAvatar'
 import BottomBar from './BottomBar'
 import CommentsButton from './CommentsButton'
 import SimilarPosts from './SimilarPosts'
 import TopDayPosts from './TopDayPosts'
+import getCompany from 'src/api/getCompany'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -80,10 +81,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   commentsButton: {
     marginTop: theme.spacing(2),
   },
+  companyHeaderLink: {
+    display: 'flex'
+  },
+  companyHeader: {
+    width: '100%'
+  }
 }))
 
 const Post = () => {
   const [post, setPost] = useState<IPost>()
+  const [company, setCompany] = useState<ICompany>()
   const [fetchError, _setError] = useState<string>()
   const { id } = useParams<{ id: string }>()
   const classes = useStyles()
@@ -100,6 +108,15 @@ const Post = () => {
         ))}
       </Container>
       <Divider />
+      {company && (
+        <a className={classes.companyHeaderLink} href={company.branding.headerUrl}>
+          <img
+            alt={company.alias}
+            className={classes.companyHeader}
+            src={company.branding.headerImageUrl}
+          />
+        </a>
+      )}
       <Container className={classes.post}>
         <Grid
           className={classes.authorBar}
@@ -126,9 +143,7 @@ const Post = () => {
         <Typography className={classes.title}>{post.titleHtml}</Typography>
 
         {/* Article text */}
-        <FormattedText className={classes.text}>
-          {post.textHtml}
-        </FormattedText>
+        <FormattedText className={classes.text}>{post.textHtml}</FormattedText>
       </Container>
 
       {/* Bottom bar with some article info */}
@@ -143,6 +158,7 @@ const Post = () => {
     return _setError(e)
   }
 
+  // Get the post data
   useEffect(() => {
     const get = async () => {
       // Reset error state
@@ -152,12 +168,25 @@ const Post = () => {
       try {
         setPost(await getPost(id))
       } catch (e) {
-        if (e.statusCode === 404) return setError('Статья не найдена')
+        if (e?.statusCode === 404) return setError('Статья не найдена')
         else return setError(e.message)
       }
     }
     get()
   }, [id])
+
+  // Get company data if post is corporative
+  useEffect(() => {
+    const get = async () => {
+      const hub = post.hubs.find((e) => e.type === 'corporative')
+      try {
+        hub && setCompany((await getCompany(hub.alias)).data)
+      } catch (e) {
+        console.warn(`Cannot get company data ${hub.alias}:`, e.message)
+      }
+    }
+    if (post && post.isCorporative) get()
+  }, [post])
 
   if (post) document.title = post.titleHtml
   if (fetchError) return <ErrorComponent message={fetchError} />
@@ -167,7 +196,13 @@ const Post = () => {
       {contents}
 
       {/* Button to Comments page */}
-      {post && <CommentsButton className={classes.commentsButton} id={id} count={post.statistics.commentsCount} />}
+      {post && (
+        <CommentsButton
+          className={classes.commentsButton}
+          id={id}
+          count={post.statistics.commentsCount}
+        />
+      )}
 
       {/* Similar */}
       <SimilarPosts id={id} />

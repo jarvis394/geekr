@@ -90,7 +90,7 @@ const NewsItem = ({ data }): React.ReactElement => {
   })
 
   return (
-    <Link to={'/article/' + data.id} className={classes.article}>
+    <Link to={'/post/' + data.id} className={classes.article}>
       <Grid container direction="row" className={classes.item}>
         <Grid container direction="column">
           <Grid item>

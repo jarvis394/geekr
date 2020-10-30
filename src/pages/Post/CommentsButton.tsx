@@ -43,7 +43,7 @@ const CommentsButton = ({
         fullWidth
         className={classes.button}
         color="default"
-        onClick={() => history.push('/article/' + id + '/comments')}
+        onClick={() => history.push('/post/' + id + '/comments')}
       >
         <ChatBubbleIcon className={classes.chatIcon} />
         Комментарии

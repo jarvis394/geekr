@@ -1,6 +1,6 @@
 import * as React from 'react'
 import ReactDOM from 'react-dom'
-import Layout from './components/Layout'
+import App from './components/App'
 import * as serviceWorker from './serviceWorker'
 import moment from 'moment'
 import { Provider } from 'react-redux'
@@ -14,7 +14,7 @@ moment.updateLocale('ru', ru)
 
 ReactDOM.render(
   <Provider store={store}>
-    <Layout />
+    <App />
   </Provider>,
   document.getElementById('root')
 )

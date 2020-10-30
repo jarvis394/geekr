@@ -148,7 +148,7 @@ export const PostItem = ({
     {
       icon: ChatBubbleIcon,
       count: comments,
-      to: '/article/' + id + '/comments',
+      to: '/post/' + id + '/comments',
     },
   ]
   const imageURLRegEx = /<img[^>]+src="?([^"\s]+)"?\s*/g
@@ -177,7 +177,7 @@ export const PostItem = ({
         <Grid item className={classes.imageHolder}>
           <Link
             style={{ display: 'flex', width: '100%' }}
-            to={'/article/' + id}
+            to={'/post/' + id}
           >
             {postFisrtImage && (
               <LazyLoadImage
@@ -192,7 +192,7 @@ export const PostItem = ({
           <Grid item xs={12}>
             <Link
               className={classes.postLink + ' ' + classes.noDeco}
-              to={'/article/' + id}
+              to={'/post/' + id}
             >
               <Typography className={classes.postTitle}>{title}</Typography>
             </Link>

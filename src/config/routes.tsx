@@ -19,11 +19,11 @@ interface Route {
 
 const routes: Route[] = [
   {
-    path: '/article/:id/comments',
+    path: '/post/:id/comments',
     component: <CommentsPage />,
   },
   {
-    path: '/article/:id',
+    path: '/post/:id',
     component: <Post />,
   },
   {
