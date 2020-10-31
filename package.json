@@ -13,6 +13,7 @@
     "@material-ui/lab": "^4.0.0-alpha.50",
     "axios": "^0.19.2",
     "html-react-parser": "^0.10.3",
+    "iframe-resizer-react": "^1.0.4",
     "is-mobile": "^2.2.2",
     "moment": "^2.29.0",
     "number-to-words-ru": "^2.2.3",

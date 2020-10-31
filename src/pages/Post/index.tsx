@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/core/styles'
 import { useParams } from 'react-router'
 import { getPost } from '../../api'
@@ -28,16 +27,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: theme.palette.background.default,
   },
   hubs: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
     wordBreak: 'break-word',
     width: '100%',
-    background: theme.palette.background.default,
+    marginBottom: theme.spacing(3)
   },
   hubLink: {
-    color: theme.palette.primary.main,
+    color: theme.palette.text.hint,
     fontWeight: 500,
+    transitionDuration: '100ms',
     textDecoration: 'none',
+    '&:hover': {
+      color: theme.palette.primary.light,
+    }
   },
   post: {
     background: theme.palette.background.paper,
@@ -75,18 +76,20 @@ const useStyles = makeStyles((theme: Theme) => ({
     lineHeight: '34px',
     wordBreak: 'break-word',
     hyphens: 'auto',
-    marginBottom: theme.spacing(3),
-    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(1.5),
   },
   commentsButton: {
     marginTop: theme.spacing(2),
   },
   companyHeaderLink: {
-    display: 'flex'
+    display: 'flex',
+    background: theme.palette.background.default,
+    flexDirection: 'column'
   },
   companyHeader: {
-    width: '100%'
-  }
+    width: '100%',
+  },
 }))
 
 const Post = () => {
@@ -95,29 +98,23 @@ const Post = () => {
   const [fetchError, _setError] = useState<string>()
   const { id } = useParams<{ id: string }>()
   const classes = useStyles()
-  const contents = post ? (
+  const contents = (post && post.isCorporative ? post && company : post) ? (
     <>
-      <Container className={classes.hubs}>
-        {post.hubs.map((hub, i) => (
-          <Typography key={i} variant="caption">
-            <Link className={classes.hubLink} to={'/hub/' + hub.alias}>
-              {hub.title}
-            </Link>
-            {post.hubs.length - 1 !== i && ', '}
-          </Typography>
-        ))}
-      </Container>
-      <Divider />
-      {company && (
-        <a className={classes.companyHeaderLink} href={company.branding.headerUrl}>
-          <img
-            alt={company.alias}
-            className={classes.companyHeader}
-            src={company.branding.headerImageUrl}
-          />
-        </a>
+      {/** Company header */}
+      {company && company?.branding?.headerUrl && (
+        <div className={classes.companyHeaderLink}>
+          <a style={{ display: 'flex' }} href={company.branding.headerUrl}>
+            <img
+              alt={company.alias}
+              className={classes.companyHeader}
+              src={company.branding.headerImageUrl}
+            />
+          </a>
+        </div>
       )}
+
       <Container className={classes.post}>
+        {/** Post header */}
         <Grid
           className={classes.authorBar}
           container
@@ -141,9 +138,19 @@ const Post = () => {
           </Typography>
         </Grid>
         <Typography className={classes.title}>{post.titleHtml}</Typography>
+        <div className={classes.hubs}>
+          {post.hubs.map((hub, i) => (
+            <Typography key={i} variant="body2" component="span">
+              <Link className={classes.hubLink} to={'/hub/' + hub.alias}>
+                {hub.title}
+                {post.hubs.length - 1 !== i && ', '}
+              </Link>
+            </Typography>
+          ))}
+        </div>
 
         {/* Article text */}
-        <FormattedText className={classes.text}>{post.textHtml}</FormattedText>
+        <FormattedText className={classes.text} disableParagraphMargin={post.editorVersion === '1.0'}>{post.textHtml}</FormattedText>
       </Container>
 
       {/* Bottom bar with some article info */}
