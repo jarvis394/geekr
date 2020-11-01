@@ -90,7 +90,7 @@ const Hubs = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const isFetched = useSelector((store) => store.user.profile.hubs.fetched)
   const isFetching = useSelector((store) => store.user.profile.hubs.fetching)
   const fetchError = useSelector((store) => store.user.profile.hubs.error)
-  const shouldCollapse = hubs ? hubs.hubIds.length > 17 : false
+  const shouldCollapse = hubs ? hubs.hubIds.length > 25 : false
 
   useEffect(() => {
     setShowAll(false)

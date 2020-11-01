@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   hubs: {
     wordBreak: 'break-word',
     width: '100%',
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
   },
   hubLink: {
     color: theme.palette.text.hint,
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     textDecoration: 'none',
     '&:hover': {
       color: theme.palette.primary.light,
-    }
+    },
   },
   post: {
     background: theme.palette.background.paper,
@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   companyHeaderLink: {
     display: 'flex',
     background: theme.palette.background.default,
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   companyHeader: {
     width: '100%',
@@ -150,7 +150,12 @@ const Post = () => {
         </div>
 
         {/* Article text */}
-        <FormattedText className={classes.text} disableParagraphMargin={post.editorVersion === '1.0'}>{post.textHtml}</FormattedText>
+        <FormattedText
+          className={classes.text}
+          disableParagraphMargin={post.editorVersion === '1.0'}
+        >
+          {post.textHtml}
+        </FormattedText>
       </Container>
 
       {/* Bottom bar with some article info */}

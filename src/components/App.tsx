@@ -28,7 +28,9 @@ const useStyles = makeStyles(() => ({
   },
   root: {
     backgroundColor: (theme: ThemeOptions) =>
-      theme.palette.type === 'dark' ? '#0d0d0d' : '#f2f4f6',
+      theme.palette.type === 'dark'
+        ? darken(theme.palette.background.paper, 0.5)
+        : darken(theme.palette.background.paper, 0.04),
     color: (theme: ThemeOptions) => theme.palette.text.primary,
     margin: 0,
     fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif',

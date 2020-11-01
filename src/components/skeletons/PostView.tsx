@@ -3,7 +3,6 @@ import Skeleton from '@material-ui/lab/Skeleton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
-import Divider from '@material-ui/core/Divider'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,15 +31,6 @@ const PostSkeleton = () => {
 
   return (
     <div>
-      <Container className={classes.hubs}>
-        <Skeleton
-          variant="text"
-          width={256}
-          height={18}
-          className={classes.skeleton}
-        />
-      </Container>
-      <Divider />
       <Container className={classes.root}>
         <Grid container>
           <Grid container direction="row" style={{ marginTop: 16 }}>

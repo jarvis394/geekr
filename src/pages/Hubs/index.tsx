@@ -8,7 +8,6 @@ import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import { getHubsList } from 'src/store/actions/hubs'
 import { useParams, useHistory } from 'react-router-dom'
-import { Hub } from 'src/interfaces'
 import ErrorComponent from 'src/components/blocks/Error'
 import EmptySVG from 'src/components/svg/Empty'
 import { getHubsSearchResults } from 'src/store/actions/hubs'
@@ -104,6 +103,8 @@ const Hubs = () => {
     dispatch(getHubsList(currentPage))
   }, [currentPage, dispatch])
 
+  console.log(storeSearchResults)
+
   return fetchError ? (
     <ErrorComponent message={fetchError.error.message} />
   ) : (
@@ -114,8 +115,8 @@ const Hubs = () => {
         {isFetched &&
           storeSearchQuery &&
           storeSearchResults.length !== 0 &&
-          storeSearchResults.map((e: Hub.Hub, i: number) => (
-            <Item data={e} key={i} />
+          storeSearchResults.hubIds.map((e: string, i: number) => (
+            <Item data={storeSearchResults.hubRefs[e]} key={i} />
           ))}
         {isFetched && storeSearchQuery && storeSearchResults.length === 0 && (
           <NoResults />

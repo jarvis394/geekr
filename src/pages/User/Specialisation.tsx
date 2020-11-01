@@ -19,7 +19,7 @@ export const Specialisation = ({
   const classes = useStyles()
   const user = useSelector((store) => store.user.profile.user.data)
 
-  return user.description_html ? (
+  return user.specializm ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>Специализация</Typography>
       <Typography>{user.specializm}</Typography>

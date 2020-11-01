@@ -8,6 +8,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import { Hub } from 'src/interfaces'
 import { Link } from 'react-router-dom'
+import FormattedText from 'src/components/formatters/FormattedText'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,7 +35,7 @@ const Item = ({ data }: { data: Hub.Hub }) => {
       </ListItemAvatar>
       <ListItemText
         primaryTypographyProps={{ className: classes.primaryText }}
-        primary={data.titleHtml}
+        primary={<FormattedText>{data.titleHtml}</FormattedText>}
         secondary={data.descriptionHtml}
       />
     </ListItem>
