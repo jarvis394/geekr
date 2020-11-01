@@ -5,6 +5,7 @@ import * as serviceWorker from './serviceWorker'
 import moment from 'moment'
 import { Provider } from 'react-redux'
 import store from './store'
+import swConfig from './serviceWorkerConfig'
 import 'react-medium-image-zoom/dist/styles.css'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 
@@ -18,4 +19,4 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 )
-serviceWorker.register()
+serviceWorker.register(swConfig)
