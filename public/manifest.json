@@ -6,10 +6,23 @@
       "src": "favicon-32x32.png",
       "type": "image/png",
       "sizes": "32x32"
+    },
+    {
+      "src": "favicon-16x16.png",
+      "type": "image/png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "maskable_icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": "/top/day/page/1",
+  "start_url": "/top/day/p/1",
   "display": "standalone",
   "theme_color": "#2979ff",
-  "background_color": "#ffffff"
+  "scope": "/",
+  "background_color": "#ffffff",
+  "splash_pages": null
 }

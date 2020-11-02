@@ -87,14 +87,6 @@ const AboutPage = () => {
         </>
       ),
       props: { variant: 'body1', style: { fontSize: 18, lineHeight: '28px' } },
-    },
-    {
-      data: (
-        <>
-          Версия: 1.0.0
-        </>
-      ),
-      props: { variant: 'body1', style: { fontSize: 18, lineHeight: '28px', opacity: 0.5 } },
     }
   ]
 
