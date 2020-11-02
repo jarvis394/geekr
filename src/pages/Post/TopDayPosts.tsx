@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import { Posts } from 'src/interfaces'
 import DensePostsSkeleton from 'src/components/skeletons/DensePostsSkeleton'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { getPosts } from 'src/api'
 
 const useStyles = makeStyles((theme) => ({
@@ -69,7 +69,7 @@ const Post = ({ data }) => {
   const classes = useStyles(isBookmarked)
   const { id, titleHtml: title, timePublished: tsUnparsed, statistics } = data
   const { score } = statistics
-  const ts = moment(tsUnparsed).calendar()
+  const ts = dayjs(tsUnparsed).calendar()
 
   return (
     <Grid className={classes.post}>

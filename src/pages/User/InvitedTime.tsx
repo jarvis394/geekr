@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography } from '@material-ui/core'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 export const InvitedTime = () => {
   const classes = useStyles()
   const user = useSelector((store) => store.user.profile.user.data)
-  const timeInvited = moment(user.time_invited).fromNow()
+  const timeInvited = dayjs(user.time_invited).fromNow()
   const textTimeInvited = timeInvited[0].toUpperCase() + timeInvited.slice(1)
   const wasInvitedText = user.sex === '1' ? 'был приглашён' : 'была приглашена'
   return (

@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
 import numToWord from 'number-to-words-ru'
 import { Link } from 'react-router-dom'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import NewsItemSkeleton from '../skeletons/NewsItem'
 import { useDispatch } from 'react-redux'
 import { getNewsPromo } from 'src/store/actions/news'
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NewsItem = ({ data }): React.ReactElement => {
   const classes = useStyles()
-  const ts = moment(data.timePublished).calendar()
+  const ts = dayjs(data.timePublished).calendar()
   const commentsCount = numToWord.convert(data.statistics.commentsCount, {
     currency: {
       currencyNameCases: ['комментарий', 'комментария', 'комментариев'],
@@ -138,7 +138,7 @@ const NewsBlock = () => {
         news &&
         news
           // Sort news in a descending order based on their timePublished
-          .sort((a, b) => +moment(b.timePublished) - +moment(a.timePublished))
+          .sort((a, b) => +(new Date(b.timePublished)) - +(new Date(a.timePublished)))
           .map((e, i) => <NewsItem data={e} key={i} />)}
       <Box className={classes.linkBox}>
         <Button

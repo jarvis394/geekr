@@ -9,7 +9,7 @@ import { getPost } from '../../api'
 import { Link } from 'react-router-dom'
 import PostViewSkeleton from '../../components/skeletons/PostView'
 import ErrorComponent from '../../components/blocks/Error'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import FormattedText from '../../components/formatters/FormattedText'
 import { Theme } from '@material-ui/core/styles'
 import { Post as IPost, Company as ICompany } from 'src/interfaces'
@@ -134,7 +134,7 @@ const Post = () => {
             {post.author.login}
           </Typography>
           <Typography className={classes.ts}>
-            {moment(post.timePublished).fromNow()}
+            {dayjs(post.timePublished).fromNow()}
           </Typography>
         </Grid>
         <Typography className={classes.title}>{post.titleHtml}</Typography>
