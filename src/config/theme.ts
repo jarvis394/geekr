@@ -24,8 +24,8 @@ export const makePrimaryColors = (
   dark: string
 } => ({
   main: THEME_TYPES[t] === 'dark' ? blue.A100 : blue.A400,
-  light: THEME_TYPES[t] ? blue.A100 : blue.A400,
-  dark: THEME_TYPES[t] ? darken(blue.A100, 0.1) : blue.A700,
+  light: THEME_TYPES[t] === 'dark' ? blue.A100 : blue.A400,
+  dark: THEME_TYPES[t] === 'dark' ? darken(blue.A100, 0.1) : blue.A700,
 })
 
 const generateTheme = (themeType?: PaletteType): ThemeOptions => ({
