@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import { Post } from 'src/interfaces'
 import DensePostsSkeleton from 'src/components/skeletons/DensePostsSkeleton'
 import getSimilar from 'src/api/getSimilar'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 interface Props {
   id: number | string
@@ -72,7 +72,7 @@ const SimilarPost = ({ data }) => {
   const [isBookmarked, setBookmarkedState] = useState<boolean>(false)
   const classes = useStyles(isBookmarked)
   const { score, id, title, time_published: tsUnparsed } = data
-  const ts = moment(tsUnparsed).calendar()
+  const ts = dayjs(tsUnparsed).calendar()
 
   return (
     <Grid className={classes.post}>

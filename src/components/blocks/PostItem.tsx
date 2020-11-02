@@ -10,7 +10,7 @@ import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
 import { makeStyles, darken, lighten } from '@material-ui/core/styles'
 import formatNumber from 'src/utils/formatNumber'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import parse from 'html-react-parser'
 import { Post } from 'src/interfaces'
 import UserAvatar from './UserAvatar'
@@ -109,7 +109,7 @@ export const PostItem = ({
   style?: Record<string, unknown>
 }) => {
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
-  const ts = moment(post.timePublished).calendar().toLowerCase()
+  const ts = dayjs(post.timePublished).calendar().toLowerCase()
   const { login, avatarUrl } = post.author
   const {
     titleHtml: unparsedTitle,

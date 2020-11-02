@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Button, Grid, Typography } from '@material-ui/core'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import FormattedText from '../../formatters/FormattedText'
 import GreenRedNumber from '../../formatters/GreenRedNumber'
 import UserAvatar from '../UserAvatar'
@@ -124,7 +124,7 @@ const Comment = ({ data }) => {
     isFavorite,
   })
   const { message } = data
-  const ts = moment(data.timePublished).fromNow()
+  const ts = dayjs(data.timePublished).fromNow()
   const commentOpacity = data.score < 0 ? getOpacity(data.score) : 1
   const margin =
     data.level > MAX_LEVEL
