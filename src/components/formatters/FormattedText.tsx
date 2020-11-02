@@ -7,6 +7,7 @@ import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser'
 import LazyLoadImage from '../blocks/LazyLoadImage'
 import Details from '../blocks/Details'
 import Iframe from 'react-iframe'
+import { Node as MathJaxNode } from '@nteract/mathjax'
 
 const useStyles = makeStyles((theme) => ({
   img: {
@@ -87,6 +88,11 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     minWidth: '100%',
   },
+  mathJaxNode: {
+    '& span.mjx-chtml': {
+      whiteSpace: 'normal',
+    }
+  }
 }))
 
 const FormattedText = ({
@@ -117,6 +123,11 @@ const FormattedText = ({
         )
       }
       if (name === 'img') {
+        if (attribs['data-tex']) {
+          const formula = attribs['alt'].slice(1, attribs['alt'].length - 1)
+          return <div className={classes.mathJaxNode}><MathJaxNode inline={attribs['data-tex'] === 'inline'}>{formula}</MathJaxNode></div>
+        }
+
         return (
           <LazyLoadImage
             placeholder={
