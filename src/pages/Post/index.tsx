@@ -203,8 +203,6 @@ const Post = () => {
   if (post) document.title = post.titleHtml
   if (fetchError) return <ErrorComponent message={fetchError} />
 
-  console.log(post?.textHtml)
-
   return (
     <div className={classes.root}>
       {contents}
