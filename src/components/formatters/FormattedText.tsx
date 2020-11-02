@@ -12,7 +12,8 @@ import { Node as MathJaxNode } from '@nteract/mathjax'
 const useStyles = makeStyles((theme) => ({
   img: {
     maxWidth: '100%',
-    width: '100%',
+    verticalAlign: 'middle',
+    height: 'auto'
   },
   text: {
     '& a': {
