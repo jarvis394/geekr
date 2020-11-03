@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { makeStyles, fade } from '@material-ui/core/styles'
+import { makeStyles, fade, useTheme } from '@material-ui/core/styles'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import Spoiler from '../blocks/Spoiler'
@@ -8,6 +8,8 @@ import LazyLoadImage from '../blocks/LazyLoadImage'
 import Details from '../blocks/Details'
 import Iframe from 'react-iframe'
 import { Node as MathJaxNode } from '@nteract/mathjax'
+
+type FloatType = 'left' | 'right'
 
 const useStyles = makeStyles((theme) => ({
   img: {
@@ -32,9 +34,10 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: theme.shape.borderRadius,
       wordBreak: 'break-word',
     },
+    '& div.scrollable-table': {
+      overflow: 'auto'
+    },
     '& table': {
-      overflow: 'auto',
-      display: 'block',
       width: '100%',
       borderCollapse: 'collapse',
     },
@@ -43,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
       border: '1px solid ' + theme.palette.text.hint,
       verticalAlign: 'top',
       lineHeight: '1.5',
+      minWidth: 100
     },
     '& h1, h2, h3, h4, h5, h6': {
       margin: theme.spacing(2) + 'px 0 0 0',
@@ -73,6 +77,10 @@ const useStyles = makeStyles((theme) => ({
         lineHeight: '18px',
       },
     },
+    // MathJaxNode overflow fix
+    '& span.mjx-chtml': {
+      whiteSpace: 'normal',
+    }
   },
   syntaxHighlighter: {
     margin: 0,
@@ -89,11 +97,6 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     minWidth: '100%',
   },
-  mathJaxNode: {
-    '& span.mjx-chtml': {
-      whiteSpace: 'normal',
-    }
-  }
 }))
 
 const FormattedText = ({
@@ -104,6 +107,7 @@ const FormattedText = ({
 }) => {
   const classes = useStyles(disableParagraphMargin)
   const [iframeHeights, setIframeHeights] = React.useState<Record<string, number>>({})
+  const theme = useTheme()
   const options: HTMLReactParserOptions = {
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === 'pre') {
@@ -126,7 +130,16 @@ const FormattedText = ({
       if (name === 'img') {
         if (attribs['data-tex']) {
           const formula = attribs['alt'].slice(1, attribs['alt'].length - 1)
-          return <div className={classes.mathJaxNode}><MathJaxNode inline={attribs['data-tex'] === 'inline'}>{formula}</MathJaxNode></div>
+          return <MathJaxNode inline={attribs['data-tex'] === 'inline'}>{formula}</MathJaxNode>
+        }
+
+        const imgStyles = {
+          float: (attribs.align || 'none') as FloatType,
+          marginRight: attribs.align === 'left' ? theme.spacing(2) : 0,
+          marginLeft: attribs.align === 'right' ? theme.spacing(2) : 0,
+          marginBottom: attribs.align ? theme.spacing(1) : 0,
+          maxWidth: attribs.align ? '40%' : '100%',
+          width: attribs['data-width'] || 'auto'
         }
 
         return (
@@ -135,11 +148,13 @@ const FormattedText = ({
               <img
                 src={attribs.src}
                 alt={attribs.alt || 'Image'}
+                style={imgStyles}
                 className={classes.img}
               />
             }
             src={attribs['data-src']}
             alt={attribs.alt || 'Image'}
+            style={imgStyles}
             className={classes.img}
           />
         )
