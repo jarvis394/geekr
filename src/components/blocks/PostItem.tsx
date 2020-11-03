@@ -105,14 +105,14 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.hint,
     fontFamily: 'Google Sans',
     fontWeight: 500,
-    flexGrow: 1
+    flexGrow: 1,
   },
   trollLink: {
     color: theme.palette.primary.main,
     fontFamily: 'Google Sans',
     fontWeight: 500,
-    textDecoration: 'none'
-  }
+    textDecoration: 'none',
+  },
 }))
 
 export const PostItem = ({
@@ -169,18 +169,34 @@ export const PostItem = ({
     : leadImage
   const classes = useStyles(!!postFisrtImage)
   const isCorporative = post.isCorporative
-  const companyAlias = isCorporative ? post.hubs.find((e) => e.type === 'corporative').alias : null
+  const companyAlias = isCorporative
+    ? post.hubs.find((e) => e.type === 'corporative').alias
+    : null
 
   // Return troll text for hidden post
-  if (hiddenAuthors.some(e => e === login) || (post.isCorporative && hiddenCompanies.some(e => e === companyAlias))) return (
-    <Paper style={{ padding: 16, display: 'flex' }} elevation={0} className={classes.paper}>
-      <Typography className={classes.trollText}>Тут был тролль</Typography>
-      <Link className={classes.trollLink} to={'/post/' + id} style={{ display: 'flex', alignItems: 'center' }}>
-        <Typography className={classes.trollLink}>всё равно читать</Typography>
-        <RightIcon />
-      </Link>
-    </Paper>
+  if (
+    hiddenAuthors.some((e) => e === login) ||
+    (post.isCorporative && hiddenCompanies.some((e) => e === companyAlias))
   )
+    return (
+      <Paper
+        style={{ padding: 16, display: 'flex' }}
+        elevation={0}
+        className={classes.paper}
+      >
+        <Typography className={classes.trollText}>Тут был тролль</Typography>
+        <Link
+          className={classes.trollLink}
+          to={'/post/' + id}
+          style={{ display: 'flex', alignItems: 'center' }}
+        >
+          <Typography className={classes.trollLink}>
+            всё равно читать
+          </Typography>
+          <RightIcon />
+        </Link>
+      </Paper>
+    )
 
   return (
     <Paper elevation={0} className={classes.paper} style={style}>

@@ -27,9 +27,9 @@ const UserAvatar = ({
   // Otherwise, we render UserPlaceholder
   const state = src
     ? [
-      'habr.com/images/avatars/stub-user',
-      'habr.com/images/stub-user',
-    ].some((e) => src.split('//')[1].startsWith(e))
+        'habr.com/images/avatars/stub-user',
+        'habr.com/images/stub-user',
+      ].some((e) => src.split('//')[1].startsWith(e))
     : true
 
   return (

@@ -24,7 +24,11 @@ import Menu from '@material-ui/core/Menu'
 import { makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
-import { setHiddenAuthors, setHiddenCompanies, setTheme } from 'src/store/actions/settings'
+import {
+  setHiddenAuthors,
+  setHiddenCompanies,
+  setTheme,
+} from 'src/store/actions/settings'
 import { THEMES, PaletteType, THEME_NAMES } from 'src/config/constants'
 import { TransitionProps } from '@material-ui/core/transitions'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
@@ -84,8 +88,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontFamily: 'Google Sans',
     fontSize: 24,
-    marginTop: theme.spacing(4)
-  }
+    marginTop: theme.spacing(4),
+  },
 }))
 
 const Transition = React.forwardRef(function Transition(
@@ -95,13 +99,13 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />
 })
 
-const HiddenArticlesDialogComponent = ({ 
+const HiddenArticlesDialogComponent = ({
   primaryText,
   secondaryText,
   dialogContentText,
   inputPlaceholder,
   data,
-  action
+  action,
 }) => {
   const [open, setOpen] = React.useState(false)
   const handleClickOpen = () => setOpen(true)
@@ -125,8 +129,8 @@ const HiddenArticlesDialogComponent = ({
     const [alertDialogOpen, setAlertOpen] = React.useState(false)
     const handleBannedItemClick = () => setAlertOpen(true)
     const handleAlertClose = () => setAlertOpen(false)
-    const handleAlertCloseWithDeletion = () => {      
-      const newData = data.filter(e => e !== text)
+    const handleAlertCloseWithDeletion = () => {
+      const newData = data.filter((e) => e !== text)
       dispatch(action(newData))
       setAlertOpen(false)
     }
@@ -139,10 +143,7 @@ const HiddenArticlesDialogComponent = ({
             <CloseRoundedIcon />
           </IconButton>
         </ListItem>
-        <Dialog
-          open={alertDialogOpen}
-          onClose={handleAlertClose}
-        >
+        <Dialog open={alertDialogOpen} onClose={handleAlertClose}>
           <DialogTitle id="alert-dialog-title">Подтверждение</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
@@ -150,10 +151,16 @@ const HiddenArticlesDialogComponent = ({
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleAlertClose} color="default" >
+            <Button onClick={handleAlertClose} color="default">
               Нет, оставить
             </Button>
-            <Button onClick={handleAlertCloseWithDeletion} color="primary" variant="contained" disableElevation autoFocus>
+            <Button
+              onClick={handleAlertCloseWithDeletion}
+              color="primary"
+              variant="contained"
+              disableElevation
+              autoFocus
+            >
               Да, удалить
             </Button>
           </DialogActions>
@@ -180,9 +187,7 @@ const HiddenArticlesDialogComponent = ({
           <Typography variant="h6">{primaryText}</Typography>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            {dialogContentText}
-          </DialogContentText>
+          <DialogContentText>{dialogContentText}</DialogContentText>
           <form method="POST" onSubmit={(e) => handleBannedItemAdd(e)}>
             <Paper elevation={0} className={classes.dialogInputPaper}>
               <InputBase
@@ -206,11 +211,15 @@ const HiddenArticlesDialogComponent = ({
           </form>
 
           {/** List for banned items */}
-          {data.length !== 0 ? <List>
-            {data.map((e: string, i: number) => (
-              <BannedListItem key={i} text={e} />
-            ))}
-          </List> : <Typography className={classes.nothingHere}>Пусто!</Typography>}
+          {data.length !== 0 ? (
+            <List>
+              {data.map((e: string, i: number) => (
+                <BannedListItem key={i} text={e} />
+              ))}
+            </List>
+          ) : (
+            <Typography className={classes.nothingHere}>Пусто!</Typography>
+          )}
         </DialogContent>
       </Dialog>
     </div>
