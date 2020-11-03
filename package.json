@@ -79,7 +79,7 @@
     "cra-append-sw": "^2.7.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
-    "eslint": "^7.12.1",
+    "eslint": "^6.6.0",
     "eslint-plugin-react": "^7.21.5",
     "husky": "^5.0.0-beta.0",
     "prettier": "^2.1.2",
