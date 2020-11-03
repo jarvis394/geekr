@@ -24,7 +24,7 @@ export interface TabObject {
 
 interface Params {
   tabs: TabObject[]
-  onChange: (event: React.ChangeEvent<{}>, value: number) => void
+  onChange: (event: React.ChangeEvent<unknown>, value: number) => void
   value: number
   hidden: boolean
   shouldUseLinks?: boolean

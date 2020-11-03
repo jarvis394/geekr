@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import makeRequest from './makeRequest'
 import { Posts } from '../interfaces'
 

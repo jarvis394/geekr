@@ -56,7 +56,10 @@ const RouterTabs = () => {
   const location = useLocation()
   const shouldShow = isValidPath(location.pathname)
   const [value, setValue] = useState<number>(findPathValue(location.pathname))
-  const handleChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleChange = (
+    _event: React.ChangeEvent<unknown>,
+    newValue: number
+  ) => {
     setValue(newValue)
   }
 

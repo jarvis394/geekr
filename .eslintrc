@@ -33,7 +33,7 @@
     "jsx-boolean-value": "off",
     "no-inner-declarations": "off",
     "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
-    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "indent": ["warn", 2, { "SwitchCase": 1, "flatTernaryExpressions": true }],
     "linebreak-style": ["error", "windows"],
     "quotes": ["error", "single"],
     "semi": ["error", "never"],
