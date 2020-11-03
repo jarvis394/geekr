@@ -21,15 +21,16 @@ const UserAvatar = ({
   login: string
   className?: string
 }) => {
+  const habrStubPaths = [
+    'habr.com/images/avatars/stub-user',
+    'habr.com/images/stub-user',
+  ]
   const classes = useStyles()
   // Checks if user has a stub Habr avatar or not
   // If false, then user has a custom avatar and we should render Avatar component
   // Otherwise, we render UserPlaceholder
   const state = src
-    ? [
-        'habr.com/images/avatars/stub-user',
-        'habr.com/images/stub-user',
-      ].some((e) => src.split('//')[1].startsWith(e))
+    ? habrStubPaths.some((e) => src.split('//')[1].startsWith(e))
     : true
 
   return (
