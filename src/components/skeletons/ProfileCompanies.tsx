@@ -1,7 +1,13 @@
 import * as React from 'react'
 import Skeleton from '@material-ui/lab/Skeleton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { Typography, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core'
+import {
+  Typography,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+} from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   root: {

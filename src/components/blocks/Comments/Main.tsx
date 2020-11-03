@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   progress: {
     marginTop: theme.spacing(2),
     borderRadius: theme.shape.borderRadius,
-    margin: theme.spacing(0, 2)
+    margin: theme.spacing(0, 2),
   },
   nothingText: {
     marginTop: theme.spacing(2),
@@ -78,7 +78,7 @@ const Comments = ({ postId }) => {
   }, [commentsSliceEnd, isLoadingNewComments, commentsLength])
 
   const flatten = useCallback((nodes, a = []) => {
-    nodes.forEach(e => {
+    nodes.forEach((e) => {
       a.push(e)
       flatten(e.children, a)
     })
@@ -150,12 +150,7 @@ const Comments = ({ postId }) => {
         {comments &&
           comments
             .slice(0, commentsSliceEnd)
-            .map((node) => (
-              <Comment
-                key={node.id}
-                data={node}
-              />
-            ))}
+            .map((node) => <Comment key={node.id} data={node} />)}
         {commentsLength !== 0 && (!comments || isLoadingNewComments) && (
           <LinearProgress className={classes.progress} />
         )}

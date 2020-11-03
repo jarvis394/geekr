@@ -46,11 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const BottomBar = ({ post }: { post: Post }) => {
-  const {
-    id,
-    titleHtml: title,
-    statistics
-  } = post
+  const { id, titleHtml: title, statistics } = post
   const { favoritesCount, commentsCount, score: sc } = statistics
   const [isBookmarked, setBookmarkState] = React.useState<boolean>(false)
   const classes = useStyles()

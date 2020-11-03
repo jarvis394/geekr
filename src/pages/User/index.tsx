@@ -65,13 +65,14 @@ const User = ({ path }) => {
           <Component user={user} />
         </>
       )}
-      {isUserFetching && (Component === Profile ? (
-        <UserPageSkeleton />
-      ) : (
-        <div className={classes.centered}>
-          <CircularProgress />
-        </div>
-      ))}
+      {isUserFetching &&
+        (Component === Profile ? (
+          <UserPageSkeleton />
+        ) : (
+          <div className={classes.centered}>
+            <CircularProgress />
+          </div>
+        ))}
     </>
   )
 }

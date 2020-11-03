@@ -3,7 +3,7 @@ import Props from '../../interfaces/SVGProps'
 
 const NotFound = ({ svgProps, ...props }: Props) => {
   const isLight = props.theme === 'light'
-  
+
   return (
     <div {...props}>
       <svg
@@ -83,7 +83,7 @@ const NotFound = ({ svgProps, ...props }: Props) => {
         <path
           d="M563.21,706.78c2.92-4,7.93-6.8,12.73-5.71s9.35,5.66,13.62,3.37c5.84-3.12,1.7-14.59,11.18-15.44a12.44,12.44,0,0,1,5.77,1c4,1.63,10.26,3.47,13.34-.2,1.81-2.16,1.68-5.45,3.41-7.69,2-2.6,5.81-2.93,9.06-2.43l.16.05c6.27,2.59,13.13-1.71,12.64-8.47-.63-9,2.23-17.48,2.85-19.32l11.88-35.31A60.38,60.38,0,0,0,622,540.34h0a60.38,60.38,0,0,0-76.27,37.86L527,633.73a60.39,60.39,0,0,0,34.82,75.15A21.47,21.47,0,0,1,563.21,706.78Z"
           transform="translate(-180 -86.57)"
-          fill={isLight ? '#fff' : '#ffffff55' }
+          fill={isLight ? '#fff' : '#ffffff55'}
         />
         <circle cx="405.35" cy="486.08" r="6.51" opacity="0.2" />
         <circle cx="442.37" cy="498.53" r="6.51" opacity="0.2" />
@@ -96,8 +96,18 @@ const NotFound = ({ svgProps, ...props }: Props) => {
           fill={isLight ? '#e0e0e0' : '#000'}
           opacity={isLight ? 1 : 0.2}
         />
-        <circle cx="552.53" cy="487.52" r="9.76" fill={isLight ? '#fff' : '#ffffff55' } />
-        <circle cx="583.45" cy="472.17" r="4.88" fill={isLight ? '#fff' : '#ffffff55' } />
+        <circle
+          cx="552.53"
+          cy="487.52"
+          r="9.76"
+          fill={isLight ? '#fff' : '#ffffff55'}
+        />
+        <circle
+          cx="583.45"
+          cy="472.17"
+          r="4.88"
+          fill={isLight ? '#fff' : '#ffffff55'}
+        />
         <g opacity="0.5">
           <g opacity="0.3">
             <path
@@ -131,12 +141,12 @@ const NotFound = ({ svgProps, ...props }: Props) => {
         <path
           d="M612,192.4c-158.18,0-286.42,33.51-286.42,74.86H898.42C898.42,225.91,770.18,192.4,612,192.4Z"
           transform="translate(-180 -86.57)"
-          fill={isLight ? '#fff' : '#777' }
+          fill={isLight ? '#fff' : '#777'}
         />
         <path
           d="M612,342.11c158.18,0,286.42-33.51,286.42-74.85H325.58C325.58,308.6,453.82,342.11,612,342.11Z"
           transform="translate(-180 -86.57)"
-          fill={isLight ? '#fff' : '#777' }
+          fill={isLight ? '#fff' : '#777'}
         />
         <path
           d="M612,342.11c158.18,0,286.42-33.51,286.42-74.85H325.58C325.58,308.6,453.82,342.11,612,342.11Z"

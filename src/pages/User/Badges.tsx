@@ -21,12 +21,12 @@ export const Badges = ({
 }: ComponentWithUserParams) => {
   const classes = useStyles()
   const user = useSelector((store) => store.user.profile.user.data)
-  
-  return user.badges.length !== 0 ? (
+
+  return user.badges ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>Значки</Typography>
       <Grid spacing={1} container className={classes.badges}>
-        {user.badges.map((e, i) => (
+        {Object.values(user.badges).map((e, i) => (
           <Grid key={i} item>
             <Chip
               style={{ cursor: 'help' }}

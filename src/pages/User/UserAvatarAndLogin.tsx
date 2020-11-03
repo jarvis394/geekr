@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 export const UserAvatarAndLogin = () => {
   const classes = useStyles()
   const user = useSelector((store) => store.user.profile.user.data)
-  
+
   return (
     <>
       <UserAvatar

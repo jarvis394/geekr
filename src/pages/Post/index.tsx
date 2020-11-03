@@ -123,7 +123,7 @@ const Post = () => {
         >
           <UserAvatar
             login={post.author.login}
-            src={post.author.avatar}
+            src={post.author.avatarUrl}
             className={classes.avatar}
           />
           <Typography

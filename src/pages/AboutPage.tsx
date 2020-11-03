@@ -25,9 +25,13 @@ const useStyles = makeStyles((theme) => ({
 const AboutPage = () => {
   const classes = useStyles()
   const Text = ({ index, children, ...props }) => (
-    <Fade in timeout={1000} style={{
-      transitionDelay: `${index / 4}s`,
-    }}>
+    <Fade
+      in
+      timeout={1000}
+      style={{
+        transitionDelay: `${index / 4}s`,
+      }}
+    >
       <div>
         <Typography className={classes.text} {...props}>
           {children}
@@ -87,7 +91,7 @@ const AboutPage = () => {
         </>
       ),
       props: { variant: 'body1', style: { fontSize: 18, lineHeight: '28px' } },
-    }
+    },
   ]
 
   React.useEffect(() => window.scrollTo(0, 0), [])

@@ -51,7 +51,12 @@ const TabsComponent = ({
       className={classes.root}
     >
       {tabs.map(({ to, label }, i: number) => (
-        <LinkTabMemoized isLink={shouldUseLinks} to={to()} label={label} key={i} />
+        <LinkTabMemoized
+          isLink={shouldUseLinks}
+          to={to()}
+          label={label}
+          key={i}
+        />
       ))}
     </Tabs>
   )

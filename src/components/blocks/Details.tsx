@@ -15,14 +15,14 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 14,
       lineHeight: '18px',
       marginTop: theme.spacing(1),
-      textAlign: 'center'
+      textAlign: 'center',
     },
     '& figure': {
       display: 'flex',
       alignItems: 'center',
-      flexDirection: 'column'
-    }
-  }
+      flexDirection: 'column',
+    },
+  },
 }))
 
 const Details = ({ title, children }) => {

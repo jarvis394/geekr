@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   img: {
     maxWidth: '100%',
     verticalAlign: 'middle',
-    height: 'auto'
+    height: 'auto',
   },
   text: {
     '& a': {
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
       wordBreak: 'break-word',
     },
     '& div.scrollable-table': {
-      overflow: 'auto'
+      overflow: 'auto',
     },
     '& table': {
       width: '100%',
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
       border: '1px solid ' + theme.palette.text.hint,
       verticalAlign: 'top',
       lineHeight: '1.5',
-      minWidth: 100
+      minWidth: 100,
     },
     '& h1, h2, h3, h4, h5, h6': {
       margin: theme.spacing(2) + 'px 0 0 0',
@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
     // MathJaxNode overflow fix
     '& span.mjx-chtml': {
       whiteSpace: 'normal',
-    }
+    },
   },
   syntaxHighlighter: {
     margin: 0,
@@ -106,7 +106,9 @@ const FormattedText = ({
   ...props
 }) => {
   const classes = useStyles(disableParagraphMargin)
-  const [iframeHeights, setIframeHeights] = React.useState<Record<string, number>>({})
+  const [iframeHeights, setIframeHeights] = React.useState<
+    Record<string, number>
+  >({})
   const theme = useTheme()
   const options: HTMLReactParserOptions = {
     replace: ({ name, children, attribs }): void | React.ReactElement => {
@@ -130,7 +132,11 @@ const FormattedText = ({
       if (name === 'img') {
         if (attribs['data-tex']) {
           const formula = attribs['alt'].slice(1, attribs['alt'].length - 1)
-          return <MathJaxNode inline={attribs['data-tex'] === 'inline'}>{formula}</MathJaxNode>
+          return (
+            <MathJaxNode inline={attribs['data-tex'] === 'inline'}>
+              {formula}
+            </MathJaxNode>
+          )
         }
 
         const imgStyles = {
@@ -139,7 +145,7 @@ const FormattedText = ({
           marginLeft: attribs.align === 'right' ? theme.spacing(2) : 0,
           marginBottom: attribs.align ? theme.spacing(1) : 0,
           maxWidth: attribs.align ? '40%' : '100%',
-          width: attribs['data-width'] || 'auto'
+          width: attribs['data-width'] || 'auto',
         }
 
         return (
@@ -196,7 +202,10 @@ const FormattedText = ({
   React.useEffect(() => {
     window.addEventListener('message', (e) => {
       if (e.data.type === 'embed-size') {
-        setIframeHeights(prev => ({ ...prev, [e.data.id]: e.data.height || 'auto' }))
+        setIframeHeights((prev) => ({
+          ...prev,
+          [e.data.id]: e.data.height || 'auto',
+        }))
       }
     })
     return () => {

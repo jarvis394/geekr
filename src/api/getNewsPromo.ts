@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import makeRequest from './makeRequest'
-import { News } from '../interfaces'
+import { Posts } from '../interfaces'
 
-export default async (): Promise<News.NewsItem[]> =>
+export default async (): Promise<Posts> =>
   (
     await makeRequest({
       path: 'news/context',
@@ -10,7 +10,7 @@ export default async (): Promise<News.NewsItem[]> =>
       params: {
         extend_context: 'true',
         per_page: 5,
-        page_num: 1
-      }
+        page_num: 1,
+      },
     })
   ).data

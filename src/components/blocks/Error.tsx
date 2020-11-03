@@ -6,14 +6,16 @@ import isMobile from 'is-mobile'
 const chromeAddressBarHeight = 56
 const useStyles = makeStyles((theme) => ({
   centered: {
-    height: `calc(100vh - 96px - 194px - ${isMobile() ? chromeAddressBarHeight : '0'}px)`,
+    height: `calc(100vh - 96px - 194px - ${
+      isMobile() ? chromeAddressBarHeight : '0'
+    }px)`,
     minHeight: 600,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
     '@media (min-width: 768px)': {
-      flexDirection: 'row'
+      flexDirection: 'row',
     },
   },
   code: {
@@ -30,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: theme.spacing(2.5),
       paddingBottom: 0,
       borderRight: '1px solid ' + theme.palette.divider,
-      lineHeight: '48px'
+      lineHeight: '48px',
     },
   },
   message: {
@@ -42,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
       paddingLeft: theme.spacing(2.5),
       paddingTop: 0,
     },
-  }
+  },
 }))
 
 interface Params {

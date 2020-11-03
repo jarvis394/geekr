@@ -74,10 +74,13 @@ const UserTabs = () => {
   const findPath = (path: string): TabObject => {
     return tabs.find((e) => path.match(e.match))
   }
-  const findPathValue = React.useCallback((path: string): number => {
-    const res = tabs.findIndex((e) => path.match(e.match))
-    return res < 0 ? 0 : res
-  }, [tabs])
+  const findPathValue = React.useCallback(
+    (path: string): number => {
+      const res = tabs.findIndex((e) => path.match(e.match))
+      return res < 0 ? 0 : res
+    },
+    [tabs]
+  )
   const isValidPath = (path: string): boolean => !!findPath(path)
   const location = useLocation()
   const shouldShow = isValidPath(location.pathname)
@@ -87,7 +90,8 @@ const UserTabs = () => {
   }
 
   useEffect(() => setValue(findPathValue(location.pathname)), [
-    location.pathname, findPathValue
+    location.pathname,
+    findPathValue,
   ])
 
   return (

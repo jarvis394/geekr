@@ -10,6 +10,7 @@ import NewsItemSkeleton from '../skeletons/NewsItem'
 import { useDispatch } from 'react-redux'
 import { getNewsPromo } from 'src/store/actions/news'
 import { useSelector } from 'src/hooks'
+import { Post } from 'src/interfaces'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,48 +68,52 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const NewsItem = ({ data }): React.ReactElement => {
-  const classes = useStyles()
-  const ts = dayjs(data.timePublished).calendar()
-  const commentsCount = numToWord.convert(data.statistics.commentsCount, {
-    currency: {
-      currencyNameCases: ['комментарий', 'комментария', 'комментариев'],
-      fractionalPartNameCases: ['', '', ''],
-      currencyNounGender: {
-        integer: 0,
-        fractionalPart: 0,
+const NewsItem = React.memo(
+  ({ data }: { data: Post }): React.ReactElement => {
+    const classes = useStyles()
+    const ts = dayjs(data.timePublished).calendar()
+    const commentsCount = numToWord.convert(data.statistics.commentsCount, {
+      currency: {
+        currencyNameCases: ['комментарий', 'комментария', 'комментариев'],
+        fractionalPartNameCases: ['', '', ''],
+        currencyNounGender: {
+          integer: 0,
+          fractionalPart: 0,
+        },
       },
-    },
-    showNumberParts: {
-      integer: true,
-      fractional: false,
-    },
-    convertNumbertToWords: {
-      integer: false,
-      fractional: false,
-    },
-  })
+      showNumberParts: {
+        integer: true,
+        fractional: false,
+      },
+      convertNumbertToWords: {
+        integer: false,
+        fractional: false,
+      },
+    })
 
-  return (
-    <Link to={'/post/' + data.id} className={classes.article}>
-      <Grid container direction="row" className={classes.item}>
-        <Grid container direction="column">
+    return (
+      <Link to={'/post/' + data.id} className={classes.article}>
+        <Grid container direction="row" className={classes.item}>
+          <Grid container direction="column">
+            <Grid item>
+              <Typography className={classes.title}>
+                {data.titleHtml}
+              </Typography>
+            </Grid>
+            <Grid container direction="row" alignItems="center">
+              <Typography className={classes.ts}>{ts}</Typography>
+              <span className={classes.dot}>•</span>
+              <Typography className={classes.ts}>{commentsCount}</Typography>
+            </Grid>
+          </Grid>
           <Grid item>
-            <Typography className={classes.title}>{data.titleHtml}</Typography>
-          </Grid>
-          <Grid container direction="row" alignItems="center">
-            <Typography className={classes.ts}>{ts}</Typography>
-            <span className={classes.dot}>•</span>
-            <Typography className={classes.ts}>{commentsCount}</Typography>
+            <RightIcon color="disabled" />
           </Grid>
         </Grid>
-        <Grid item>
-          <RightIcon color="disabled" />
-        </Grid>
-      </Grid>
-    </Link>
-  )
-}
+      </Link>
+    )
+  }
+)
 
 const NewsBlock = () => {
   const classes = useStyles()
@@ -138,7 +143,9 @@ const NewsBlock = () => {
         news &&
         news
           // Sort news in a descending order based on their timePublished
-          .sort((a, b) => +(new Date(b.timePublished)) - +(new Date(a.timePublished)))
+          .sort(
+            (a, b) => +new Date(b.timePublished) - +new Date(a.timePublished)
+          )
           .map((e, i) => <NewsItem data={e} key={i} />)}
       <Box className={classes.linkBox}>
         <Button
@@ -156,4 +163,4 @@ const NewsBlock = () => {
   )
 }
 
-export default NewsBlock
+export default React.memo(NewsBlock)

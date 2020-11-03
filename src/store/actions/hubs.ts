@@ -27,7 +27,7 @@ export const getHubsSearchResults = (query: string) => async (dispatch) => {
 
   try {
     const data = await api.getHubsSearchResults(query)
-    
+
     dispatch({
       type: type + '_FULFILLED',
       payload: { data, query },

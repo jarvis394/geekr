@@ -22,7 +22,7 @@ dayjs.updateLocale('ru', {
   calendar: {
     sameDay: 'Сегодня, в hh:mm',
     lastDay: 'Вчера, в hh:mm',
-    sameElse: 'DD.MM.YYYY'
+    sameElse: 'DD.MM.YYYY',
   },
 })
 

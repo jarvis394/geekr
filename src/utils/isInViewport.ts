@@ -1,3 +1,5 @@
+import React from 'react'
+
 export default (ref: React.MutableRefObject<Element>, offset = 0) => {
   if (!ref.current) return false
   const top = ref.current.getBoundingClientRect().top

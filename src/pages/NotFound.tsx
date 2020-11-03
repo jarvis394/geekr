@@ -13,7 +13,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     minHeight: 600,
     flexDirection: 'column',
-    height: `calc(100vh - 96px - ${isMobile() ? chromeAddressBarHeight : '0'}px)`,
+    height: `calc(100vh - 96px - ${
+      isMobile() ? chromeAddressBarHeight : '0'
+    }px)`,
   },
   title: {
     fontFamily: 'Google Sans',
@@ -50,9 +52,7 @@ const NotFound = () => {
   return (
     <div className={classes.root}>
       <Typography className={classes.title}>four-o-four</Typography>
-      <Typography className={classes.text}>
-        Страница не найдена.
-      </Typography>
+      <Typography className={classes.text}>Страница не найдена.</Typography>
       <Typography className={classes.text}>
         Может,{' '}
         <Link to="/" className={classes.link}>

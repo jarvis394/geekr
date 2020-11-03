@@ -7,7 +7,7 @@ export default async (login: string, page: number): Promise<Posts> =>
       path: 'articles',
       params: {
         user: login,
-        page
+        page,
       },
       version: 2,
     })

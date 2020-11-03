@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.background.paper,
     borderRadius: 0,
     overflow: 'auto',
-    paddingBottom: theme.spacing(2)
+    paddingBottom: theme.spacing(2),
   },
   hubs: {
     background: theme.palette.background.default,
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   skeleton: {
     maxWidth: '100%',
     backgroundColor: theme.palette.action.hover,
-    borderRadius: 4
+    borderRadius: 4,
   },
 }))
 

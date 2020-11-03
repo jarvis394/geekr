@@ -29,12 +29,12 @@ export const useStyles = makeStyles((theme) => ({
   },
   blockMargin: {
     marginTop: theme.spacing(2),
-  }
+  },
 }))
 
 const Profile = ({ user }) => {
   const classes = useStyles()
-  
+
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   useEffect(() => {}, [user.login])
 
@@ -52,14 +52,17 @@ const Profile = ({ user }) => {
         ))}
       </div>
       <div className={classes.mainBlock}>
-        {[Specialisation, Badges, About, Hubs, Contacts, Children, Companies].map(
-          (Component, i) => (
-            <Component
-              key={i}
-              classes={classes.blockMargin}
-            />
-          )
-        )}
+        {[
+          Specialisation,
+          Badges,
+          About,
+          Hubs,
+          Contacts,
+          Children,
+          Companies,
+        ].map((Component, i) => (
+          <Component key={i} classes={classes.blockMargin} />
+        ))}
       </div>
     </>
   )

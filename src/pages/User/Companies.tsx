@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react'
-import { Typography, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core'
+import {
+  Typography,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+} from '@material-ui/core'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
@@ -32,9 +37,7 @@ const Companies = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const user = useSelector((store) => store.user.profile.user.data)
-  const companies = useSelector(
-    (store) => store.user.profile.companies.data
-  )
+  const companies = useSelector((store) => store.user.profile.companies.data)
   const isFetched = useSelector((store) => store.user.profile.companies.fetched)
   const isFetching = useSelector(
     (store) => store.user.profile.companies.fetching
@@ -46,7 +49,11 @@ const Companies = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   }, [user.login, dispatch])
 
   const Item = ({ data }: { data: Company }) => (
-    <ListItem style={{ paddingLeft: 0, paddingRight: 0 }} component={Link} to={'/company/' + data.name}>
+    <ListItem
+      style={{ paddingLeft: 0, paddingRight: 0 }}
+      component={Link}
+      to={'/company/' + data.name}
+    >
       <ListItemAvatar>
         <UserAvatar
           className={classes.avatar}

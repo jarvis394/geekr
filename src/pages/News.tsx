@@ -63,10 +63,7 @@ const News = () => {
           <PostItem post={posts.articleRefs[i]} key={i} />
         ))}
       {fetchError && (
-        <ErrorComponent
-          message={fetchError.error.message}
-          to="/news/p/1"
-        />
+        <ErrorComponent message={fetchError.error.message} to="/news/p/1" />
       )}
       <PaginationComponent />
     </List>

@@ -9,7 +9,9 @@ import { List, makeStyles } from '@material-ui/core'
 import PostSkeleton from 'src/components/skeletons/Post'
 import ErrorComponent from 'src/components/blocks/Error'
 
-interface ArticlesPathParams { page: string }
+interface ArticlesPathParams {
+  page: string
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +30,9 @@ const Articles = () => {
   const isFetched = useSelector((state) => state.user.articles.fetched)
   const isFetching = useSelector((state) => state.user.articles.fetching)
   const fetchError = useSelector((state) => state.user.articles.error)
-  const data = useSelector((state) => state.user.articles.data.pages[currentPage])
+  const data = useSelector(
+    (state) => state.user.articles.data.pages[currentPage]
+  )
   const user = useSelector((state) => state.user.profile.user.data)
   const pagesCount = useSelector((state) => state.user.articles.data.pagesCount)
 

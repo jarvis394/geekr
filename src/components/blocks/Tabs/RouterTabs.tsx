@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import Tabs from '.'
 import getCachedMode from 'src/utils/getCachedMode'
@@ -60,10 +60,18 @@ const RouterTabs = () => {
     setValue(newValue)
   }
 
-  useEffect(() => setValue(findPathValue(location.pathname)), [location.pathname])
+  useEffect(() => setValue(findPathValue(location.pathname)), [
+    location.pathname,
+  ])
 
   return (
-    <Tabs shouldUseLinks onChange={handleChange} tabs={tabs} hidden={!shouldShow} value={value} />
+    <Tabs
+      shouldUseLinks
+      onChange={handleChange}
+      tabs={tabs}
+      hidden={!shouldShow}
+      value={value}
+    />
   )
 }
 

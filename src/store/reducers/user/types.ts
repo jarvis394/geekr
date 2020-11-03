@@ -16,18 +16,17 @@ export interface PromiseItem<T> {
   error: null | string
 }
 export interface State {
-  hubs: PromiseItem<{ hubIds: string[]; hubRefs: Record<string, Hub.Hub>; pagesCount: number }>
-  user: PromiseItem<UserExtended>
-  companies: PromiseItem<Company[]>
-  children: PromiseItem<UserExtended[]>
+  hubs?: PromiseItem<{
+    hubIds: string[]
+    hubRefs: Record<string, Hub.Hub>
+    pagesCount: number
+  }>
+  user?: PromiseItem<UserExtended>
+  companies?: PromiseItem<Company[]>
+  children?: PromiseItem<UserExtended[]>
 }
 
-export const fieldsMap = [
-  'user',
-  'companies',
-  'children',
-  'hubs'
-]
+export const fieldsMap = ['user', 'companies', 'children', 'hubs']
 export const typesMap = [
   USER_PROFILE_DATA,
   USER_PROFILE_COMPANIES,

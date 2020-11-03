@@ -1,6 +1,6 @@
 import { State, fieldsMap, typesMap } from './types'
 
-const initialState = {} as State
+const initialState: State = {}
 ;['hubs', 'user', 'companies', 'children'].forEach(
   (e: string) =>
     (initialState[e] = {
@@ -21,7 +21,7 @@ export default (
         fetching: true,
         fetched: false,
         error: null,
-        data: null
+        data: null,
       }
     } else if (type.endsWith('FULFILLED')) {
       return {

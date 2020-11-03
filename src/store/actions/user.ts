@@ -20,7 +20,7 @@ export const request = async ({
   storeType,
   params,
   v2 = false,
-  dispatch
+  dispatch,
 }: RequestParams) => {
   const type = storeType + 'FETCH'
   dispatch({ type })
@@ -33,7 +33,10 @@ export const request = async ({
       payload: { data: v2 ? data : data?.data },
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error: error.message, ...params } })
+    dispatch({
+      type: type + '_REJECTED',
+      payload: { error: error.message, ...params },
+    })
   }
 }
 
@@ -41,7 +44,8 @@ export const getUser = (login: string) => async (dispatch) => {
   return await request({
     method: 'getUser',
     storeType: USER_PROFILE_DATA,
-    params: [login], dispatch
+    params: [login],
+    dispatch,
   })
 }
 
@@ -50,7 +54,7 @@ export const getUserCompanies = (login: string) => async (dispatch) => {
     method: 'getUserCompanies',
     storeType: USER_PROFILE_COMPANIES,
     params: [login],
-    dispatch
+    dispatch,
   })
 }
 
@@ -59,7 +63,7 @@ export const getUserChildren = (login: string) => async (dispatch) => {
     method: 'getUserChildren',
     storeType: USER_PROFILE_CHILDREN,
     params: [login],
-    dispatch
+    dispatch,
   })
 }
 
@@ -69,11 +73,13 @@ export const getUserHubs = (login: string) => async (dispatch) => {
     storeType: USER_PROFILE_HUBS,
     params: [login],
     v2: true,
-    dispatch
+    dispatch,
   })
 }
 
-export const getUserArticles = (login: string, page: number) => async (dispatch) => {
+export const getUserArticles = (login: string, page: number) => async (
+  dispatch
+) => {
   const type = USER_ARTICLES + 'FETCH'
   dispatch({ type })
 

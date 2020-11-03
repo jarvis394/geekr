@@ -20,14 +20,14 @@ const useStyles = makeStyles((theme) => ({
   chatIcon: {
     fontSize: 16,
     marginRight: theme.spacing(1),
-    color: theme.palette.text.secondary
-  }
+    color: theme.palette.text.secondary,
+  },
 }))
 
 const CommentsButton = ({
   id,
   className,
-  count
+  count,
 }: {
   id: number | string
   className?: string
@@ -47,7 +47,9 @@ const CommentsButton = ({
       >
         <ChatBubbleIcon className={classes.chatIcon} />
         Комментарии
-        <Typography className={classes.count} color="primary">{count}</Typography>
+        <Typography className={classes.count} color="primary">
+          {count}
+        </Typography>
       </Button>
     </div>
   )

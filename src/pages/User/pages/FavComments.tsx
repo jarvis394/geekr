@@ -1,11 +1,7 @@
 import React from 'react'
 
 const FavComments = () => {
-  return (
-    <div>
-      
-    </div>
-  )
+  return <div></div>
 }
 
 export default FavComments

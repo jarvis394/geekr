@@ -16,6 +16,8 @@ import { Post } from 'src/interfaces'
 import UserAvatar from './UserAvatar'
 import { POST_IMAGE_HEIGHT } from 'src/config/constants'
 import LazyLoadImage from './LazyLoadImage'
+import { useSelector } from 'src/hooks'
+import RightIcon from '@material-ui/icons/ChevronRightRounded'
 
 const ld = { lighten, darken }
 const useStyles = makeStyles((theme) => ({
@@ -99,6 +101,18 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none !important',
     paddingBottom: (hasImage) => (hasImage ? theme.spacing(2) : 0),
   },
+  trollText: {
+    color: theme.palette.text.hint,
+    fontFamily: 'Google Sans',
+    fontWeight: 500,
+    flexGrow: 1
+  },
+  trollLink: {
+    color: theme.palette.primary.main,
+    fontFamily: 'Google Sans',
+    fontWeight: 500,
+    textDecoration: 'none'
+  }
 }))
 
 export const PostItem = ({
@@ -108,15 +122,12 @@ export const PostItem = ({
   post: Post
   style?: Record<string, unknown>
 }) => {
+  const hiddenAuthors = useSelector((state) => state.settings.hiddenAuthors)
+  const hiddenCompanies = useSelector((state) => state.settings.hiddenCompanies)
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
   const ts = dayjs(post.timePublished).calendar().toLowerCase()
   const { login, avatarUrl } = post.author
-  const {
-    titleHtml: unparsedTitle,
-    id,
-    statistics,
-    leadData
-  } = post
+  const { titleHtml: unparsedTitle, id, statistics, leadData } = post
   const { readingCount, favoritesCount, commentsCount, score: sc } = statistics
   const { textHtml, imageUrl: leadImage } = leadData
   const title = parse(unparsedTitle)
@@ -153,8 +164,23 @@ export const PostItem = ({
   ]
   const imageURLRegEx = /<img[^>]+src="?([^"\s]+)"?\s*/g
   const imageURLRegExResults = imageURLRegEx.exec(textHtml)
-  const postFisrtImage = imageURLRegExResults ? imageURLRegExResults[1] : leadImage
+  const postFisrtImage = imageURLRegExResults
+    ? imageURLRegExResults[1]
+    : leadImage
   const classes = useStyles(!!postFisrtImage)
+  const isCorporative = post.isCorporative
+  const companyAlias = isCorporative ? post.hubs.find((e) => e.type === 'corporative').alias : null
+
+  // Return troll text for hidden post
+  if (hiddenAuthors.some(e => e === login) || (post.isCorporative && hiddenCompanies.some(e => e === companyAlias))) return (
+    <Paper style={{ padding: 16, display: 'flex' }} elevation={0} className={classes.paper}>
+      <Typography className={classes.trollText}>Тут был тролль</Typography>
+      <Link className={classes.trollLink} to={'/post/' + id} style={{ display: 'flex', alignItems: 'center' }}>
+        <Typography className={classes.trollLink}>всё равно читать</Typography>
+        <RightIcon />
+      </Link>
+    </Paper>
+  )
 
   return (
     <Paper elevation={0} className={classes.paper} style={style}>
@@ -175,10 +201,7 @@ export const PostItem = ({
           </Grid>
         </Link>
         <Grid item className={classes.imageHolder}>
-          <Link
-            style={{ display: 'flex', width: '100%' }}
-            to={'/post/' + id}
-          >
+          <Link style={{ display: 'flex', width: '100%' }} to={'/post/' + id}>
             {postFisrtImage && (
               <LazyLoadImage
                 src={postFisrtImage}
@@ -243,4 +266,4 @@ export const PostItem = ({
   )
 }
 
-export default PostItem
+export default React.memo(PostItem)

@@ -7,7 +7,7 @@ export const API_URL = 'https://m.habr.com/kek/'
 /**
  * Minimal application width to stay with the drawer
  */
-export const MIN_WIDTH = 900  
+export const MIN_WIDTH = 900
 
 export const POST_IMAGE_HEIGHT = 212
 
@@ -38,7 +38,7 @@ export const HOUR = 1000 * 60 * 60
 export const DEFAULT_UPDATE_INTERVAL = HOUR / 4
 
 export const DEFAULT_USER_SETTINGS: UserSettings = {
-  theme: 'light'
+  theme: 'light',
 }
 
 export const THEMES: PaletteType[] = ['light', 'dark', 'oled', 'sepia']
@@ -47,21 +47,21 @@ export const BACKGROUND_COLORS_DEFAULT = {
   light: '#fafafa',
   dark: '#121212',
   oled: '#121212',
-  sepia: '#f5e2a8'
-} 
+  sepia: '#f5e2a8',
+}
 
 export const BACKGROUND_COLORS_PAPER = {
   light: '#fff',
   dark: '#1d1d1d',
   oled: '#000',
-  sepia: '#ffecb3'
+  sepia: '#ffecb3',
 }
 
 export const THEME_NAMES = {
   light: 'Светлая тема',
   dark: 'Тёмная тема',
   oled: 'Тема для OLED экранов',
-  sepia: 'Ночной режим'
+  sepia: 'Ночной режим',
 }
 
 export type PaletteType = 'light' | 'dark' | 'oled' | 'sepia'
@@ -70,5 +70,5 @@ export const THEME_TYPES: Record<PaletteType, MUIPaletteType> = {
   light: 'light',
   dark: 'dark',
   oled: 'dark',
-  sepia: 'light'
+  sepia: 'light',
 }
