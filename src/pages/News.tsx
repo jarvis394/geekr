@@ -49,7 +49,6 @@ const News = () => {
   }
 
   useEffect(() => {
-    window.scrollTo(0, 0)
     dispatch(getNews(currentPage))
   }, [currentPage, dispatch])
 

@@ -71,7 +71,6 @@ const Home = () => {
   }
 
   useEffect(() => {
-    window.scrollTo(0, 0)
     dispatch(getPosts(mode, currentPage))
   }, [currentPage, mode, dispatch])
 

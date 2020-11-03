@@ -124,7 +124,6 @@ const NewsBlock = () => {
   const news = useSelector((state) => state.news.block.data)
 
   useEffect(() => {
-    window.scrollTo(0, 0)
     dispatch(getNewsPromo())
   }, [dispatch])
 

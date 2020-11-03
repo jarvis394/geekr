@@ -175,7 +175,6 @@ const Post = () => {
     const get = async () => {
       // Reset error state
       setError(null)
-      window.scrollTo(0, 0)
 
       try {
         setPost(await getPost(id))
@@ -186,6 +185,8 @@ const Post = () => {
     }
     get()
   }, [id])
+
+  React.useLayoutEffect(() => window.scrollTo(0, 0))
 
   // Get company data if post is corporative
   useEffect(() => {

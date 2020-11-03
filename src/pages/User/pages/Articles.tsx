@@ -52,7 +52,6 @@ const Articles = () => {
   }
 
   useEffect(() => {
-    window.scrollTo(0, 0)
     dispatch(getUserArticles(user.login, currentPage))
   }, [user.login, currentPage, dispatch])
 

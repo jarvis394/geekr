@@ -11,7 +11,6 @@ import isMobile from 'is-mobile'
 import Footer from './blocks/Footer'
 import { useSelector } from 'src/hooks'
 import Tabs from './blocks/Tabs/RouterTabs'
-// import StartupDialog from './StartupDialog'
 
 const chromeAddressBarHeight = 56
 const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
@@ -68,7 +67,7 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const Layout = (): React.ReactElement => {
+const App = (): React.ReactElement => {
   const storeTheme = useSelector((state) => state.settings.theme)
   const theme = createMuiTheme(storeTheme)
   const classes = useStyles(theme)
@@ -76,10 +75,12 @@ const Layout = (): React.ReactElement => {
   // Set root classes
   document.body.className = classes.root
 
+  // Restore user scroll (might not work)
+  window.history.scrollRestoration = 'auto'
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        {/* <StartupDialog /> */}
         <AppBar />
         <div className={classes.app}>
           <Tabs />
@@ -91,4 +92,4 @@ const Layout = (): React.ReactElement => {
   )
 }
 
-export default Layout
+export default App

@@ -27,9 +27,6 @@ const CommentsPage = () => {
       // Reset error state
       setError(null)
 
-      // Scroll to the page's top
-      window.scrollTo(0, 0)
-
       try {
         setPost(await getPost(id))
       } catch (e) {
