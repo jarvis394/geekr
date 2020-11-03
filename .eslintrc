@@ -27,14 +27,14 @@
     }
   },
   "rules": {
-    "no-console": "off",
+    "no-console": "warn",
     "member-access": "off",
     "jsx-no-lambda": "off",
     "jsx-boolean-value": "off",
     "no-inner-declarations": "off",
     "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
     "indent": ["warn", 2, { "SwitchCase": 1, "flatTernaryExpressions": true }],
-    "linebreak-style": ["error", "windows"],
+    "linebreak-style": ["off"],
     "quotes": ["error", "single"],
     "semi": ["error", "never"],
     "no-unused-vars": "off",
