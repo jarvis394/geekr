@@ -18,6 +18,7 @@ import { POST_IMAGE_HEIGHT } from 'src/config/constants'
 import LazyLoadImage from './LazyLoadImage'
 import { useSelector } from 'src/hooks'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
+import { Chip } from '@material-ui/core'
 
 const ld = { lighten, darken }
 const useStyles = makeStyles((theme) => ({
@@ -75,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
   postTs: {
     color: theme.palette.text.hint,
+    flexGrow: 1,
   },
   postAvatar: {
     width: theme.spacing(2.5),
@@ -214,6 +216,22 @@ export const PostItem = ({
             <Typography className={classes.postTs} variant="caption">
               {ts}
             </Typography>
+            {post.postLabels.some((e) => e === 'translation') && (
+              <Chip
+                label="Перевод"
+                variant="outlined"
+                color="primary"
+                size="small"
+              />
+            )}
+            {post.postLabels.some((e) => e === 'tutorial') && (
+              <Chip
+                label="Туториал"
+                variant="outlined"
+                color="primary"
+                size="small"
+              />
+            )}
           </Grid>
         </Link>
         <Grid item className={classes.imageHolder}>

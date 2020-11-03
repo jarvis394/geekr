@@ -19,6 +19,7 @@ dayjs.extend(updateLocalePlugin)
 
 dayjs.updateLocale('ru', {
   calendar: {
+    lastWeek: 'D MMMM, в hh:mm',
     sameDay: 'Сегодня, в hh:mm',
     lastDay: 'Вчера, в hh:mm',
     sameElse: 'DD.MM.YYYY',
