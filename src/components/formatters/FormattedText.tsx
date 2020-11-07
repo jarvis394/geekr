@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
         fontSize: theme.typography.body2.fontSize,
         textAlign: 'center',
-        marginTop: theme.spacing(0.5),
+        marginTop: theme.spacing(1),
         lineHeight: '18px',
       },
     },
@@ -158,7 +158,9 @@ const FormattedText = ({
                 className={classes.img}
               />
             }
-            src={attribs['data-src']}
+            // First try to load src from 'data-src' attribute
+            // If not found, then use default 'src' attribute
+            src={attribs['data-src'] || attribs.src}
             alt={attribs.alt || 'Image'}
             style={imgStyles}
             className={classes.img}

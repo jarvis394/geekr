@@ -109,8 +109,6 @@ const Hubs = () => {
     dispatch(getHubsList(currentPage))
   }, [currentPage, dispatch])
 
-  console.log(storeSearchResults)
-
   return fetchError ? (
     <ErrorComponent message={fetchError.error.message} />
   ) : (
