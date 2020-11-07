@@ -94,8 +94,6 @@ const AboutPage = () => {
     },
   ]
 
-  React.useEffect(() => window.scrollTo(0, 0), [])
-
   return (
     <Container>
       {text.map((e, i) => (

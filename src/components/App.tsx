@@ -11,6 +11,7 @@ import isMobile from 'is-mobile'
 import Footer from './blocks/Footer'
 import { useSelector } from 'src/hooks'
 import Tabs from './blocks/Tabs/RouterTabs'
+import ScrollRestoration from 'react-scroll-restoration'
 
 const chromeAddressBarHeight = 56
 const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
@@ -75,12 +76,12 @@ const App = (): React.ReactElement => {
   // Set root classes
   document.body.className = classes.root
 
-  // Restore user scroll (might not work)
-  window.history.scrollRestoration = 'auto'
-
   return (
     <ThemeProvider theme={theme}>
       <Router>
+        {/** Restores user scroll */}
+        <ScrollRestoration />
+
         <AppBar />
         <div className={classes.app}>
           <Tabs />

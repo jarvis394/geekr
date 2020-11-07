@@ -186,8 +186,6 @@ const Post = () => {
     get()
   }, [id])
 
-  React.useLayoutEffect(() => window.scrollTo(0, 0))
-
   // Get company data if post is corporative
   useEffect(() => {
     const get = async () => {

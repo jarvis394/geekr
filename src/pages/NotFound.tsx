@@ -47,8 +47,6 @@ const NotFound = () => {
   const classes = useStyles()
   const theme = useTheme()
 
-  React.useEffect(() => window.scrollTo(0, 0), [])
-
   return (
     <div className={classes.root}>
       <Typography className={classes.title}>four-o-four</Typography>
