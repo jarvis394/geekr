@@ -73,7 +73,11 @@ const Component = () => {
         <Container className={classes.container}>
           <Toolbar style={{ minHeight: 'unset', height: 48 }}>
             <Typography variant="h6" className={classes.linkTypography}>
-              <Link to={`/${getCachedMode()}/p/1`} className={classes.link}>
+              <Link
+                to={`/${getCachedMode()}/p/1`}
+                onClick={() => window.scrollTo(0, 0)}
+                className={classes.link}
+              >
                 habra.
                 <Offline>
                   <WifiOffRoundedIcon className={classes.offline} />

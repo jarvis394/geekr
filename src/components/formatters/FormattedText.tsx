@@ -10,6 +10,11 @@ import Iframe from 'react-iframe'
 import { Node as MathJaxNode } from '@nteract/mathjax'
 
 type FloatType = 'left' | 'right'
+interface IframeResizeData {
+  type: string
+  id: number
+  height: number
+}
 
 const useStyles = makeStyles((theme) => ({
   img: {
@@ -202,18 +207,17 @@ const FormattedText = ({
   }
 
   React.useEffect(() => {
-    window.addEventListener('message', (e) => {
-      if (e.data.type === 'embed-size') {
+    const handler = (e: MessageEvent<IframeResizeData>) => {
+      e.data.type === 'embed-size' &&
         setIframeHeights((prev) => ({
           ...prev,
           [e.data.id]: e.data.height || 'auto',
         }))
-      }
-    })
+    }
+    window.addEventListener('message', handler)
     return () => {
       // Remove listener on cleanup
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      window.removeEventListener('message', () => {})
+      window.removeEventListener('message', handler)
     }
   }, [])
 

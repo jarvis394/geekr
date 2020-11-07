@@ -28,8 +28,6 @@ const useStyles = makeStyles((theme) => ({
 type HomePathParams = { page: string }
 
 const Home = () => {
-  document.title = 'habra.'
-
   const params = useParams() as HomePathParams
   const lastSelectedMode = useLastMode()
   const [mode, setMode] = useState<Mode>(lastSelectedMode)
@@ -71,6 +69,7 @@ const Home = () => {
   }
 
   useEffect(() => {
+    if (document.title !== 'habra.') document.title = 'habra.'
     dispatch(getPosts(mode, currentPage))
   }, [currentPage, mode, dispatch])
 

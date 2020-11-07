@@ -15,6 +15,7 @@ import { Redirect } from 'react-router'
 interface Route {
   path: string | string[]
   component: MemoExoticComponent<() => React.ReactElement> | React.ReactElement
+  title?: string
 }
 
 const routes: Route[] = [
@@ -29,18 +30,22 @@ const routes: Route[] = [
   {
     path: '/settings',
     component: <Settings />,
+    title: 'Настройки',
   },
   {
     path: '/habra-about',
     component: <AboutPage />,
+    title: 'О проекте',
   },
   {
     path: ['/search', '/search/p/:page'],
     component: <Search />,
+    title: 'Поиск',
   },
   {
     path: '/hubs/p/:page',
     component: <Hubs />,
+    title: 'Хабы',
   },
   {
     path: '/user/:login/favorites/comments/:page',
@@ -65,6 +70,7 @@ const routes: Route[] = [
   {
     path: '/news/p/:page',
     component: <News />,
+    title: 'Новости',
   },
   {
     path: [
@@ -74,6 +80,7 @@ const routes: Route[] = [
       '/top/month/p/:page',
     ],
     component: <Home />,
+    title: 'habra.',
   },
   {
     path: '/',
@@ -82,6 +89,7 @@ const routes: Route[] = [
   {
     path: '*',
     component: <NotFound />,
+    title: '404',
   },
 ]
 

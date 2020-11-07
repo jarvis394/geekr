@@ -18,6 +18,7 @@
     "html-react-parser": "^0.10.3",
     "is-mobile": "^2.2.2",
     "number-to-words-ru": "^2.2.3",
+    "path-to-regexp": "^6.2.0",
     "react": "^16.13.0",
     "react-detect-offline": "^2.4.0",
     "react-dom": "^16.13.0",

@@ -12,6 +12,7 @@ import Footer from './blocks/Footer'
 import { useSelector } from 'src/hooks'
 import Tabs from './blocks/Tabs/RouterTabs'
 import ScrollRestoration from 'react-scroll-restoration'
+import RouterTitleChange from './RouterTitleChange'
 
 const chromeAddressBarHeight = 56
 const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
@@ -81,6 +82,9 @@ const App = (): React.ReactElement => {
       <Router>
         {/** Restores user scroll */}
         <ScrollRestoration />
+
+        {/** Change document title on routing */}
+        <RouterTitleChange />
 
         <AppBar />
         <div className={classes.app}>
