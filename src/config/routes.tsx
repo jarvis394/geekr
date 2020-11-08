@@ -11,6 +11,7 @@ import AboutPage from 'src/pages/AboutPage'
 import Hubs from 'src/pages/Hubs/index'
 import User from 'src/pages/User/index'
 import { Redirect } from 'react-router'
+import Login from 'src/pages/Login'
 
 interface Route {
   path: string | string[]
@@ -19,6 +20,11 @@ interface Route {
 }
 
 const routes: Route[] = [
+  {
+    path: '/auth',
+    component: <Login />,
+    title: 'Авторизация',
+  },
   {
     path: '/post/:id/comments',
     component: <CommentsPage />,

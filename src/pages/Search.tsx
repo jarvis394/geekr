@@ -64,13 +64,14 @@ const useSvgStyles = makeStyles((theme) => ({
   svgTitle: {
     fontFamily: 'Google Sans',
     fontSize: 18,
+    marginTop: theme.spacing(2),
   },
   svg: {
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(6),
     width: '65%',
     display: 'flex',
     justifyContent: 'center',
-    '& svg': { maxWidth: 400, width: '100%', height: '100%' },
+    '& svg': { maxWidth: 270, width: '100%', height: '100%' },
   },
 }))
 

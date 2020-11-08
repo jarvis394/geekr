@@ -90,12 +90,7 @@ const Component = () => {
             <IconButton onClick={() => history.push('/settings')}>
               <SettingsOutlinedIcon />
             </IconButton>
-            <IconButton
-              target="_blank"
-              rel="noopener noreferrer"
-              component="a"
-              href="https://m.habr.com/kek/v1/auth/habrahabr/?back=/ru/all/&hl=ru"
-            >
+            <IconButton onClick={() => history.push('/auth')}>
               <PermIdentityRoundedIcon />
             </IconButton>
           </Toolbar>
