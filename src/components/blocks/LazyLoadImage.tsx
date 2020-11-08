@@ -8,7 +8,9 @@ const LazyLoadImage = (props: LazyLoadImageProps) => {
   return (
     <LazyLoadImageComponent
       effect="opacity"
-      wrapperProps={{ style: { display: 'flex', width: '100%' } }}
+      wrapperProps={{
+        style: { display: 'flex', height: 'auto', flex: 1, width: '100%' },
+      }}
       {...props}
     />
   )
