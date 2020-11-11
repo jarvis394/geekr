@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom'
 import { useSelector } from 'src/hooks'
 import ProfileChildrenSkeleton from 'src/components/skeletons/ProfileChildren'
 import { useDispatch } from 'react-redux'
-import { getUserChildren } from 'src/store/actions/user'
+import { getProfileChildren } from 'src/store/actions/profile'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -63,7 +63,7 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const [showAll, setShowAll] = useState<boolean>(false)
   const classes = useStyles()
   const dispatch = useDispatch()
-  const user = useSelector((store) => store.user.profile.user.data)
+  const profile = useSelector((store) => store.user.profile.user.data)
   const childrenData = useSelector((store) => store.user.profile.children.data)
   const isFetched = useSelector((store) => store.user.profile.children.fetched)
   const isFetching = useSelector(
@@ -77,8 +77,8 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
 
   useEffect(() => {
     setShowAll(false)
-    dispatch(getUserChildren(user.login))
-  }, [user.login, dispatch])
+    dispatch(getProfileChildren(profile.login))
+  }, [profile.login, dispatch])
 
   const Item = ({ data }: { data: UserExtended }) => (
     <ListItem

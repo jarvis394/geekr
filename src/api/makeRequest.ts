@@ -29,7 +29,7 @@ export default async ({
   version = 2,
 }: Arguments): Promise<AxiosPromise> =>
   await axios({
-    method: requestOptions?.method || 'get', // Fancy TS v3.8
+    method: requestOptions?.method || 'get',
     url: API_URL + `v${version}/` + path,
     params: {
       fl: language,

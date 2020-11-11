@@ -4,18 +4,21 @@ import React from 'react'
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    background: theme.palette.background.default,
+  },
+  paper: {
     marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
     margin: '0 auto',
     maxWidth: 460,
     width: '100%',
-    boxShadow: '0 2px 4px 0 rgba(0,0,0,0.1)',
+    boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.1)',
   },
   grid: {
     width: '100%',
     height: '100%',
     padding: theme.spacing(2.5),
   },
-  header: {},
   headerTitle: {
     fontFamily: 'Google Sans',
     fontWeight: 500,
@@ -40,46 +43,46 @@ const Login = () => {
   const classes = useStyles()
 
   return (
-    <Paper className={classes.root}>
-      <Grid container direction="column" className={classes.grid}>
-        <Grid item>
-          <div className={classes.header}>
+    <div className={classes.root}>
+      <Paper className={classes.paper}>
+        <Grid container direction="column" className={classes.grid}>
+          <Grid item>
             <Typography className={classes.headerTitle}>Вход</Typography>
-          </div>
+          </Grid>
+          <Grid item className={classes.input}>
+            <Typography className={classes.inputLabel}>Электропочта</Typography>
+            <TextField
+              autoFocus
+              name="email"
+              size="small"
+              fullWidth
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item className={classes.input}>
+            <Typography className={classes.inputLabel}>Пароль</Typography>
+            <TextField
+              size="small"
+              name="password"
+              type="password"
+              fullWidth
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item>
+            <Button
+              disableElevation
+              className={classes.loginButton}
+              fullWidth
+              variant="contained"
+              color="primary"
+            >
+              Войти
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item className={classes.input}>
-          <Typography className={classes.inputLabel}>Электропочта</Typography>
-          <TextField
-            autoFocus
-            name="email"
-            size="small"
-            fullWidth
-            variant="outlined"
-          />
-        </Grid>
-        <Grid item className={classes.input}>
-          <Typography className={classes.inputLabel}>Пароль</Typography>
-          <TextField
-            size="small"
-            name="password"
-            type="password"
-            fullWidth
-            variant="outlined"
-          />
-        </Grid>
-        <Grid item>
-          <Button
-            disableElevation
-            className={classes.loginButton}
-            fullWidth
-            variant="contained"
-            color="primary"
-          >
-            Войти
-          </Button>
-        </Grid>
-      </Grid>
-    </Paper>
+      </Paper>
+    </div>
   )
 }
 
