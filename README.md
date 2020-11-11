@@ -11,8 +11,12 @@ Go to the [habra.js.org](https://habra.js.org/) site and feel yourself at home! 
 - Mobile friendly
 - Coded with React, TypeScript and Redux
 
+## Docs
+
+Click [here](https://jarvis394.gitbook.io/habra) to view docs on GitBook.
+
 ## Contribution
-Feel free to contribute as `habra.` is open-sourced! If you want more contributing information, visit [the page]() about self-hosting.
+Feel free to contribute as `habra.` is open-sourced! If you want more contributing information, visit [the page](https://jarvis394.gitbook.io/habra/self-host/cloning-and-installation) about self-hosting.
 
 ## Author
 
