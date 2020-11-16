@@ -6,18 +6,20 @@ import {
 
 const LazyLoadImage = (props: LazyLoadImageProps) => {
   return (
-    <LazyLoadImageComponent
-      effect="opacity"
-      wrapperProps={{
-        style: {
-          display: 'flex',
-          height: 'auto',
-          alignItems: 'flex-start',
-          width: '100%',
-        },
-      }}
-      {...props}
-    />
+    <div style={{ display: 'inline-block' }}>
+      <LazyLoadImageComponent
+        effect="opacity"
+        wrapperProps={{
+          style: {
+            display: 'flex',
+            height: 'auto',
+            alignItems: 'flex-start',
+            width: '100%',
+          },
+        }}
+        {...props}
+      />
+    </div>
   )
 }
 
