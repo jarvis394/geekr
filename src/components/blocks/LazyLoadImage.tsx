@@ -6,7 +6,6 @@ import {
 
 const LazyLoadImage = (props: LazyLoadImageProps) => {
   return (
-    <div style={{ display: 'inline-block' }}>
       <LazyLoadImageComponent
         effect="opacity"
         wrapperProps={{
@@ -19,7 +18,6 @@ const LazyLoadImage = (props: LazyLoadImageProps) => {
         }}
         {...props}
       />
-    </div>
   )
 }
 
