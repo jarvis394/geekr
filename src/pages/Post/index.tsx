@@ -98,7 +98,12 @@ const Post = () => {
   const [fetchError, _setError] = useState<string>()
   const { id } = useParams<{ id: string }>()
   const classes = useStyles()
-  const contents = (post && post.isCorporative ? post && company : post) ? (
+  const [shouldShowCompanyHeader, setCompanyHeaderState] = useState<boolean>(
+    post?.isCorporative || true
+  )
+  const shouldShowContents =
+    post && (shouldShowCompanyHeader ? post && company : post)
+  const contents = shouldShowContents ? (
     <>
       {/** Company header */}
       {company && company?.branding?.headerUrl && (
@@ -177,7 +182,9 @@ const Post = () => {
       setError(null)
 
       try {
-        setPost(await getPost(id))
+        const data = await getPost(id)
+        setPost(data)
+        setCompanyHeaderState(data.isCorporative)
       } catch (e) {
         if (e?.statusCode === 404) return setError('Статья не найдена')
         else return setError(e.message)
@@ -194,6 +201,7 @@ const Post = () => {
         hub && setCompany((await getCompany(hub.alias)).data)
       } catch (e) {
         console.warn(`Cannot get company data ${hub.alias}:`, e.message)
+        setCompanyHeaderState(false)
       }
     }
     if (post && post.isCorporative) get()

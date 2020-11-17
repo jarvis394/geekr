@@ -1,11 +1,10 @@
+import React from 'react'
+import { getToken } from 'habra-auth'
 import { Button, Typography, Grid, Paper, TextField } from '@material-ui/core'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import React from 'react'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    background: theme.palette.background.default,
-  },
+  root: {},
   paper: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
@@ -42,8 +41,19 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
   const classes = useStyles()
 
+  const handleLoginSubmit = (e) => {
+    e.preventDefault()
+    const email = e.target.email.value
+    const password = e.target.password.value
+    getToken(email, password)
+      .then((e) => {
+        console.log(e)
+      })
+      .catch((e) => console.warn(e))
+  }
+
   return (
-    <div className={classes.root}>
+    <form className={classes.root} onSubmit={handleLoginSubmit}>
       <Paper className={classes.paper}>
         <Grid container direction="column" className={classes.grid}>
           <Grid item>
@@ -76,13 +86,14 @@ const Login = () => {
               fullWidth
               variant="contained"
               color="primary"
+              type="submit"
             >
               Войти
             </Button>
           </Grid>
         </Grid>
       </Paper>
-    </div>
+    </form>
   )
 }
 

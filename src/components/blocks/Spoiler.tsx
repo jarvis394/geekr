@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   rotate: {},
   text: {
     position: 'relative',
-    top: 10,
+    marginTop: 10,
   },
   collapse: {
     marginLeft: theme.spacing(2),
