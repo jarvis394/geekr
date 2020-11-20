@@ -10,7 +10,8 @@ export default () => {
   const mode = localStorage.getItem('mode')
 
   if (!mode) {
-    localStorage.setItem('mode', 'all')
-    return 'all'
-  } else return modes[mode]
+    localStorage.setItem('mode', modes.all)
+    return modes.all
+  } else if (modes[mode]) return modes[mode]
+  else return modes.all
 }
