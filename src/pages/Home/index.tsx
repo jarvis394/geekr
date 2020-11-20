@@ -64,8 +64,8 @@ const Home = () => {
 
   const handleSwitcher = ({ mode: newMode, to }) => {
     localStorage.setItem('mode', newMode)
-    history.push(to + '/p/1')
     setMode(newMode)
+    history.push(to + '/p/1')
   }
 
   useEffect(() => {

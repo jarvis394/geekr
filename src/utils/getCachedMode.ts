@@ -1,9 +1,11 @@
 export default () => {
   const modes = {
     all: 'all',
-    day: 'top/day',
-    week: 'top/week',
-    month: 'top/month',
+    daily: 'top/daily',
+    weekly: 'top/weekly',
+    monthly: 'top/monthly',
+    yearly: 'top/yearly',
+    alltime: 'top/alltime',
   }
   const mode = localStorage.getItem('mode')
 

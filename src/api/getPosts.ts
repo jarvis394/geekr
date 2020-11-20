@@ -1,13 +1,15 @@
 import makeRequest from './makeRequest'
 import { Posts } from '../interfaces'
 
-export type Mode = 'all' | 'day' | 'week' | 'month'
+export type Mode = 'all' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'alltime'
 
 export const modeParams = {
   all: { sort: 'rating', date: '' },
-  day: { date: 'day', sort: 'date' },
-  week: { date: 'week', sort: 'date' },
-  month: { date: 'month', sort: 'date' },
+  daily: { period: 'daily', sort: 'date' },
+  weekly: { period: 'weekly', sort: 'date' },
+  monthly: { period: 'monthly', sort: 'date' },
+  yearly: { period: 'yearly', sort: 'date' },
+  alltime: { period: 'alltime', sort: 'date' },
 }
 
 export default async (mode: Mode, page: number): Promise<Posts> =>
@@ -16,8 +18,7 @@ export default async (mode: Mode, page: number): Promise<Posts> =>
       path: 'articles',
       version: 2,
       params: {
-        date: modeParams[mode].date,
-        sort: modeParams[mode].sort,
+        ...modeParams[mode],
         page,
       },
     })

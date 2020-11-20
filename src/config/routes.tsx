@@ -81,9 +81,11 @@ const routes: Route[] = [
   {
     path: [
       '/all/p/:page',
-      '/top/day/p/:page',
-      '/top/week/p/:page',
-      '/top/month/p/:page',
+      '/top/daily/p/:page',
+      '/top/weekly/p/:page',
+      '/top/monthly/p/:page',
+      '/top/yearly/p/:page',
+      '/top/alltime/p/:page',
     ],
     component: <Home />,
     title: 'habra.',
@@ -93,7 +95,7 @@ const routes: Route[] = [
     component: <Redirect to={`/${getCachedMode()}/p/1`} />,
   },
   {
-    path: '*',
+    path: '/:404*',
     component: <NotFound />,
     title: '404',
   },

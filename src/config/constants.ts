@@ -20,18 +20,28 @@ export const MODES: { text: string; to: string; mode: Mode }[] = [
   },
   {
     text: 'Лучшее за день',
-    to: '/top/day',
-    mode: 'day',
+    to: '/top/daily',
+    mode: 'daily',
   },
   {
     text: 'Лучшее за неделю',
-    to: '/top/week',
-    mode: 'week',
+    to: '/top/weekly',
+    mode: 'weekly',
   },
   {
     text: 'Лучшее за месяц',
-    to: '/top/month',
-    mode: 'month',
+    to: '/top/monthly',
+    mode: 'monthly',
+  },
+  {
+    text: 'Лучшее за год',
+    to: '/top/yearly',
+    mode: 'yearly',
+  },
+  {
+    text: 'Лучшее за всё время',
+    to: '/top/alltime',
+    mode: 'alltime',
   },
 ]
 
