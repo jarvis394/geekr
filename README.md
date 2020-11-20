@@ -15,6 +15,10 @@ Go to the [habra.js.org](https://habra.js.org/) site and feel yourself at home! 
 
 Click [here](https://jarvis394.gitbook.io/habra) to view docs on GitBook.
 
+## Extensions
+
+Open in "habra.": [habra-redirect](https://github.com/istudyatuni/habra-redirect)
+
 ## Contribution
 Feel free to contribute as `habra.` is open-sourced! If you want more contributing information, visit [the page](https://jarvis394.gitbook.io/habra/self-host/cloning-and-installation) about self-hosting.
 
