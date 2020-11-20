@@ -1,4 +1,4 @@
-import { Mode } from '../api/getPosts'
+import { Mode } from '../interfaces'
 import { UserSettings } from '../interfaces'
 import { PaletteType as MUIPaletteType } from '@material-ui/core'
 
@@ -12,7 +12,7 @@ export const MIN_WIDTH = 900
 
 export const POST_IMAGE_HEIGHT = 212
 
-export const MODES: { text: string; to: string; mode: Mode }[] = [
+export const MODES: Mode[] = [
   {
     text: 'Все подряд',
     to: '/all',
@@ -22,26 +22,31 @@ export const MODES: { text: string; to: string; mode: Mode }[] = [
     text: 'Лучшее за день',
     to: '/top/daily',
     mode: 'daily',
+    periodText: 'Сутки',
   },
   {
     text: 'Лучшее за неделю',
     to: '/top/weekly',
     mode: 'weekly',
+    periodText: 'Неделя',
   },
   {
     text: 'Лучшее за месяц',
     to: '/top/monthly',
     mode: 'monthly',
+    periodText: 'Месяц',
   },
   {
     text: 'Лучшее за год',
     to: '/top/yearly',
     mode: 'yearly',
+    periodText: 'Год',
   },
   {
     text: 'Лучшее за всё время',
     to: '/top/alltime',
     mode: 'alltime',
+    periodText: 'Всё время',
   },
 ]
 
