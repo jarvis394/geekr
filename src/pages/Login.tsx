@@ -41,15 +41,17 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
   const classes = useStyles()
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault()
     const email = e.target.email.value
     const password = e.target.password.value
-    getToken(email, password)
-      .then((e) => {
-        console.log(e)
-      })
-      .catch((e) => console.warn(e))
+
+    try {
+      const response = await getToken(email, password)
+      alert(response.access_token)
+    } catch (e) {
+      alert('Got login error: ' + e)
+    }
   }
 
   return (
