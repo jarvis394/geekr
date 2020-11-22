@@ -87,6 +87,18 @@ export const RATING_MODES: ModeObject[] = [
   },
 ]
 
+export const POST_LABELS = {
+  tutorial: { text: 'Туториал' },
+  translation: { text: 'Перевод' },
+  sandbox: { text: 'Из песочницы' },
+  recovery: { text: 'Recovery' },
+  technotext2020: {
+    text: '🔥 Технотекст 2020',
+    link:
+      'https://contenting.io/challenge.html?utm_source=habr&utm_medium=label',
+  },
+}
+
 export const HOUR = 1000 * 60 * 60
 export const DEFAULT_UPDATE_INTERVAL = HOUR / 4
 

@@ -28,6 +28,11 @@ const useStyles = makeStyles(() => ({
     margin: '48px auto 0 auto',
   },
   root: {
+    /** Disable blue highlight for links. Can be bad for accessibility. */
+    '& a': {
+      '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)',
+      'user-select': 'none',
+    },
     backgroundColor: (theme: ThemeOptions) =>
       theme.palette.type === 'dark'
         ? darken(theme.palette.background.paper, 0.5)

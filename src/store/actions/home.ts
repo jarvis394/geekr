@@ -10,7 +10,7 @@ export const getPosts = (mode: Mode, page: number) => async (
 ) => {
   const type = HOME_PREFIX + 'FETCH'
   // Get data from root store to find out if we're going to fetch a data or not
-  const storeData = getState().news.data.pages[page]
+  const storeData = getState().home.data[mode].pages[page]
   if (!shouldUpdate(storeData)) {
     return Promise.resolve()
   }

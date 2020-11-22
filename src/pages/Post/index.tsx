@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles'
+import { fade, makeStyles } from '@material-ui/core/styles'
 import { useParams } from 'react-router'
 import { getPost } from '../../api'
 import { Link } from 'react-router-dom'
@@ -19,6 +19,8 @@ import CommentsButton from './CommentsButton'
 import SimilarPosts from './SimilarPosts'
 import TopDayPosts from './TopDayPosts'
 import getCompany from 'src/api/getCompany'
+import { Chip, Link as MUILink } from '@material-ui/core'
+import { POST_LABELS as postLabels } from 'src/config/constants'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -29,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   hubs: {
     wordBreak: 'break-word',
     width: '100%',
-    marginBottom: theme.spacing(3),
   },
   hubLink: {
     color: theme.palette.text.hint,
@@ -63,6 +64,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: 14,
   },
   text: {
+    marginTop: theme.spacing(3),
     paddingBottom: theme.spacing(2),
     lineHeight: '1.56',
     wordBreak: 'break-word',
@@ -90,6 +92,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   companyHeader: {
     width: '100%',
   },
+  translatedBox: {
+    backgroundColor: fade(theme.palette.primary.dark, 0.1),
+    padding: theme.spacing(1, 2),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    display: 'flex',
+    fontSize: 14,
+  },
 }))
 
 const Post = () => {
@@ -101,8 +111,29 @@ const Post = () => {
   const [shouldShowCompanyHeader, setCompanyHeaderState] = useState<boolean>(
     post?.isCorporative || true
   )
+  const isTranslated = post && post.postLabels.some((e) => e === 'translation')
   const shouldShowContents =
     post && (shouldShowCompanyHeader ? post && company : post)
+  const labels =
+    shouldShowContents &&
+    post.postLabels.map((e, i) => {
+      const labelData = postLabels[e]
+      const chip = (
+        <Chip
+          label={labelData.text}
+          variant="outlined"
+          color="primary"
+          size="small"
+          key={i}
+          style={{ marginRight: 8, marginTop: 8 }}
+        />
+      )
+      return labelData.link ? (
+        <MUILink href={labelData.link}>{chip}</MUILink>
+      ) : (
+        chip
+      )
+    })
   const contents = shouldShowContents ? (
     <>
       {/** Company header */}
@@ -153,6 +184,15 @@ const Post = () => {
             </Typography>
           ))}
         </div>
+        {labels}
+        {isTranslated && (
+          <MUILink
+            href={post.translationData.originalUrl}
+            className={classes.translatedBox}
+          >
+            Автор оригинала: {post.translationData.originalAuthorName}
+          </MUILink>
+        )}
 
         {/* Article text */}
         <FormattedText

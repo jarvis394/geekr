@@ -28,7 +28,7 @@ export default interface Post {
     vkShareImageUrl: string
   }
   polls: never[]
-  postLabels: never[]
+  postLabels: string[]
   postType: string
   statistics: {
     commentsCount: number
@@ -41,6 +41,9 @@ export default interface Post {
   textHtml: string
   timePublished: string
   titleHtml: string
-  translationData: never
+  translationData: {
+    originalAuthorName: string
+    originalUrl: string
+  }
   votesEnabled: boolean
 }

@@ -5,12 +5,12 @@ import * as serviceWorker from './serviceWorker'
 import { Provider } from 'react-redux'
 import store from './store'
 import swConfig from './serviceWorkerConfig'
-import 'react-lazy-load-image-component/src/effects/opacity.css'
 import dayjs from 'dayjs'
-import 'dayjs/locale/ru'
 import relativeTimePlugin from 'dayjs/plugin/relativeTime'
 import calendarPlugin from 'dayjs/plugin/calendar'
 import updateLocalePlugin from 'dayjs/plugin/updateLocale'
+import 'react-lazy-load-image-component/src/effects/opacity.css'
+import 'dayjs/locale/ru'
 
 dayjs.locale('ru')
 dayjs.extend(relativeTimePlugin)
