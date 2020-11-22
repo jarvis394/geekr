@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom'
-import { Mode } from '../api/getPosts'
+import { Mode } from 'src/config/constants'
 
 export default (): Mode => {
   const location = useLocation()

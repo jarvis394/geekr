@@ -1,6 +1,7 @@
 import { HOME_PREFIX } from './types'
-import { MODES } from 'src/config/constants'
+import { RATING_MODES } from 'src/config/constants'
 import { Posts } from 'src/interfaces'
+import getCachedMode from 'src/utils/getCachedMode'
 
 interface ModeObject {
   pages: Record<number, Omit<Posts, 'pagesCount'>>
@@ -9,7 +10,7 @@ interface ModeObject {
 }
 
 const modes: Record<string, ModeObject> = {}
-MODES.forEach(({ mode }) => {
+RATING_MODES.forEach(({ mode }) => {
   modes[mode] = {
     pages: {},
     pagesCount: null,
@@ -22,12 +23,19 @@ const initialState = {
   fetched: false,
   error: null,
   data: modes,
+  mode: getCachedMode().mode,
 }
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case HOME_PREFIX + 'FETCH': {
-      return { ...state, fetching: true, error: null, fetched: false }
+      return {
+        ...state,
+        fetching: true,
+        error: null,
+        fetched: false,
+        mode: payload,
+      }
     }
 
     case HOME_PREFIX + 'FETCH_FULFILLED': {

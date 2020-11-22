@@ -13,8 +13,8 @@ interface TabObject {
 const tabs: TabObject[] = [
   {
     label: 'Статьи',
-    to: () => `/${getCachedMode()}/p/1`,
-    match: /\/(all|top\/daily|top\/weekly|top\/monthly|top\/yearly|top\/alltime)\/p\/([0-9]+)\/?$/,
+    to: () => `${getCachedMode().to}/p/1`,
+    match: /\/(all|top[0|10|25|50|100]|top\/daily|top\/weekly|top\/monthly|top\/yearly|top\/alltime)\/p\/([0-9]+)\/?$/,
     tab: 'home',
   },
   {
@@ -48,13 +48,13 @@ const findPath = (path: string): TabObject => {
 }
 const findPathValue = (path: string): number => {
   const res = tabs.findIndex((e) => path.match(e.match))
-  return res < 0 ? 0 : res
+  return res
 }
 const isValidPath = (path: string): boolean => !!findPath(path)
 
 const RouterTabs = () => {
   const location = useLocation()
-  const shouldShow = isValidPath(location.pathname)
+  const isHidden = !isValidPath(location.pathname)
   const [value, setValue] = useState<number>(findPathValue(location.pathname))
   const handleChange = (
     _event: React.ChangeEvent<unknown>,
@@ -72,8 +72,8 @@ const RouterTabs = () => {
       shouldUseLinks
       onChange={handleChange}
       tabs={tabs}
-      hidden={!shouldShow}
-      value={value}
+      hidden={isHidden}
+      value={value < 0 ? 0 : value}
     />
   )
 }

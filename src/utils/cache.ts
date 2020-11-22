@@ -11,21 +11,11 @@ export const parse = (data: string) => {
   }
 }
 
-export const shouldUpdate = (storeData, cachedData) => {
+export const shouldUpdate = (storeData) => {
   const now = Date.now()
   const shouldUpdateByTS = (d: number) => now - d >= DEFAULT_UPDATE_INTERVAL
 
   if (storeData) {
     return shouldUpdateByTS(storeData.lastUpdated)
-  } else if (cachedData) {
-    return shouldUpdateByTS(cachedData.lastUpdated)
   } else return true
 }
-
-export const NEWS = 'habra_news'
-export const NEWS_PROMO = NEWS + '_promo'
-export const getNews = () => parse(localStorage.getItem(NEWS))
-export const getNewsPromo = () => parse(localStorage.getItem(NEWS_PROMO))
-
-export const HOME = 'habra_home'
-export const getPosts = () => parse(localStorage.getItem(HOME))

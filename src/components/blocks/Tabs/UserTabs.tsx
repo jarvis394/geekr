@@ -11,6 +11,7 @@ interface TabObject {
   match: RegExp
   tab: string
 }
+
 const Counter = ({ children }) => {
   const theme = useTheme()
   return (
@@ -26,6 +27,7 @@ const Counter = ({ children }) => {
     </Fade>
   )
 }
+
 const generateTabs = (user: UserExtendedObject): TabObject[] => [
   {
     label: 'Профиль',

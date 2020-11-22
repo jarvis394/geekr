@@ -6,15 +6,15 @@ import Typography from '@material-ui/core/Typography'
 import { Link } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
 import Container from '@material-ui/core/Container'
-import { MIN_WIDTH as maxWidth } from '../../config/constants'
+import { MIN_WIDTH as maxWidth, RATING_MODES } from '../../config/constants'
 import PermIdentityRoundedIcon from '@material-ui/icons/PermIdentityRounded'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import { useHistory } from 'react-router-dom'
-import getCachedMode from '../../utils/getCachedMode'
 import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
 import { useScrollTrigger, Slide } from '@material-ui/core'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,6 +66,8 @@ const HideOnScroll = (props: HideOnScrollProps) => {
 const Component = () => {
   const classes = useStyles()
   const history = useHistory()
+  const modeName = useSelector((state) => state.home.mode)
+  const mode = RATING_MODES.find((e) => e.mode === modeName)
 
   return (
     <HideOnScroll>
@@ -74,7 +76,7 @@ const Component = () => {
           <Toolbar style={{ minHeight: 'unset', height: 48 }}>
             <Typography variant="h6" className={classes.linkTypography}>
               <Link
-                to={`/${getCachedMode()}/p/1`}
+                to={mode ? `${mode.to}/p/1` : '/'}
                 onClick={() => window.scrollTo(0, 0)}
                 className={classes.link}
               >

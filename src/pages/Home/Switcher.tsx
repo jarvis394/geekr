@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
-import ExpandIcon from '@material-ui/icons/ArrowDropDown'
-import { MODES as modes } from '../../config/constants'
+import { RATING_MODES as modes } from '../../config/constants'
 import {
   Button,
   ButtonBase,
   ButtonGroup,
-  Grid,
   SwipeableDrawer,
 } from '@material-ui/core'
-import { Mode } from 'src/interfaces'
+import { ModeObject } from 'src/interfaces'
+import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded'
+import SwitcherButtons from './SwitcherButtons'
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -70,16 +70,13 @@ const showModes: { text: string; mode: ShowMode }[] = [
 //@ts-ignore
 const isIOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
 
-/**
- * TODO: Optimize button blocks
- */
 const Switcher = ({ handleClick, mode, setMode }) => {
   const [isOpen, setOpen] = useState(false)
   const [showMode, setShowMode] = useState<ShowMode>(
     mode !== 'all' ? 'top' : 'new'
   )
   const current = modes.find((e) => e.mode === mode)
-  const [drawerMode, setDrawerMode] = useState<Mode>(current)
+  const [drawerMode, setDrawerMode] = useState<ModeObject>(current)
   const classes = useStyles()
 
   const onButtonClick = () => {
@@ -88,7 +85,7 @@ const Switcher = ({ handleClick, mode, setMode }) => {
   const handleShowModeChange = (newShowMode: ShowMode) => {
     newShowMode !== showMode && setShowMode(newShowMode)
   }
-  const handleDrawerModeClick = (newMode: Mode) => {
+  const handleDrawerModeClick = (newMode: ModeObject) => {
     setDrawerMode(newMode)
   }
   const handleApplyClick = () => {
@@ -105,7 +102,7 @@ const Switcher = ({ handleClick, mode, setMode }) => {
             {current.text}
           </Typography>
           <div className={classes.expandIcon}>
-            <ExpandIcon />
+            <ChevronRightRoundedIcon />
           </div>
         </Container>
       </ButtonBase>
@@ -141,16 +138,11 @@ const Switcher = ({ handleClick, mode, setMode }) => {
               <Typography className={classes.drawerHeaderText}>
                 Порог рейтинга
               </Typography>
-              <Button
-                disableElevation
-                color="primary"
-                variant={'all' === drawerMode.mode ? 'contained' : 'outlined'}
-                onClick={() =>
-                  handleDrawerModeClick(modes.find((e) => e.mode === 'all'))
-                }
-              >
-                Все подряд
-              </Button>
+              <SwitcherButtons
+                data={modes.filter((e) => e.switcherText && e.isNewMode)}
+                onChange={(e: ModeObject) => handleDrawerModeClick(e)}
+                currentValue={drawerMode.mode}
+              />
             </>
           )}
 
@@ -160,24 +152,11 @@ const Switcher = ({ handleClick, mode, setMode }) => {
               <Typography className={classes.drawerHeaderText}>
                 Период
               </Typography>
-              <Grid container spacing={1}>
-                {modes
-                  .filter((e) => e.periodText)
-                  .map((e, i) => (
-                    <Grid item key={i}>
-                      <Button
-                        disableElevation
-                        onClick={() => handleDrawerModeClick(e)}
-                        color="primary"
-                        variant={
-                          e.mode === drawerMode.mode ? 'contained' : 'outlined'
-                        }
-                      >
-                        {e.periodText}
-                      </Button>
-                    </Grid>
-                  ))}
-              </Grid>
+              <SwitcherButtons
+                data={modes.filter((e) => e.switcherText && !e.isNewMode)}
+                onChange={(e: ModeObject) => handleDrawerModeClick(e)}
+                currentValue={drawerMode.mode}
+              />
             </>
           )}
         </Container>
@@ -195,67 +174,5 @@ const Switcher = ({ handleClick, mode, setMode }) => {
     </>
   )
 }
-
-// const Switcher = ({ handleClick, mode, setMode }) => {
-//   const [isExpanded, setExpanded] = React.useState(false)
-//   const ListButton = ({ data }) => {
-//     const isNotCurrent = data.mode !== current.mode
-//     const handleClickWrapped = () => {
-//       if (isNotCurrent) {
-//         setExpanded(false)
-//         setMode(data.mode)
-//         handleClick(data)
-//       }
-//     }
-
-//     return (
-//       <ListItem
-//         onClick={handleClickWrapped}
-//         button={isNotCurrent as true | undefined}
-//         className={classes.item}
-//       >
-//         <ListItemText
-//           primaryTypographyProps={{
-//             className: isNotCurrent ? classes.text : classes.textSelected,
-//           }}
-//         >
-//           {data.text}
-//         </ListItemText>
-//       </ListItem>
-//     )
-//   }
-//   const ListButtonMemoized = React.memo(ListButton)
-
-//   const classes = useStyles()
-//   const current = modes.find((e) => e.mode === mode)
-//   const buttonList = modes.map((e, i) => (
-//     <ListButtonMemoized data={e} key={i} />
-//   ))
-
-//   return (
-//     <>
-//       <Accordion
-//         elevation={0}
-//         expanded={isExpanded}
-//         onChange={() => setExpanded((prev) => !prev)}
-//         className={classes.expansionPanel}
-//         TransitionProps={{ unmountOnExit: true }}
-//       >
-//         <Container>
-//           <AccordionSummary
-//             className={classes.expansionPanelSummary}
-//             expandIcon={<ExpandIcon />}
-//           >
-//             <Typography className={classes.text}>{current.text}</Typography>
-//             <Divider />
-//           </AccordionSummary>
-//         </Container>
-//         <AccordionDetails className={classes.expansionPanelDetails}>
-//           <List style={{ width: '100%', paddingTop: 0 }}>{buttonList}</List>
-//         </AccordionDetails>
-//       </Accordion>
-//     </>
-//   )
-// }
 
 export default React.memo(Switcher)

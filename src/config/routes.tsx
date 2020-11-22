@@ -81,6 +81,11 @@ const routes: Route[] = [
   {
     path: [
       '/all/p/:page',
+      '/top0/p/:page',
+      '/top10/p/:page',
+      '/top25/p/:page',
+      '/top50/p/:page',
+      '/top100/p/:page',
       '/top/daily/p/:page',
       '/top/weekly/p/:page',
       '/top/monthly/p/:page',
@@ -92,7 +97,7 @@ const routes: Route[] = [
   },
   {
     path: '/',
-    component: <Redirect to={`/${getCachedMode()}/p/1`} />,
+    component: <Redirect to={`${getCachedMode().to}/p/1`} />,
   },
   {
     path: '/:404*',

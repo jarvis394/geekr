@@ -18,7 +18,7 @@ const LinkTabMemoized = React.memo(LinkTab)
 export interface TabObject {
   label: React.ReactElement | string
   to: () => string
-  match: RegExp
+  match: string[] | string | RegExp | RegExp[]
   tab: string
 }
 

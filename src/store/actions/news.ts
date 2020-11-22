@@ -1,30 +1,25 @@
 import * as api from 'src/api'
-import { NEWS_PREFIX } from '../reducers/news/types'
-import {
-  getNews as getCachedNews,
-  getNewsPromo as getCachedNewsPromo,
-  shouldUpdate,
-} from 'src/utils/cache'
+import { shouldUpdate } from 'src/utils/cache'
 import { RootState } from '..'
+import { NEWS_PREFIX } from '../reducers/news/types'
 
 export const getNews = (page: number) => async (
   dispatch,
   getState: () => RootState
 ) => {
-  const cachedData = getCachedNews()[page]
+  const type = NEWS_PREFIX + 'FETCH'
+  // Get data from root store to find out if we're going to fetch a data or not
   const storeData = getState().news.data.pages[page]
-  if (!shouldUpdate(storeData, cachedData)) {
+  if (!shouldUpdate(storeData)) {
     return Promise.resolve()
   }
 
-  const type = NEWS_PREFIX + 'FETCH'
   dispatch({ type, payload: { page } })
 
   try {
     const data = await api.getNews(page)
     const pagesCount = data?.pagesCount
 
-    // Dispatch an action
     dispatch({
       type: type + '_FULFILLED',
       payload: { data, page, pagesCount },
@@ -39,9 +34,9 @@ export const getNewsPromo = () => async (
   getState: () => RootState
 ) => {
   const type = NEWS_PREFIX + 'PROMO_FETCH'
-  const cachedData = getCachedNewsPromo()
+  // Get data from root store to find out if we're going to fetch a data or not
   const storeData = getState().news.block
-  if (!shouldUpdate(storeData, cachedData)) {
+  if (!shouldUpdate(storeData)) {
     return Promise.resolve()
   }
 
