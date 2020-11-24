@@ -1,6 +1,5 @@
 import React from 'react'
-import { Typography, Grid } from '@material-ui/core'
-import { Link } from 'react-router-dom'
+import { Typography, Grid, Link } from '@material-ui/core'
 import parse, { HTMLReactParserOptions } from 'html-react-parser'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
@@ -35,7 +34,7 @@ export const Contacts = ({
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === 'a') {
         return (
-          <Link className={classes.link} to={attribs.href}>
+          <Link className={classes.link} href={attribs.href} rel="nofollow noopener" target="_blank">
             {children[0].data}
           </Link>
         )
