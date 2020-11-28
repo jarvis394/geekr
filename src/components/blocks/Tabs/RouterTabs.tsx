@@ -14,7 +14,7 @@ const tabs: TabObject[] = [
   {
     label: 'Статьи',
     to: () => `${getCachedMode().to}/p/1`,
-    match: /\/(all|top[0|10|25|50|100]|top\/daily|top\/weekly|top\/monthly|top\/yearly|top\/alltime)\/p\/([0-9]+)\/?$/,
+    match: /\/(all|top(0|10|25|50|100)|top\/daily|top\/weekly|top\/monthly|top\/yearly|top\/alltime)\/p\/([0-9]+)\/?$/,
     tab: 'home',
   },
   {
