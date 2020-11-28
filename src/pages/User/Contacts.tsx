@@ -30,7 +30,7 @@ export const Contacts = ({
   classes: additionalClasses,
 }: ComponentWithUserParams) => {
   const classes = useStyles()
-  const user = useSelector((store) => store.user.profile.user.data)
+  const user = useSelector((store) => store.profile.profile.user.data)
   const options: HTMLReactParserOptions = {
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === 'a') {

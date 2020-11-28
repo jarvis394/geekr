@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography } from '@material-ui/core'
-import numToWord from 'number-to-words-ru'
+import numToWord, { ConvertOptions } from 'number-to-words-ru'
 import { makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
 
@@ -13,12 +13,12 @@ const useStyles = makeStyles((theme) => ({
 
 export const FollowersCount = () => {
   const classes = useStyles()
-  const user = useSelector((store) => store.user.profile.user.data)
+  const user = useSelector((store) => store.profile.profile.user.data)
   const followers = Number(user.counters.followers)
   const followed = Number(user.counters.followed)
   const followersCases = ['подписчик', 'подписчика', 'подписчиков']
   const followedCases = ['подписка', 'подписки', 'подписок']
-  const generateOptions = (cases: string[]) => ({
+  const generateOptions = (cases): ConvertOptions => ({
     currency: {
       currencyNameCases: cases,
       fractionalPartNameCases: ['', '', ''],

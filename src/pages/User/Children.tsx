@@ -63,13 +63,19 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const [showAll, setShowAll] = useState<boolean>(false)
   const classes = useStyles()
   const dispatch = useDispatch()
-  const profile = useSelector((store) => store.user.profile.user.data)
-  const childrenData = useSelector((store) => store.user.profile.children.data)
-  const isFetched = useSelector((store) => store.user.profile.children.fetched)
-  const isFetching = useSelector(
-    (store) => store.user.profile.children.fetching
+  const profile = useSelector((store) => store.profile.profile.user.data)
+  const childrenData = useSelector(
+    (store) => store.profile.profile.children.data
   )
-  const fetchError = useSelector((store) => store.user.profile.children.error)
+  const isFetched = useSelector(
+    (store) => store.profile.profile.children.fetched
+  )
+  const isFetching = useSelector(
+    (store) => store.profile.profile.children.fetching
+  )
+  const fetchError = useSelector(
+    (store) => store.profile.profile.children.error
+  )
   const sorted = (childrenData || []).sort(
     (a, b) => Date.parse(a.time_registered) - Date.parse(b.time_registered)
   )

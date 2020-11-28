@@ -26,6 +26,8 @@ const useStyles = makeStyles((theme) => ({
 
 type HomePathParams = { page: string }
 
+const isServerUpdateError = (message: string) => message === 'Network Error'
+
 const Home = () => {
   const params = useParams() as HomePathParams
   const lastSelectedMode = getCachedMode()
@@ -39,6 +41,12 @@ const Home = () => {
   const fetchError = useSelector((state) => state.home.error)
   const posts = useSelector((state) => state.home.data[mode].pages[currentPage])
   const pagesCount = useSelector((state) => state.home.data[mode].pagesCount)
+  const fetchErrorMessage = isServerUpdateError(fetchError?.error?.message)
+    ? 'Идут технические работы'
+    : fetchError?.error?.message
+  const fetchErrorCode = isServerUpdateError(fetchError?.error?.message)
+    ? 503
+    : fetchError?.error?.code
 
   const PaginationComponent = () =>
     pagesCount ? (
@@ -68,7 +76,6 @@ const Home = () => {
   }
 
   useEffect(() => {
-    if (document.title !== 'habra.') document.title = 'habra.'
     dispatch(getPosts(mode, currentPage))
   }, [currentPage, mode, dispatch])
 
@@ -85,7 +92,9 @@ const Home = () => {
             {postsComponents.slice(1)}
           </>
         )}
-        {fetchError && <ErrorComponent message={fetchError.error.message} />}
+        {fetchError && (
+          <ErrorComponent code={fetchErrorCode} message={fetchErrorMessage} />
+        )}
         <PaginationComponent />
       </List>
     </>

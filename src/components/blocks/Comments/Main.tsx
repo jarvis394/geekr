@@ -7,7 +7,7 @@ import { getComments } from '../../../api'
 import Comment from './Comment'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Fade from '@material-ui/core/Fade'
-import { Comments as IComments } from 'src/interfaces'
+import { Comment as IComment } from 'src/interfaces'
 import isInViewport from 'src/utils/isInViewport'
 
 const useStyles = makeStyles((theme) => ({
@@ -51,7 +51,7 @@ const MIN_COMMENTS_SLICE = 25
 const SCROLL_OFFSET = 256
 
 const Comments = ({ postId }) => {
-  const [comments, setComments] = useState<IComments.Comment[]>()
+  const [comments, setComments] = useState<IComment[]>()
   const [commentsSliceEnd, setCommentsSliceEnd] = useState<number>(
     MIN_COMMENTS_SLICE
   )
@@ -86,7 +86,7 @@ const Comments = ({ postId }) => {
   }, [])
 
   useEffect(() => {
-    const parseComments = (nodes: Map<number, IComments.Comment>) => {
+    const parseComments = (nodes: Map<number, IComment>) => {
       const root = []
       for (const id in nodes) {
         const comment = nodes[id]
@@ -117,7 +117,7 @@ const Comments = ({ postId }) => {
         const flat = flatten(parsedComments)
 
         setCommentsLength(Object.keys(commentsData).length)
-        setComments(flat.map((x: IComments.Comment) => delete x.children && x))
+        setComments(flat.map((x: IComment) => delete x.children && x))
       } catch (e) {
         console.error('On getting comments data:', e.message)
         return setError('Произошла ошибка при запросе')

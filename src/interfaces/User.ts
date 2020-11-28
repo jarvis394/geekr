@@ -20,7 +20,7 @@ export interface UserCompanies {
 }
 
 export interface UserHubs {
-  hubs: Hub.Hub[]
+  hubs: Hub[]
 }
 
 export interface UserChildren {

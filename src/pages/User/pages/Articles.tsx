@@ -27,14 +27,16 @@ const Articles = () => {
   const history = useHistory()
   const classes = useStyles()
   const dispatch = useDispatch()
-  const isFetched = useSelector((state) => state.user.articles.fetched)
-  const isFetching = useSelector((state) => state.user.articles.fetching)
-  const fetchError = useSelector((state) => state.user.articles.error)
+  const isFetched = useSelector((state) => state.profile.articles.fetched)
+  const isFetching = useSelector((state) => state.profile.articles.fetching)
+  const fetchError = useSelector((state) => state.profile.articles.error)
   const data = useSelector(
-    (state) => state.user.articles.data.pages[currentPage]
+    (state) => state.profile.articles.data.pages[currentPage]
   )
-  const profile = useSelector((state) => state.user.profile.user.data)
-  const pagesCount = useSelector((state) => state.user.articles.data.pagesCount)
+  const profile = useSelector((state) => state.profile.profile.user.data)
+  const pagesCount = useSelector(
+    (state) => state.profile.articles.data.pagesCount
+  )
 
   const PaginationComponent = () =>
     pagesCount ? (

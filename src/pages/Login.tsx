@@ -1,7 +1,22 @@
-import React from 'react'
-import { getToken } from 'habra-auth'
-import { Button, Typography, Grid, Paper, TextField } from '@material-ui/core'
+import React, { useEffect, useState } from 'react'
+import {
+  Button,
+  Typography,
+  Grid,
+  Paper,
+  TextField,
+  IconButton,
+  InputAdornment,
+  OutlinedInput,
+} from '@material-ui/core'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import useSelector from 'src/hooks/useSelector'
+import { useDispatch } from 'react-redux'
+import { getToken } from 'src/store/actions/user'
+import { FetchingState } from 'src/interfaces'
+import { useHistory } from 'react-router-dom'
+import VisibilityIcon from '@material-ui/icons/Visibility'
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -40,19 +55,23 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const classes = useStyles()
+  const [showPassword, setShowPassword] = useState(false)
+  const state = useSelector((store) => store.user.state)
+  const dispatch = useDispatch()
+  const history = useHistory()
 
-  const handleLoginSubmit = async (e) => {
+  const handleLoginSubmit = (e) => {
     e.preventDefault()
     const email = e.target.email.value
     const password = e.target.password.value
-
-    try {
-      const response = await getToken(email, password)
-      alert(response.access_token)
-    } catch (e) {
-      alert('Got login error: ' + e)
-    }
+    dispatch(getToken(email, password))
   }
+
+  useEffect(() => {
+    if (state === FetchingState.Fetched) {
+      return history.push('/')
+    }
+  }, [state, history])
 
   return (
     <form className={classes.root} onSubmit={handleLoginSubmit}>
@@ -65,6 +84,7 @@ const Login = () => {
             <Typography className={classes.inputLabel}>Электропочта</Typography>
             <TextField
               autoFocus
+              autoComplete="email"
               name="email"
               size="small"
               fullWidth
@@ -73,12 +93,19 @@ const Login = () => {
           </Grid>
           <Grid item className={classes.input}>
             <Typography className={classes.inputLabel}>Пароль</Typography>
-            <TextField
-              size="small"
+            <OutlinedInput
+              autoComplete="current-password"
               name="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               fullWidth
-              variant="outlined"
+              margin="dense"
+              endAdornment={
+                <InputAdornment position="end" style={{ marginRight: -8 }}>
+                  <IconButton onClick={() => setShowPassword((prev) => !prev)}>
+                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                </InputAdornment>
+              }
             />
           </Grid>
           <Grid item>

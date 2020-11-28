@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const InvitedTime = () => {
   const classes = useStyles()
-  const user = useSelector((store) => store.user.profile.user.data)
+  const user = useSelector((store) => store.profile.profile.user.data)
   const timeInvited = dayjs(user.time_invited).fromNow()
   const textTimeInvited = timeInvited[0].toUpperCase() + timeInvited.slice(1)
   const wasInvitedText = user.sex === '1' ? 'был приглашён' : 'была приглашена'

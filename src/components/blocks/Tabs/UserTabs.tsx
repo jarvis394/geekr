@@ -71,7 +71,7 @@ const generateTabs = (user: UserExtendedObject): TabObject[] => [
 ]
 
 const UserTabs = () => {
-  const user = useSelector((state) => state.user.profile.user.data)
+  const user = useSelector((state) => state.profile.profile.user.data)
   const tabs = generateTabs(user)
   const findPath = (path: string): TabObject => {
     return tabs.find((e) => path.match(e.match))

@@ -3,7 +3,8 @@ import home from './home'
 import settings from './settings'
 import news from './news'
 import hubs from './hubs'
-import user from './profile'
+import profile from './profile'
+import user from './user'
 
 export default combineReducers({
   news,
@@ -11,4 +12,5 @@ export default combineReducers({
   settings,
   hubs,
   user,
+  profile,
 })

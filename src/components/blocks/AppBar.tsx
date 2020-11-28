@@ -3,8 +3,9 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import { Link } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
+import Avatar from '@material-ui/core/Avatar'
+import { Link } from 'react-router-dom'
 import Container from '@material-ui/core/Container'
 import { MIN_WIDTH as maxWidth, RATING_MODES } from '../../config/constants'
 import PermIdentityRoundedIcon from '@material-ui/icons/PermIdentityRounded'
@@ -15,6 +16,9 @@ import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
 import { useScrollTrigger, Slide } from '@material-ui/core'
 import { useSelector } from 'src/hooks'
+import { FetchingState } from 'src/interfaces'
+import { useDispatch } from 'react-redux'
+import { getMe } from 'src/store/actions/user'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +50,11 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     alignItems: 'center',
   },
+  avatar: {
+    height: theme.spacing(3),
+    width: theme.spacing(3),
+    borderRadius: theme.shape.borderRadius,
+  },
 }))
 
 interface HideOnScrollProps {
@@ -65,9 +74,22 @@ const HideOnScroll = (props: HideOnScrollProps) => {
 
 const Component = () => {
   const classes = useStyles()
+  const dispatch = useDispatch()
   const history = useHistory()
   const modeName = useSelector((state) => state.home.mode)
+  const tokenState = useSelector((state) => state.user.state)
+  const userState = useSelector((state) => state.user.profile.state)
+  const userData = useSelector((state) => state.user.profile.data)
+  const token = useSelector((state) => state.user.token)
   const mode = RATING_MODES.find((e) => e.mode === modeName)
+  const shouldFetchUser =
+    tokenState === FetchingState.Fetched &&
+    (userState === FetchingState.Idle || userState === FetchingState.Error)
+  const shouldShowUser = userState === FetchingState.Fetched
+
+  React.useEffect(() => {
+    if (shouldFetchUser) dispatch(getMe(token))
+  }, [shouldFetchUser, dispatch, token])
 
   return (
     <HideOnScroll>
@@ -92,9 +114,16 @@ const Component = () => {
             <IconButton onClick={() => history.push('/settings')}>
               <SettingsOutlinedIcon />
             </IconButton>
-            <IconButton onClick={() => history.push('/auth')}>
-              <PermIdentityRoundedIcon />
-            </IconButton>
+            {!shouldShowUser && (
+              <IconButton onClick={() => history.push('/auth')}>
+                <PermIdentityRoundedIcon />
+              </IconButton>
+            )}
+            {shouldShowUser && (
+              <IconButton>
+                <Avatar className={classes.avatar} src={userData.avatar} />
+              </IconButton>
+            )}
           </Toolbar>
         </Container>
       </AppBar>

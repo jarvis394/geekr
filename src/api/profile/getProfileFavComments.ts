@@ -4,7 +4,7 @@ import { APIResponse, Comments } from 'src/interfaces'
 export default async (
   login: string,
   page: number
-): Promise<APIResponse<Comments.Comments>> =>
+): Promise<APIResponse<Comments>> =>
   (
     await makeRequest({
       path: `users/${login}/comments`,

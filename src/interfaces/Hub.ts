@@ -1,5 +1,3 @@
-import { Flow } from '.'
-
 export interface HubsResponse {
   hubIds: string[]
   hubRefs: Record<string, Hub>

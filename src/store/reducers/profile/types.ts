@@ -18,7 +18,7 @@ export interface PromiseItem<T> {
 export interface State {
   hubs?: PromiseItem<{
     hubIds: string[]
-    hubRefs: Record<string, Hub.Hub>
+    hubRefs: Record<string, Hub>
     pagesCount: number
   }>
   user?: PromiseItem<UserExtended>

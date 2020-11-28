@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Item = ({ data }: { data: Hub.Hub }) => {
+const Item = ({ data }: { data: Hub }) => {
   const classes = useStyles()
 
   return (

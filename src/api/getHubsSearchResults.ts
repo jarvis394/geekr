@@ -1,7 +1,7 @@
 import makeRequest from './makeRequest'
-import { Hub } from '../interfaces'
+import { HubsSearchResponse } from '../interfaces'
 
-export default async (q: string): Promise<Hub.HubsSearchResponse> =>
+export default async (q: string): Promise<HubsSearchResponse> =>
   (
     await makeRequest({
       path: 'hubs/search',

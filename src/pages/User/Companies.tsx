@@ -36,13 +36,17 @@ const useStyles = makeStyles((theme) => ({
 const Companies = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const profile = useSelector((store) => store.user.profile.user.data)
-  const companies = useSelector((store) => store.user.profile.companies.data)
-  const isFetched = useSelector((store) => store.user.profile.companies.fetched)
-  const isFetching = useSelector(
-    (store) => store.user.profile.companies.fetching
+  const profile = useSelector((store) => store.profile.profile.user.data)
+  const companies = useSelector((store) => store.profile.profile.companies.data)
+  const isFetched = useSelector(
+    (store) => store.profile.profile.companies.fetched
   )
-  const fetchError = useSelector((store) => store.user.profile.companies.error)
+  const isFetching = useSelector(
+    (store) => store.profile.profile.companies.fetching
+  )
+  const fetchError = useSelector(
+    (store) => store.profile.profile.companies.error
+  )
 
   useEffect(() => {
     dispatch(getProfileCompanies(profile.login))
