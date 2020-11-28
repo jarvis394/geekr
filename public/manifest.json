@@ -23,6 +23,6 @@
   "display": "standalone",
   "theme_color": "#2979ff",
   "scope": "/",
-  "background_color": "#ffffff",
+  "background_color": "#2979ff",
   "splash_pages": null
 }
