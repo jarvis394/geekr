@@ -1,9 +1,9 @@
 import { FetchingState, UserExtended } from 'src/interfaces'
-import { GET_TOKEN, GET_PROFILE } from './types'
+import { SET_TOKEN, GET_PROFILE } from './types'
+
+const cachedToken = localStorage.getItem('token')
 
 interface State {
-  state: FetchingState
-  fetchError: string
   token: string
   profile: {
     state: FetchingState
@@ -13,9 +13,7 @@ interface State {
 }
 
 const initialState: State = {
-  fetchError: null,
-  state: FetchingState.Idle,
-  token: null,
+  token: cachedToken,
   profile: {
     state: FetchingState.Idle,
     fetchError: null,
@@ -25,24 +23,10 @@ const initialState: State = {
 
 export default (reducerState = initialState, { type, payload }) => {
   switch (type) {
-    case GET_TOKEN: {
+    case SET_TOKEN: {
       return {
         ...reducerState,
-        state: FetchingState.Fetching,
-        fetchError: null,
-      }
-    }
-
-    case GET_TOKEN + '_FETCH_FULFILLED': {
-      reducerState.token = payload
-      return { ...reducerState, state: FetchingState.Fetched, fetchError: null }
-    }
-
-    case GET_TOKEN + '_FETCH_REJECTED': {
-      return {
-        ...reducerState,
-        state: FetchingState.Error,
-        fetchError: payload,
+        token: payload,
       }
     }
 

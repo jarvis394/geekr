@@ -13,6 +13,7 @@ import { useSelector } from 'src/hooks'
 import Tabs from './blocks/Tabs/RouterTabs'
 import ScrollRestoration from 'react-scroll-restoration'
 import RouterTitleChange from './RouterTitleChange'
+import { SnackbarProvider } from 'notistack'
 
 const chromeAddressBarHeight = 56
 const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
@@ -84,20 +85,22 @@ const App = (): React.ReactElement => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Router>
-        {/** Restores user scroll */}
-        <ScrollRestoration />
+      <SnackbarProvider>
+        <Router>
+          {/** Restores user scroll */}
+          <ScrollRestoration />
 
-        {/** Change document title on routing */}
-        <RouterTitleChange />
+          {/** Change document title on routing */}
+          <RouterTitleChange />
 
-        <AppBar />
-        <div className={classes.app}>
-          <Tabs />
-          <AppRouter />
-        </div>
-        <Footer />
-      </Router>
+          <AppBar />
+          <div className={classes.app}>
+            <Tabs />
+            <AppRouter />
+          </div>
+          <Footer />
+        </Router>
+      </SnackbarProvider>
     </ThemeProvider>
   )
 }

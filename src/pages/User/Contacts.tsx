@@ -34,7 +34,12 @@ export const Contacts = ({
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === 'a') {
         return (
-          <Link className={classes.link} href={attribs.href} rel="nofollow noopener" target="_blank">
+          <Link
+            className={classes.link}
+            href={attribs.href}
+            rel="nofollow noopener"
+            target="_blank"
+          >
             {children[0].data}
           </Link>
         )

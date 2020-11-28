@@ -16,7 +16,7 @@ import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
 import { useScrollTrigger, Slide } from '@material-ui/core'
 import { useSelector } from 'src/hooks'
-import { FetchingState } from 'src/interfaces'
+import { FetchingState, UserExtended } from 'src/interfaces'
 import { useDispatch } from 'react-redux'
 import { getMe } from 'src/store/actions/user'
 
@@ -77,14 +77,13 @@ const Component = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const modeName = useSelector((state) => state.home.mode)
-  const tokenState = useSelector((state) => state.user.state)
   const userState = useSelector((state) => state.user.profile.state)
-  const userData = useSelector((state) => state.user.profile.data)
+  const userData = useSelector(
+    (state) => state.user.profile.data
+  ) as UserExtended
   const token = useSelector((state) => state.user.token)
   const mode = RATING_MODES.find((e) => e.mode === modeName)
-  const shouldFetchUser =
-    tokenState === FetchingState.Fetched &&
-    (userState === FetchingState.Idle || userState === FetchingState.Error)
+  const shouldFetchUser = !!token
   const shouldShowUser = userState === FetchingState.Fetched
 
   React.useEffect(() => {
@@ -120,7 +119,9 @@ const Component = () => {
               </IconButton>
             )}
             {shouldShowUser && (
-              <IconButton>
+              <IconButton
+                onClick={() => history.push('/users/' + userData.path)}
+              >
                 <Avatar className={classes.avatar} src={userData.avatar} />
               </IconButton>
             )}
