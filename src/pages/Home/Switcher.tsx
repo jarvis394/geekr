@@ -72,10 +72,10 @@ const isIOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
 
 const Switcher = ({ handleClick, mode, setMode }) => {
   const [isOpen, setOpen] = useState(false)
-  const [showMode, setShowMode] = useState<ShowMode>(
-    mode !== 'all' ? 'top' : 'new'
-  )
   const current = modes.find((e) => e.mode === mode)
+  const [showMode, setShowMode] = useState<ShowMode>(
+    current.isNewMode ? 'new' : 'top'
+  )
   const [drawerMode, setDrawerMode] = useState<ModeObject>(current)
   const classes = useStyles()
 
