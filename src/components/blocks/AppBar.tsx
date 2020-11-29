@@ -120,7 +120,7 @@ const Component = () => {
             )}
             {shouldShowUser && (
               <IconButton
-                onClick={() => history.push('/user/' + userData.path)}
+                onClick={() => history.push('/user/' + userData.login)}
               >
                 <Avatar className={classes.avatar} src={userData.avatar} />
               </IconButton>
