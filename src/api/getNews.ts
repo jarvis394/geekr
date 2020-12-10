@@ -1,14 +1,12 @@
 import makeRequest from './makeRequest'
 import { Posts } from '../interfaces'
 
-export default async (page: number): Promise<Posts> =>
-  (
-    await makeRequest({
-      path: 'articles',
-      params: {
-        news: 'true',
-        page,
-      },
-      version: 2,
-    })
-  ).data
+export default async (page: number) =>
+  await makeRequest<Posts>({
+    path: 'articles',
+    params: {
+      news: 'true',
+      page: page.toString(),
+    },
+    version: 2,
+  })

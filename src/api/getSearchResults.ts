@@ -6,15 +6,13 @@ export default async (
   query: string,
   page: number,
   order: 'relevance' | 'date' | 'rating'
-): Promise<Posts> =>
-  (
-    await makeRequest({
-      path: 'articles',
-      version: 2,
-      params: {
-        query,
-        page,
-        order,
-      },
-    })
-  ).data
+) =>
+  await makeRequest<Posts>({
+    path: 'articles',
+    version: 2,
+    params: {
+      query,
+      page: page.toString(),
+      order,
+    },
+  })

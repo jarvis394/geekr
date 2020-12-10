@@ -11,6 +11,7 @@ export const getPosts = (mode: Mode, page: number) => async (
   const type = HOME_PREFIX + 'FETCH'
   // Get data from root store to find out if we're going to fetch a data or not
   const storeData = getState().home.data[mode].pages[page]
+  const token = getState().user.token
   if (!shouldUpdate(storeData)) {
     return Promise.resolve()
   }
@@ -18,12 +19,12 @@ export const getPosts = (mode: Mode, page: number) => async (
   dispatch({ type, payload: mode })
 
   try {
-    const data = await api.getPosts(mode, page)
+    const data = await api.getPosts(mode, page, token)
     const pagesCount = data?.pagesCount
 
     dispatch({
       type: type + '_FULFILLED',
-      payload: { data: data, mode, page, pagesCount },
+      payload: { data: data, mode, page, pagesCount, token },
     })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: { error, mode, page } })

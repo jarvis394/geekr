@@ -1,13 +1,11 @@
 import makeRequest from './makeRequest'
 import { HubsResponse } from '../interfaces'
 
-export default async (page: number): Promise<HubsResponse> =>
-  (
-    await makeRequest({
-      path: 'hubs',
-      params: {
-        page,
-      },
-      version: 2,
-    })
-  ).data
+export default async (page: number) =>
+  await makeRequest<HubsResponse>({
+    path: 'hubs',
+    params: {
+      page: page.toString(),
+    },
+    version: 2,
+  })

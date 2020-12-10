@@ -1,10 +1,8 @@
 import makeRequest from './makeRequest'
 import { APIResponse, Post } from '../interfaces'
 
-export default async (id: number): Promise<APIResponse<Post[]>> =>
-  (
-    await makeRequest({
-      path: `articles/${id}/similar`,
-      version: 2,
-    })
-  ).data
+export default async (id: number) =>
+  await makeRequest<APIResponse<Post[]>>({
+    path: `articles/${id}/similar`,
+    version: 2,
+  })

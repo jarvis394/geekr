@@ -12,7 +12,7 @@ export const getMe = (token: string) => async (dispatch) => {
   dispatch({ type })
 
   try {
-    const data = await getUserProfile(token)
+    const { data } = await getUserProfile(token)
 
     dispatch({
       type: type + '_FULFILLED',
