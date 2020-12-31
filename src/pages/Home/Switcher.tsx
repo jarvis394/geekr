@@ -15,19 +15,23 @@ import SwitcherButtons from './SwitcherButtons'
 
 const useStyles = makeStyles((theme) => ({
   button: {
-    background: theme.palette.background.paper,
+    background: theme.palette.background.default,
     textAlign: 'left',
     minHeight: 48,
     height: 48,
+    marginTop: theme.spacing(2),
   },
   buttonContainer: {
     display: 'flex',
     height: '100%',
     alignItems: 'center',
+    padding: theme.spacing(0, 2),
+    width: '100%',
   },
   currentMode: {
-    fontSize: 14,
-    fontWeight: 500,
+    fontSize: 24,
+    fontWeight: 800,
+    fontFamily: 'Google Sans',
     flexGrow: 1,
   },
   expandIcon: {
@@ -39,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
+  },
+  drawerRoot: {
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
   },
   drawer: {
     margin: theme.spacing(0, 0, 2, 0),
@@ -97,14 +105,14 @@ const Switcher = ({ handleClick, mode, setMode }) => {
   return (
     <>
       <ButtonBase className={classes.button} onClick={onButtonClick}>
-        <Container className={classes.buttonContainer}>
+        <div className={classes.buttonContainer}>
           <Typography className={classes.currentMode}>
             {current.text}
           </Typography>
           <div className={classes.expandIcon}>
             <ChevronRightRoundedIcon />
           </div>
-        </Container>
+        </div>
       </ButtonBase>
 
       <SwipeableDrawer
@@ -115,6 +123,9 @@ const Switcher = ({ handleClick, mode, setMode }) => {
         disableBackdropTransition={!isIOS}
         disableDiscovery={isIOS}
         disableSwipeToOpen
+        classes={{
+          paper: classes.drawerRoot,
+        }}
       >
         <Container className={classes.drawer}>
           <Typography className={classes.drawerHeaderText}>

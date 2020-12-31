@@ -6,15 +6,13 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import Avatar from '@material-ui/core/Avatar'
 import { Link } from 'react-router-dom'
-import Container from '@material-ui/core/Container'
-import { MIN_WIDTH as maxWidth, RATING_MODES } from '../../config/constants'
+import { MIN_WIDTH, RATING_MODES } from '../../config/constants'
 import PermIdentityRoundedIcon from '@material-ui/icons/PermIdentityRounded'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import { useHistory } from 'react-router-dom'
 import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
-import { useScrollTrigger, Slide } from '@material-ui/core'
 import { useSelector } from 'src/hooks'
 import { FetchingState, UserExtended } from 'src/interfaces'
 import { useDispatch } from 'react-redux'
@@ -22,14 +20,22 @@ import { getMe } from 'src/store/actions/user'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: (trigger) =>
+      theme.palette.background[trigger ? 'paper' : 'default'],
     color: theme.palette.text.primary,
     position: 'fixed',
     height: 48,
     flexGrow: 1,
-    borderBottom: '1px solid ' + theme.palette.divider,
+    transitionDuration: '0.5s',
   },
-  container: { maxWidth, padding: 0 },
+  toolbar: {
+    margin: 'auto',
+    minHeight: 'unset',
+    height: 48,
+    padding: 0,
+    maxWidth: MIN_WIDTH,
+    width: '100%',
+  },
   link: {
     textDecoration: 'none',
     color: theme.palette.text.primary,
@@ -37,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     alignItems: 'center',
     display: 'flex',
+    fontFamily: 'Google Sans',
   },
   offline: {
     color: theme.palette.text.disabled,
@@ -55,25 +62,22 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(3),
     borderRadius: theme.shape.borderRadius,
   },
+  marginContainer: {
+    margin: theme.spacing(0, 2),
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    borderBottom: '1px solid ' + theme.palette.divider,
+  },
 }))
 
 interface HideOnScrollProps {
   children: React.ReactElement
 }
 
-const HideOnScroll = (props: HideOnScrollProps) => {
-  const { children } = props
-  const trigger = useScrollTrigger({ target: window })
-
-  return (
-    <Slide appear={false} direction="down" in={!trigger}>
-      {children}
-    </Slide>
-  )
-}
-
 const Component = () => {
-  const classes = useStyles()
+  const [trigger, setTrigger] = React.useState(false)
+  const classes = useStyles(trigger)
   const dispatch = useDispatch()
   const history = useHistory()
   const modeName = useSelector((state) => state.home.mode)
@@ -87,48 +91,52 @@ const Component = () => {
   const shouldShowUser = userState === FetchingState.Fetched
 
   React.useEffect(() => {
-    if (shouldFetchUser) dispatch(getMe(token))
-  }, [shouldFetchUser, dispatch, token])
+    const scrollCallback = () => {
+      const position = window.pageYOffset
+      const state = position > 48
+      trigger !== state && setTrigger(state)
+    }
+
+    if (shouldFetchUser && !shouldShowUser) dispatch(getMe(token))
+    window.addEventListener('scroll', () => scrollCallback())
+    return window.removeEventListener('scroll', scrollCallback)
+  }, [shouldFetchUser, dispatch, token, trigger])
 
   return (
-    <HideOnScroll>
-      <AppBar className={classes.root} elevation={0}>
-        <Container className={classes.container}>
-          <Toolbar style={{ minHeight: 'unset', height: 48 }}>
-            <Typography variant="h6" className={classes.linkTypography}>
-              <Link
-                to={mode ? `${mode.to}/p/1` : '/'}
-                onClick={() => window.scrollTo(0, 0)}
-                className={classes.link}
-              >
-                habra.
-                <Offline>
-                  <WifiOffRoundedIcon className={classes.offline} />
-                </Offline>
-              </Link>
-            </Typography>
-            <IconButton onClick={() => history.push('/search')}>
-              <SearchRoundedIcon />
+    <AppBar className={classes.root} elevation={0}>
+      <Toolbar className={classes.toolbar}>
+        <div className={classes.marginContainer}>
+          <Typography variant="h6" className={classes.linkTypography}>
+            <Link
+              to={mode ? `${mode.to}/p/1` : '/'}
+              onClick={() => window.scrollTo(0, 0)}
+              className={classes.link}
+            >
+              habra.
+              <Offline>
+                <WifiOffRoundedIcon className={classes.offline} />
+              </Offline>
+            </Link>
+          </Typography>
+          <IconButton onClick={() => history.push('/search')}>
+            <SearchRoundedIcon />
+          </IconButton>
+          <IconButton onClick={() => history.push('/settings')}>
+            <SettingsOutlinedIcon />
+          </IconButton>
+          {!shouldShowUser && (
+            <IconButton onClick={() => (token ? '' : history.push('/auth'))}>
+              <PermIdentityRoundedIcon />
             </IconButton>
-            <IconButton onClick={() => history.push('/settings')}>
-              <SettingsOutlinedIcon />
+          )}
+          {shouldShowUser && (
+            <IconButton onClick={() => history.push('/user/' + userData.login)}>
+              <Avatar className={classes.avatar} src={userData.avatar} />
             </IconButton>
-            {!shouldShowUser && (
-              <IconButton onClick={() => history.push('/auth')}>
-                <PermIdentityRoundedIcon />
-              </IconButton>
-            )}
-            {shouldShowUser && (
-              <IconButton
-                onClick={() => history.push('/user/' + userData.login)}
-              >
-                <Avatar className={classes.avatar} src={userData.avatar} />
-              </IconButton>
-            )}
-          </Toolbar>
-        </Container>
-      </AppBar>
-    </HideOnScroll>
+          )}
+        </div>
+      </Toolbar>
+    </AppBar>
   )
 }
 

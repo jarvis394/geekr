@@ -10,6 +10,7 @@ import VKIcon from 'src/components/svg/VKIcon'
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(7),
   },
   container: {
     padding: `${theme.spacing(3)}px ${theme.spacing(2)}px ${theme.spacing(

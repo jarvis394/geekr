@@ -110,15 +110,15 @@ export const THEMES: PaletteType[] = ['light', 'dark', 'oled', 'sepia']
 
 export const BACKGROUND_COLORS_DEFAULT = {
   light: '#fafafa',
-  dark: '#121212',
-  oled: '#121212',
+  dark: '#000',
+  oled: '#000',
   sepia: '#f5e2a8',
 }
 
 export const BACKGROUND_COLORS_PAPER = {
   light: '#fff',
   dark: '#1d1d1d',
-  oled: '#000',
+  oled: '#1d1d1d',
   sepia: '#ffecb3',
 }
 

@@ -10,10 +10,10 @@ import { lighten, darken } from '@material-ui/core/styles'
 import isMobile from 'is-mobile'
 import Footer from './blocks/Footer'
 import { useSelector } from 'src/hooks'
-import Tabs from './blocks/Tabs/RouterTabs'
 import ScrollRestoration from 'react-scroll-restoration'
 import RouterTitleChange from './RouterTitleChange'
 import { SnackbarProvider } from 'notistack'
+import BottomBar from './blocks/BottomBar'
 
 const chromeAddressBarHeight = 56
 const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
@@ -36,8 +36,8 @@ const useStyles = makeStyles(() => ({
     },
     backgroundColor: (theme: ThemeOptions) =>
       theme.palette.type === 'dark'
-        ? darken(theme.palette.background.paper, 0.5)
-        : darken(theme.palette.background.paper, 0.04),
+        ? theme.palette.background.paper
+        : theme.palette.background.paper,
     color: (theme: ThemeOptions) => theme.palette.text.primary,
     margin: 0,
     fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif',
@@ -94,8 +94,8 @@ const App = (): React.ReactElement => {
           <RouterTitleChange />
 
           <AppBar />
+          <BottomBar />
           <div className={classes.app}>
-            <Tabs />
             <AppRouter />
           </div>
           <Footer />
