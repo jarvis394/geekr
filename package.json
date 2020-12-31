@@ -14,7 +14,7 @@
     "@nteract/mathjax": "^4.0.13",
     "axios": "^0.19.2",
     "dayjs": "^1.9.6",
-    "habra-auth": "^2.2.1",
+    "habra-auth": "^2.3.3",
     "html-react-parser": "^0.10.3",
     "is-mobile": "^2.2.2",
     "local-cors-proxy": "^1.1.0",
