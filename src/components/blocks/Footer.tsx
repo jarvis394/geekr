@@ -69,7 +69,7 @@ const Footer = () => {
           ))}
         </Grid>
 
-        <div style={{ marginTop: 16 }}>
+        <div style={{ marginTop: 8 }}>
           <Link to={'/habra-about'} className={classes.text}>
             О проекте
           </Link>
