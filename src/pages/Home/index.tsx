@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
     padding: 0,
-    paddingTop: theme.spacing(2),
+    paddingTop: theme.spacing(1),
     width: '100%',
   },
 }))

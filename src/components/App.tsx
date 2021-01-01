@@ -34,10 +34,7 @@ const useStyles = makeStyles(() => ({
       '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)',
       'user-select': 'none',
     },
-    backgroundColor: (theme: ThemeOptions) =>
-      theme.palette.type === 'dark'
-        ? theme.palette.background.paper
-        : theme.palette.background.paper,
+    backgroundColor: (theme: ThemeOptions) => theme.palette.background.default,
     color: (theme: ThemeOptions) => theme.palette.text.primary,
     margin: 0,
     fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif',

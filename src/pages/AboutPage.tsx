@@ -1,6 +1,7 @@
 import React from 'react'
 import { Typography, Fade, Container } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import OutsidePage from 'src/components/blocks/OutsidePage'
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -95,13 +96,15 @@ const AboutPage = () => {
   ]
 
   return (
-    <Container>
-      {text.map((e, i) => (
-        <Text index={i} key={i} {...e.props}>
-          {e.data}
-        </Text>
-      ))}
-    </Container>
+    <OutsidePage headerText="О проекте">
+      <Container>
+        {text.map((e, i) => (
+          <Text index={i} key={i} {...e.props}>
+            {e.data}
+          </Text>
+        ))}
+      </Container>
+    </OutsidePage>
   )
 }
 

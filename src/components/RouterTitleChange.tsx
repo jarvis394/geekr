@@ -8,7 +8,7 @@ const RouterTitleChange = ({ history }) => {
     const unlisten = history.listen((location: Location) => {
       const path = location.pathname
       const route = routes.find((e) => match(e.path)(path))
-      const newTitle = route.title ? route.title + ' | habra.' : document.title
+      const newTitle = route.title ? route.title + ' | habra.' : 'habra.'
       if (document.title !== newTitle) document.title = newTitle
     })
 

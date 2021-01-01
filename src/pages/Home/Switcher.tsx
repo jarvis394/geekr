@@ -10,7 +10,7 @@ import {
   SwipeableDrawer,
 } from '@material-ui/core'
 import { ModeObject } from 'src/interfaces'
-import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded'
+import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import SwitcherButtons from './SwitcherButtons'
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
     minHeight: 48,
     height: 48,
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
   },
   buttonContainer: {
     display: 'flex',
@@ -32,21 +32,24 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 24,
     fontWeight: 800,
     fontFamily: 'Google Sans',
-    flexGrow: 1,
   },
   expandIcon: {
     display: 'flex',
+    marginLeft: theme.spacing(1),
     alignItems: 'center',
     justifyContent: 'center',
-    color: theme.palette.text.secondary,
+    color: theme.palette.primary.main,
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
   },
   drawerRoot: {
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderRadius: 14,
+    border: '1px solid ' + theme.palette.divider,
+    marginBottom: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
   },
   drawer: {
     margin: theme.spacing(0, 0, 2, 0),
@@ -57,6 +60,28 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     marginBottom: theme.spacing(2),
     marginTop: theme.spacing(2),
+  },
+  dragLine: {
+    width: 48,
+    height: 5,
+    background: theme.palette.divider,
+    borderRadius: 10,
+    position: 'relative',
+    marginTop: theme.spacing(1.5),
+    display: 'block',
+    marginRight: 'auto',
+    marginLeft: 'auto',
+    marginBottom: -5,
+  },
+  applyButton: {
+    height: 40,
+    marginTop: theme.spacing(2),
+    borderRadius: 8,
+    transition: 'all .15s',
+  },
+  applyButtonHover: {
+    opacity: 0.8,
+    transform: 'scale(0.95)',
   },
 }))
 
@@ -80,6 +105,7 @@ const isIOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
 
 const Switcher = ({ handleClick, mode, setMode }) => {
   const [isOpen, setOpen] = useState(false)
+  const [applyButtonHover, setApplyButtonHover] = useState(false)
   const current = modes.find((e) => e.mode === mode)
   const [showMode, setShowMode] = useState<ShowMode>(
     current.isNewMode ? 'new' : 'top'
@@ -110,7 +136,7 @@ const Switcher = ({ handleClick, mode, setMode }) => {
             {current.text}
           </Typography>
           <div className={classes.expandIcon}>
-            <ChevronRightRoundedIcon />
+            <ExpandMoreRoundedIcon style={{ fontSize: 28 }} />
           </div>
         </div>
       </ButtonBase>
@@ -126,8 +152,11 @@ const Switcher = ({ handleClick, mode, setMode }) => {
         classes={{
           paper: classes.drawerRoot,
         }}
+        elevation={0}
       >
         <Container className={classes.drawer}>
+          <span className={classes.dragLine} />
+
           <Typography className={classes.drawerHeaderText}>
             Сначала показывать
           </Typography>
@@ -170,17 +199,24 @@ const Switcher = ({ handleClick, mode, setMode }) => {
               />
             </>
           )}
+          <Button
+            color="primary"
+            disableElevation
+            disableRipple
+            className={
+              classes.applyButton +
+              ' ' +
+              (applyButtonHover ? classes.applyButtonHover : '')
+            }
+            fullWidth
+            variant="contained"
+            onClick={handleApplyClick}
+            onMouseDown={() => setApplyButtonHover(true)}
+            onMouseUp={() => setApplyButtonHover(false)}
+          >
+            Применить
+          </Button>
         </Container>
-        <Button
-          color="primary"
-          disableElevation
-          style={{ height: 48, borderRadius: 0 }}
-          fullWidth
-          variant="contained"
-          onClick={handleApplyClick}
-        >
-          Применить
-        </Button>
       </SwipeableDrawer>
     </>
   )

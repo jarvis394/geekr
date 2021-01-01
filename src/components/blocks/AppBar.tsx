@@ -17,14 +17,20 @@ import { useSelector } from 'src/hooks'
 import { FetchingState, UserExtended } from 'src/interfaces'
 import { useDispatch } from 'react-redux'
 import { getMe } from 'src/store/actions/user'
+import { Divider, useTheme } from '@material-ui/core'
+import blend from 'src/utils/blendColors'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: (trigger) =>
-      theme.palette.background[trigger ? 'paper' : 'default'],
+    backgroundColor: (progress: number) =>
+      blend(
+        theme.palette.background.default,
+        theme.palette.background.paper,
+        progress
+      ),
     color: theme.palette.text.primary,
     position: 'fixed',
-    height: 48,
+    height: 49,
     flexGrow: 1,
     transitionDuration: '0.5s',
   },
@@ -67,17 +73,21 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    borderBottom: '1px solid ' + theme.palette.divider,
+    flexDirection: 'column',
+  },
+  content: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
   },
 }))
 
-interface HideOnScrollProps {
-  children: React.ReactElement
-}
-
-const Component = () => {
-  const [trigger, setTrigger] = React.useState(false)
-  const classes = useStyles(trigger)
+const AppBarComponent = () => {
+  const theme = useTheme()
+  const [scrollProgress, setScrollProgress] = React.useState(
+    Math.min(window.pageYOffset / 48, 1)
+  )
+  const classes = useStyles(scrollProgress)
   const dispatch = useDispatch()
   const history = useHistory()
   const modeName = useSelector((state) => state.home.mode)
@@ -93,51 +103,63 @@ const Component = () => {
   React.useEffect(() => {
     const scrollCallback = () => {
       const position = window.pageYOffset
-      const state = position > 48
-      trigger !== state && setTrigger(state)
+      const progress = Math.min(position / 48, 1)
+      setScrollProgress(progress)
     }
 
     if (shouldFetchUser && !shouldShowUser) dispatch(getMe(token))
     window.addEventListener('scroll', () => scrollCallback())
     return window.removeEventListener('scroll', scrollCallback)
-  }, [shouldFetchUser, dispatch, token, trigger])
+  }, [
+    shouldFetchUser,
+    dispatch,
+    token,
+    shouldShowUser,
+    theme.palette.background.default,
+    theme.palette.background.paper,
+  ])
 
   return (
     <AppBar className={classes.root} elevation={0}>
       <Toolbar className={classes.toolbar}>
         <div className={classes.marginContainer}>
-          <Typography variant="h6" className={classes.linkTypography}>
-            <Link
-              to={mode ? `${mode.to}/p/1` : '/'}
-              onClick={() => window.scrollTo(0, 0)}
-              className={classes.link}
-            >
-              habra.
-              <Offline>
-                <WifiOffRoundedIcon className={classes.offline} />
-              </Offline>
-            </Link>
-          </Typography>
-          <IconButton onClick={() => history.push('/search')}>
-            <SearchRoundedIcon />
-          </IconButton>
-          <IconButton onClick={() => history.push('/settings')}>
-            <SettingsOutlinedIcon />
-          </IconButton>
-          {!shouldShowUser && (
-            <IconButton onClick={() => (token ? '' : history.push('/auth'))}>
-              <PermIdentityRoundedIcon />
+          <div className={classes.content}>
+            <Typography variant="h6" className={classes.linkTypography}>
+              <Link
+                to={mode ? `${mode.to}/p/1` : '/'}
+                onClick={() => window.scrollTo(0, 0)}
+                className={classes.link}
+              >
+                habra.
+                <Offline>
+                  <WifiOffRoundedIcon className={classes.offline} />
+                </Offline>
+              </Link>
+            </Typography>
+            <IconButton onClick={() => history.push('/search')}>
+              <SearchRoundedIcon />
             </IconButton>
-          )}
-          {shouldShowUser && (
-            <IconButton onClick={() => history.push('/user/' + userData.login)}>
-              <Avatar className={classes.avatar} src={userData.avatar} />
+            <IconButton onClick={() => history.push('/settings')}>
+              <SettingsOutlinedIcon />
             </IconButton>
-          )}
+            {!shouldShowUser && (
+              <IconButton onClick={() => (token ? '' : history.push('/auth'))}>
+                <PermIdentityRoundedIcon />
+              </IconButton>
+            )}
+            {shouldShowUser && (
+              <IconButton
+                onClick={() => history.push('/user/' + userData.login)}
+              >
+                <Avatar className={classes.avatar} src={userData.avatar} />
+              </IconButton>
+            )}
+          </div>
+          <Divider style={{ width: '100%' }} />
         </div>
       </Toolbar>
     </AppBar>
   )
 }
 
-export default React.memo(Component)
+export default React.memo(AppBarComponent)

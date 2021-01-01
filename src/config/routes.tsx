@@ -93,7 +93,6 @@ const routes: Route[] = [
       '/top/alltime/p/:page',
     ],
     component: <Home />,
-    title: 'habra.',
   },
   {
     path: '/',
