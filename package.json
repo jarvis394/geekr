@@ -12,7 +12,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.50",
     "@nteract/mathjax": "^4.0.13",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "dayjs": "^1.9.6",
     "habra-auth": "^2.3.3",
     "html-react-parser": "^0.10.3",
