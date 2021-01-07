@@ -84,8 +84,9 @@ const useStyles = makeStyles((theme) => ({
 
 const AppBarComponent = () => {
   const theme = useTheme()
+  const state = useSelector((state) => state.app.appbar)
   const [scrollProgress, setScrollProgress] = React.useState(
-    Math.min(window.pageYOffset / 48, 1)
+    state.shouldChangeColors ? Math.min(window.pageYOffset / 48, 1) : 1
   )
   const classes = useStyles(scrollProgress)
   const dispatch = useDispatch()
@@ -108,16 +109,20 @@ const AppBarComponent = () => {
     }
 
     if (shouldFetchUser && !shouldShowUser) dispatch(getMe(token))
-    window.addEventListener('scroll', () => scrollCallback())
-    return window.removeEventListener('scroll', scrollCallback)
+    state.shouldChangeColors &&
+      window.addEventListener('scroll', () => scrollCallback())
+    return () => window.removeEventListener('scroll', scrollCallback)
   }, [
     shouldFetchUser,
     dispatch,
     token,
+    state,
     shouldShowUser,
     theme.palette.background.default,
     theme.palette.background.paper,
   ])
+
+  if (state.isHidden) return null
 
   return (
     <AppBar className={classes.root} elevation={0}>

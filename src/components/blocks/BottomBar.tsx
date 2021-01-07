@@ -23,11 +23,13 @@ const useStyles = makeStyles((theme) => ({
   root: {
     position: 'fixed',
     bottom: 0,
-    zIndex: 1000,
+    zIndex: theme.zIndex.appBar,
     width: '100%',
+    willChange: 'transform',
   },
   container: {
     background: lighten(theme.palette.background.paper, 0.07),
+    height: 52,
   },
   item: {
     fontFamily: 'Google Sans',

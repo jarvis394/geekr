@@ -6,7 +6,7 @@ import Container from '@material-ui/core/Container'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    background: theme.palette.background.paper,
+    background: theme.palette.background.default,
     borderRadius: 0,
     overflow: 'auto',
     paddingBottom: theme.spacing(2),

@@ -13,6 +13,7 @@ import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import { CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import OutsidePage from 'src/components/blocks/OutsidePage'
 
 const useStyles = makeStyles(() => ({
   centered: {
@@ -61,7 +62,7 @@ const User = ({ path }) => {
   }, [login, profile, dispatch])
 
   return (
-    <>
+    <OutsidePage headerText={isUserFetched ? '@' + profile.login : null}>
       {!userFetchError && <Tabs />}
       {userFetchError && <ErrorComponent message={userFetchError} />}
       {isUserFetched && (
@@ -77,7 +78,7 @@ const User = ({ path }) => {
             <CircularProgress />
           </div>
         ))}
-    </>
+    </OutsidePage>
   )
 }
 

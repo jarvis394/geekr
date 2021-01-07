@@ -1,6 +1,6 @@
-import { HOME_PREFIX } from './types'
+import { HOME_PREFIX, ADVERTS_PREFIX } from './types'
 import { RATING_MODES } from 'src/config/constants'
-import { Posts } from 'src/interfaces'
+import { Advert, Posts } from 'src/interfaces'
 import getCachedMode from 'src/utils/getCachedMode'
 
 interface ModeObject {
@@ -23,6 +23,12 @@ const initialState = {
   fetched: false,
   error: null,
   data: modes,
+  adverts: {
+    fetching: false,
+    fetched: false,
+    error: null,
+    data: null as Advert[],
+  },
   mode: getCachedMode().mode,
 }
 
@@ -50,6 +56,28 @@ export default (state = initialState, { type, payload }) => {
 
     case HOME_PREFIX + 'FETCH_REJECTED': {
       return { ...state, fetching: false, fetched: false, error: payload }
+    }
+
+    case ADVERTS_PREFIX + 'FETCH': {
+      state.adverts.fetched = false
+      state.adverts.fetching = true
+      state.adverts.error = null
+      return state
+    }
+
+    case ADVERTS_PREFIX + 'FETCH_FULFILLED': {
+      state.adverts.data = payload
+      state.adverts.fetched = true
+      state.adverts.fetching = false
+      state.adverts.error = null
+      return state
+    }
+
+    case ADVERTS_PREFIX + 'FETCH_REJECTED': {
+      state.adverts.error = payload
+      state.adverts.fetched = false
+      state.adverts.fetching = false
+      return state
     }
 
     default:

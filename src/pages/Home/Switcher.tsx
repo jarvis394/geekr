@@ -41,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
   },
   drawerRoot: {
@@ -77,11 +76,10 @@ const useStyles = makeStyles((theme) => ({
     height: 40,
     marginTop: theme.spacing(2),
     borderRadius: 8,
-    transition: 'all .15s',
   },
-  applyButtonHover: {
-    opacity: 0.8,
-    transform: 'scale(0.95)',
+  margin: {
+    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2),
   },
 }))
 
@@ -96,16 +94,8 @@ const showModes: { text: string; mode: ShowMode }[] = [
     mode: 'top',
   },
 ]
-
-// Bad thing to do, but who cares. Checker doesn't know about browser process,
-// so it shows an error, thinking it's NodeJS `process`
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-//@ts-ignore
-const isIOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
-
 const Switcher = ({ handleClick, mode, setMode }) => {
   const [isOpen, setOpen] = useState(false)
-  const [applyButtonHover, setApplyButtonHover] = useState(false)
   const current = modes.find((e) => e.mode === mode)
   const [showMode, setShowMode] = useState<ShowMode>(
     current.isNewMode ? 'new' : 'top'
@@ -146,12 +136,14 @@ const Switcher = ({ handleClick, mode, setMode }) => {
         anchor="bottom"
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
-        disableBackdropTransition={!isIOS}
-        disableDiscovery={isIOS}
+        disableBackdropTransition
+        disableDiscovery
         disableSwipeToOpen
         classes={{
           paper: classes.drawerRoot,
         }}
+        className={classes.margin}
+        style={{ zIndex: 5000 }}
         elevation={0}
       >
         <Container className={classes.drawer}>
@@ -202,17 +194,10 @@ const Switcher = ({ handleClick, mode, setMode }) => {
           <Button
             color="primary"
             disableElevation
-            disableRipple
-            className={
-              classes.applyButton +
-              ' ' +
-              (applyButtonHover ? classes.applyButtonHover : '')
-            }
+            className={classes.applyButton}
             fullWidth
             variant="contained"
             onClick={handleApplyClick}
-            onMouseDown={() => setApplyButtonHover(true)}
-            onMouseUp={() => setApplyButtonHover(false)}
           >
             Применить
           </Button>

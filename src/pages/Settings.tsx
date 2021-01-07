@@ -1,7 +1,5 @@
 import * as React from 'react'
-import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
 import numToWord from 'number-to-words-ru'
 import {
   List,
@@ -33,6 +31,7 @@ import { THEMES, PaletteType, THEME_NAMES } from 'src/config/constants'
 import { TransitionProps } from '@material-ui/core/transitions'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
 import BackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
+import OutsidePage from 'src/components/blocks/OutsidePage'
 
 const useStyles = makeStyles((theme) => ({
   root: { width: '100%', height: '100%', maxWidth: '100vw' },
@@ -89,6 +88,9 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Google Sans',
     fontSize: 24,
     marginTop: theme.spacing(4),
+  },
+  menu: {
+    borderRadius: 8,
   },
 }))
 
@@ -302,6 +304,7 @@ const HiddenCompaniesListItem = () => {
 
 const ThemeMenuListItem = () => {
   const themeType = useSelector((state) => state.settings.themeType)
+  const classes = useStyles()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>()
   const themeName =
     THEME_NAMES[themeType][0].toLowerCase() + THEME_NAMES[themeType].slice(1)
@@ -349,6 +352,10 @@ const ThemeMenuListItem = () => {
         id="theme-menu"
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        classes={{
+          paper: classes.menu,
+        }}
+        elevation={2}
       >
         {THEMES.map((option, index) => (
           <MenuItem
@@ -369,26 +376,21 @@ const Settings = () => {
   const classes = useStyles()
 
   return (
-    <Grid
-      container
-      direction="column"
-      style={{ width: '100%', height: '100%' }}
-    >
-      <Grid item>
-        <Container className={classes.title}>
-          <Typography>Настройки</Typography>
-        </Container>
-        <Divider />
+    <OutsidePage headerText={'Настройки'}>
+      <Grid
+        container
+        direction="column"
+        style={{ width: '100%', height: '100vh' }}
+      >
+        <Grid style={{ overflow: 'auto' }} item>
+          <List style={{ overflow: 'auto' }} className={classes.list}>
+            <ThemeMenuListItem />
+            <HiddenAuthorsListItem />
+            <HiddenCompaniesListItem />
+          </List>
+        </Grid>
       </Grid>
-
-      <Grid style={{ overflow: 'auto' }} item>
-        <List style={{ overflow: 'auto' }} className={classes.list}>
-          <ThemeMenuListItem />
-          <HiddenAuthorsListItem />
-          <HiddenCompaniesListItem />
-        </List>
-      </Grid>
-    </Grid>
+    </OutsidePage>
   )
 }
 

@@ -10,7 +10,7 @@ const initialState: State = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case APPBAR_STATE_CHANGE:
-      return { ...state, ...payload }
+      return { ...state, appbar: { ...payload } }
 
     default:
       return state

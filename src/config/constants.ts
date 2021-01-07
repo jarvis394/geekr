@@ -101,6 +101,7 @@ export const POST_LABELS = {
 
 export const HOUR = 1000 * 60 * 60
 export const DEFAULT_UPDATE_INTERVAL = HOUR / 4
+export const chromeAddressBarHeight = 56
 
 export const DEFAULT_USER_SETTINGS: UserSettings = {
   theme: 'light',
@@ -118,7 +119,7 @@ export const BACKGROUND_COLORS_DEFAULT = {
 export const BACKGROUND_COLORS_PAPER = {
   light: '#ffffff',
   dark: '#1d1d1d',
-  oled: '#1d1d1d',
+  oled: '#0e0e0e',
   sepia: '#ffecb3',
 }
 

@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux'
 import { getPosts } from 'src/store/actions/home'
 import { useSelector } from 'src/hooks'
 import getCachedMode from 'src/utils/getCachedMode'
+import AdvertsBlock from './AdvertsBlock'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,6 +82,7 @@ const Home = () => {
 
   return (
     <>
+      <AdvertsBlock />
       <Switcher setMode={setMode} mode={mode} handleClick={handleSwitcher} />
       <List className={classes.root}>
         {isFetching &&

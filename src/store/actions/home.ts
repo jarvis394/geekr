@@ -2,7 +2,7 @@ import * as api from 'src/api'
 import { Mode } from 'src/config/constants'
 import { shouldUpdate } from 'src/utils/cache'
 import { RootState } from '..'
-import { HOME_PREFIX } from '../reducers/home/types'
+import { HOME_PREFIX, ADVERTS_PREFIX } from '../reducers/home/types'
 
 export const getPosts = (mode: Mode, page: number) => async (
   dispatch,
@@ -28,5 +28,22 @@ export const getPosts = (mode: Mode, page: number) => async (
     })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: { error, mode, page } })
+  }
+}
+
+export const getAdverts = () => async (dispatch) => {
+  const type = ADVERTS_PREFIX + 'FETCH'
+
+  dispatch({ type })
+
+  try {
+    const data = await api.getAdverts()
+
+    dispatch({
+      type: type + '_FULFILLED',
+      payload: data.adverts,
+    })
+  } catch (error) {
+    dispatch({ type: type + '_REJECTED', payload: { error } })
   }
 }

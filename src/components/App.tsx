@@ -5,7 +5,10 @@ import { makeStyles, ThemeOptions } from '@material-ui/core/styles/'
 import AppRouter from './Router'
 import AppBar from './blocks/AppBar'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { MIN_WIDTH as minWidth } from '../config/constants'
+import {
+  chromeAddressBarHeight,
+  MIN_WIDTH as minWidth,
+} from '../config/constants'
 import { lighten, darken } from '@material-ui/core/styles'
 import isMobile from 'is-mobile'
 import Footer from './blocks/Footer'
@@ -15,14 +18,13 @@ import RouterTitleChange from './RouterTitleChange'
 import { SnackbarProvider } from 'notistack'
 import BottomBar from './blocks/BottomBar'
 
-const chromeAddressBarHeight = 56
 const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
 const useStyles = makeStyles(() => ({
   app: {
     display: 'flex',
     minHeight: `calc(100vh - 48px - ${
       isMobile() ? chromeAddressBarHeight : 0
-    }px - 196px)`,
+    }px - 192px)`,
     borderRadius: 0,
     flexDirection: 'column',
     maxWidth: minWidth,

@@ -21,6 +21,7 @@ import TopDayPosts from './TopDayPosts'
 import getCompany from 'src/api/getCompany'
 import { Chip, Link as MUILink } from '@material-ui/core'
 import { POST_LABELS as postLabels } from 'src/config/constants'
+import OutsidePage from 'src/components/blocks/OutsidePage'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   post: {
-    background: theme.palette.background.paper,
+    background: theme.palette.background.default,
   },
   authorBar: { paddingTop: theme.spacing(2.5) },
   avatar: {
@@ -251,24 +252,26 @@ const Post = () => {
   if (fetchError) return <ErrorComponent message={fetchError} />
 
   return (
-    <div className={classes.root}>
-      {contents}
+    <OutsidePage headerText={post?.titleHtml}>
+      <div className={classes.root}>
+        {contents}
 
-      {/* Button to Comments page */}
-      {post && (
-        <CommentsButton
-          className={classes.commentsButton}
-          id={id}
-          count={post.statistics.commentsCount}
-        />
-      )}
+        {/* Button to Comments page */}
+        {post && (
+          <CommentsButton
+            className={classes.commentsButton}
+            id={id}
+            count={post.statistics.commentsCount}
+          />
+        )}
 
-      {/* Similar */}
-      <SimilarPosts id={id} />
+        {/* Similar */}
+        <SimilarPosts id={id} />
 
-      {/* Top day */}
-      <TopDayPosts />
-    </div>
+        {/* Top day */}
+        <TopDayPosts />
+      </div>
+    </OutsidePage>
   )
 }
 
