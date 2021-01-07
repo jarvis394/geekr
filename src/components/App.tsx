@@ -34,7 +34,6 @@ const useStyles = makeStyles(() => ({
     /** Disable blue highlight for links. Can be bad for accessibility. */
     '& a': {
       '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)',
-      'user-select': 'none',
     },
     backgroundColor: (theme: ThemeOptions) => theme.palette.background.default,
     color: (theme: ThemeOptions) => theme.palette.text.primary,
