@@ -18,6 +18,13 @@ import RouterTitleChange from './RouterTitleChange'
 import { SnackbarProvider } from 'notistack'
 import BottomBar from './blocks/BottomBar'
 
+// import whyDidYouRender from '@welldone-software/why-did-you-render'
+// whyDidYouRender(React, {
+//   trackAllPureComponents: true,
+//   collapseGroups: true,
+//   include: [/^.*/]
+// })
+
 const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
 const useStyles = makeStyles(() => ({
   app: {

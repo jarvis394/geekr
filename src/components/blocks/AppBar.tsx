@@ -82,6 +82,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const dividerStyle = { width: '100%' }
+
 const AppBarComponent = () => {
   const theme = useTheme()
   const state = useSelector((state) => state.app.appbar)
@@ -124,43 +126,57 @@ const AppBarComponent = () => {
 
   if (state.isHidden) return null
 
+  const HeaderTitle = () => (
+    <Typography variant="h6" className={classes.linkTypography}>
+      <Link
+        to={mode ? `${mode.to}/p/1` : '/'}
+        onClick={() => window.scrollTo(0, 0)}
+        className={classes.link}
+      >
+        habra.
+        <Offline>
+          <WifiOffRoundedIcon className={classes.offline} />
+        </Offline>
+      </Link>
+    </Typography>
+  )
+  const SearchButton = () => (
+    <IconButton onClick={() => history.push('/search')}>
+      <SearchRoundedIcon />
+    </IconButton>
+  )
+  const SettingsButton = () => (
+    <IconButton onClick={() => history.push('/settings')}>
+      <SettingsOutlinedIcon />
+    </IconButton>
+  )
+  const UserButton = () => (
+    <>
+      {!shouldShowUser && (
+        <IconButton onClick={() => (token ? '' : history.push('/auth'))}>
+          <PermIdentityRoundedIcon />
+        </IconButton>
+      )}
+      {shouldShowUser && (
+        <IconButton onClick={() => history.push('/user/' + userData.login)}>
+          <Avatar className={classes.avatar} src={userData.avatar} />
+        </IconButton>
+      )}
+    </>
+  )
+  const AppBarDivider = () => <Divider style={dividerStyle} />
+
   return (
     <AppBar className={classes.root} elevation={0}>
       <Toolbar className={classes.toolbar}>
         <div className={classes.marginContainer}>
           <div className={classes.content}>
-            <Typography variant="h6" className={classes.linkTypography}>
-              <Link
-                to={mode ? `${mode.to}/p/1` : '/'}
-                onClick={() => window.scrollTo(0, 0)}
-                className={classes.link}
-              >
-                habra.
-                <Offline>
-                  <WifiOffRoundedIcon className={classes.offline} />
-                </Offline>
-              </Link>
-            </Typography>
-            <IconButton onClick={() => history.push('/search')}>
-              <SearchRoundedIcon />
-            </IconButton>
-            <IconButton onClick={() => history.push('/settings')}>
-              <SettingsOutlinedIcon />
-            </IconButton>
-            {!shouldShowUser && (
-              <IconButton onClick={() => (token ? '' : history.push('/auth'))}>
-                <PermIdentityRoundedIcon />
-              </IconButton>
-            )}
-            {shouldShowUser && (
-              <IconButton
-                onClick={() => history.push('/user/' + userData.login)}
-              >
-                <Avatar className={classes.avatar} src={userData.avatar} />
-              </IconButton>
-            )}
+            <HeaderTitle />
+            <SearchButton />
+            <SettingsButton />
+            <UserButton />
           </div>
-          <Divider style={{ width: '100%' }} />
+          <AppBarDivider />
         </div>
       </Toolbar>
     </AppBar>

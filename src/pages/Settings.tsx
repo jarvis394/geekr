@@ -376,7 +376,7 @@ const Settings = () => {
   const classes = useStyles()
 
   return (
-    <OutsidePage headerText={'Настройки'}>
+    <OutsidePage headerText={'Настройки'} hidePositionBar>
       <Grid
         container
         direction="column"

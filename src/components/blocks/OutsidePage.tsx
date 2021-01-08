@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { darken, lighten, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import {
   AppBar,
   Divider,
@@ -23,7 +23,7 @@ interface StyleProps {
 const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
-    zIndex: 2000,
+    zIndex: 1100,
     position: 'absolute',
     top: 0,
     left: 0,
@@ -35,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: MIN_WIDTH,
     display: 'flex',
     flexDirection: 'column',
+    marginRight: 'auto',
+    marginLeft: 'auto',
   },
 }))
 
@@ -61,12 +63,13 @@ const useAppBarStyles = makeStyles((theme) => ({
     position: 'absolute',
     color: ({ isShrinked }: StyleProps) =>
       theme.palette.text[isShrinked ? 'secondary' : 'primary'],
-    fontSize: ({ isShrinked }: StyleProps) => (isShrinked ? 16 : 20),
-    left: ({ isShrinked }: StyleProps) => (isShrinked ? 16 : 52),
+    fontSize: 20,
+    transform: ({ isShrinked }: StyleProps) =>
+      `translateX(${isShrinked ? 16 : 52}px) scale(${isShrinked ? 0.8 : 1})`,
+    transformOrigin: 'left',
     letterHeight: '1.6',
     marginTop: 2,
     whiteSpace: 'nowrap',
-    willChange: 'transform',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     maxWidth: ({ isShrinked }: StyleProps) =>
@@ -76,23 +79,21 @@ const useAppBarStyles = makeStyles((theme) => ({
   },
   headerIcon: {
     marginRight: theme.spacing(0.5),
-    transition: 'margin-left .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
-    willChange: 'transform',
-    marginLeft: ({ isShrinked }: StyleProps) => (isShrinked ? -36 : 0),
+    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms !important',
+    transform: ({ isShrinked }: StyleProps) =>
+      'translateX(' + (isShrinked ? -36 : 0) + 'px)',
   },
   marginContainer: {
     display: 'flex',
-    willChange: 'transform',
     width: '100%',
     flexDirection: 'column',
     '&::before': {
       position: 'absolute',
-      willChange: 'transform',
       width: ({ scrollProgress }: StyleProps) => scrollProgress * 100 + '%',
       background:
         theme.palette.type === 'dark'
-          ? lighten(theme.palette.background.paper, 0.05)
-          : darken(theme.palette.background.paper, 0.05),
+          ? 'rgba(255, 255, 255, .1)'
+          : 'rgba(0, 0, 0, .1)',
       height: '100%',
       content: '""',
     },
@@ -101,9 +102,10 @@ const useAppBarStyles = makeStyles((theme) => ({
     display: 'flex',
     width: '100%',
     alignItems: 'center',
-    willChange: 'transform',
-    height: ({ isShrinked }: StyleProps) => (isShrinked ? 33 : 49),
-    transition: 'height .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
+    transform: 'translateZ(0)',
+    height: '100%',
+    maxHeight: ({ isShrinked }: StyleProps) => (isShrinked ? 33 : 49),
+    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
   },
   dividerHolder: {
     display: 'flex',
@@ -113,17 +115,17 @@ const useAppBarStyles = makeStyles((theme) => ({
   divider: {
     width: ({ isShrinked }: StyleProps) =>
       isShrinked ? '100%' : 'calc(100% - 32px)',
-    willChange: 'transform',
-    transition: 'width .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
+    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
   },
 }))
 
 interface Props {
   children?: unknown
   headerText?: unknown
+  hidePositionBar?: boolean
 }
 
-const NavBar = ({ headerText }) => {
+const NavBar = ({ headerText, hidePositionBar = false }) => {
   const isShrinked = useScrollTrigger({
     threshold: 48,
   })
@@ -150,22 +152,26 @@ const NavBar = ({ headerText }) => {
       setScrollProgress(newScrollProgress)
     }
 
-    window.addEventListener('scroll', () => scrollCallback())
-    return () => window.removeEventListener('scroll', scrollCallback)
-  }, [])
+    if (!hidePositionBar) {
+      window.addEventListener('scroll', () => scrollCallback())
+      return () => window.removeEventListener('scroll', scrollCallback)
+    } else return () => null
+  }, [hidePositionBar])
 
   return (
     <AppBar className={classes.header} elevation={0}>
       <Toolbar className={classes.toolbar}>
         <div className={classes.marginContainer}>
           <div className={classes.content}>
-            <IconButton
-              disableRipple={isShrinked}
-              className={classes.headerIcon}
-              onClick={() => (isShrinked ? {} : history.goBack())}
-            >
-              <BackRoundedIcon />
-            </IconButton>
+            <Fade in={!isShrinked}>
+              <IconButton
+                disableRipple={isShrinked}
+                className={classes.headerIcon}
+                onClick={() => (isShrinked ? {} : history.goBack())}
+              >
+                <BackRoundedIcon />
+              </IconButton>
+            </Fade>
             {headerText && (
               <Fade in>
                 <Typography className={classes.headerTitle}>
@@ -185,11 +191,11 @@ const NavBar = ({ headerText }) => {
 
 const OutsidePage = ({ children, ...props }: Props) => {
   const classes = useStyles()
-  const { headerText } = props
+  const { headerText, hidePositionBar } = props
 
   return (
     <div className={classes.root}>
-      <NavBar headerText={headerText} />
+      <NavBar headerText={headerText} hidePositionBar={hidePositionBar} />
       <div className={classes.children}>{children}</div>
     </div>
   )

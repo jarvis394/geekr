@@ -125,4 +125,4 @@ const AdvertsBlock = () => {
   )
 }
 
-export default AdvertsBlock
+export default React.memo(AdvertsBlock)

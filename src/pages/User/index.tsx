@@ -62,7 +62,10 @@ const User = ({ path }) => {
   }, [login, profile, dispatch])
 
   return (
-    <OutsidePage headerText={isUserFetched ? '@' + profile.login : null}>
+    <OutsidePage
+      hidePositionBar
+      headerText={isUserFetched ? '@' + profile.login : null}
+    >
       {!userFetchError && <Tabs />}
       {userFetchError && <ErrorComponent message={userFetchError} />}
       {isUserFetched && (
