@@ -12,7 +12,7 @@ import { getPosts } from 'src/api'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.default,
     marginTop: theme.spacing(2),
     padding: theme.spacing(2),
     borderRadius: 0,
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Google Sans',
     fontWeight: 800,
     color: theme.palette.primary.main,
-    fontSize: 20,
+    fontSize: 24,
     marginBottom: theme.spacing(1),
   },
   link: {

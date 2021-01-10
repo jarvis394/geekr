@@ -1,7 +1,7 @@
 import * as React from 'react'
 import ThemeProvider from '@material-ui/styles/ThemeProvider'
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
-import { makeStyles, ThemeOptions } from '@material-ui/core/styles/'
+import { fade, makeStyles, ThemeOptions } from '@material-ui/core/styles/'
 import AppRouter from './Router'
 import AppBar from './blocks/AppBar'
 import { BrowserRouter as Router } from 'react-router-dom'
@@ -40,7 +40,8 @@ const useStyles = makeStyles(() => ({
   root: {
     /** Disable blue highlight for links. Can be bad for accessibility. */
     '& a': {
-      '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)',
+      '-webkit-tap-highlight-color': (theme: ThemeOptions) =>
+        fade(theme.palette.background.paper, 0.3),
     },
     backgroundColor: (theme: ThemeOptions) => theme.palette.background.default,
     color: (theme: ThemeOptions) => theme.palette.text.primary,

@@ -36,11 +36,13 @@ const LazyLoadImage = (props: LazyLoadImageProps) => {
         threshold={200}
         {...props}
       />
-      {isOpen && (
+      {
         <Backdrop
           className={classes.backdrop}
           open={isOpen}
           onClick={() => setOpen(false)}
+          unmountOnExit
+          mountOnEnter
         >
           <TransformWrapper>
             <TransformComponent>
@@ -52,7 +54,7 @@ const LazyLoadImage = (props: LazyLoadImageProps) => {
             </TransformComponent>
           </TransformWrapper>
         </Backdrop>
-      )}
+      }
     </>
   )
 }

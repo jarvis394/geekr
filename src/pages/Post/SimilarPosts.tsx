@@ -5,7 +5,7 @@ import BookmarkIcon from '@material-ui/icons/BookmarkBorderRounded'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
-import { Post } from 'src/interfaces'
+import { Post, Posts } from 'src/interfaces'
 import DensePostsSkeleton from 'src/components/skeletons/DensePostsSkeleton'
 import getSimilar from 'src/api/getSimilar'
 import dayjs from 'dayjs'
@@ -16,7 +16,7 @@ interface Props {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.default,
     marginTop: theme.spacing(2),
     padding: theme.spacing(2),
     borderRadius: 0,
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Google Sans',
     fontWeight: 800,
     color: theme.palette.primary.main,
-    fontSize: 20,
+    fontSize: 24,
     marginBottom: theme.spacing(1),
   },
   link: {
@@ -68,10 +68,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const SimilarPost = ({ data }) => {
+const SimilarPost = ({ data }: { data: Post }) => {
   const [isBookmarked, setBookmarkedState] = useState<boolean>(false)
   const classes = useStyles(isBookmarked)
-  const { score, id, title, time_published: tsUnparsed } = data
+  const { statistics, id, titleHtml, timePublished: tsUnparsed } = data
+  const { score } = statistics
   const ts = dayjs(tsUnparsed).calendar()
 
   return (
@@ -86,7 +87,7 @@ const SimilarPost = ({ data }) => {
       </Grid>
       <Grid item style={{ flexGrow: 1, marginRight: 8 }}>
         <Link to={'/post/' + id} className={classes.link}>
-          <Typography className={classes.postTitle}>{title}</Typography>
+          <Typography className={classes.postTitle}>{titleHtml}</Typography>
           <Typography className={classes.postTs}>{ts}</Typography>
         </Link>
       </Grid>
@@ -103,13 +104,13 @@ const SimilarPost = ({ data }) => {
 const SimilarPosts = (props: Props) => {
   const { id } = props
   const classes = useStyles()
-  const [data, setData] = useState<Post[]>()
+  const [data, setData] = useState<Posts>()
   const [error, setError] = useState<string>()
 
   useEffect(() => {
     const get = async () => {
       try {
-        setData((await getSimilar(Number(id))).data)
+        setData(await getSimilar(Number(id)))
       } catch (e) {
         console.warn('Could not fetch similar posts:', e.message)
         setError(e.message)
@@ -118,7 +119,7 @@ const SimilarPosts = (props: Props) => {
     get()
   }, [id])
 
-  return data && data.length !== 0 ? (
+  return data && data.articleIds.length !== 0 ? (
     <Paper elevation={0} className={classes.root}>
       <Typography className={classes.header}>Похожие статьи</Typography>
       {error && (
@@ -127,7 +128,10 @@ const SimilarPosts = (props: Props) => {
         </Typography>
       )}
       {!data && <DensePostsSkeleton n={3} />}
-      {data && data.map((e, i) => <SimilarPost data={e} key={i} />)}
+      {data &&
+        data.articleIds.map((e, i) => (
+          <SimilarPost data={data.articleRefs[e]} key={i} />
+        ))}
     </Paper>
   ) : null
 }

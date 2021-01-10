@@ -42,8 +42,9 @@ const useStyles = makeStyles((theme) => ({
 
 const useAppBarStyles = makeStyles((theme) => ({
   header: {
-    backgroundColor: ({ isShrinked }: StyleProps) =>
-      theme.palette.background[isShrinked ? 'paper' : 'default'],
+    // backgroundColor: ({ isShrinked }: StyleProps) =>
+    //   theme.palette.background[isShrinked ? 'paper' : 'default'],
+    backgroundColor: theme.palette.background.default,
     color: theme.palette.text.primary,
     position: 'fixed',
     willChange: 'transform',
@@ -71,9 +72,8 @@ const useAppBarStyles = makeStyles((theme) => ({
     marginTop: 2,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    maxWidth: ({ isShrinked }: StyleProps) =>
-      `calc(100% - ${isShrinked ? 32 : 32 + 48}px)`,
+    // maxWidth: ({ isShrinked }: StyleProps) =>
+    //   `calc(100% - ${isShrinked ? 0 : 16 + 4 + 48}px + ${isShrinked ? 56 + 32 : 0}px)`,
     zIndex: 1000,
     transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms !important',
   },
@@ -117,6 +117,24 @@ const useAppBarStyles = makeStyles((theme) => ({
       isShrinked ? '100%' : 'calc(100% - 32px)',
     transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
   },
+  // shadow: {
+  //   position: 'absolute',
+  //   width: 32,
+  //   right: 0,
+  //   background: `linear-gradient(to right, transparent, ${theme.palette.background.default})`,
+  //   height: '100%',
+  //   zIndex: -1,
+  //   '&::after': {
+  //     position: 'absolute',
+  //     width: 48,
+  //     right: 0,
+  //     background: `linear-gradient(to right, transparent, ${theme.palette.background.paper})`,
+  //     height: '100%',
+  //     content: '""',
+  //     transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
+  //     opacity: ({ isShrinked }: StyleProps) => isShrinked ? 1 : 0
+  //   }
+  // }
 }))
 
 interface Props {
@@ -151,10 +169,11 @@ const NavBar = ({ headerText, hidePositionBar = false }) => {
         ) / 10000
       setScrollProgress(newScrollProgress)
     }
+    const scrollCallbackFn = scrollCallback.bind(this)
 
     if (!hidePositionBar) {
-      window.addEventListener('scroll', () => scrollCallback())
-      return () => window.removeEventListener('scroll', scrollCallback)
+      window.addEventListener('scroll', scrollCallbackFn)
+      return () => window.removeEventListener('scroll', scrollCallbackFn)
     } else return () => null
   }, [hidePositionBar])
 

@@ -1,8 +1,8 @@
 import makeRequest from './makeRequest'
-import { APIResponse, Post } from '../interfaces'
+import { Posts } from '../interfaces'
 
 export default async (id: number) =>
-  await makeRequest<APIResponse<Post[]>>({
+  await makeRequest<Posts>({
     path: `articles/${id}/similar`,
     version: 2,
   })
