@@ -3,7 +3,7 @@ import { UserSettings } from '../interfaces'
 import { PaletteType as MUIPaletteType } from '@material-ui/core'
 
 export const API_URL = 'https://m.habr.com/kek/'
-export const API_TOKEN_URL = 'http://45.84.1.17:3000/'
+export const API_TOKEN_URL = 'https://jarvis394-backend.ml/habra/'
 
 /**
  * Minimal application width to stay with the drawer
