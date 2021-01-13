@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     color: fade(theme.palette.text.primary, 0.5),
   },
   viewsCard: {
-    background: fade(theme.palette.background.paper, 0.7),
+    background: theme.palette.background.paper,
   },
   scoreCard: {
     background: (score: number) =>
@@ -70,19 +70,20 @@ const useStyles = makeStyles((theme) => ({
   },
   commentsCard: {
     background: fade(theme.palette.background.paper, 0.7),
+    boxShadow: '0 0 0 2px inset ' + theme.palette.primary.main,
   },
 }))
 
 const BottomBar = ({ post }: { post: Post }) => {
   const { id, titleHtml: title, statistics } = post
-  const { favoritesCount, readingCount, score: sc, commentsCount } = statistics
-  const [isBookmarked, setBookmarkState] = React.useState<boolean>(false)
+  const { score: sc, favoritesCount, commentsCount, readingCount } = statistics
+
   const classes = useStyles(sc)
   const score = formatNumber(Number(sc))
   const comments = formatNumber(Number(commentsCount))
-  const favorites = formatNumber(
-    Number(favoritesCount) + (isBookmarked ? 1 : 0)
-  )
+  const favorites = Number(formatNumber(
+    Number(favoritesCount)
+  ))
   const reads = formatNumber(Number(readingCount))
   const history = useHistory()
   const share = () => {
@@ -95,7 +96,7 @@ const BottomBar = ({ post }: { post: Post }) => {
       .share(shareData)
       .catch((e: Error) => console.error('On sharing post:', e))
   }
-
+ 
   const Card = ({ className, amount, text, ...props }) => {
     console.log('rerender', className)
     return (
@@ -107,21 +108,22 @@ const BottomBar = ({ post }: { post: Post }) => {
       </Grid>
     )
   }
-  const ViewsCard = React.memo(function ViewsCardUnmemoized() {
+  const ViewsCard = React.memo(function ViewsCardUnmemozed() {
     return (
       <Card className={classes.viewsCard} amount={reads} text={'просмотров'} />
     )
   })
   const ScoreCard = React.memo(function ScoreCardUnmemoized() {
     return (
-      <Card className={classes.scoreCard} amount={score} text={'голосов'} />
+      <Card className={classes.scoreCard} amount={score > 0 ? '+' + score : score} text={'голосов'} />
     )
   })
   const FavoritesCard = React.memo(function FavoritesCardUnmemoized() {
+    const [isBookmarked, setBookmarkState] = React.useState<boolean>(false)
     return (
       <Card
         className={classes.favoritesCard}
-        amount={favorites}
+        amount={favorites + (isBookmarked ? 1 : 0)}
         text={'в закладках'}
         onClick={() => setBookmarkState((prev) => !prev)}
       />
@@ -146,13 +148,9 @@ const BottomBar = ({ post }: { post: Post }) => {
         <FavoritesCard />
         <CommentsCard />
       </Grid>
-      {navigator.share && (
-        <Grid container direction="row" alignItems="center" justify="center">
-          <ShareIcon onClick={() => share()} className={classes.shareIcon} />
-        </Grid>
-      )}
     </Container>
   )
 }
+
 
 export default React.memo(BottomBar)

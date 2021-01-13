@@ -136,7 +136,7 @@ const Post = () => {
       )
     })
   const contents = shouldShowContents ? (
-    <>
+<>
       {/** Company header */}
       {company && company?.branding?.headerUrl && (
         <div className={classes.companyHeaderLink}>
@@ -202,11 +202,7 @@ const Post = () => {
         >
           {post.textHtml}
         </FormattedText>
-      </Container>
-
-      {/* Bottom bar with some article info */}
-      <BottomBar post={post} />
-    </>
+      </Container></>
   ) : (
     <PostViewSkeleton />
   )
@@ -255,15 +251,10 @@ const Post = () => {
     <OutsidePage headerText={post?.titleHtml}>
       <div className={classes.root}>
         {contents}
+        {/* Bottom bar with some article info */}
+        {post && <BottomBar post={post} />}
 
-        {/* Button to Comments page */}
-        {post && (
-          <CommentsButton
-            className={classes.commentsButton}
-            id={id}
-            count={post.statistics.commentsCount}
-          />
-        )}
+
 
         {/* Similar */}
         <SimilarPosts id={id} />
