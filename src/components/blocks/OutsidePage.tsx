@@ -49,7 +49,8 @@ const useAppBarStyles = makeStyles((theme) => ({
     position: 'fixed',
     willChange: 'transform',
     flexGrow: 1,
-    transform: ({ isShrinked }: StyleProps) => `translateZ(0) translateY(${isShrinked ? -16 : 0}px)`, //maxH// maxHeight isShrinked }: Styl'translateY(isShrinked ? 33 : 49),
+    transform: ({ isShrinked }: StyleProps) =>
+      `translateZ(0) translateY(${isShrinked ? -16 : 0}px)`, //maxH// maxHeight isShrinked }: Styl'translateY(isShrinked ? 33 : 49),
     transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
   },
   toolbar: {

@@ -15,7 +15,6 @@ import { Theme } from '@material-ui/core/styles'
 import { Post as IPost, Company as ICompany } from 'src/interfaces'
 import UserAvatar from 'src/components/blocks/UserAvatar'
 import BottomBar from './BottomBar'
-import CommentsButton from './CommentsButton'
 import SimilarPosts from './SimilarPosts'
 import TopDayPosts from './TopDayPosts'
 import getCompany from 'src/api/getCompany'
@@ -136,7 +135,7 @@ const Post = () => {
       )
     })
   const contents = shouldShowContents ? (
-<>
+    <>
       {/** Company header */}
       {company && company?.branding?.headerUrl && (
         <div className={classes.companyHeaderLink}>
@@ -202,7 +201,8 @@ const Post = () => {
         >
           {post.textHtml}
         </FormattedText>
-      </Container></>
+      </Container>
+    </>
   ) : (
     <PostViewSkeleton />
   )
@@ -253,8 +253,6 @@ const Post = () => {
         {contents}
         {/* Bottom bar with some article info */}
         {post && <BottomBar post={post} />}
-
-
 
         {/* Similar */}
         <SimilarPosts id={id} />

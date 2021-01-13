@@ -22,11 +22,11 @@ import blend from 'src/utils/blendColors'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: (progress: number) =>
+    backgroundColor: (progress) =>
       blend(
         theme.palette.background.default,
         theme.palette.background.paper,
-        progress
+        progress as number
       ),
     color: theme.palette.text.primary,
     position: 'fixed',
