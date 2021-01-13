@@ -104,7 +104,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     display: 'flex',
     width: '100%',
     alignItems: 'center',
-    //transform: 'translateZ(0)',
+    transform: 'translateZ(0)',
     height: 49,
     transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
   },
@@ -118,24 +118,25 @@ const useAppBarStyles = makeStyles((theme) => ({
       isShrinked ? '100%' : 'calc(100% - 32px)',
     transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
   },
-  // shadow: {
-  //   position: 'absolute',
-  //   width: 32,
-  //   right: 0,
-  //   background: `linear-gradient(to right, transparent, ${theme.palette.background.default})`,
-  //   height: '100%',
-  //   zIndex: -1,
-  //   '&::after': {
-  //     position: 'absolute',
-  //     width: 48,
-  //     right: 0,
-  //     background: `linear-gradient(to right, transparent, ${theme.palette.background.paper})`,
-  //     height: '100%',
-  //     content: '""',
-  //     transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
-  //     opacity: ({ isShrinked }: StyleProps) => isShrinked ? 1 : 0
-  //   }
-  // }
+  shrinkedHeaderTitle: {
+    fontFamily: 'Google Sans',
+    fontWeight: 500,
+    position: 'absolute',
+    color: ({ isShrinked }: StyleProps) =>
+      theme.palette.text[isShrinked ? 'secondary' : 'primary'],
+    fontSize: 20,
+    transform: ({ isShrinked }: StyleProps) =>
+      `translateX(${isShrinked ? 16 : 52}px) scale(${isShrinked ? 0.8 : 1})`,
+    transformOrigin: 'left',
+    letterHeight: '1.6',
+    marginTop: 2,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    // maxWidth: ({ isShrinked }: StyleProps) =>
+    //   `calc(100% - ${isShrinked ? 0 : 16 + 4 + 48}px + ${isShrinked ? 56 + 32 : 0}px)`,
+    zIndex: 1000,
+    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms !important',
+  },
 }))
 
 interface Props {
@@ -178,27 +179,46 @@ const NavBar = ({ headerText, hidePositionBar = false }) => {
     } else return () => null
   }, [hidePositionBar])
 
+  const ShrinkedContent = () => (
+    <Typography className={classes.shrinkedHeaderTitle}>
+      {headerText}
+    </Typography>
+  )
+  const UnshrinkedContent = () => (
+    <div>
+      <IconButton
+        disableRipple={isShrinked}
+        className={classes.headerIcon}
+        onClick={() => (isShrinked ? {} : history.goBack())}
+      >
+        <BackRoundedIcon />
+      </IconButton>
+      {headerText && (
+        <Fade in>
+          <Typography className={classes.headerTitle}>{headerText}</Typography>
+        </Fade>
+      )}
+    </div>
+  )
+
   return (
     <AppBar className={classes.header} elevation={0}>
       <Toolbar className={classes.toolbar}>
         <div className={classes.marginContainer}>
           <div className={classes.content}>
-            <Fade in={!isShrinked}>
-              <IconButton
-                disableRipple={isShrinked}
-                className={classes.headerIcon}
-                onClick={() => (isShrinked ? {} : history.goBack())}
-              >
-                <BackRoundedIcon />
-              </IconButton>
+            <Fade appear in={isShrinked} unmountOnExit mountOnEnter>
+              {isShrinked ? <UnshrinkedContent /> : <div />}
             </Fade>
-            {headerText && (
-              <Fade in>
-                <Typography className={classes.headerTitle}>
-                  {headerText}
-                </Typography>
-              </Fade>
-            )}
+            <Fade
+              in={!isShrinked}
+              unmountOnExit
+              mountOnEnter
+              timeout={{
+                enter: 500,
+              }}
+            >
+              {!isShrinked ? <ShrinkedContent /> : <div />}
+            </Fade>
           </div>
           <div className={classes.dividerHolder}>
             <Divider className={classes.divider} />

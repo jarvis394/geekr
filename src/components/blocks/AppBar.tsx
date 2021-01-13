@@ -17,7 +17,7 @@ import { useSelector } from 'src/hooks'
 import { FetchingState, UserExtended } from 'src/interfaces'
 import { useDispatch } from 'react-redux'
 import { getMe } from 'src/store/actions/user'
-import { Divider, useTheme } from '@material-ui/core'
+import { Divider } from '@material-ui/core'
 import blend from 'src/utils/blendColors'
 
 const useStyles = makeStyles((theme) => ({
@@ -85,7 +85,6 @@ const useStyles = makeStyles((theme) => ({
 const dividerStyle = { width: '100%' }
 
 const AppBarComponent = () => {
-  const theme = useTheme()
   const state = useSelector((state) => state.app.appbar)
   const [scrollProgress, setScrollProgress] = React.useState(
     state.shouldChangeColors ? Math.min(window.pageYOffset / 48, 1) : 1
@@ -114,15 +113,7 @@ const AppBarComponent = () => {
     state.shouldChangeColors &&
       window.addEventListener('scroll', () => scrollCallback())
     return () => window.removeEventListener('scroll', scrollCallback)
-  }, [
-    shouldFetchUser,
-    dispatch,
-    token,
-    state,
-    shouldShowUser,
-    theme.palette.background.default,
-    theme.palette.background.paper,
-  ])
+  }, [dispatch, token, state, shouldFetchUser, shouldShowUser])
 
   if (state.isHidden) return null
 
