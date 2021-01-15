@@ -42,8 +42,6 @@ const useStyles = makeStyles((theme) => ({
 
 const useAppBarStyles = makeStyles((theme) => ({
   header: {
-    // backgroundColor: ({ isShrinked }: StyleProps) =>
-    //   theme.palette.background[isShrinked ? 'paper' : 'default'],
     backgroundColor: theme.palette.background.default,
     color: theme.palette.text.primary,
     position: 'fixed',
@@ -63,27 +61,16 @@ const useAppBarStyles = makeStyles((theme) => ({
   headerTitle: {
     fontFamily: 'Google Sans',
     fontWeight: 500,
-    position: 'absolute',
-    color: ({ isShrinked }: StyleProps) =>
-      theme.palette.text[isShrinked ? 'secondary' : 'primary'],
+    color: theme.palette.text.primary,
     fontSize: 20,
-    transform: ({ isShrinked }: StyleProps) =>
-      `translateX(${isShrinked ? 16 : 52}px) scale(${isShrinked ? 0.8 : 1})`,
-    transformOrigin: 'left',
     letterHeight: '1.6',
     marginTop: 2,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    // maxWidth: ({ isShrinked }: StyleProps) =>
-    //   `calc(100% - ${isShrinked ? 0 : 16 + 4 + 48}px + ${isShrinked ? 56 + 32 : 0}px)`,
     zIndex: 1000,
-    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms !important',
   },
   headerIcon: {
     marginRight: theme.spacing(0.5),
-    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms !important',
-    transform: ({ isShrinked }: StyleProps) =>
-      'translateX(' + (isShrinked ? -36 : 0) + 'px)',
   },
   marginContainer: {
     display: 'flex',
@@ -102,11 +89,12 @@ const useAppBarStyles = makeStyles((theme) => ({
   },
   content: {
     display: 'flex',
+    flexDirection: 'row', 
     width: '100%',
     alignItems: 'center',
     transform: 'translateZ(0)',
     height: 49,
-    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
+    // transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
   },
   dividerHolder: {
     display: 'flex',
@@ -121,13 +109,11 @@ const useAppBarStyles = makeStyles((theme) => ({
   shrinkedHeaderTitle: {
     fontFamily: 'Google Sans',
     fontWeight: 500,
-    position: 'absolute',
-    color: ({ isShrinked }: StyleProps) =>
-      theme.palette.text[isShrinked ? 'secondary' : 'primary'],
-    fontSize: 20,
-    transform: ({ isShrinked }: StyleProps) =>
-      `translateX(${isShrinked ? 16 : 52}px) scale(${isShrinked ? 0.8 : 1})`,
-    transformOrigin: 'left',
+    //position: 'absolute',
+    color: theme.palette.text.secondary,
+    fontSize: 16,
+    transform: 'translateX(16px) translateY(8px)',
+    // transformOrigin: 'left',
     letterHeight: '1.6',
     marginTop: 2,
     whiteSpace: 'nowrap',
@@ -135,7 +121,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     // maxWidth: ({ isShrinked }: StyleProps) =>
     //   `calc(100% - ${isShrinked ? 0 : 16 + 4 + 48}px + ${isShrinked ? 56 + 32 : 0}px)`,
     zIndex: 1000,
-    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms !important',
+    // transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms !important',
   },
 }))
 
@@ -179,46 +165,51 @@ const NavBar = ({ headerText, hidePositionBar = false }) => {
     } else return () => null
   }, [hidePositionBar])
 
-  const ShrinkedContent = () => (
-    <Typography className={classes.shrinkedHeaderTitle}>
-      {headerText}
-    </Typography>
-  )
-  const UnshrinkedContent = () => (
-    <div>
-      <IconButton
-        disableRipple={isShrinked}
-        className={classes.headerIcon}
-        onClick={() => (isShrinked ? {} : history.goBack())}
-      >
-        <BackRoundedIcon />
-      </IconButton>
-      {headerText && (
-        <Fade in>
-          <Typography className={classes.headerTitle}>{headerText}</Typography>
-        </Fade>
-      )}
-    </div>
-  )
+  const ShrinkedContent = React.memo(() => (
+    <Fade
+      in={isShrinked}
+      unmountOnExit
+      mountOnEnter
+    >
+      <Typography className={classes.shrinkedHeaderTitle}>
+        {headerText}
+      </Typography>
+    </Fade>
+  ))
+  const UnshrinkedContent = React.memo(() => (
+    <Fade
+      in={!isShrinked}
+      unmountOnExit
+      mountOnEnter
+    >
+      <div className={classes.content}>
+        <IconButton
+          disableRipple={isShrinked}
+          className={classes.headerIcon}
+          onClick={() => (isShrinked ? {} : history.goBack())}
+        >
+          <BackRoundedIcon />
+        </IconButton>
+        {headerText && (
+          <Fade in>
+            <Typography className={classes.headerTitle}>{headerText}</Typography>
+          </Fade>
+        )}
+      </div>
+    </Fade>
+  ))
 
   return (
     <AppBar className={classes.header} elevation={0}>
       <Toolbar className={classes.toolbar}>
         <div className={classes.marginContainer}>
           <div className={classes.content}>
-            <Fade appear in={isShrinked} unmountOnExit mountOnEnter>
-              {isShrinked ? <UnshrinkedContent /> : <div />}
-            </Fade>
-            <Fade
-              in={!isShrinked}
-              unmountOnExit
-              mountOnEnter
-              timeout={{
-                enter: 500,
-              }}
-            >
-              {!isShrinked ? <ShrinkedContent /> : <div />}
-            </Fade>
+            
+              <UnshrinkedContent />
+            
+            
+              <ShrinkedContent />
+            
           </div>
           <div className={classes.dividerHolder}>
             <Divider className={classes.divider} />
