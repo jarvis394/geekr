@@ -241,4 +241,4 @@ const NotFound = ({ svgProps, ...props }: Props) => {
   )
 }
 
-export default NotFound
+export default React.memo(NotFound)

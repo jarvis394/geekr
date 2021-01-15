@@ -18,4 +18,4 @@ const RouterTitleChange = ({ history }) => {
   return null
 }
 
-export default withRouter(RouterTitleChange)
+export default React.memo(withRouter(RouterTitleChange))

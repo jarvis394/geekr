@@ -11,7 +11,7 @@ import calendarPlugin from 'dayjs/plugin/calendar'
 import updateLocalePlugin from 'dayjs/plugin/updateLocale'
 import 'react-lazy-load-image-component/src/effects/opacity.css'
 import 'dayjs/locale/ru'
-import whyDidYouRender from '@welldone-software/why-did-you-render'
+// import whyDidYouRender from '@welldone-software/why-did-you-render'
 
 dayjs.locale('ru')
 dayjs.extend(relativeTimePlugin)
@@ -27,10 +27,11 @@ dayjs.updateLocale('ru', {
   },
 })
 
-whyDidYouRender(React, {
-  trackAllPureComponents: true,
-  collapseGroups: true,
-})
+// whyDidYouRender(React, {
+//   trackAllPureComponents: true,
+//   collapseGroups: true,
+//   include: [/^.*/]
+// })
 
 ReactDOM.render(
   <Provider store={store}>

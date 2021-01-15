@@ -104,4 +104,4 @@ const App = (): React.ReactElement => {
   )
 }
 
-export default App
+export default React.memo(App)

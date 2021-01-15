@@ -43,4 +43,4 @@ const VKIcon = () => {
   )
 }
 
-export default VKIcon
+export default React.memo(VKIcon)

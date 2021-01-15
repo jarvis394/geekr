@@ -110,4 +110,4 @@ const UserTabs = () => {
   )
 }
 
-export default UserTabs
+export default React.memo(UserTabs)

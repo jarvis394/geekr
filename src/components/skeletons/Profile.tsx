@@ -96,4 +96,4 @@ const ProfileSkeleton = () => {
   )
 }
 
-export default ProfileSkeleton
+export default React.memo(ProfileSkeleton)

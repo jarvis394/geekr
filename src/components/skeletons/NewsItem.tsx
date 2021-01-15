@@ -55,4 +55,4 @@ const NewsItemSkeleton = () => {
   )
 }
 
-export default NewsItemSkeleton
+export default React.memo(NewsItemSkeleton)

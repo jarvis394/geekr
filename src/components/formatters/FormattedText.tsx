@@ -228,4 +228,4 @@ const FormattedText = ({
   )
 }
 
-export default FormattedText
+export default React.memo(FormattedText)

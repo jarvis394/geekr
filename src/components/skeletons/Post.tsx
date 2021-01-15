@@ -80,4 +80,4 @@ const PostSkeleton = () => {
   )
 }
 
-export default PostSkeleton
+export default React.memo(PostSkeleton)

@@ -131,4 +131,4 @@ const TopDayPosts = () => {
   )
 }
 
-export default TopDayPosts
+export default React.memo(TopDayPosts)

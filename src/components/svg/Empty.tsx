@@ -510,4 +510,4 @@ const Empty = ({ svgProps, ...props }: Props) => {
   )
 }
 
-export default Empty
+export default React.memo(Empty)

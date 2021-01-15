@@ -34,4 +34,4 @@ const Details = ({ title, children }) => {
   )
 }
 
-export default Details
+export default React.memo(Details)

@@ -32,4 +32,4 @@ const AdvertsBlockSkeleton = () => {
   )
 }
 
-export default AdvertsBlockSkeleton
+export default React.memo(AdvertsBlockSkeleton)

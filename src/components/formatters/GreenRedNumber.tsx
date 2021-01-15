@@ -45,4 +45,4 @@ const GreenRedNumber = ({
   )
 }
 
-export default GreenRedNumber
+export default React.memo(GreenRedNumber)

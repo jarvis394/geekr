@@ -64,4 +64,4 @@ const DensePostsSkeleton = ({ n = 3 }: { n?: number }) => {
   )
 }
 
-export default DensePostsSkeleton
+export default React.memo(DensePostsSkeleton)

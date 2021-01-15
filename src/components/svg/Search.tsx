@@ -526,4 +526,4 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
   )
 }
 
-export default SearchSVG
+export default React.memo(SearchSVG)

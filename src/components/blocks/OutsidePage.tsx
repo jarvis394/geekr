@@ -130,40 +130,46 @@ interface Props {
 
 const ShrinkedContent = ({ isShrinked, headerText }) => {
   const classes = useAppBarStyles({ isShrinked, scrollProgress: 0 })
+  const Title = () => (
+    <Typography className={classes.shrinkedHeaderTitle}>
+      {headerText}
+    </Typography>
+  )
   return (
     <Fade in={isShrinked} unmountOnExit mountOnEnter>
-      <Typography className={classes.shrinkedHeaderTitle}>
-        {headerText}
-      </Typography>
+      <Title />
     </Fade>
   )
 }
 const UnshrinkedContent = ({ isShrinked, headerText }) => {
   const classes = useAppBarStyles({ isShrinked, scrollProgress: 0 })
   const history = useHistory()
+  const Title = () =>
+    headerText ? (
+      <Fade in>
+        <Typography className={classes.headerTitle}>{headerText}</Typography>
+      </Fade>
+    ) : null
+  const Icon = () => (
+    <IconButton
+      disableRipple={isShrinked}
+      className={classes.headerIcon}
+      onClick={() => (isShrinked ? {} : history.goBack())}
+    >
+      <BackRoundedIcon />
+    </IconButton>
+  )
   return (
     <Fade in={!isShrinked} unmountOnExit mountOnEnter>
       <div className={classes.content}>
-        <IconButton
-          disableRipple={isShrinked}
-          className={classes.headerIcon}
-          onClick={() => (isShrinked ? {} : history.goBack())}
-        >
-          <BackRoundedIcon />
-        </IconButton>
-        {headerText && (
-          <Fade in>
-            <Typography className={classes.headerTitle}>
-              {headerText}
-            </Typography>
-          </Fade>
-        )}
+        <Icon />
+        <Title />
       </div>
     </Fade>
   )
 }
 
-const NavBar = ({ headerText, hidePositionBar = false }) => {
+const NavBarUnmemoized = ({ headerText, hidePositionBar = false }) => {
   const isShrinked = useScrollTrigger({
     threshold: 48,
   })
@@ -192,6 +198,12 @@ const NavBar = ({ headerText, hidePositionBar = false }) => {
     } else return () => null
   }, [hidePositionBar])
 
+  const NavBarDivider = () => (
+    <div className={classes.dividerHolder}>
+      <Divider className={classes.divider} />
+    </div>
+  )
+
   return (
     <AppBar className={classes.header} elevation={0}>
       <Toolbar className={classes.toolbar}>
@@ -203,14 +215,13 @@ const NavBar = ({ headerText, hidePositionBar = false }) => {
             />
             <ShrinkedContent isShrinked={isShrinked} headerText={headerText} />
           </div>
-          <div className={classes.dividerHolder}>
-            <Divider className={classes.divider} />
-          </div>
+          <NavBarDivider />
         </div>
       </Toolbar>
     </AppBar>
   )
 }
+const NavBar = React.memo(NavBarUnmemoized)
 
 const OutsidePage = ({ children, ...props }: Props) => {
   const classes = useStyles()

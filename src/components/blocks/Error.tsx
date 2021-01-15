@@ -64,4 +64,4 @@ const ErrorComponent = ({ code = 500, message, to = '/' }: Params) => {
   )
 }
 
-export default ErrorComponent
+export default React.memo(ErrorComponent)

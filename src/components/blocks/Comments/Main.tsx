@@ -160,4 +160,4 @@ const Comments = ({ postId }) => {
   )
 }
 
-export default Comments
+export default React.memo(Comments)

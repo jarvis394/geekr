@@ -136,4 +136,4 @@ const SimilarPosts = (props: Props) => {
   ) : null
 }
 
-export default SimilarPosts
+export default React.memo(SimilarPosts)

@@ -59,4 +59,4 @@ const LazyLoadImage = (props: LazyLoadImageProps) => {
   )
 }
 
-export default LazyLoadImage
+export default React.memo(LazyLoadImage)

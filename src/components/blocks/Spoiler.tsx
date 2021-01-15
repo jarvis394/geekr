@@ -58,4 +58,4 @@ const Spoiler = ({ children, title }) => {
   )
 }
 
-export default Spoiler
+export default React.memo(Spoiler)
