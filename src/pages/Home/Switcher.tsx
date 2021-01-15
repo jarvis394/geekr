@@ -33,12 +33,15 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 800,
     fontFamily: 'Google Sans',
   },
-  expandIcon: {
+  expandIconWrapper: {
     display: 'flex',
     marginLeft: theme.spacing(1),
     alignItems: 'center',
     justifyContent: 'center',
     color: theme.palette.primary.main,
+  },
+  expandIcon: {
+    fontSize: 28,
   },
   backdrop: {
     color: '#fff',
@@ -94,6 +97,12 @@ const showModes: { text: string; mode: ShowMode }[] = [
     mode: 'top',
   },
 ]
+const switcherButtonsDataNew = modes.filter(
+  (e) => e.switcherText && e.isNewMode
+)
+const switcherButtonsDataTop = modes.filter(
+  (e) => e.switcherText && !e.isNewMode
+)
 const Switcher = ({ handleClick, mode, setMode }) => {
   const [isOpen, setOpen] = useState(false)
   const current = modes.find((e) => e.mode === mode)
@@ -109,14 +118,12 @@ const Switcher = ({ handleClick, mode, setMode }) => {
   const handleShowModeChange = (newShowMode: ShowMode) => {
     newShowMode !== showMode && setShowMode(newShowMode)
   }
-  const handleDrawerModeClick = (newMode: ModeObject) => {
-    setDrawerMode(newMode)
-  }
   const handleApplyClick = () => {
     setMode(drawerMode.mode)
     handleClick(drawerMode)
     setOpen(false)
   }
+  const onChange = React.useCallback((e: ModeObject) => setDrawerMode(e), [])
 
   return (
     <>
@@ -125,8 +132,8 @@ const Switcher = ({ handleClick, mode, setMode }) => {
           <Typography className={classes.currentMode}>
             {current.text}
           </Typography>
-          <div className={classes.expandIcon}>
-            <ExpandMoreRoundedIcon style={{ fontSize: 28 }} />
+          <div className={classes.expandIconWrapper}>
+            <ExpandMoreRoundedIcon className={classes.expandIcon} />
           </div>
         </div>
       </ButtonBase>
@@ -171,8 +178,8 @@ const Switcher = ({ handleClick, mode, setMode }) => {
                 Порог рейтинга
               </Typography>
               <SwitcherButtons
-                data={modes.filter((e) => e.switcherText && e.isNewMode)}
-                onChange={(e: ModeObject) => handleDrawerModeClick(e)}
+                data={switcherButtonsDataNew}
+                onChange={onChange}
                 currentValue={drawerMode.mode}
               />
             </>
@@ -185,8 +192,8 @@ const Switcher = ({ handleClick, mode, setMode }) => {
                 Период
               </Typography>
               <SwitcherButtons
-                data={modes.filter((e) => e.switcherText && !e.isNewMode)}
-                onChange={(e: ModeObject) => handleDrawerModeClick(e)}
+                data={switcherButtonsDataTop}
+                onChange={onChange}
                 currentValue={drawerMode.mode}
               />
             </>

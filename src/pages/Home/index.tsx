@@ -70,11 +70,14 @@ const Home = () => {
     history.push(modes.find((e) => e.mode === mode).to + '/p/' + i)
   }
 
-  const handleSwitcher = ({ mode: newMode, to }) => {
-    localStorage.setItem('mode', newMode)
-    setMode(newMode)
-    history.push(to + '/p/1')
-  }
+  const handleSwitcher = React.useCallback(
+    ({ mode: newMode, to }) => {
+      localStorage.setItem('mode', newMode)
+      setMode(newMode)
+      history.push(to + '/p/1')
+    },
+    [history]
+  )
 
   useEffect(() => {
     dispatch(getPosts(mode, currentPage))

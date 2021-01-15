@@ -48,7 +48,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     willChange: 'transform',
     flexGrow: 1,
     transform: ({ isShrinked }: StyleProps) =>
-      `translateZ(0) translateY(${isShrinked ? -16 : 0}px)`, //maxH// maxHeight isShrinked }: Styl'translateY(isShrinked ? 33 : 49),
+      `translateZ(0) translateY(${isShrinked ? -16 : 0}px)`,
     transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
   },
   toolbar: {
@@ -68,6 +68,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     zIndex: 1000,
+    textOverflow: 'ellipsis',
   },
   headerIcon: {
     marginRight: theme.spacing(0.5),
@@ -89,12 +90,11 @@ const useAppBarStyles = makeStyles((theme) => ({
   },
   content: {
     display: 'flex',
-    flexDirection: 'row', 
+    flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
     transform: 'translateZ(0)',
     height: 49,
-    // transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
   },
   dividerHolder: {
     display: 'flex',
@@ -109,19 +109,16 @@ const useAppBarStyles = makeStyles((theme) => ({
   shrinkedHeaderTitle: {
     fontFamily: 'Google Sans',
     fontWeight: 500,
-    //position: 'absolute',
     color: theme.palette.text.secondary,
     fontSize: 16,
     transform: 'translateX(16px) translateY(8px)',
-    // transformOrigin: 'left',
     letterHeight: '1.6',
     marginTop: 2,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    // maxWidth: ({ isShrinked }: StyleProps) =>
-    //   `calc(100% - ${isShrinked ? 0 : 16 + 4 + 48}px + ${isShrinked ? 56 + 32 : 0}px)`,
     zIndex: 1000,
-    // transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms !important',
+    position: 'absolute',
+    textOverflow: 'ellipsis',
   },
 }))
 
@@ -131,57 +128,21 @@ interface Props {
   hidePositionBar?: boolean
 }
 
-const NavBar = ({ headerText, hidePositionBar = false }) => {
-  const isShrinked = useScrollTrigger({
-    threshold: 48,
-  })
-  const [scrollProgress, setScrollProgress] = useState(
-    Math.round(Math.min(window.pageYOffset / 48, 1) * 10000) / 10000
-  )
-  const classes = useAppBarStyles({ isShrinked, scrollProgress })
-  const history = useHistory()
-
-  useEffect(() => {
-    const scrollCallback = () => {
-      const position = window.pageYOffset
-      const windowHeight =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight
-      const newScrollProgress =
-        Math.round(
-          Math.min(
-            position /
-              (windowHeight - (isMobile() ? chromeAddressBarHeight : 0)),
-            1
-          ) * 10000
-        ) / 10000
-      setScrollProgress(newScrollProgress)
-    }
-    const scrollCallbackFn = scrollCallback.bind(this)
-
-    if (!hidePositionBar) {
-      window.addEventListener('scroll', scrollCallbackFn)
-      return () => window.removeEventListener('scroll', scrollCallbackFn)
-    } else return () => null
-  }, [hidePositionBar])
-
-  const ShrinkedContent = React.memo(() => (
-    <Fade
-      in={isShrinked}
-      unmountOnExit
-      mountOnEnter
-    >
+const ShrinkedContent = ({ isShrinked, headerText }) => {
+  const classes = useAppBarStyles({ isShrinked, scrollProgress: 0 })
+  return (
+    <Fade in={isShrinked} unmountOnExit mountOnEnter>
       <Typography className={classes.shrinkedHeaderTitle}>
         {headerText}
       </Typography>
     </Fade>
-  ))
-  const UnshrinkedContent = React.memo(() => (
-    <Fade
-      in={!isShrinked}
-      unmountOnExit
-      mountOnEnter
-    >
+  )
+}
+const UnshrinkedContent = ({ isShrinked, headerText }) => {
+  const classes = useAppBarStyles({ isShrinked, scrollProgress: 0 })
+  const history = useHistory()
+  return (
+    <Fade in={!isShrinked} unmountOnExit mountOnEnter>
       <div className={classes.content}>
         <IconButton
           disableRipple={isShrinked}
@@ -192,24 +153,55 @@ const NavBar = ({ headerText, hidePositionBar = false }) => {
         </IconButton>
         {headerText && (
           <Fade in>
-            <Typography className={classes.headerTitle}>{headerText}</Typography>
+            <Typography className={classes.headerTitle}>
+              {headerText}
+            </Typography>
           </Fade>
         )}
       </div>
     </Fade>
-  ))
+  )
+}
+
+const NavBar = ({ headerText, hidePositionBar = false }) => {
+  const isShrinked = useScrollTrigger({
+    threshold: 48,
+  })
+  const [scrollProgress, setScrollProgress] = useState(
+    Math.min(window.pageYOffset / 48, 1)
+  )
+  const classes = useAppBarStyles({ isShrinked, scrollProgress })
+
+  useEffect(() => {
+    const scrollCallback = () => {
+      const position = window.pageYOffset
+      const windowHeight =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight
+      const newScrollProgress = Math.min(
+        position / (windowHeight - (isMobile() ? chromeAddressBarHeight : 0)),
+        1
+      )
+      setScrollProgress(newScrollProgress)
+    }
+    const scrollCallbackFn = scrollCallback.bind(this)
+
+    if (!hidePositionBar) {
+      window.addEventListener('scroll', scrollCallbackFn)
+      return () => window.removeEventListener('scroll', scrollCallbackFn)
+    } else return () => null
+  }, [hidePositionBar])
 
   return (
     <AppBar className={classes.header} elevation={0}>
       <Toolbar className={classes.toolbar}>
         <div className={classes.marginContainer}>
           <div className={classes.content}>
-            
-              <UnshrinkedContent />
-            
-            
-              <ShrinkedContent />
-            
+            <UnshrinkedContent
+              isShrinked={isShrinked}
+              headerText={headerText}
+            />
+            <ShrinkedContent isShrinked={isShrinked} headerText={headerText} />
           </div>
           <div className={classes.dividerHolder}>
             <Divider className={classes.divider} />

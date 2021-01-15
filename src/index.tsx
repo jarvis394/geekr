@@ -11,6 +11,7 @@ import calendarPlugin from 'dayjs/plugin/calendar'
 import updateLocalePlugin from 'dayjs/plugin/updateLocale'
 import 'react-lazy-load-image-component/src/effects/opacity.css'
 import 'dayjs/locale/ru'
+import whyDidYouRender from '@welldone-software/why-did-you-render'
 
 dayjs.locale('ru')
 dayjs.extend(relativeTimePlugin)
@@ -24,6 +25,11 @@ dayjs.updateLocale('ru', {
     lastDay: 'Вчера, в hh:mm',
     sameElse: 'DD.MM.YYYY',
   },
+})
+
+whyDidYouRender(React, {
+  trackAllPureComponents: true,
+  collapseGroups: true,
 })
 
 ReactDOM.render(
