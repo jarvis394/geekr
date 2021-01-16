@@ -6,12 +6,20 @@ import {
   GridListTile,
   useTheme,
 } from '@material-ui/core'
-import { fade, makeStyles } from '@material-ui/core/styles'
+import {
+  darken,
+  fade,
+  lighten,
+  makeStyles,
+  ThemeOptions,
+} from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
 import { getAdverts } from 'src/store/actions/home'
 import { useDispatch } from 'react-redux'
 import AdvertsBlockSkeleton from '../../components/skeletons/AdvertsBlockSkeleton'
+import isMobile from 'is-mobile'
 
+const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(1),
@@ -41,6 +49,34 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     width: '100%',
     margin: '0 !important',
+    '&::-webkit-scrollbar': isMobile()
+      ? {}
+      : {
+          background: isDarkTheme(theme)
+            ? lighten(theme.palette.background.default, 0.03)
+            : theme.palette.background.paper,
+          border: '1px solid ' + darken(theme.palette.background.paper, 0.05),
+          borderRadius: 4,
+          height: 12,
+        },
+    '&::-webkit-scrollbar-thumb': {
+      minHeight: 12,
+      borderRadius: 4,
+      background: isDarkTheme(theme)
+        ? lighten(theme.palette.background.paper, 0.08)
+        : darken(theme.palette.background.paper, 0.08),
+      transition: '0.1s',
+      '&:hover': {
+        background: isDarkTheme(theme)
+          ? lighten(theme.palette.background.paper, 0.1)
+          : darken(theme.palette.background.paper, 0.1),
+      },
+      '&:active': {
+        background: isDarkTheme(theme)
+          ? lighten(theme.palette.background.paper, 0.2)
+          : darken(theme.palette.background.paper, 0.2),
+      },
+    },
   },
   button: {
     height: '100%',
@@ -57,16 +93,17 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 18,
     fontWeight: 800,
     textAlign: 'initial',
+    color: theme.palette.getContrastText(theme.palette.common.black),
   },
   label: {
     padding: '2px 6px',
-    background: fade(theme.palette.text.primary, 0.9),
+    background: fade(theme.palette.common.white, 0.9),
     fontFamily: 'Google Sans',
     fontSize: 14,
     fontWeight: 800,
     borderRadius: 8,
     marginTop: theme.spacing(1),
-    color: theme.palette.getContrastText(theme.palette.text.primary),
+    color: theme.palette.getContrastText(theme.palette.common.white),
   },
   tile: {
     textDecoration: 'none',
@@ -107,9 +144,9 @@ const AdvertsBlock = () => {
                 className={classes.button}
                 style={{
                   backgroundImage: `linear-gradient(to right, ${fade(
-                    theme.palette.background.paper,
+                    theme.palette.common.black,
                     0.7
-                  )}, ${fade(theme.palette.background.paper, 0.5)}), url(${
+                  )}, ${fade(theme.palette.common.black, 0.5)}), url(${
                     e.imageUrl
                   })`,
                 }}

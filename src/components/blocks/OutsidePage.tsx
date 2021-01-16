@@ -69,7 +69,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     zIndex: 1000,
     textOverflow: 'ellipsis',
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   headerIcon: {
     marginRight: theme.spacing(0.5),
@@ -153,9 +153,13 @@ const UnshrinkedContent = ({ isShrinked, headerText }) => {
         >
           <BackRoundedIcon />
         </IconButton>
-        {headerText && <Fade in>
-          <Typography className={classes.headerTitle}>{headerText}</Typography>
-        </Fade>}
+        {headerText && (
+          <Fade in>
+            <Typography className={classes.headerTitle}>
+              {headerText}
+            </Typography>
+          </Fade>
+        )}
       </div>
     </Fade>
   )
