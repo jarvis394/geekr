@@ -69,6 +69,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     zIndex: 1000,
     textOverflow: 'ellipsis',
+    marginRight: theme.spacing(2)
   },
   headerIcon: {
     marginRight: theme.spacing(0.5),
@@ -117,6 +118,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     zIndex: 1000,
+    maxWidth: 'calc(100% - 32px)',
     position: 'absolute',
     textOverflow: 'ellipsis',
   },
@@ -130,40 +132,30 @@ interface Props {
 
 const ShrinkedContent = ({ isShrinked, headerText }) => {
   const classes = useAppBarStyles({ isShrinked, scrollProgress: 0 })
-  const Title = () => (
-    <Typography className={classes.shrinkedHeaderTitle}>
-      {headerText}
-    </Typography>
-  )
   return (
     <Fade in={isShrinked} unmountOnExit mountOnEnter>
-      <Title />
+      <Typography className={classes.shrinkedHeaderTitle}>
+        {headerText}
+      </Typography>
     </Fade>
   )
 }
 const UnshrinkedContent = ({ isShrinked, headerText }) => {
   const classes = useAppBarStyles({ isShrinked, scrollProgress: 0 })
   const history = useHistory()
-  const Title = () =>
-    headerText ? (
-      <Fade in>
-        <Typography className={classes.headerTitle}>{headerText}</Typography>
-      </Fade>
-    ) : null
-  const Icon = () => (
-    <IconButton
-      disableRipple={isShrinked}
-      className={classes.headerIcon}
-      onClick={() => (isShrinked ? {} : history.goBack())}
-    >
-      <BackRoundedIcon />
-    </IconButton>
-  )
   return (
     <Fade in={!isShrinked} unmountOnExit mountOnEnter>
       <div className={classes.content}>
-        <Icon />
-        <Title />
+        <IconButton
+          disableRipple={isShrinked}
+          className={classes.headerIcon}
+          onClick={() => (isShrinked ? {} : history.goBack())}
+        >
+          <BackRoundedIcon />
+        </IconButton>
+        {headerText && <Fade in>
+          <Typography className={classes.headerTitle}>{headerText}</Typography>
+        </Fade>}
       </div>
     </Fade>
   )
@@ -193,16 +185,12 @@ const NavBarUnmemoized = ({ headerText, hidePositionBar = false }) => {
     const scrollCallbackFn = scrollCallback.bind(this)
 
     if (!hidePositionBar) {
-      window.addEventListener('scroll', scrollCallbackFn)
+      document.addEventListener('scroll', () => {
+        requestAnimationFrame(scrollCallbackFn)
+      })
       return () => window.removeEventListener('scroll', scrollCallbackFn)
     } else return () => null
   }, [hidePositionBar])
-
-  const NavBarDivider = () => (
-    <div className={classes.dividerHolder}>
-      <Divider className={classes.divider} />
-    </div>
-  )
 
   return (
     <AppBar className={classes.header} elevation={0}>
@@ -215,7 +203,9 @@ const NavBarUnmemoized = ({ headerText, hidePositionBar = false }) => {
             />
             <ShrinkedContent isShrinked={isShrinked} headerText={headerText} />
           </div>
-          <NavBarDivider />
+          <div className={classes.dividerHolder}>
+            <Divider className={classes.divider} />
+          </div>
         </div>
       </Toolbar>
     </AppBar>
