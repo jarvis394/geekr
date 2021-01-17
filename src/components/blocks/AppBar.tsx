@@ -17,8 +17,24 @@ import { useSelector } from 'src/hooks'
 import { FetchingState, UserExtended } from 'src/interfaces'
 import { useDispatch } from 'react-redux'
 import { getMe } from 'src/store/actions/user'
-import { Divider } from '@material-ui/core'
+import {
+  ButtonBase,
+  Divider,
+  Fade,
+  fade,
+  Grid,
+  SwipeableDrawer,
+} from '@material-ui/core'
 import blend from 'src/utils/blendColors'
+import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
+import DeviceHubRoundedIcon from '@material-ui/icons/DeviceHubRounded'
+import SubscriptionsRoundedIcon from '@material-ui/icons/SubscriptionsRounded'
+import CodeRoundedIcon from '@material-ui/icons/CodeRounded'
+import SupervisorAccountRoundedIcon from '@material-ui/icons/SupervisorAccountRounded'
+import BrushRoundedIcon from '@material-ui/icons/BrushRounded'
+import StorageRoundedIcon from '@material-ui/icons/StorageRounded'
+import LiveTvRoundedIcon from '@material-ui/icons/LiveTvRounded'
+import MenuBookRoundedIcon from '@material-ui/icons/MenuBookRounded'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,6 +79,10 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     alignItems: 'center',
   },
+  menuIcon: {
+    marginLeft: -12,
+    color: theme.palette.text.primary,
+  },
   avatar: {
     height: theme.spacing(3),
     width: theme.spacing(3),
@@ -80,15 +100,127 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: '100%',
   },
+  drawerPaper: {
+    background: theme.palette.background.default,
+    maxWidth: '75%',
+  },
+  drawerRoot: {
+    height: '100%',
+    background: `linear-gradient(to right, ${fade(
+      theme.palette.background.default,
+      0.4
+    )}, transparent)`,
+  },
+  drawerFlowsTitle: {
+    fontFamily: 'Google Sans',
+    fontWeight: 800,
+    fontSize: 20,
+    height: 48,
+    display: 'flex',
+    alignItems: 'center',
+    marginLeft: theme.spacing(2),
+  },
+  drawerBackdrop: {
+    background: fade(theme.palette.background.default, 0.7),
+  },
+  drawerFlowsGrid: {
+    padding: theme.spacing(0.5),
+    width: '100%',
+    margin: 0,
+  },
+  flowCard: {
+    width: '100%',
+    height: 48,
+    borderRadius: 8,
+    background: theme.palette.background.paper,
+    overflow: 'hidden',
+    display: 'flex',
+    justifyContent: 'center',
+    padding: theme.spacing(2),
+    flexDirection: 'column',
+    alignItems: 'baseline',
+  },
+  flowCardTitle: {
+    fontFamily: 'Google Sans',
+    fontSize: 18,
+    fontWeight: 800,
+    color: fade(theme.palette.text.primary, 0.7),
+  },
+  flowCardIcon: {
+    position: 'absolute',
+    top: 2,
+    right: 4,
+    opacity: 0.1,
+    borderRadius: 8,
+    '& svg': { fontSize: '4rem' },
+  },
 }))
 
 const dividerStyle = { width: '100%' }
+const flows = [
+  { title: 'Все потоки', icon: <DeviceHubRoundedIcon /> },
+  { title: 'Моя лента', icon: <SubscriptionsRoundedIcon /> },
+  { title: 'Разработка', icon: <CodeRoundedIcon /> },
+  { title: 'Администрирование', icon: <StorageRoundedIcon /> },
+  { title: 'Дизайн', icon: <BrushRoundedIcon /> },
+  { title: 'Менеджмент', icon: <SupervisorAccountRoundedIcon /> },
+  { title: 'Маркетинг', icon: <LiveTvRoundedIcon /> },
+  { title: 'Научпоп', icon: <MenuBookRoundedIcon /> },
+]
+
+const FlowCard = ({ title, icon }) => {
+  const classes = useStyles()
+  return (
+    <ButtonBase className={classes.flowCard}>
+      <div className={classes.flowCardIcon}>{icon}</div>
+      <Typography className={classes.flowCardTitle}>{title}</Typography>
+    </ButtonBase>
+  )
+}
+
+const Drawer = ({ isOpen, setOpen }) => {
+  const classes = useStyles()
+  return (
+    <SwipeableDrawer
+      anchor={'left'}
+      open={isOpen}
+      BackdropProps={{
+        classes: { root: classes.drawerBackdrop },
+      }}
+      onClose={() => setOpen(false)}
+      onOpen={() => setOpen(true)}
+      disableDiscovery
+      disableSwipeToOpen
+      disableBackdropTransition
+      PaperProps={{
+        style: {},
+      }}
+      classes={{
+        paper: classes.drawerPaper,
+      }}
+    >
+      <Fade in={isOpen}>
+        <div className={classes.drawerRoot}>
+          <Typography className={classes.drawerFlowsTitle}>Потоки</Typography>
+          <Grid container spacing={1} className={classes.drawerFlowsGrid}>
+            {flows.map((e, i) => (
+              <Grid item key={i} xs={12} sm={12} md={3}>
+                <FlowCard title={e.title} icon={e.icon} />
+              </Grid>
+            ))}
+          </Grid>
+        </div>
+      </Fade>
+    </SwipeableDrawer>
+  )
+}
 
 const AppBarComponent = () => {
   const state = useSelector((state) => state.app.appbar)
   const [scrollProgress, setScrollProgress] = React.useState(
     state.shouldChangeColors ? Math.min(window.pageYOffset / 48, 1) : 1
   )
+  const [isDrawerOpen, setDrawerOpen] = React.useState(false)
   const classes = useStyles(scrollProgress)
   const dispatch = useDispatch()
   const history = useHistory()
@@ -117,6 +249,14 @@ const AppBarComponent = () => {
 
   if (state.isHidden) return null
 
+  const MenuIcon = () => (
+    <IconButton
+      onClick={() => setDrawerOpen(true)}
+      className={classes.menuIcon}
+    >
+      <MenuRoundedIcon />
+    </IconButton>
+  )
   const HeaderTitle = () => (
     <Typography variant="h6" className={classes.linkTypography}>
       <Link
@@ -158,19 +298,23 @@ const AppBarComponent = () => {
   const AppBarDivider = () => <Divider style={dividerStyle} />
 
   return (
-    <AppBar className={classes.root} elevation={0}>
-      <Toolbar className={classes.toolbar}>
-        <div className={classes.marginContainer}>
-          <div className={classes.content}>
-            <HeaderTitle />
-            <SearchButton />
-            <SettingsButton />
-            <UserButton />
+    <>
+      <Drawer isOpen={isDrawerOpen} setOpen={setDrawerOpen} />
+      <AppBar className={classes.root} elevation={0}>
+        <Toolbar className={classes.toolbar}>
+          <div className={classes.marginContainer}>
+            <div className={classes.content}>
+              <MenuIcon />
+              <HeaderTitle />
+              <SearchButton />
+              <SettingsButton />
+              <UserButton />
+            </div>
+            <AppBarDivider />
           </div>
-          <AppBarDivider />
-        </div>
-      </Toolbar>
-    </AppBar>
+        </Toolbar>
+      </AppBar>
+    </>
   )
 }
 

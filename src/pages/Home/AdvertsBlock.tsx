@@ -49,6 +49,8 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     width: '100%',
     margin: '0 !important',
+    // Do not change the scrollbar on mobile due to design flaws
+    // If the -webkit-scrollbar is empty, any other scrollbar style will not be applied.
     '&::-webkit-scrollbar': isMobile()
       ? {}
       : {
