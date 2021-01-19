@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     minHeight: `calc(100vh - 48px - ${
       isMobile() ? chromeAddressBarHeight : 0
-    }px - 192px)`,
+    }px)`,
     borderRadius: 0,
     flexDirection: 'column',
     maxWidth: minWidth,
@@ -93,7 +93,7 @@ const App = (): React.ReactElement => {
           <RouterTitleChange />
 
           <AppBar />
-          <BottomBar />
+          {/* <BottomBar /> */}
           <div className={classes.app}>
             <AppRouter />
           </div>

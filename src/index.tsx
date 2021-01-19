@@ -12,7 +12,6 @@ import updateLocalePlugin from 'dayjs/plugin/updateLocale'
 import 'react-lazy-load-image-component/src/effects/opacity.css'
 import 'dayjs/locale/ru'
 
-
 dayjs.locale('ru')
 dayjs.extend(relativeTimePlugin)
 dayjs.extend(calendarPlugin)

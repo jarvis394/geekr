@@ -7,13 +7,13 @@ import {
   IconButton,
   Toolbar,
   Typography,
-  useScrollTrigger,
 } from '@material-ui/core'
 import BackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
 import { useHistory } from 'react-router'
 import { MIN_WIDTH } from 'src/config/constants'
 import isMobile from 'is-mobile'
 import { chromeAddressBarHeight } from 'src/config/constants'
+import { useScrollTrigger } from 'src/hooks'
 
 interface StyleProps {
   isShrinked: boolean
@@ -23,15 +23,9 @@ interface StyleProps {
 const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
-    zIndex: 1100,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
     minHeight: '100%',
   },
   children: {
-    marginTop: 49,
     maxWidth: MIN_WIDTH,
     display: 'flex',
     flexDirection: 'column',
@@ -174,9 +168,8 @@ const NavBarUnmemoized = ({ headerText, hidePositionBar = false }) => {
     Math.min(window.pageYOffset / 48, 1)
   )
   const classes = useAppBarStyles({ isShrinked, scrollProgress })
-
-  useEffect(() => {
-    const scrollCallback = () => {
+  const scrollCallback = () =>
+    requestAnimationFrame(() => {
       const position = window.pageYOffset
       const windowHeight =
         document.documentElement.scrollHeight -
@@ -186,14 +179,12 @@ const NavBarUnmemoized = ({ headerText, hidePositionBar = false }) => {
         1
       )
       setScrollProgress(newScrollProgress)
-    }
-    const scrollCallbackFn = scrollCallback.bind(this)
+    })
 
+  useEffect(() => {
     if (!hidePositionBar) {
-      document.addEventListener('scroll', () => {
-        requestAnimationFrame(scrollCallbackFn)
-      })
-      return () => window.removeEventListener('scroll', scrollCallbackFn)
+      window.addEventListener('scroll', scrollCallback)
+      return () => window.removeEventListener('scroll', scrollCallback)
     } else return () => null
   }, [hidePositionBar])
 

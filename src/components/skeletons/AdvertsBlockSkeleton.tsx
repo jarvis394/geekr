@@ -18,13 +18,13 @@ const AdvertsBlockSkeleton = () => {
       {[...Array(3)].map((_, i) => (
         <GridListTile
           key={i}
-          style={{ padding: '2px 2px 2px 16px', width: '83.3333%' }}
+          style={{ padding: '2px 2px 2px 16px', width: '90.9091%' }}
         >
           <Skeleton
             variant="rect"
             className={classes.skeleton}
             key={i}
-            height={152}
+            height={148}
           />
         </GridListTile>
       ))}
