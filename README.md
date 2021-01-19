@@ -1,8 +1,11 @@
 <p align="center"><a href="https://habra.js.org/"><img width=512 src="https://raw.githubusercontent.com/jarvis394/habra/master/images/logo.png" alt="habra logo" /></a></p>
 <h5 align="center">✨🎉 Habrahabr, but with a new client</h5>
 
-<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/jarvis394/habra/Github%20Pages?logo=github&style=for-the-badge">
-<img alt="GitHub issues" src="https://img.shields.io/github/issues/jarvis394/habra?color=2979ff&style=for-the-badge">
+<p align="center">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/jarvis394/habra/Github%20Pages?logo=github&style=for-the-badge">
+  <img alt="GitHub issues" src="https://img.shields.io/github/issues/jarvis394/habra?color=2979ff&style=for-the-badge">
+  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/jarvis394/habra?color=black&style=for-the-badge">
+</p>
 
 ## See it live
 Go to the [habra.js.org](https://habra.js.org/) site and feel yourself at home! It can do almost everything that the original site does, but with its own tricks and features.
