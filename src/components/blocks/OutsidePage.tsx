@@ -72,7 +72,8 @@ const useAppBarStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   headerIcon: {
-    marginRight: theme.spacing(0.5),
+    marginLeft: 4,
+    color: theme.palette.text.primary,
   },
   marginContainer: {
     display: 'flex',
@@ -144,7 +145,7 @@ const UnshrinkedContent = ({ isShrinked, headerText }) => {
   const classes = useAppBarStyles({ isShrinked, scrollProgress: 0 })
   const history = useHistory()
   return (
-    <Fade in={!isShrinked} unmountOnExit mountOnEnter>
+    <Fade in={!isShrinked}>
       <div className={classes.content}>
         <IconButton
           disableRipple={isShrinked}

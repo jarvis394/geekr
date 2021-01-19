@@ -101,15 +101,11 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   drawerPaper: {
-    background: theme.palette.background.default,
+    background: theme.palette.background.paper,
     maxWidth: '75%',
   },
   drawerRoot: {
     height: '100%',
-    background: `linear-gradient(to right, ${fade(
-      theme.palette.background.default,
-      0.4
-    )}, transparent)`,
   },
   drawerFlowsTitle: {
     fontFamily: 'Google Sans',
@@ -132,7 +128,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: 48,
     borderRadius: 8,
-    background: theme.palette.background.paper,
+    background: theme.palette.background.default,
     overflow: 'hidden',
     display: 'flex',
     justifyContent: 'center',
@@ -144,7 +140,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Google Sans',
     fontSize: 18,
     fontWeight: 800,
-    color: fade(theme.palette.text.primary, 0.7),
+    color: fade(theme.palette.text.primary, 0.6),
   },
   flowCardIcon: {
     position: 'absolute',
@@ -178,7 +174,7 @@ const FlowCard = ({ title, icon }) => {
   )
 }
 
-const Drawer = ({ isOpen, setOpen }) => {
+const DrawerUnmemoized = ({ isOpen, setOpen }) => {
   const classes = useStyles()
   return (
     <SwipeableDrawer
@@ -193,27 +189,27 @@ const Drawer = ({ isOpen, setOpen }) => {
       disableSwipeToOpen
       disableBackdropTransition
       PaperProps={{
-        style: {},
+        elevation: 1,
       }}
       classes={{
         paper: classes.drawerPaper,
       }}
     >
-      <Fade in={isOpen}>
-        <div className={classes.drawerRoot}>
-          <Typography className={classes.drawerFlowsTitle}>Потоки</Typography>
-          <Grid container spacing={1} className={classes.drawerFlowsGrid}>
-            {flows.map((e, i) => (
-              <Grid item key={i} xs={12} sm={12} md={3}>
-                <FlowCard title={e.title} icon={e.icon} />
-              </Grid>
-            ))}
-          </Grid>
-        </div>
-      </Fade>
+      <div className={classes.drawerRoot}>
+        <Typography className={classes.drawerFlowsTitle}>Потоки</Typography>
+        <Grid container spacing={1} className={classes.drawerFlowsGrid}>
+          {flows.map((e, i) => (
+            <Grid item key={i} xs={12} sm={12} md={3}>
+              <FlowCard title={e.title} icon={e.icon} />
+            </Grid>
+          ))}
+        </Grid>
+      </div>
+
     </SwipeableDrawer>
   )
 }
+const Drawer = React.memo(DrawerUnmemoized)
 
 const AppBarComponent = () => {
   const state = useSelector((state) => state.app.appbar)
@@ -233,7 +229,7 @@ const AppBarComponent = () => {
   const mode = RATING_MODES.find((e) => e.mode === modeName)
   const shouldFetchUser = !!token
   const shouldShowUser = userState === FetchingState.Fetched
-
+  
   React.useEffect(() => {
     const scrollCallback = () => {
       const position = window.pageYOffset
