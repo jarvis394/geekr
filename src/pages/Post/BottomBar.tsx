@@ -41,10 +41,11 @@ const useStyles = makeStyles((theme) => ({
   },
   cardAmount: {
     fontFamily: 'Google Sans',
-    fontSize: 36,
+    fontSize: 32,
     fontWeight: 800,
     color: theme.palette.text.primary,
-    lineHeight: '36px',
+    lineHeight: '32px',
+    marginBottom: 2,
   },
   cardIcon: {
     position: 'absolute',
@@ -56,8 +57,9 @@ const useStyles = makeStyles((theme) => ({
   },
   cardText: {
     fontFamily: 'Google Sans',
-    fontSize: 18,
-    fontWeight: 800,
+    fontSize: 16,
+    lineHeight: '16px',
+    fontWeight: 500,
     color: fade(theme.palette.text.primary, 0.5),
   },
   viewsCard: {

@@ -4,10 +4,16 @@ enum Direction {
   UP,
   DOWN,
 }
+
+const State = {
+  SHOW: false,
+  HIDE: true,
+}
+
 type StoreRef = React.MutableRefObject<{
-  scroll: number
+  position: number
+  previousScroll: number
   direction: Direction
-  isHolding: boolean
 }>
 
 interface Options {
@@ -15,59 +21,68 @@ interface Options {
   threshold: number
   disableHysteresis: boolean
   target: Window
+  trigger: boolean
 }
+
+const defaultThreshold = 200
+const defaultTarget = typeof window !== 'undefined' ? window : null
 
 function defaultTrigger(store: StoreRef, options: Partial<Options>) {
-  const { threshold = 48, target } = options
-  const direction = store.current.direction
-  const isHolding = store.current.isHolding
-  const previous = store.current.scroll
+  const { threshold = defaultThreshold, target, trigger } = options
+  const previousDirection = store.current.direction
+  const previousScroll = store.current.previousScroll
   const currentScroll = target ? target.pageYOffset : 0
 
-  if (target && !isHolding) {
-    // Set vertical scroll
-    store.current.scroll = currentScroll
+  // Set the trigger to show if the scroll position is lower than a threshold
+  if (currentScroll < threshold) return State.SHOW
+
+  // Set the previousScroll to the current scroll to store
+  // This doesn't affect previousScroll variable, so we can do that anywhere in the code
+  store.current.previousScroll = currentScroll
+
+  // Set current scroll direction
+  if (currentScroll > previousScroll) {
+    store.current.direction = Direction.DOWN
+  } else {
+    store.current.direction = Direction.UP
   }
 
-  if (previous !== undefined) {
-    if (currentScroll > previous) {
-      if (direction === Direction.UP) store.current.isHolding = true
-      store.current.direction = Direction.DOWN
-    } else if (currentScroll < previous) {
-      if (direction === Direction.DOWN) store.current.isHolding = true
-      store.current.direction = Direction.UP
-    }
-
-    // if (store.current.scroll < lastPosition - threshold) {
-    //   store.current.lastPosition = undefined
-    //   return false
-    // } else if (store.current.scroll > lastPosition + threshold) {
-    //   store.current.lastPosition = undefined
-    //   return true
-    // }
+  // If user changed their scroll direction, then set the store scroll once.
+  if (store.current.direction !== previousDirection) {
+    store.current.position = currentScroll
   }
 
-  return store.current.scroll > threshold
+  // Return false when user passed the threshold value by scrolling upwards
+  if (store.current.direction === Direction.UP) {
+    if (store.current.position - threshold >= currentScroll) return State.SHOW
+    else return trigger
+  }
+  // Return true when user passed the threshold value by scrolling downwards
+  if (store.current.direction === Direction.DOWN) {
+    if (store.current.position + threshold <= currentScroll) return State.HIDE
+    else return trigger
+  }
 }
-
-const defaultTarget = typeof window !== 'undefined' ? window : null
 
 const useScrollTrigger = (options: Partial<Options> = {}) => {
   const {
     getTrigger = defaultTrigger,
     target = defaultTarget,
-    ...other
+    threshold = defaultThreshold,
   } = options
-  const store = React.useRef({
-    scroll: undefined,
+  const store: StoreRef = React.useRef({
+    position: target.pageYOffset,
+    previousScroll: target.pageYOffset,
     direction: undefined,
-    isHolding: false,
   })
-  const [trigger, setTrigger] = React.useState(() => getTrigger(store, other))
+  const defaultTriggerValue = target.pageYOffset > threshold
+  const [trigger, setTrigger] = React.useState(() =>
+    getTrigger(store, { trigger: defaultTriggerValue, target, threshold })
+  )
 
   React.useEffect(() => {
     const handleScroll = () => {
-      setTrigger(getTrigger(store, { target }))
+      setTrigger(getTrigger(store, { target, trigger, threshold }))
     }
 
     handleScroll() // Re-evaluate trigger when dependencies change
@@ -75,7 +90,7 @@ const useScrollTrigger = (options: Partial<Options> = {}) => {
     return () => {
       target.removeEventListener('scroll', handleScroll)
     }
-  }, [target, getTrigger])
+  }, [target, getTrigger, trigger, threshold])
 
   return trigger
 }

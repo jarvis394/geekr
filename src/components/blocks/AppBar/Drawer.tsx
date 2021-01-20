@@ -5,7 +5,7 @@ import {
   ButtonBase,
   fade,
   Grid,
-  Divider,
+  // Divider,
   SwipeableDrawer,
 } from '@material-ui/core'
 import DeviceHubRoundedIcon from '@material-ui/icons/DeviceHubRounded'
