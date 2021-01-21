@@ -33,7 +33,7 @@ const LazyLoadImage = (props: LazyLoadImageProps) => {
           },
         }}
         onClick={() => setOpen(true)}
-        threshold={200}
+        threshold={500}
         {...props}
       />
       {

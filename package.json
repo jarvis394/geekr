@@ -13,6 +13,7 @@
     "@material-ui/lab": "^4.0.0-alpha.50",
     "@material-ui/styles": "^4.11.2",
     "@nteract/mathjax": "^4.0.13",
+    "@vkontakte/icons": "^1.72.0",
     "@welldone-software/why-did-you-render": "^6.0.5",
     "axios": "^0.21.1",
     "dayjs": "^1.9.6",

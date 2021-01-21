@@ -94,7 +94,7 @@ const dividerStyle = { width: '100%' }
 const AppBarComponent = ({ history }) => {
   const state = useSelector((state) => state.app.appbar)
   const [scrollProgress, setScrollProgress] = React.useState(
-    state.shouldChangeColors ? Math.min(window.pageYOffset / 48, 1) : 1
+    state.shouldChangeColors ? Math.min(window.pageYOffset / 256, 1) : 1
   )
   const [isDrawerOpen, setDrawerOpen] = React.useState(false)
   const [isHidden, setHidden] = React.useState(false)
@@ -111,7 +111,7 @@ const AppBarComponent = ({ history }) => {
   const shouldShowUser = userState === FetchingState.Fetched
   const scrollCallback = () => {
     const position = window.pageYOffset
-    const progress = Math.min(position / 48, 1)
+    const progress = Math.min(position / 256, 1)
     setScrollProgress(progress)
   }
   const hideAppBarHandler = (location: Location) => {

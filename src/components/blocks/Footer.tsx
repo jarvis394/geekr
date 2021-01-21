@@ -10,6 +10,7 @@ import VKIcon from 'src/components/svg/VKIcon'
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(2),
+    marginBottom: 52
   },
   container: {
     padding: `${theme.spacing(3)}px ${theme.spacing(2)}px ${theme.spacing(
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     )}px`,
     textAlign: 'center',
     maxWidth: minWidth,
-    margin: '0 auto',
+    margin: '0 auto'
   },
   logo: {
     fontFamily: 'Google Sans',

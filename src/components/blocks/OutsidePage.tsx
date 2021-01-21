@@ -165,7 +165,7 @@ const NavBarUnmemoized = ({ headerText, hidePositionBar = false }) => {
     threshold: 48,
   })
   const [scrollProgress, setScrollProgress] = useState(
-    Math.min(window.pageYOffset / 48, 1)
+    hidePositionBar ? 0 : Math.min(window.pageYOffset / 48, 1)
   )
   const classes = useAppBarStyles({ isShrinked, scrollProgress })
   const scrollCallback = () =>

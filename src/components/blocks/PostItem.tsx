@@ -135,15 +135,14 @@ export const PostItem = ({
   const { textHtml, imageUrl: leadImage } = leadData
   const title = parse(unparsedTitle)
   const reads = formatNumber(readingCount)
-  const score = formatNumber(Number(sc))
-  const favorites = formatNumber(
+   const favorites = formatNumber(
     Number(favoritesCount) + (isBookmarked ? 1 : 0)
   )
   const comments = formatNumber(Number(commentsCount))
   const bottomRow = [
     {
       icon: ThumbsUpDownIcon,
-      count: score,
+      count: sc,
       coloredText: true,
     },
     {

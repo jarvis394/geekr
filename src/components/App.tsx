@@ -16,7 +16,7 @@ import { useSelector } from 'src/hooks'
 import ScrollRestoration from 'react-scroll-restoration'
 import RouterTitleChange from './RouterTitleChange'
 import { SnackbarProvider } from 'notistack'
-// import BottomBar from './blocks/BottomBar'
+import BottomBar from './blocks/BottomBar'
 
 const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
 const useStyles = makeStyles(() => ({
@@ -93,7 +93,7 @@ const App = (): React.ReactElement => {
           <RouterTitleChange />
 
           <AppBar />
-          {/* <BottomBar /> */}
+          <BottomBar />
           <div className={classes.app}>
             <AppRouter />
           </div>

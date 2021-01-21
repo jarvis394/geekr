@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { lighten, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
-import HomeRoundedIcon from '@material-ui/icons/HomeRounded'
-import EventNoteRoundedIcon from '@material-ui/icons/EventNoteRounded'
-import DeviceHubRoundedIcon from '@material-ui/icons/DeviceHubRounded'
-import PeopleOutlineRoundedIcon from '@material-ui/icons/PeopleOutlineRounded'
-import ApartmentRoundedIcon from '@material-ui/icons/ApartmentRounded'
 import { Paper } from '@material-ui/core'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useLocation, withRouter } from 'react-router-dom'
 import getCachedMode from 'src/utils/getCachedMode'
+import routes from 'src/config/routes'
+import { match } from 'path-to-regexp'
+
+import { Icon28Newsfeed } from '@vkontakte/icons'
+import { Icon20HomeOutline } from '@vkontakte/icons'
+import { Icon28ServicesOutline } from '@vkontakte/icons'
+import { Icon28SettingsOutline } from '@vkontakte/icons'
+import { Icon28Profile } from '@vkontakte/icons'
 
 interface TabObject {
   label: string
@@ -28,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     willChange: 'transform',
   },
   container: {
-    background: lighten(theme.palette.background.paper, 0.07),
+    background: theme.palette.background.default,
     height: 52,
   },
   item: {
@@ -44,35 +47,35 @@ const useStyles = makeStyles((theme) => ({
 const tabs: TabObject[] = [
   {
     label: 'Статьи',
-    icon: <HomeRoundedIcon />,
+    icon: <Icon20HomeOutline width={24} height={24} />,
     to: () => `${getCachedMode().to}/p/1`,
     match: /\/(all|top(0|10|25|50|100)|top\/daily|top\/weekly|top\/monthly|top\/yearly|top\/alltime)\/p\/([0-9]+)\/?$/,
     tab: 'home',
   },
   {
     label: 'Новости',
-    icon: <EventNoteRoundedIcon />,
+    icon: <Icon28Newsfeed width={24} height={24} />,
     to: () => '/news/p/1',
     tab: 'news',
     match: /\/news\/p\/([0-9]+)\/?$/,
   },
   {
     label: 'Хабы',
-    icon: <DeviceHubRoundedIcon />,
+    icon: <Icon28ServicesOutline width={24} height={24} />,
     to: () => '/hubs/p/1',
     match: /\/hubs\/p\/([0-9]+)\/?$/,
     tab: 'hubs',
   },
   {
-    label: 'Авторы',
-    icon: <PeopleOutlineRoundedIcon />,
-    to: () => '/authors',
-    match: /\/authors\/?$/,
-    tab: 'authors',
+    label: 'Настройки',
+    icon: <Icon28SettingsOutline width={24} height={24} />,
+    to: () => '/settings',
+    match: /\/settings\/?$/,
+    tab: 'settings',
   },
   {
-    label: 'Компании',
-    icon: <ApartmentRoundedIcon />,
+    label: 'Профиль',
+    icon: <Icon28Profile width={24} height={24} />,
     to: () => '/companies',
     match: /\/companies\/?$/,
     tab: 'companies',
@@ -83,10 +86,10 @@ const findPathValue = (path: string): number => {
   return res
 }
 
-const BottomBar = () => {
+const BottomBar = ({ history }) => {
   const classes = useStyles()
   const location = useLocation()
-  const history = useHistory()
+  const [isHidden, setHidden] = React.useState(false)
   const [value, setValue] = useState<number>(findPathValue(location.pathname))
   const handleChange = (
     _event: React.ChangeEvent<unknown>,
@@ -94,10 +97,27 @@ const BottomBar = () => {
   ) => {
     setValue(newValue)
   }
+  
+  const hideAppBarHandler = (location: Location) => {
+    const path = location.pathname
+    const route = routes.find((e) => match(e.path)(path))
+
+    if (!route.shouldShowAppBar) setHidden(true)
+    else setHidden(false)
+  }
 
   useEffect(() => setValue(findPathValue(location.pathname)), [
     location.pathname,
   ])
+  
+  useEffect(() => {
+    hideAppBarHandler(history.location)
+    const unlisten = history.listen(hideAppBarHandler)
+    return () => unlisten()
+  }, [history])
+
+  // Do not render BottomBar if it is hidden by the route
+  if (isHidden) return null
 
   return (
     <Paper elevation={2} className={classes.root}>
@@ -121,4 +141,4 @@ const BottomBar = () => {
   )
 }
 
-export default React.memo(BottomBar)
+export default withRouter(React.memo(BottomBar))

@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: 'none',
     },
     '& a:hover': {
-      color: theme.palette.primary.dark,
+      color: fade(theme.palette.primary.main, 0.8),
       textDecoration: 'underline',
     },
     '& p': { margin: 0, marginTop: (d) => (d ? 0 : theme.spacing(3)) },
