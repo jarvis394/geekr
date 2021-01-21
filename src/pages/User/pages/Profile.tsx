@@ -12,10 +12,11 @@ import { Specialisation } from '../Specialisation'
 import Children from '../Children'
 import Companies from '../Companies'
 import Hubs from '../Hubs'
+import ProfileLinks from '../ProfileLinks'
 
 export const useStyles = makeStyles((theme) => ({
   topBlock: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.default,
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
@@ -25,7 +26,7 @@ export const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     paddingBottom: theme.spacing(2),
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.paper,
   },
   blockMargin: {
     marginTop: theme.spacing(2),
@@ -47,6 +48,7 @@ const Profile = ({ user }) => {
           FollowersCount,
           InvitedTime,
           RegisteredTime,
+          ProfileLinks,
         ].map((Component, i) => (
           <Component key={i} />
         ))}

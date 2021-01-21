@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
-import Tabs from 'src/components/blocks/Tabs/UserTabs'
 import { getProfile } from 'src/store/actions/profile'
 import UserPageSkeleton from 'src/components/skeletons/Profile'
 import ErrorComponent from 'src/components/blocks/Error'
@@ -13,6 +12,7 @@ import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import { CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import OutsidePage from 'src/components/blocks/OutsidePage'
 
 const useStyles = makeStyles(() => ({
   centered: {
@@ -61,8 +61,11 @@ const User = ({ path }) => {
   }, [login, profile, dispatch])
 
   return (
-    <>
-      {!userFetchError && <Tabs />}
+    <OutsidePage
+      headerText={login ? '@' + login : null}
+      hidePositionBar
+      shrinkedHeaderText={profile?.fullname}
+    >
       {userFetchError && <ErrorComponent message={userFetchError} />}
       {isUserFetched && (
         <>
@@ -77,7 +80,7 @@ const User = ({ path }) => {
             <CircularProgress />
           </div>
         ))}
-    </>
+    </OutsidePage>
   )
 }
 

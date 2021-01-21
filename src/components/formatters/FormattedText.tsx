@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     verticalAlign: 'middle',
     height: 'auto',
+    borderRadius: 4,
   },
   text: {
     '& a': {
@@ -150,7 +151,8 @@ const FormattedText = ({
           marginLeft: attribs.align === 'right' ? theme.spacing(2) : 0,
           marginBottom: attribs.align ? theme.spacing(1) : 0,
           maxWidth: attribs.align ? '40%' : '100%',
-          width: attribs['data-width'] || 'auto',
+          width: attribs['data-width'] || attribs.width || 'auto',
+          height: attribs['data-height'] || attribs.height || 'auto',
         }
 
         return (

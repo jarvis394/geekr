@@ -97,7 +97,7 @@ const BottomBar = ({ history }) => {
   ) => {
     setValue(newValue)
   }
-  
+
   const hideAppBarHandler = (location: Location) => {
     const path = location.pathname
     const route = routes.find((e) => match(e.path)(path))
@@ -109,7 +109,7 @@ const BottomBar = ({ history }) => {
   useEffect(() => setValue(findPathValue(location.pathname)), [
     location.pathname,
   ])
-  
+
   useEffect(() => {
     hideAppBarHandler(history.location)
     const unlisten = history.listen(hideAppBarHandler)

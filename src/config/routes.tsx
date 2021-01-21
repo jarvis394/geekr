@@ -41,7 +41,7 @@ const routes: Route[] = [
     path: '/settings',
     component: <Settings />,
     title: 'Настройки',
-    shouldShowAppBar: false,
+    shouldShowAppBar: true,
   },
   {
     path: '/habra-about',
@@ -90,7 +90,7 @@ const routes: Route[] = [
     path: '/news/p/:page',
     component: <News />,
     title: 'Новости',
-    shouldShowAppBar: false,
+    shouldShowAppBar: true,
   },
   {
     path: [

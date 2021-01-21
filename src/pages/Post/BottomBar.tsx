@@ -7,11 +7,12 @@ import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import CommentsIocn from '@material-ui/icons/CommentRounded'
-// import ShareIcon from '@material-ui/icons/Share'
+import ShareIcon from '@material-ui/icons/Share'
 import formatNumber from 'src/utils/formatNumber'
 import { Post } from 'src/interfaces'
-import { ButtonBase, fade, Typography } from '@material-ui/core'
+import { Button, ButtonBase, fade, Typography } from '@material-ui/core'
 import { useHistory } from 'react-router'
+import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -24,10 +25,25 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: '100%',
     zIndex: 5,
+    flexDirection: 'column',
   },
-  shareIcon: {
-    color: theme.palette.text.hint,
-    fontSize: 16,
+  title: {
+    fontFamily: 'Google Sans',
+    fontWeight: 800,
+    color: theme.palette.primary.main,
+    fontSize: 24,
+    textAlign: 'left',
+    marginLeft: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    lineHeight: '24px',
+  },
+  shareButton: {
+    width: '100%',
+    borderRadius: 8,
+    height: 48,
+    marginTop: theme.spacing(1),
+    color: theme.palette.text.secondary,
   },
   card: {
     display: 'flex',
@@ -88,7 +104,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const BottomBar = ({ post }: { post: Post }) => {
-  const { id, /*titleHtml: title,*/ statistics } = post
+  const { enqueueSnackbar } = useSnackbar()
+  const { id, titleHtml: title, statistics } = post
   const { score: sc, favoritesCount, commentsCount, readingCount } = statistics
 
   const classes = useStyles(sc)
@@ -97,16 +114,21 @@ const BottomBar = ({ post }: { post: Post }) => {
   const favorites = Number(formatNumber(Number(favoritesCount)))
   const reads = formatNumber(Number(readingCount))
   const history = useHistory()
-  // const share = () => {
-  //   const shareData = {
-  //     title,
-  //     url: process.env.PUBLIC_URL + '/post/' + id,
-  //   }
+  const share = () => {
+    const shareData = {
+      title,
+      url: process.env.PUBLIC_URL + '/post/' + id,
+    }
 
-  //   navigator
-  //     .share(shareData)
-  //     .catch((e: Error) => console.error('On sharing post:', e))
-  // }
+    try {
+      navigator.share(shareData)
+    } catch (e) {
+      enqueueSnackbar('Не удалось поделиться статьей', {
+        variant: 'error',
+        autoHideDuration: 3000,
+      })
+    }
+  }
 
   const Card = ({ className, amount, text, icon, ...props }) => {
     return (
@@ -164,14 +186,25 @@ const BottomBar = ({ post }: { post: Post }) => {
   })
 
   return (
-    <Container className={classes.container}>
-      <Grid container direction="row" spacing={2}>
-        <ViewsCard />
-        <ScoreCard />
-        <FavoritesCard />
-        <CommentsCard />
-      </Grid>
-    </Container>
+    <>
+      <Typography className={classes.title}>Статистика</Typography>
+      <Container className={classes.container}>
+        <Grid container direction="row" spacing={2}>
+          <ViewsCard />
+          <ScoreCard />
+          <FavoritesCard />
+          <CommentsCard />
+        </Grid>
+        <Button
+          className={classes.shareButton}
+          variant="text"
+          onClick={share}
+          startIcon={<ShareIcon />}
+        >
+          Поделиться
+        </Button>
+      </Container>
+    </>
   )
 }
 

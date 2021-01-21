@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.default,
     marginTop: theme.spacing(2),
-    padding: theme.spacing(2),
+    padding: theme.spacing(0, 2),
     borderRadius: 0,
   },
   header: {
@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 800,
     color: theme.palette.primary.main,
     fontSize: 24,
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(2),
+    lineHeight: '24px',
   },
   link: {
     textDecoration: 'none',

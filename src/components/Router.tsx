@@ -6,9 +6,7 @@ import { Fade } from '@material-ui/core'
 const Route = ({ children, ...props }) => (
   <ReactRouterRoute {...props}>
     <Fade in>
-      <div>
-        {children}
-      </div>
+      <div>{children}</div>
     </Fade>
   </ReactRouterRoute>
 )
@@ -22,6 +20,5 @@ const Router = () => (
     ))}
   </Switch>
 )
-
 
 export default React.memo(Router)

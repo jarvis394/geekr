@@ -58,7 +58,6 @@ const useAppBarStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     fontSize: 20,
     letterHeight: '1.6',
-    marginTop: 2,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     zIndex: 1000,
@@ -109,7 +108,6 @@ const useAppBarStyles = makeStyles((theme) => ({
     fontSize: 16,
     transform: 'translateX(16px) translateY(8px)',
     letterHeight: '1.6',
-    marginTop: 2,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     zIndex: 1000,
@@ -123,14 +121,15 @@ interface Props {
   children?: unknown
   headerText?: unknown
   hidePositionBar?: boolean
+  shrinkedHeaderText?: unknown
 }
 
-const ShrinkedContent = ({ isShrinked, headerText }) => {
+const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
   const classes = useAppBarStyles({ isShrinked, scrollProgress: 0 })
   return (
     <Fade in={isShrinked} unmountOnExit mountOnEnter>
       <Typography className={classes.shrinkedHeaderTitle}>
-        {headerText}
+        {shrinkedHeaderText}
       </Typography>
     </Fade>
   )
@@ -160,7 +159,11 @@ const UnshrinkedContent = ({ isShrinked, headerText }) => {
   )
 }
 
-const NavBarUnmemoized = ({ headerText, hidePositionBar = false }) => {
+const NavBarUnmemoized = ({
+  headerText,
+  shrinkedHeaderText,
+  hidePositionBar = false,
+}) => {
   const isShrinked = useScrollTrigger({
     threshold: 48,
   })
@@ -197,7 +200,10 @@ const NavBarUnmemoized = ({ headerText, hidePositionBar = false }) => {
               isShrinked={isShrinked}
               headerText={headerText}
             />
-            <ShrinkedContent isShrinked={isShrinked} headerText={headerText} />
+            <ShrinkedContent
+              isShrinked={isShrinked}
+              shrinkedHeaderText={shrinkedHeaderText || headerText}
+            />
           </div>
           <div className={classes.dividerHolder}>
             <Divider className={classes.divider} />
@@ -211,11 +217,15 @@ const NavBar = React.memo(NavBarUnmemoized)
 
 const OutsidePage = ({ children, ...props }: Props) => {
   const classes = useStyles()
-  const { headerText, hidePositionBar } = props
+  const { headerText, hidePositionBar, shrinkedHeaderText } = props
 
   return (
     <div className={classes.root}>
-      <NavBar headerText={headerText} hidePositionBar={hidePositionBar} />
+      <NavBar
+        headerText={headerText}
+        shrinkedHeaderText={shrinkedHeaderText}
+        hidePositionBar={hidePositionBar}
+      />
       <div className={classes.children}>{children}</div>
     </div>
   )

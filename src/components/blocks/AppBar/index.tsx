@@ -9,7 +9,6 @@ import { Link, withRouter } from 'react-router-dom'
 import { MIN_WIDTH, RATING_MODES } from 'src/config/constants'
 import PermIdentityRoundedIcon from '@material-ui/icons/PermIdentityRounded'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
-import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
 import { useSelector } from 'src/hooks'
@@ -165,11 +164,6 @@ const AppBarComponent = ({ history }) => {
       <SearchRoundedIcon />
     </IconButton>
   )
-  const SettingsButton = () => (
-    <IconButton onClick={() => history.push('/settings')}>
-      <SettingsOutlinedIcon />
-    </IconButton>
-  )
   const UserButton = () => (
     <>
       {!shouldShowUser && (
@@ -196,7 +190,6 @@ const AppBarComponent = ({ history }) => {
               <MenuIcon />
               <HeaderTitle />
               <SearchButton />
-              <SettingsButton />
               <UserButton />
             </div>
             <AppBarDivider />

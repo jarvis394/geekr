@@ -34,6 +34,8 @@ const LazyLoadImage = (props: LazyLoadImageProps) => {
         }}
         onClick={() => setOpen(true)}
         threshold={500}
+        width={props?.style?.width || 'auto'}
+        height={props?.style?.height || 'auto'}
         {...props}
       />
       {

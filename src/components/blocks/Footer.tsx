@@ -6,11 +6,14 @@ import { MIN_WIDTH as minWidth } from 'src/config/constants'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import { IconButton } from '@material-ui/core'
 import VKIcon from 'src/components/svg/VKIcon'
+import routes from 'src/config/routes'
+import { match } from 'path-to-regexp'
+import { withRouter } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(2),
-    marginBottom: 52
+    marginBottom: 52,
   },
   container: {
     padding: `${theme.spacing(3)}px ${theme.spacing(2)}px ${theme.spacing(
@@ -18,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     )}px`,
     textAlign: 'center',
     maxWidth: minWidth,
-    margin: '0 auto'
+    margin: '0 auto',
   },
   logo: {
     fontFamily: 'Google Sans',
@@ -39,12 +42,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Footer = () => {
+const Footer = ({ history }) => {
   const classes = useStyles()
+  const [isHidden, setHidden] = React.useState(false)
   const buttons = [
     { href: 'https://github.com/jarvis394/habra', icon: GitHubIcon },
     { href: 'https://vk.com/tarnatovski', icon: VKIcon },
   ]
+
+  const hideAppBarHandler = (location: Location) => {
+    const path = location.pathname
+    const route = routes.find((e) => match(e.path)(path))
+
+    if (!route.shouldShowAppBar) setHidden(true)
+    else setHidden(false)
+  }
+
+  React.useEffect(() => {
+    hideAppBarHandler(history.location)
+    const unlisten = history.listen(hideAppBarHandler)
+    return () => unlisten()
+  }, [history])
+
+  if (isHidden) return null
 
   return (
     <div className={classes.root}>
@@ -80,4 +100,4 @@ const Footer = () => {
   )
 }
 
-export default React.memo(Footer)
+export default withRouter(React.memo(Footer))

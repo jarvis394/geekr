@@ -135,7 +135,7 @@ export const PostItem = ({
   const { textHtml, imageUrl: leadImage } = leadData
   const title = parse(unparsedTitle)
   const reads = formatNumber(readingCount)
-   const favorites = formatNumber(
+  const favorites = formatNumber(
     Number(favoritesCount) + (isBookmarked ? 1 : 0)
   )
   const comments = formatNumber(Number(commentsCount))
