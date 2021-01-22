@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     background: theme.palette.background.paper,
     borderRadius: 0,
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(1.5),
   },
   padding: {
     padding: theme.spacing(2),

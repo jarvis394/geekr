@@ -106,7 +106,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     fontWeight: 500,
     color: theme.palette.text.secondary,
     fontSize: 16,
-    transform: 'translateX(16px) translateY(8px)',
+    transform: 'translateX(16px) translateY(10px)',
     letterHeight: '1.6',
     whiteSpace: 'nowrap',
     overflow: 'hidden',

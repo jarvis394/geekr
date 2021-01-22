@@ -31,7 +31,6 @@ import { THEMES, PaletteType, THEME_NAMES } from 'src/config/constants'
 import { TransitionProps } from '@material-ui/core/transitions'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
 import BackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
-import OutsidePage from 'src/components/blocks/OutsidePage'
 
 const useStyles = makeStyles((theme) => ({
   root: { width: '100%', height: '100%', maxWidth: '100vw' },
@@ -376,7 +375,6 @@ const Settings = () => {
   const classes = useStyles()
 
   return (
-    <OutsidePage headerText={'Настройки'} hidePositionBar>
       <Grid
         container
         direction="column"
@@ -390,7 +388,6 @@ const Settings = () => {
           </List>
         </Grid>
       </Grid>
-    </OutsidePage>
   )
 }
 

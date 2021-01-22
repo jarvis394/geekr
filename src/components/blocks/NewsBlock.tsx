@@ -14,7 +14,7 @@ import { Post } from 'src/interfaces'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(1.5),
     padding: theme.spacing(2),
     borderRadius: 0,
   },

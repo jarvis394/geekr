@@ -2,14 +2,19 @@ import * as React from 'react'
 import { Switch, Route as ReactRouterRoute } from 'react-router-dom'
 import routes from 'src/config/routes'
 import { Fade } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 
-const Route = ({ children, ...props }) => (
-  <ReactRouterRoute {...props}>
-    <Fade in>
-      <div>{children}</div>
+const Route = ({ children, key, ...props }) => {
+  return (
+    <Fade in key={key}>
+      <div>
+        <ReactRouterRoute {...props}>
+          {children}
+        </ReactRouterRoute>
+      </div>
     </Fade>
-  </ReactRouterRoute>
-)
+  )
+}
 
 const Router = () => (
   <Switch>
