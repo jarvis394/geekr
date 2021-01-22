@@ -13,6 +13,7 @@ import EmptySVG from 'src/components/svg/Empty'
 import { getHubsSearchResults } from 'src/store/actions/hubs'
 import { HUBS_PREFIX } from 'src/store/reducers/hubs/types'
 import Pagination from 'src/components/blocks/Pagination'
+import OutsidePage from 'src/components/blocks/OutsidePage'
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -112,7 +113,7 @@ const Hubs = () => {
   return fetchError ? (
     <ErrorComponent message={fetchError.error.message} />
   ) : (
-    <div>
+    <OutsidePage headerText={'Хабы'} hidePositionBar>
       <SearchBar inputRef={inputRef} onChange={search} />
       <List className={classes.list}>
         {isFetching && <Loader />}
@@ -142,7 +143,7 @@ const Hubs = () => {
           />
         </div>
       )}
-    </div>
+    </OutsidePage>
   )
 }
 

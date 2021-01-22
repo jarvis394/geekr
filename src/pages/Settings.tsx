@@ -375,19 +375,19 @@ const Settings = () => {
   const classes = useStyles()
 
   return (
-      <Grid
-        container
-        direction="column"
-        style={{ width: '100%', height: '100vh' }}
-      >
-        <Grid style={{ overflow: 'auto' }} item>
-          <List style={{ overflow: 'auto' }} className={classes.list}>
-            <ThemeMenuListItem />
-            <HiddenAuthorsListItem />
-            <HiddenCompaniesListItem />
-          </List>
-        </Grid>
+    <Grid
+      container
+      direction="column"
+      style={{ width: '100%', height: '100vh' }}
+    >
+      <Grid style={{ overflow: 'auto' }} item>
+        <List style={{ overflow: 'auto' }} className={classes.list}>
+          <ThemeMenuListItem />
+          <HiddenAuthorsListItem />
+          <HiddenCompaniesListItem />
+        </List>
       </Grid>
+    </Grid>
   )
 }
 

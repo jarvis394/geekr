@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     background:
       'linear-gradient(0deg,' +
-      theme.palette.background.default +
+      theme.palette.background.paper +
       ',transparent)',
     bottom: 0,
     pointerEvents: 'none',

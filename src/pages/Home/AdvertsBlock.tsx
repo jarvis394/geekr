@@ -51,16 +51,14 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 !important',
     // Do not change the scrollbar on mobile due to design flaws
     // If the -webkit-scrollbar is empty, any other scrollbar style will not be applied.
-    '&::-webkit-scrollbar': isMobile()
-      ? {}
-      : {
-          background: isDarkTheme(theme)
-            ? lighten(theme.palette.background.default, 0.03)
-            : theme.palette.background.paper,
-          border: '1px solid ' + darken(theme.palette.background.paper, 0.05),
-          borderRadius: 4,
-          height: 12,
-        },
+    '&::-webkit-scrollbar': !isMobile() && {
+      background: isDarkTheme(theme)
+        ? lighten(theme.palette.background.default, 0.03)
+        : theme.palette.background.paper,
+      border: '1px solid ' + darken(theme.palette.background.paper, 0.05),
+      borderRadius: 4,
+      height: 12,
+    },
     '&::-webkit-scrollbar-thumb': {
       minHeight: 12,
       borderRadius: 4,
@@ -88,7 +86,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 1.5),
     alignItems: 'start',
     backgroundPosition: 'center',
-    backgroundSize: 'contain',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
   },
   title: {
     fontFamily: 'Google Sans',

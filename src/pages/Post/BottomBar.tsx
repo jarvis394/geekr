@@ -7,7 +7,7 @@ import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import CommentsIocn from '@material-ui/icons/CommentRounded'
-import ShareIcon from '@material-ui/icons/Share'
+import { Icon28ShareOutline as ShareIcon } from '@vkontakte/icons'
 import formatNumber from 'src/utils/formatNumber'
 import { Post } from 'src/interfaces'
 import { Button, ButtonBase, fade, Typography } from '@material-ui/core'
@@ -199,7 +199,7 @@ const BottomBar = ({ post }: { post: Post }) => {
           className={classes.shareButton}
           variant="text"
           onClick={share}
-          startIcon={<ShareIcon />}
+          startIcon={<ShareIcon height={20} width={20} />}
         >
           Поделиться
         </Button>

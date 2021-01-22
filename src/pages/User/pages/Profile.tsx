@@ -21,6 +21,7 @@ export const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     flexDirection: 'column',
     padding: theme.spacing(2),
+    paddingBottom: 0,
   },
   mainBlock: {
     paddingRight: theme.spacing(2),

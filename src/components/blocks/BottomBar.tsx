@@ -62,9 +62,9 @@ const tabs: TabObject[] = [
   {
     label: 'Хабы',
     icon: <Icon28ServicesOutline width={24} height={24} />,
-    to: () => '/hubs/p/1',
-    match: /\/hubs\/p\/([0-9]+)\/?$/,
-    tab: 'hubs',
+    to: () => '/services',
+    match: /\/services\/?$/,
+    tab: 'services',
   },
   {
     label: 'Настройки',

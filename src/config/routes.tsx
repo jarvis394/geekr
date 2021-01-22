@@ -12,6 +12,7 @@ import Hubs from 'src/pages/Hubs/index'
 import User from 'src/pages/User/index'
 import { Redirect } from 'react-router'
 import Login from 'src/pages/Login'
+import Services from 'src/pages/Services'
 
 interface Route {
   path: string | string[]
@@ -21,6 +22,12 @@ interface Route {
 }
 
 const routes: Route[] = [
+  {
+    path: '/services',
+    component: <Services />,
+    title: 'Хабы',
+    shouldShowAppBar: true,
+  },
   {
     path: '/auth',
     component: <Login />,
