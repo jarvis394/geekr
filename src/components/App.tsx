@@ -6,12 +6,13 @@ import AppRouter from './Router'
 import AppBar from './blocks/AppBar'
 import { BrowserRouter as Router } from 'react-router-dom'
 import {
+  APP_BAR_HEIGHT,
+  BOTTOM_BAR_HEIGHT,
   chromeAddressBarHeight,
   MIN_WIDTH as minWidth,
 } from '../config/constants'
 import { lighten, darken } from '@material-ui/core/styles'
 import isMobile from 'is-mobile'
-import Footer from './blocks/Footer'
 import { useSelector } from 'src/hooks'
 import ScrollRestoration from 'react-scroll-restoration'
 import RouterTitleChange from './RouterTitleChange'
@@ -22,13 +23,13 @@ const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
 const useStyles = makeStyles(() => ({
   app: {
     display: 'flex',
-    minHeight: `calc(100vh - 48px - ${
+    minHeight: `calc(100vh - ${APP_BAR_HEIGHT}px - ${
       isMobile() ? chromeAddressBarHeight : 0
-    }px)`,
+    }px - ${BOTTOM_BAR_HEIGHT})`,
     borderRadius: 0,
     flexDirection: 'column',
     maxWidth: minWidth,
-    margin: '48px auto 0 auto',
+    margin: `${APP_BAR_HEIGHT}px auto ${BOTTOM_BAR_HEIGHT}px auto`,
   },
   root: {
     /** Disable blue highlight for links. Can be bad for accessibility. */
@@ -97,7 +98,6 @@ const App = (): React.ReactElement => {
           <div className={classes.app}>
             <AppRouter />
           </div>
-          <Footer />
         </Router>
       </SnackbarProvider>
     </ThemeProvider>

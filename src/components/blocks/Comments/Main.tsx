@@ -7,8 +7,9 @@ import { getComments } from '../../../api'
 import Comment from './Comment'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Fade from '@material-ui/core/Fade'
-import { Comment as IComment } from 'src/interfaces'
+import { Comment as IComment, Post } from 'src/interfaces'
 import isInViewport from 'src/utils/isInViewport'
+import OutsidePage from '../OutsidePage'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   nothingText: {
     marginTop: theme.spacing(2),
+    marginLeft: theme.spacing(2),
   },
   errorText: {
     color: theme.palette.error.main,
@@ -50,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 const MIN_COMMENTS_SLICE = 25
 const SCROLL_OFFSET = 256
 
-const Comments = ({ postId }) => {
+const Comments = ({ post }: { post: Post }) => {
   const [comments, setComments] = useState<IComment[]>()
   const [commentsSliceEnd, setCommentsSliceEnd] = useState<number>(
     MIN_COMMENTS_SLICE
@@ -111,7 +113,7 @@ const Comments = ({ postId }) => {
       setError(null)
 
       try {
-        const d = await getComments(postId)
+        const d = await getComments(post.id)
         const commentsData = d.comments
         const parsedComments = parseComments(commentsData)
         const flat = flatten(parsedComments)
@@ -123,40 +125,46 @@ const Comments = ({ postId }) => {
         return setError('Произошла ошибка при запросе')
       }
     }
-    get()
+    post && get()
 
     return () => window.removeEventListener('scroll', onScroll)
-  }, [postId, onScroll, flatten])
+  }, [post, onScroll, flatten])
 
   if (fetchError)
     return <Typography className={classes.errorText}>{fetchError}</Typography>
 
   return (
-    <div className={classes.root}>
-      <Container className={classes.headerContainer}>
-        <Typography className={classes.header}>
-          Комментарии&nbsp;
-          {commentsLength && (
-            <Fade in={commentsLength !== 0}>
-              <span className={classes.commentsNumber}>{commentsLength}</span>
-            </Fade>
+    <OutsidePage
+      hidePositionBar
+      headerText="Комментарии"
+      shrinkedHeaderText={post?.titleHtml}
+    >
+      <div className={classes.root}>
+        <Container className={classes.headerContainer}>
+          <Typography className={classes.header}>
+            Комментарии&nbsp;
+            {commentsLength && (
+              <Fade in={commentsLength !== 0}>
+                <span className={classes.commentsNumber}>{commentsLength}</span>
+              </Fade>
+            )}
+          </Typography>
+        </Container>
+        <div className={classes.comments}>
+          {commentsLength === 0 && (
+            <Typography className={classes.nothingText}>Пусто!</Typography>
           )}
-        </Typography>
-      </Container>
-      <div className={classes.comments}>
-        {commentsLength === 0 && (
-          <Typography className={classes.nothingText}>Пусто!</Typography>
-        )}
-        {comments &&
-          comments
-            .slice(0, commentsSliceEnd)
-            .map((node) => <Comment key={node.id} data={node} />)}
-        {commentsLength !== 0 && (!comments || isLoadingNewComments) && (
-          <LinearProgress className={classes.progress} />
-        )}
-        <div ref={commentsEndRef} />
+          {comments &&
+            comments
+              .slice(0, commentsSliceEnd)
+              .map((node) => <Comment key={node.id} data={node} />)}
+          {commentsLength !== 0 && (!comments || isLoadingNewComments) && (
+            <LinearProgress className={classes.progress} />
+          )}
+          <div ref={commentsEndRef} />
+        </div>
       </div>
-    </div>
+    </OutsidePage>
   )
 }
 

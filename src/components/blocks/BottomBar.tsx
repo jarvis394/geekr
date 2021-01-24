@@ -13,6 +13,7 @@ import { Icon20HomeOutline } from '@vkontakte/icons'
 import { Icon28ServicesOutline } from '@vkontakte/icons'
 import { Icon28SettingsOutline } from '@vkontakte/icons'
 import { Icon28Profile } from '@vkontakte/icons'
+import { BOTTOM_BAR_HEIGHT } from 'src/config/constants'
 
 interface TabObject {
   label: string
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     background: theme.palette.background.default,
-    height: 52,
+    height: BOTTOM_BAR_HEIGHT,
   },
   item: {
     fontFamily: 'Google Sans',

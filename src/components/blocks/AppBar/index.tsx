@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -6,7 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import Avatar from '@material-ui/core/Avatar'
 import { Link, withRouter } from 'react-router-dom'
-import { MIN_WIDTH, RATING_MODES } from 'src/config/constants'
+import { APP_BAR_HEIGHT, MIN_WIDTH, RATING_MODES } from 'src/config/constants'
 import PermIdentityRoundedIcon from '@material-ui/icons/PermIdentityRounded'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
@@ -15,31 +16,48 @@ import { useSelector } from 'src/hooks'
 import { FetchingState, UserExtended } from 'src/interfaces'
 import { useDispatch } from 'react-redux'
 import { getMe } from 'src/store/actions/user'
-import { Divider } from '@material-ui/core'
+import { Divider, useTheme } from '@material-ui/core'
 import blend from 'src/utils/blendColors'
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
 import Drawer from './Drawer'
 import routes from 'src/config/routes'
 import { match } from 'path-to-regexp'
 
+interface StyleProps {
+  scrollProgress: number
+  appBarColor: string
+  shouldChangeColors: boolean
+}
+
+const makeAppBarBackgroundColor = ({
+  scrollProgress,
+  appBarColor,
+  shouldChangeColors,
+  theme,
+}) => {
+  if (shouldChangeColors)
+    return blend(
+      theme.palette.background.default,
+      theme.palette.background.paper,
+      scrollProgress
+    )
+  else return appBarColor
+}
+
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: (progress) =>
-      blend(
-        theme.palette.background.default,
-        theme.palette.background.paper,
-        progress as number
-      ),
+    backgroundColor: (props: StyleProps) =>
+      makeAppBarBackgroundColor({ ...props, theme }),
     color: theme.palette.text.primary,
     position: 'fixed',
-    height: 49,
+    height: APP_BAR_HEIGHT + 1,
     flexGrow: 1,
-    transitionDuration: '0.5s',
+    transition: '225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
   },
   toolbar: {
     margin: 'auto',
     minHeight: 'unset',
-    height: 48,
+    height: APP_BAR_HEIGHT,
     padding: 0,
     maxWidth: MIN_WIDTH,
     width: '100%',
@@ -91,13 +109,23 @@ const useStyles = makeStyles((theme) => ({
 const dividerStyle = { width: '100%' }
 
 const AppBarComponent = ({ history }) => {
-  const state = useSelector((state) => state.app.appbar)
-  const [scrollProgress, setScrollProgress] = React.useState(
-    state.shouldChangeColors ? Math.min(window.pageYOffset / 256, 1) : 1
+  const theme = useTheme()
+  const currentRoute = routes.find((e) =>
+    match(e.path)(history.location.pathname)
   )
-  const [isDrawerOpen, setDrawerOpen] = React.useState(false)
-  const [isHidden, setHidden] = React.useState(false)
-  const classes = useStyles(scrollProgress)
+  const [shouldChangeColors, setShouldChangeColors] = useState(
+    currentRoute.shouldAppBarChangeColors || false
+  )
+  const [appBarColor, setAppBarColor] = useState(
+    (currentRoute.appBarColor && currentRoute.appBarColor(theme)) ||
+      theme.palette.background.default
+  )
+  const [scrollProgress, setScrollProgress] = useState(
+    shouldChangeColors ? Math.min(window.pageYOffset / 256, 1) : 1
+  )
+  const [isDrawerOpen, setDrawerOpen] = useState(false)
+  const [isHidden, setHidden] = useState(false)
+  const classes = useStyles({ scrollProgress, appBarColor, shouldChangeColors })
   const dispatch = useDispatch()
   const modeName = useSelector((state) => state.home.mode)
   const userState = useSelector((state) => state.user.profile.state)
@@ -113,26 +141,40 @@ const AppBarComponent = ({ history }) => {
     const progress = Math.min(position / 256, 1)
     setScrollProgress(progress)
   }
-  const hideAppBarHandler = (location: Location) => {
-    const path = location.pathname
-    const route = routes.find((e) => match(e.path)(path))
+  const routeChangeHandler = useCallback(
+    (location: Location) => {
+      const path = location.pathname
+      const route = routes.find((e) => match(e.path)(path))
+      const shouldChangeAppBarColor = !!route.appBarColor
 
-    if (!route.shouldShowAppBar) setHidden(true)
-    else setHidden(false)
-  }
+      setScrollProgress(Math.min(window.pageYOffset / 256, 1))
+      setHidden(!route.shouldShowAppBar)
+      setShouldChangeColors(route.shouldAppBarChangeColors || false)
+      shouldChangeAppBarColor && setAppBarColor(route.appBarColor(theme))
+    },
+    [theme]
+  )
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (shouldFetchUser && !shouldShowUser) dispatch(getMe(token))
-    if (state.shouldChangeColors && !isHidden)
+    if (shouldChangeColors && !isHidden)
       window.addEventListener('scroll', () => scrollCallback())
     return () => window.removeEventListener('scroll', scrollCallback)
-  }, [dispatch, token, state, shouldFetchUser, shouldShowUser, isHidden])
+  }, [
+    dispatch,
+    token,
+    shouldChangeColors,
+    routeChangeHandler,
+    shouldFetchUser,
+    shouldShowUser,
+    isHidden,
+  ])
 
-  React.useEffect(() => {
-    hideAppBarHandler(history.location)
-    const unlisten = history.listen(hideAppBarHandler)
+  useEffect(() => {
+    routeChangeHandler(history.location)
+    const unlisten = history.listen(routeChangeHandler)
     return () => unlisten()
-  }, [history])
+  }, [history, routeChangeHandler])
 
   // Do not render the AppBar if it is hidden by the route
   if (isHidden) return null

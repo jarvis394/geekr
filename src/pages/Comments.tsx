@@ -45,7 +45,7 @@ const CommentsPage = () => {
     <>
       {!post && <PostSkeleton />}
       {post && <PostItem style={{ marginBottom: 0 }} post={post} />}
-      <Comments postId={id} />
+      <Comments post={post} />
     </>
   )
 }

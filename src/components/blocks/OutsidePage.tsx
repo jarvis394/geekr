@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 import BackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
 import { useHistory } from 'react-router'
-import { MIN_WIDTH } from 'src/config/constants'
+import { APP_BAR_HEIGHT, MIN_WIDTH } from 'src/config/constants'
 import isMobile from 'is-mobile'
 import { chromeAddressBarHeight } from 'src/config/constants'
 import { useScrollTrigger } from 'src/hooks'
@@ -89,7 +89,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     width: '100%',
     alignItems: 'center',
     transform: 'translateZ(0)',
-    height: 49,
+    height: APP_BAR_HEIGHT + 1,
   },
   dividerHolder: {
     display: 'flex',

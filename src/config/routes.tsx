@@ -13,12 +13,15 @@ import User from 'src/pages/User/index'
 import { Redirect } from 'react-router'
 import Login from 'src/pages/Login'
 import Services from 'src/pages/Services'
+import { Theme } from '@material-ui/core'
 
 interface Route {
   path: string | string[]
   component: MemoExoticComponent<() => React.ReactElement> | React.ReactElement
   title?: string
-  shouldShowAppBar: boolean
+  shouldShowAppBar?: boolean
+  appBarColor?: (theme: Theme) => string
+  shouldAppBarChangeColors?: boolean
 }
 
 const routes: Route[] = [
@@ -27,77 +30,105 @@ const routes: Route[] = [
     component: <Services />,
     title: 'Хабы',
     shouldShowAppBar: true,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/auth',
     component: <Login />,
     title: 'Авторизация',
     shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/post/:id/comments',
     component: <CommentsPage />,
     shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/post/:id',
     component: <Post />,
     shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/settings',
     component: <Settings />,
     title: 'Настройки',
     shouldShowAppBar: true,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/habra-about',
     component: <AboutPage />,
     title: 'О проекте',
     shouldShowAppBar: false,
+    shouldAppBarChangeColors: true,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: ['/search', '/search/p/:page'],
     component: <Search />,
     title: 'Поиск',
     shouldShowAppBar: true,
+    shouldAppBarChangeColors: true,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/hubs/p/:page',
     component: <Hubs />,
     title: 'Хабы',
     shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/user/:login/favorites/comments/:page',
     component: <User path="favoritesComments" />,
     shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/user/:login/favorites/articles/:page',
     component: <User path="favoritesArticles" />,
     shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/user/:login/comments/:page',
     component: <User path="comments" />,
     shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/user/:login/articles/:page',
     component: <User path="articles" />,
     shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/user/:login',
     component: <User path="profile" />,
     shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/news/p/:page',
     component: <News />,
     title: 'Новости',
     shouldShowAppBar: true,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.paper,
   },
   {
     path: [
@@ -115,17 +146,22 @@ const routes: Route[] = [
     ],
     component: <Home />,
     shouldShowAppBar: true,
+    shouldAppBarChangeColors: true,
   },
   {
     path: '/',
     component: <Redirect to={`${getCachedMode().to}/p/1`} />,
     shouldShowAppBar: true,
+    shouldAppBarChangeColors: true,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/:404*',
     component: <NotFound />,
     title: '404',
     shouldShowAppBar: true,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
   },
 ]
 

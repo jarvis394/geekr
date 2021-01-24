@@ -11,6 +11,8 @@ export const API_TOKEN_URL = 'https://jarvis394-backend.ml/habra/'
 export const MIN_WIDTH = 900
 
 export const POST_IMAGE_HEIGHT = 212
+export const BOTTOM_BAR_HEIGHT = 52
+export const APP_BAR_HEIGHT = 48
 
 export const RATING_MODES: ModeObject[] = [
   {
