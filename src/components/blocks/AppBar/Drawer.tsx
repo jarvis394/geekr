@@ -156,7 +156,13 @@ const Drawer = ({ isOpen, setOpen }) => {
           >
             habra.
           </Link>
-          <Grid spacing={1} container alignItems="center" justify="center">
+          <Grid
+            style={{ width: '100%' }}
+            spacing={1}
+            container
+            alignItems="center"
+            justify="center"
+          >
             {buttons.map((e, i) => (
               <Grid item key={i}>
                 <a
