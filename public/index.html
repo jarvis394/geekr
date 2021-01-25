@@ -49,6 +49,11 @@
         }
       }(window.location));
     </script>
+    <script>
+      !function(){if('PerformanceLongTaskTiming' in window){var g=window.__tti={e:[]};
+      g.o=new PerformanceObserver(function(l){g.e=g.e.concat(l.getEntries())});
+      g.o.observe({entryTypes:['longtask']})}}();
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

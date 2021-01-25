@@ -16,18 +16,20 @@ import { GA_ID_STRING } from 'src/config/constants'
 
 ReactGA.initialize(GA_ID_STRING)
 
-// const callback = list => {
-//   list.getEntries().forEach(entry => {
-//     ReactGA.timing({
-//       category: 'Load Performace',
-//       variable: 'Server Latency',
-//       value: entry.responseStart - entry.requestStart 
-//     })
-//   })
-// }
+const callback = (list) => {
+  list.getEntries().forEach((entry) => {
+    console.log(entry)
+    ReactGA.timing({
+      category: 'Performance Metrics',
+      variable: 'TTI',
+      label: 'TTI',
+      value: entry.domInteractive,
+    })
+  })
+}
 
-// const observer = new PerformanceObserver(callback);
-// observer.observe({ entryTypes: ['navigation'] })
+const observer = new PerformanceObserver(callback)
+observer.observe({ entryTypes: ['navigation'] })
 
 dayjs.locale('ru')
 dayjs.extend(relativeTimePlugin)

@@ -45,6 +45,7 @@
     "rgbaster": "^2.1.1",
     "serve": "^11.3.2",
     "src": "^1.1.2",
+    "tti-polyfill": "^0.2.2",
     "workbox-build": "^5.1.2"
   },
   "scripts": {
@@ -87,6 +88,7 @@
     "@types/react-redux": "^7.1.11",
     "@types/react-router-dom": "^5.1.4",
     "@types/react-syntax-highlighter": "^11.0.5",
+    "@types/tti-polyfill": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "cra-append-sw": "^2.7.0",
