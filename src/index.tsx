@@ -11,6 +11,23 @@ import calendarPlugin from 'dayjs/plugin/calendar'
 import updateLocalePlugin from 'dayjs/plugin/updateLocale'
 import 'react-lazy-load-image-component/src/effects/opacity.css'
 import 'dayjs/locale/ru'
+import ReactGA from 'react-ga'
+import { GA_ID_STRING } from 'src/config/constants'
+
+ReactGA.initialize(GA_ID_STRING)
+
+// const callback = list => {
+//   list.getEntries().forEach(entry => {
+//     ReactGA.timing({
+//       category: 'Load Performace',
+//       variable: 'Server Latency',
+//       value: entry.responseStart - entry.requestStart 
+//     })
+//   })
+// }
+
+// const observer = new PerformanceObserver(callback);
+// observer.observe({ entryTypes: ['navigation'] })
 
 dayjs.locale('ru')
 dayjs.extend(relativeTimePlugin)
