@@ -1,5 +1,4 @@
 import React, { MemoExoticComponent } from 'react'
-import Home from 'src/pages/Home/index'
 import Post from 'src/pages/Post'
 import Settings from 'src/pages/Settings'
 import Search from 'src/pages/Search'
@@ -12,8 +11,9 @@ import Hubs from 'src/pages/Hubs/index'
 import User from 'src/pages/User/index'
 import { Redirect } from 'react-router'
 import Login from 'src/pages/Login'
-import Services from 'src/pages/Services'
 import { Theme } from '@material-ui/core'
+import Services from 'src/pages/Services'
+import Home from 'src/pages/Home/index'
 
 interface Route {
   path: string | string[]

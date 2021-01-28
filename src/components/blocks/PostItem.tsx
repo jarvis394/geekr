@@ -35,11 +35,13 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     background: theme.palette.background.paper,
     borderRadius: 0,
+    display: 'flex',
+    flexDirection: 'column',
     marginBottom: theme.spacing(1.5),
   },
   padding: {
-    padding: theme.spacing(2),
-    width: '100%',
+    padding: theme.spacing(2)
+
   },
   imageHolder: {
     maxWidth: '100%',
@@ -99,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   avatarContainer: {
-    width: '100%',
+    // width: '100%',
     padding: theme.spacing(2),
     textDecoration: 'none !important',
     paddingBottom: (hasImage) => (hasImage ? theme.spacing(2) : 0),
@@ -130,9 +132,8 @@ export const PostItem = ({
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
   const ts = dayjs(post.timePublished).calendar().toLowerCase()
   const { login, avatarUrl } = post.author
-  const { titleHtml: unparsedTitle, id, statistics, leadData } = post
+  const { titleHtml: unparsedTitle, id, statistics, postFirstImage } = post
   const { readingCount, favoritesCount, commentsCount, score: sc } = statistics
-  const { textHtml, imageUrl: leadImage } = leadData
   const title = parse(unparsedTitle)
   const reads = formatNumber(readingCount)
   const favorites = formatNumber(
@@ -164,12 +165,8 @@ export const PostItem = ({
       to: '/post/' + id + '/comments',
     },
   ]
-  const imageURLRegEx = /<img[^>]+src="?([^"\s]+)"?\s*/g
-  const imageURLRegExResults = imageURLRegEx.exec(textHtml)
-  const postFisrtImage = imageURLRegExResults
-    ? imageURLRegExResults[1]
-    : leadImage
-  const classes = useStyles(!!postFisrtImage)
+  
+  const classes = useStyles(!!postFirstImage)
   const isCorporative = post.isCorporative
   const companyAlias = isCorporative
     ? post.hubs.find((e) => e.type === 'corporative').alias
@@ -202,7 +199,7 @@ export const PostItem = ({
 
   return (
     <Paper elevation={0} className={classes.paper} style={style}>
-      <Grid container>
+     
         <Link to={'/user/' + login} className={classes.avatarContainer}>
           <Grid alignItems="center" container direction="row">
             <UserAvatar
@@ -218,27 +215,27 @@ export const PostItem = ({
             </Typography>
           </Grid>
         </Link>
-        <Grid item className={classes.imageHolder}>
+        <div className={classes.imageHolder}>
           <Link style={{ display: 'flex', width: '100%' }} to={'/post/' + id}>
-            {postFisrtImage && (
+            {postFirstImage && (
               <LazyLoadImage
-                src={postFisrtImage}
+                src={postFirstImage}
                 alt={'Post header image'}
                 className={classes.image}
               />
             )}
           </Link>
-        </Grid>
+        </div>
         <div style={{ paddingTop: 0 }} className={classes.padding}>
-          <Grid item xs={12}>
+          
             <Link
               className={classes.postLink + ' ' + classes.noDeco}
               to={'/post/' + id}
             >
               <Typography className={classes.postTitle}>{title}</Typography>
             </Link>
-          </Grid>
-          <Grid item xs={12}>
+          
+          <div>
             {post.postLabels.map((e, i) => (
               <Chip
                 label={postLabels[e].text}
@@ -249,7 +246,7 @@ export const PostItem = ({
                 style={{ marginRight: 8, marginTop: 8 }}
               />
             ))}
-          </Grid>
+          </div>
           <Grid
             className={classes.postBottomRow}
             container
@@ -291,7 +288,7 @@ export const PostItem = ({
             ))}
           </Grid>
         </div>
-      </Grid>
+     
     </Paper>
   )
 }

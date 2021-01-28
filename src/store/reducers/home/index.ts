@@ -2,6 +2,7 @@ import { HOME_PREFIX, ADVERTS_PREFIX } from './types'
 import { RATING_MODES } from 'src/config/constants'
 import { Advert, Posts } from 'src/interfaces'
 import getCachedMode from 'src/utils/getCachedMode'
+import getPostFirstImage from 'src/utils/getPostFirstImage'
 
 interface ModeObject {
   pages: Record<number, Omit<Posts, 'pagesCount'>>
@@ -46,6 +47,10 @@ export default (state = initialState, { type, payload }) => {
 
     case HOME_PREFIX + 'FETCH_FULFILLED': {
       const { page, pagesCount, data, mode } = payload
+      
+      for (const id in data.articleRefs) {
+        data.articleRefs[id].postFirstImage = getPostFirstImage(data.articleRefs[id])
+      }
 
       state.data[mode].pages[page] = data
       state.data[mode].pagesCount = pagesCount

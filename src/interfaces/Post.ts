@@ -45,5 +45,7 @@ export default interface Post {
     originalAuthorName: string
     originalUrl: string
   }
+  /** Contains an URL of the first image in text preview */
+  postFirstImage?: string
   votesEnabled: boolean
 }

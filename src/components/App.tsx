@@ -18,8 +18,6 @@ import ScrollRestoration from 'react-scroll-restoration'
 import RouterTitleChange from './RouterTitleChange'
 import { SnackbarProvider } from 'notistack'
 import BottomBar from './blocks/BottomBar'
-import ttiPolyfill from 'tti-polyfill'
-import ReactGA from 'react-ga'
 
 const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
 const useStyles = makeStyles(() => ({
@@ -27,7 +25,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     minHeight: `calc(100vh - ${APP_BAR_HEIGHT}px - ${
       isMobile() ? chromeAddressBarHeight : 0
-    }px - ${BOTTOM_BAR_HEIGHT})`,
+    }px - ${BOTTOM_BAR_HEIGHT}px)`,
     borderRadius: 0,
     flexDirection: 'column',
     maxWidth: minWidth,
@@ -81,15 +79,6 @@ const App = (): React.ReactElement => {
   const storeTheme = useSelector((state) => state.settings.theme)
   const theme = createMuiTheme(storeTheme)
   const classes = useStyles(theme)
-
-  ttiPolyfill.getFirstConsistentlyInteractive().then((data) => {
-    console.log(data)
-    ReactGA.timing({
-      category: 'Performance Metrics',
-      variable: 'TTI',
-      value: data,
-    })
-  })
 
   // Set root classes
   document.body.className = classes.root

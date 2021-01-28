@@ -11,9 +11,10 @@ import ReactGA from 'react-ga'
 const Route = ({ children, key, ...props }) => {
   const location = useLocation()
 
-  React.useEffect(() => {
+   React.useEffect(() => {
     ReactGA.set({ page: location.pathname })
     ReactGA.pageview(location.pathname)
+    
   }, [location.pathname])
 
   return (
@@ -27,7 +28,7 @@ const Route = ({ children, key, ...props }) => {
 
 const Router = () => (
   <Switch>
-    {routes.map(({ path, component }, i) => (
+     {routes.map(({ path, component }, i) => (
       <Route key={i} exact path={path}>
         {component}
       </Route>
