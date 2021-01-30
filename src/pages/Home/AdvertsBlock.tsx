@@ -4,6 +4,7 @@ import {
   ButtonBase,
   GridList,
   GridListTile,
+  Fade,
   useTheme,
 } from '@material-ui/core'
 import {
@@ -109,6 +110,7 @@ const useStyles = makeStyles((theme) => ({
   tile: {
     textDecoration: 'none',
     color: theme.palette.text.primary,
+    '-webkit-tap-highlight-color': 'transparent !important'
   },
 }))
 
@@ -141,6 +143,7 @@ const AdvertsBlock = () => {
                 padding: `0 ${i === data.length - 1 ? '16px' : '0'} 0 16px`,
               }}
             >
+              <Fade in>
               <ButtonBase
                 className={classes.button}
                 style={{
@@ -155,6 +158,7 @@ const AdvertsBlock = () => {
                 <Typography className={classes.title}>{e.title}</Typography>
                 <Typography className={classes.label}>{e.label}</Typography>
               </ButtonBase>
+              </Fade>
             </GridListTile>
           ))}
         {fetching && <AdvertsBlockSkeleton />}
