@@ -43,7 +43,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     flexGrow: 1,
     transform: ({ isShrinked }: StyleProps) =>
       `translateZ(0) translateY(${isShrinked ? -16 : 0}px)`,
-    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
+    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1)',
   },
   toolbar: {
     margin: 'auto',
@@ -81,6 +81,7 @@ const useAppBarStyles = makeStyles((theme) => ({
           : 'rgba(0, 0, 0, .1)',
       height: '100%',
       content: '""',
+      transform: 'translateZ(0)',
     },
   },
   content: {
@@ -99,14 +100,14 @@ const useAppBarStyles = makeStyles((theme) => ({
   divider: {
     width: ({ isShrinked }: StyleProps) =>
       isShrinked ? '100%' : 'calc(100% - 32px)',
-    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1) 5ms',
+    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1)',
   },
   shrinkedHeaderTitle: {
     fontFamily: 'Google Sans',
     fontWeight: 500,
     color: theme.palette.text.secondary,
     fontSize: 16,
-    transform: 'translateX(16px) translateY(8px)',
+    transform: 'translateX(16px) translateY(9px)',
     letterHeight: '1.6',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
