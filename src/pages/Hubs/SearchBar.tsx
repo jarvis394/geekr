@@ -30,7 +30,7 @@ const SearchBar = ({ inputRef = null, onChange = null }) => {
     <form onSubmit={(e) => onSubmit(e)}>
       <Paper elevation={0} className={classes.search}>
         <InputBase
-          autoFocus
+
           name="q"
           onChange={onChange}
           inputRef={inputRef}

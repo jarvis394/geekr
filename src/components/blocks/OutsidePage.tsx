@@ -23,7 +23,7 @@ interface StyleProps {
 const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
-    minHeight: '100%',
+    minHeight: '100%'
   },
   children: {
     maxWidth: MIN_WIDTH,

@@ -40,8 +40,9 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: theme.shape.borderRadius,
       wordBreak: 'break-word',
     },
-    '& div.scrollable-table': {
+    '& div.table, div.scrollable-table': {
       overflow: 'auto',
+      marginTop: theme.spacing(2)
     },
     '& table': {
       width: '100%',
@@ -90,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
   },
   syntaxHighlighter: {
     margin: 0,
+    marginTop: theme.spacing(2),
     display: 'block',
     tabSize: 4,
     overflow: 'auto',

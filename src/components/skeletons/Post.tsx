@@ -3,18 +3,24 @@ import Skeleton from '@material-ui/lab/Skeleton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
-
+import { POST_IMAGE_HEIGHT } from 'src/config/constants'
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(2),
-    marginBottom: '15px',
+     marginBottom: '15px',
     background: theme.palette.background.paper,
     borderRadius: 0,
+  },
+  padding: {
+    padding: theme.spacing(2)
   },
   skeleton: {
     backgroundColor: theme.palette.action.hover,
     borderRadius: 4,
   },
+  skeletonImage: {
+    borderRadius: 0,
+    backgroundColor: theme.palette.action.hover
+  }
 }))
 
 const PostSkeleton = () => {
@@ -27,7 +33,8 @@ const PostSkeleton = () => {
           direction="row"
           alignItems="center"
           container
-          style={{ marginBottom: 14, width: '100%' }}
+          className={classes.padding}
+          style={{ width: '100%' }}
         >
           <Skeleton
             variant="circle"
@@ -43,6 +50,15 @@ const PostSkeleton = () => {
             height={20}
           />
         </Grid>
+        <Grid item xs={12}>
+          <Skeleton
+            variant="rect"
+            width="100%"
+            className={classes.skeletonImage}
+            height={POST_IMAGE_HEIGHT}
+          />
+        </Grid>
+        <Grid container className={classes.padding}>
         <Grid item xs={12}>
           <Skeleton
             variant="rect"
@@ -74,6 +90,7 @@ const PostSkeleton = () => {
                 />
               </Grid>
             ))}
+        </Grid>
         </Grid>
       </Grid>
     </Paper>

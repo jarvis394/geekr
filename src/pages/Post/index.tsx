@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   hubs: {
     wordBreak: 'break-word',
     width: '100%',
+    marginBottom: theme.spacing(0.5)
   },
   hubLink: {
     color: theme.palette.text.hint,
@@ -75,12 +76,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   title: {
     fontWeight: 800,
     fontFamily: 'Google Sans',
-    fontSize: 28,
-    lineHeight: '34px',
+    fontSize: 24,
+    lineHeight: '32px',
     wordBreak: 'break-word',
     hyphens: 'auto',
     marginBottom: theme.spacing(1),
-    marginTop: theme.spacing(1.5),
+    marginTop: theme.spacing(2),
   },
   commentsButton: {
     marginTop: theme.spacing(2),
