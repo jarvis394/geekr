@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 48,
     height: 48,
     marginTop: theme.spacing(1),
+    width: '100%'
   },
   buttonContainer: {
     display: 'flex',

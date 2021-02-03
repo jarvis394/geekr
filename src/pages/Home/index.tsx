@@ -85,7 +85,7 @@ const Home = () => {
 
   return (
     <>
-      <AdvertsBlock />
+      {currentPage === 1 && <AdvertsBlock />}
       <Switcher setMode={setMode} mode={mode} handleClick={handleSwitcher} />
       <List className={classes.root}>
         {isFetching &&
