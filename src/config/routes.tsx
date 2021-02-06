@@ -49,6 +49,13 @@ const routes: Route[] = [
     appBarColor: (theme) => theme.palette.background.default,
   },
   {
+    path: '/company/:alias/blog/:id',
+    component: <Post />,
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
+  },
+  {
     path: '/post/:id',
     component: <Post />,
     shouldShowAppBar: false,

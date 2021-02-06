@@ -110,7 +110,7 @@ const useStyles = makeStyles((theme) => ({
   tile: {
     textDecoration: 'none',
     color: theme.palette.text.primary,
-    '-webkit-tap-highlight-color': 'transparent !important'
+    '-webkit-tap-highlight-color': 'transparent !important',
   },
 }))
 
@@ -144,20 +144,20 @@ const AdvertsBlock = () => {
               }}
             >
               <Fade in>
-              <ButtonBase
-                className={classes.button}
-                style={{
-                  backgroundImage: `linear-gradient(to right, ${fade(
-                    theme.palette.common.black,
-                    0.7
-                  )}, ${fade(theme.palette.common.black, 0.5)}), url(${
-                    e.imageUrl
-                  })`,
-                }}
-              >
-                <Typography className={classes.title}>{e.title}</Typography>
-                <Typography className={classes.label}>{e.label}</Typography>
-              </ButtonBase>
+                <ButtonBase
+                  className={classes.button}
+                  style={{
+                    backgroundImage: `linear-gradient(to right, ${fade(
+                      theme.palette.common.black,
+                      0.7
+                    )}, ${fade(theme.palette.common.black, 0.5)}), url(${
+                      e.imageUrl
+                    })`,
+                  }}
+                >
+                  <Typography className={classes.title}>{e.title}</Typography>
+                  <Typography className={classes.label}>{e.label}</Typography>
+                </ButtonBase>
               </Fade>
             </GridListTile>
           ))}

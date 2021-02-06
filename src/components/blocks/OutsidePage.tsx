@@ -23,7 +23,7 @@ interface StyleProps {
 const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
-    minHeight: '100%'
+    minHeight: '100%',
   },
   children: {
     maxWidth: MIN_WIDTH,
@@ -107,7 +107,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     fontWeight: 500,
     color: theme.palette.text.secondary,
     fontSize: 16,
-    transform: 'translateX(16px) translateY(9px)',
+    transform: 'translateX(16px) translateY(8px)',
     letterHeight: '1.6',
     whiteSpace: 'nowrap',
     overflow: 'hidden',

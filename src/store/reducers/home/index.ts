@@ -47,9 +47,11 @@ export default (state = initialState, { type, payload }) => {
 
     case HOME_PREFIX + 'FETCH_FULFILLED': {
       const { page, pagesCount, data, mode } = payload
-      
+
       for (const id in data.articleRefs) {
-        data.articleRefs[id].postFirstImage = getPostFirstImage(data.articleRefs[id])
+        data.articleRefs[id].postFirstImage = getPostFirstImage(
+          data.articleRefs[id]
+        )
       }
 
       state.data[mode].pages[page] = data

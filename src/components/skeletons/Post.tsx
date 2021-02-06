@@ -6,12 +6,12 @@ import Paper from '@material-ui/core/Paper'
 import { POST_IMAGE_HEIGHT } from 'src/config/constants'
 const useStyles = makeStyles((theme) => ({
   root: {
-     marginBottom: '15px',
+    marginBottom: '15px',
     background: theme.palette.background.paper,
     borderRadius: 0,
   },
   padding: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   skeleton: {
     backgroundColor: theme.palette.action.hover,
@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
   },
   skeletonImage: {
     borderRadius: 0,
-    backgroundColor: theme.palette.action.hover
-  }
+    backgroundColor: theme.palette.action.hover,
+  },
 }))
 
 const PostSkeleton = () => {
@@ -59,38 +59,43 @@ const PostSkeleton = () => {
           />
         </Grid>
         <Grid container className={classes.padding}>
-        <Grid item xs={12}>
-          <Skeleton
-            variant="rect"
-            width="100%"
-            className={classes.skeleton}
-            height={14}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Skeleton
-            variant="rect"
-            width="75%"
-            className={classes.skeleton}
-            height={14}
-            style={{ marginTop: 16 }}
-          />
-        </Grid>
-        <Grid container style={{ width: '100%' }} direction="row">
-          {Array(4)
-            .fill(null)
-            .map((_, i) => (
-              <Grid justify="center" style={{ width: '25%' }} container key={i}>
-                <Skeleton
-                  variant="rect"
-                  width={64}
-                  style={{ marginTop: 20 }}
-                  className={classes.skeleton}
-                  height={20}
-                />
-              </Grid>
-            ))}
-        </Grid>
+          <Grid item xs={12}>
+            <Skeleton
+              variant="rect"
+              width="100%"
+              className={classes.skeleton}
+              height={14}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Skeleton
+              variant="rect"
+              width="75%"
+              className={classes.skeleton}
+              height={14}
+              style={{ marginTop: 16 }}
+            />
+          </Grid>
+          <Grid container style={{ width: '100%' }} direction="row">
+            {Array(4)
+              .fill(null)
+              .map((_, i) => (
+                <Grid
+                  justify="center"
+                  style={{ width: '25%' }}
+                  container
+                  key={i}
+                >
+                  <Skeleton
+                    variant="rect"
+                    width={64}
+                    style={{ marginTop: 20 }}
+                    className={classes.skeleton}
+                    height={20}
+                  />
+                </Grid>
+              ))}
+          </Grid>
         </Grid>
       </Grid>
     </Paper>

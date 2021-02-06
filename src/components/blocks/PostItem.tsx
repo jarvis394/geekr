@@ -40,8 +40,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1.5),
   },
   padding: {
-    padding: theme.spacing(2)
-
+    padding: theme.spacing(2),
   },
   imageHolder: {
     maxWidth: '100%',
@@ -165,12 +164,15 @@ export const PostItem = ({
       to: '/post/' + id + '/comments',
     },
   ]
-  
+
   const classes = useStyles(!!postFirstImage)
   const isCorporative = post.isCorporative
   const companyAlias = isCorporative
     ? post.hubs.find((e) => e.type === 'corporative').alias
     : null
+  const postLink = isCorporative
+    ? '/company/' + companyAlias + '/blog/' + id
+    : '/post/' + id
 
   // Return troll text for hidden post
   if (
@@ -186,7 +188,7 @@ export const PostItem = ({
         <Typography className={classes.trollText}>Тут был тролль</Typography>
         <Link
           className={classes.trollLink}
-          to={'/post/' + id}
+          to={postLink}
           style={{ display: 'flex', alignItems: 'center' }}
         >
           <Typography className={classes.trollLink}>
@@ -199,96 +201,90 @@ export const PostItem = ({
 
   return (
     <Paper elevation={0} className={classes.paper} style={style}>
-     
-        <Link to={'/user/' + login} className={classes.avatarContainer}>
-          <Grid alignItems="center" container direction="row">
-            <UserAvatar
-              src={avatarUrl}
-              login={login}
-              className={classes.postAvatar}
+      <Link to={'/user/' + login} className={classes.avatarContainer}>
+        <Grid alignItems="center" container direction="row">
+          <UserAvatar
+            src={avatarUrl}
+            login={login}
+            className={classes.postAvatar}
+          />
+          <Typography className={classes.postAuthor} variant="caption">
+            {login}
+          </Typography>
+          <Typography className={classes.postTs} variant="caption">
+            {ts}
+          </Typography>
+        </Grid>
+      </Link>
+      <div className={classes.imageHolder}>
+        <Link style={{ display: 'flex', width: '100%' }} to={postLink}>
+          {postFirstImage && (
+            <LazyLoadImage
+              src={postFirstImage}
+              alt={'Post header image'}
+              className={classes.image}
             />
-            <Typography className={classes.postAuthor} variant="caption">
-              {login}
-            </Typography>
-            <Typography className={classes.postTs} variant="caption">
-              {ts}
-            </Typography>
-          </Grid>
+          )}
         </Link>
-        <div className={classes.imageHolder}>
-          <Link style={{ display: 'flex', width: '100%' }} to={'/post/' + id}>
-            {postFirstImage && (
-              <LazyLoadImage
-                src={postFirstImage}
-                alt={'Post header image'}
-                className={classes.image}
-              />
-            )}
-          </Link>
+      </div>
+      <div style={{ paddingTop: 0 }} className={classes.padding}>
+        <Link className={classes.postLink + ' ' + classes.noDeco} to={postLink}>
+          <Typography className={classes.postTitle}>{title}</Typography>
+        </Link>
+
+        <div>
+          {post.postLabels.map((e, i) => (
+            <Chip
+              label={postLabels[e].text}
+              variant="outlined"
+              color="primary"
+              size="small"
+              key={i}
+              style={{ marginRight: 8, marginTop: 8 }}
+            />
+          ))}
         </div>
-        <div style={{ paddingTop: 0 }} className={classes.padding}>
-          
-            <Link
-              className={classes.postLink + ' ' + classes.noDeco}
-              to={'/post/' + id}
+        <Grid
+          className={classes.postBottomRow}
+          container
+          style={{ width: '100%' }}
+        >
+          {bottomRow.map((item, i) => (
+            <Grid
+              container
+              direction="row"
+              alignItems="center"
+              justify="center"
+              style={{
+                width: '25%',
+                cursor: item.isButton || item.to ? 'pointer' : 'inherit',
+              }}
+              key={i}
+              to={item.to}
+              color={item.isActive ? 'primary' : 'default'}
+              component={item.to ? Link : Grid}
+              onClick={item.action || null}
+              className={classes.postBottomRowItem}
             >
-              <Typography className={classes.postTitle}>{title}</Typography>
-            </Link>
-          
-          <div>
-            {post.postLabels.map((e, i) => (
-              <Chip
-                label={postLabels[e].text}
-                variant="outlined"
-                color="primary"
-                size="small"
-                key={i}
-                style={{ marginRight: 8, marginTop: 8 }}
+              <item.icon
+                className={classes.postBottomRowItemIcon}
+                color={item.isActive ? 'primary' : 'inherit'}
               />
-            ))}
-          </div>
-          <Grid
-            className={classes.postBottomRow}
-            container
-            style={{ width: '100%' }}
-          >
-            {bottomRow.map((item, i) => (
-              <Grid
-                container
-                direction="row"
-                alignItems="center"
-                justify="center"
-                style={{
-                  width: '25%',
-                  cursor: item.isButton || item.to ? 'pointer' : 'inherit',
-                }}
-                key={i}
-                to={item.to}
-                color={item.isActive ? 'primary' : 'default'}
-                component={item.to ? Link : Grid}
-                onClick={item.action || null}
-                className={classes.postBottomRowItem}
-              >
-                <item.icon
-                  className={classes.postBottomRowItemIcon}
-                  color={item.isActive ? 'primary' : 'inherit'}
-                />
-                <div style={{ fontSize: 12, fontWeight: 600 }}>
-                  {item.coloredText ? (
-                    <GreenRedNumber
-                      number={item.count}
-                      defaultClass={classes.postBottomRowItem}
-                      style={{ fontSize: 12, fontWeight: 600 }}
-                    />
-                  ) : (
-                    item.count
-                  )}
-                </div>
-              </Grid>
-            ))}
-          </Grid>
-        </div>
-     
+              <div style={{ fontSize: 12, fontWeight: 600 }}>
+                {item.coloredText ? (
+                  <GreenRedNumber
+                    number={item.count}
+                    defaultClass={classes.postBottomRowItem}
+                    style={{ fontSize: 12, fontWeight: 600 }}
+                  />
+                ) : (
+                  item.count
+                )}
+              </div>
+            </Grid>
+          ))}
+        </Grid>
+      </div>
     </Paper>
   )
 }

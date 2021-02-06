@@ -1,26 +1,26 @@
 import * as React from 'react'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { fade, makeStyles } from '@material-ui/core/styles'
 import { useParams } from 'react-router'
-import { getPost } from '../../api'
+import { getPost, getCompany } from 'src/store/actions/post'
 import { Link } from 'react-router-dom'
-import PostViewSkeleton from '../../components/skeletons/PostView'
-import ErrorComponent from '../../components/blocks/Error'
+import PostViewSkeleton from 'src/components/skeletons/PostView'
+import ErrorComponent from 'src/components/blocks/Error'
 import dayjs from 'dayjs'
-import FormattedText from '../../components/formatters/FormattedText'
+import FormattedText from 'src/components/formatters/FormattedText'
 import { Theme } from '@material-ui/core/styles'
-import { Post as IPost, Company as ICompany } from 'src/interfaces'
 import UserAvatar from 'src/components/blocks/UserAvatar'
 import BottomBar from './BottomBar'
 import SimilarPosts from './SimilarPosts'
 import TopDayPosts from './TopDayPosts'
-import getCompany from 'src/api/getCompany'
 import { Chip, Link as MUILink } from '@material-ui/core'
 import { POST_LABELS as postLabels } from 'src/config/constants'
 import OutsidePage from 'src/components/blocks/OutsidePage'
+import { useSelector } from 'src/hooks'
+import { useDispatch } from 'react-redux'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   hubs: {
     wordBreak: 'break-word',
     width: '100%',
-    marginBottom: theme.spacing(0.5)
+    marginBottom: theme.spacing(0.5),
   },
   hubLink: {
     color: theme.palette.text.hint,
@@ -104,18 +104,24 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }))
 
+interface Params {
+  id: string
+  alias?: string
+}
+
 const Post = () => {
-  const [post, setPost] = useState<IPost>()
-  const [company, setCompany] = useState<ICompany>()
-  const [fetchError, _setError] = useState<string>()
-  const { id } = useParams<{ id: string }>()
-  const classes = useStyles()
-  const [shouldShowCompanyHeader, setCompanyHeaderState] = useState<boolean>(
-    post?.isCorporative || true
+  const dispatch = useDispatch()
+  const company = useSelector((store) => store.post.company.data)
+  const companyFetchError = useSelector(
+    (store) => store.post.company.fetchError
   )
+  const post = useSelector((store) => store.post.post.data)
+  const fetchError = useSelector((store) => store.post.post.fetchError)
+  const { id: strigifiedId, alias: companyAlias } = useParams<Params>()
+  const id = Number(strigifiedId)
+  const classes = useStyles()
   const isTranslated = post && post.postLabels.some((e) => e === 'translation')
-  const shouldShowContents =
-    post && (shouldShowCompanyHeader ? post && company : post)
+  const shouldShowContents = post && (companyAlias ? post && company : post)
   const labels =
     shouldShowContents &&
     post.postLabels.map((e, i) => {
@@ -209,45 +215,16 @@ const Post = () => {
     <PostViewSkeleton />
   )
 
-  const setError = (e: string) => {
-    setPost(null)
-    return _setError(e)
-  }
-
-  // Get the post data
+  // Start fetching post data
   useEffect(() => {
-    const get = async () => {
-      // Reset error state
-      setError(null)
-
-      try {
-        const data = await getPost(id)
-        setPost(data)
-        setCompanyHeaderState(data.isCorporative)
-      } catch (e) {
-        if (e?.statusCode === 404) return setError('Статья не найдена')
-        else return setError(e.message)
-      }
-    }
-    get()
-  }, [id])
-
-  // Get company data if post is corporative
-  useEffect(() => {
-    const get = async () => {
-      const hub = post.hubs.find((e) => e.type === 'corporative')
-      try {
-        hub && setCompany((await getCompany(hub.alias)).data)
-      } catch (e) {
-        console.warn(`Cannot get company data ${hub.alias}:`, e.message)
-        setCompanyHeaderState(false)
-      }
-    }
-    if (post && post.isCorporative) get()
-  }, [post])
+    dispatch(getPost(id))
+    companyAlias && dispatch(getCompany(companyAlias))
+  }, [dispatch, id, companyAlias])
 
   if (post) document.title = post.titleHtml
   if (fetchError) return <ErrorComponent message={fetchError} />
+  if (companyFetchError)
+    console.error("Couldn't fetch company data:", companyFetchError)
 
   return (
     <OutsidePage headerText={post?.titleHtml}>

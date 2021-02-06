@@ -28,7 +28,9 @@ export default (state = initialState, { type, payload }) => {
       const { page, pagesCount, data } = payload
 
       for (const id in data.articleRefs) {
-        data.articleRefs[id].postFirstImage = getPostFirstImage(data.articleRefs[id])
+        data.articleRefs[id].postFirstImage = getPostFirstImage(
+          data.articleRefs[id]
+        )
       }
 
       state.data.pages[page] = {

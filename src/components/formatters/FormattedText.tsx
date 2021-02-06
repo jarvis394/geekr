@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     },
     '& div.table, div.scrollable-table': {
       overflow: 'auto',
-      marginTop: theme.spacing(2)
+      marginTop: theme.spacing(2),
     },
     '& table': {
       width: '100%',

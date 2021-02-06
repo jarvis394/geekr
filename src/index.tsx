@@ -16,7 +16,6 @@ import { GA_ID_STRING } from 'src/config/constants'
 
 ReactGA.initialize(GA_ID_STRING)
 
-
 dayjs.locale('ru')
 dayjs.extend(relativeTimePlugin)
 dayjs.extend(calendarPlugin)
