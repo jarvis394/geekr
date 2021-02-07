@@ -6,22 +6,20 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import Avatar from '@material-ui/core/Avatar'
-import { Link, withRouter } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { APP_BAR_HEIGHT, MIN_WIDTH, RATING_MODES } from 'src/config/constants'
 import PermIdentityRoundedIcon from '@material-ui/icons/PermIdentityRounded'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
-import { useSelector } from 'src/hooks'
+import { useRoute, useSelector } from 'src/hooks'
 import { FetchingState, UserExtended } from 'src/interfaces'
 import { useDispatch } from 'react-redux'
 import { getMe } from 'src/store/actions/user'
-import { Divider, useTheme } from '@material-ui/core'
+import { Divider, fade, useTheme } from '@material-ui/core'
 import blend from 'src/utils/blendColors'
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
 import Drawer from './Drawer'
-import routes from 'src/config/routes'
-import { match } from 'path-to-regexp'
 
 interface StyleProps {
   scrollProgress: number
@@ -52,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
     height: APP_BAR_HEIGHT + 1,
     flexGrow: 1,
-    transition: '225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
   },
   toolbar: {
     margin: 'auto',
@@ -63,24 +60,20 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   link: {
-    textDecoration: 'none',
     color: theme.palette.text.primary,
     fontWeight: 800,
     height: '100%',
     alignItems: 'center',
     display: 'flex',
     fontFamily: 'Google Sans',
+    cursor: 'pointer',
+    '-webkit-tap-highlight-color': fade(theme.palette.background.paper, 0.3),
+    userSelect: 'none',
   },
   offline: {
     color: theme.palette.text.disabled,
     marginLeft: theme.spacing(1),
     display: 'flex',
-    alignItems: 'center',
-  },
-  linkTypography: {
-    flexGrow: 1,
-    display: 'flex',
-    height: '100%',
     alignItems: 'center',
   },
   menuIcon: {
@@ -104,20 +97,24 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: '100%',
   },
+  headerTitleHolder: {
+    flexGrow: 1,
+    display: 'flex',
+  },
 }))
 
 const dividerStyle = { width: '100%' }
 
-const AppBarComponent = ({ history }) => {
+const AppBarComponent = () => {
   const theme = useTheme()
-  const currentRoute = routes.find((e) =>
-    match(e.path)(history.location.pathname)
-  )
+  const history = useHistory()
+  const location = useLocation()
+  const route = useRoute()
   const [shouldChangeColors, setShouldChangeColors] = useState(
-    currentRoute.shouldAppBarChangeColors || false
+    route.shouldAppBarChangeColors || false
   )
   const [appBarColor, setAppBarColor] = useState(
-    (currentRoute.appBarColor && currentRoute.appBarColor(theme)) ||
+    (route.appBarColor && route.appBarColor(theme)) ||
       theme.palette.background.default
   )
   const [scrollProgress, setScrollProgress] = useState(
@@ -142,23 +139,28 @@ const AppBarComponent = ({ history }) => {
     setScrollProgress(progress)
   }
   const routeChangeHandler = useCallback(
-    (location: Location) => {
-      const path = location.pathname
-      const route = routes.find((e) => match(e.path)(path))
-      const shouldChangeAppBarColor = !!route.appBarColor
+    (r) => {
+      const shouldChangeAppBarColor = !!r.appBarColor
 
       setScrollProgress(Math.min(window.pageYOffset / 256, 1))
-      setHidden(!route.shouldShowAppBar)
-      setShouldChangeColors(route.shouldAppBarChangeColors || false)
-      shouldChangeAppBarColor && setAppBarColor(route.appBarColor(theme))
+      setHidden(!r.shouldShowAppBar)
+      setShouldChangeColors(r.shouldAppBarChangeColors || false)
+      shouldChangeAppBarColor && setAppBarColor(r.appBarColor(theme))
     },
     [theme]
   )
+  const goHome = () => {
+    window.scrollTo(0, 0)
+    if (location.pathname !== `${mode?.to}/p/1`) {
+      history.push(mode ? `${mode.to}/p/1` : '/')
+    }
+  }
 
   useEffect(() => {
     if (shouldFetchUser && !shouldShowUser) dispatch(getMe(token))
     if (shouldChangeColors && !isHidden)
       window.addEventListener('scroll', () => scrollCallback())
+    routeChangeHandler(route)
     return () => window.removeEventListener('scroll', scrollCallback)
   }, [
     dispatch,
@@ -168,59 +170,11 @@ const AppBarComponent = ({ history }) => {
     shouldFetchUser,
     shouldShowUser,
     isHidden,
+    route,
   ])
-
-  useEffect(() => {
-    routeChangeHandler(history.location)
-    const unlisten = history.listen(routeChangeHandler)
-    return () => unlisten()
-  }, [history, routeChangeHandler])
 
   // Do not render the AppBar if it is hidden by the route
   if (isHidden) return null
-
-  const MenuIcon = () => (
-    <IconButton
-      onClick={() => setDrawerOpen(true)}
-      className={classes.menuIcon}
-    >
-      <MenuRoundedIcon />
-    </IconButton>
-  )
-  const HeaderTitle = () => (
-    <Typography variant="h6" className={classes.linkTypography}>
-      <Link
-        to={mode ? `${mode.to}/p/1` : '/'}
-        onClick={() => window.scrollTo(0, 0)}
-        className={classes.link}
-      >
-        habra.
-        <Offline>
-          <WifiOffRoundedIcon className={classes.offline} />
-        </Offline>
-      </Link>
-    </Typography>
-  )
-  const SearchButton = () => (
-    <IconButton onClick={() => history.push('/search')}>
-      <SearchRoundedIcon />
-    </IconButton>
-  )
-  const UserButton = () => (
-    <>
-      {!shouldShowUser && (
-        <IconButton onClick={() => (token ? '' : history.push('/auth'))}>
-          <PermIdentityRoundedIcon />
-        </IconButton>
-      )}
-      {shouldShowUser && (
-        <IconButton onClick={() => history.push('/user/' + userData.login)}>
-          <Avatar className={classes.avatar} src={userData.avatar} />
-        </IconButton>
-      )}
-    </>
-  )
-  const AppBarDivider = () => <Divider style={dividerStyle} />
 
   return (
     <>
@@ -229,12 +183,43 @@ const AppBarComponent = ({ history }) => {
         <Toolbar className={classes.toolbar}>
           <div className={classes.marginContainer}>
             <div className={classes.content}>
-              <MenuIcon />
-              <HeaderTitle />
-              <SearchButton />
-              <UserButton />
+              <IconButton
+                onClick={() => setDrawerOpen(true)}
+                className={classes.menuIcon}
+              >
+                <MenuRoundedIcon />
+              </IconButton>
+              <div className={classes.headerTitleHolder}>
+                <Typography
+                  onClick={() => goHome()}
+                  variant="h6"
+                  className={classes.link}
+                >
+                  habra.
+                  <Offline>
+                    <WifiOffRoundedIcon className={classes.offline} />
+                  </Offline>
+                </Typography>
+              </div>
+              <IconButton onClick={() => history.push('/search')}>
+                <SearchRoundedIcon />
+              </IconButton>
+              {!shouldShowUser && (
+                <IconButton
+                  onClick={() => (token ? '' : history.push('/auth'))}
+                >
+                  <PermIdentityRoundedIcon />
+                </IconButton>
+              )}
+              {shouldShowUser && (
+                <IconButton
+                  onClick={() => history.push('/user/' + userData.login)}
+                >
+                  <Avatar className={classes.avatar} src={userData.avatar} />
+                </IconButton>
+              )}
             </div>
-            <AppBarDivider />
+            <Divider style={dividerStyle} />
           </div>
         </Toolbar>
       </AppBar>
@@ -242,4 +227,4 @@ const AppBarComponent = ({ history }) => {
   )
 }
 
-export default React.memo(withRouter(AppBarComponent))
+export default React.memo(AppBarComponent)

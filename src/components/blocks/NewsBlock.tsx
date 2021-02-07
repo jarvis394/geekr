@@ -127,9 +127,22 @@ const NewsBlock = () => {
     dispatch(getNewsPromo())
   }, [dispatch])
 
+  const GoToNewsButton = () => (
+    <Button
+      size="small"
+      component={Link}
+      color="primary"
+      to="/news/p/1"
+      className={classes.link}
+      endIcon={<RightIcon />}
+    >
+      Все новости
+    </Button>
+  )
+
   return (
     <Paper className={classes.root} elevation={0}>
-      <Typography className={classes.header}>Новости</Typography>
+      <div className={classes.header}>Новости</div>
       {fetchError && (
         <Typography className={classes.error}>
           Произошла ошибка при выполнении запроса
@@ -147,16 +160,7 @@ const NewsBlock = () => {
           )
           .map((e, i) => <NewsItem data={e} key={i} />)}
       <Box className={classes.linkBox}>
-        <Button
-          size="small"
-          component={Link}
-          color="primary"
-          to="/news/p/1"
-          className={classes.link}
-          endIcon={<RightIcon />}
-        >
-          Все новости
-        </Button>
+        <GoToNewsButton />
       </Box>
     </Paper>
   )

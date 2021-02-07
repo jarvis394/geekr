@@ -3,17 +3,16 @@ import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import { Paper } from '@material-ui/core'
-import { useLocation, withRouter } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import getCachedMode from 'src/utils/getCachedMode'
-import routes from 'src/config/routes'
-import { match } from 'path-to-regexp'
+import { BOTTOM_BAR_HEIGHT } from 'src/config/constants'
+import { useRoute } from 'src/hooks'
 
 import { Icon28Newsfeed } from '@vkontakte/icons'
 import { Icon20HomeOutline } from '@vkontakte/icons'
 import { Icon28ServicesOutline } from '@vkontakte/icons'
 import { Icon28SettingsOutline } from '@vkontakte/icons'
 import { Icon28Profile } from '@vkontakte/icons'
-import { BOTTOM_BAR_HEIGHT } from 'src/config/constants'
 
 interface TabObject {
   label: string
@@ -87,10 +86,12 @@ const findPathValue = (path: string): number => {
   return res
 }
 
-const BottomBar = ({ history }) => {
+const BottomBar = () => {
   const classes = useStyles()
+  const route = useRoute()
+  const history = useHistory()
   const location = useLocation()
-  const [isHidden, setHidden] = React.useState(false)
+  const [isShown, setShown] = React.useState(false)
   const [value, setValue] = useState<number>(findPathValue(location.pathname))
   const handleChange = (
     _event: React.ChangeEvent<unknown>,
@@ -99,28 +100,22 @@ const BottomBar = ({ history }) => {
     setValue(newValue)
   }
 
-  const hideAppBarHandler = (location: Location) => {
-    const path = location.pathname
-    const route = routes.find((e) => match(e.path)(path))
-
-    if (!route.shouldShowAppBar) setHidden(true)
-    else setHidden(false)
+  const go = (e: TabObject) => {
+    if (history.location.pathname !== e.to()) {
+      history.push(e.to())
+    }
   }
 
-  useEffect(() => setValue(findPathValue(location.pathname)), [
-    location.pathname,
-  ])
+  const hideAppBarHandler = (r) => {
+    setShown(r.shouldShowAppBar)
+  }
 
   useEffect(() => {
-    hideAppBarHandler(history.location)
-    const unlisten = history.listen(hideAppBarHandler)
-    return () => unlisten()
-  }, [history])
+    hideAppBarHandler(route)
+    setValue(findPathValue(location.pathname))
+  }, [location.pathname, route])
 
-  // Do not render BottomBar if it is hidden by the route
-  if (isHidden) return null
-
-  return (
+  return isShown ? (
     <Paper elevation={2} className={classes.root}>
       <BottomNavigation
         value={value}
@@ -134,12 +129,12 @@ const BottomBar = ({ history }) => {
             classes={{ label: classes.item, selected: classes.selected }}
             label={e.label}
             icon={e.icon}
-            onClick={() => history.push(e.to())}
+            onClick={() => go(e)}
           />
         ))}
       </BottomNavigation>
     </Paper>
-  )
+  ) : null
 }
 
-export default withRouter(React.memo(BottomBar))
+export default React.memo(BottomBar)

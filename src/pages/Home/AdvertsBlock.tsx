@@ -121,6 +121,12 @@ const AdvertsBlock = () => {
   const data = useSelector((store) => store.home.adverts.data)
   const fetching = useSelector((store) => store.home.adverts.fetching)
   const error = useSelector((store) => store.home.adverts.error)
+  const getButtonStyles = (imageUrl: string) => ({
+    backgroundImage: `linear-gradient(to right, ${fade(
+      theme.palette.common.black,
+      0.7
+    )}, ${fade(theme.palette.common.black, 0.5)}), url(${imageUrl})`,
+  })
 
   useEffect(() => {
     !data && dispatch(getAdverts())
@@ -130,7 +136,7 @@ const AdvertsBlock = () => {
 
   return (
     <div className={classes.root}>
-      <Typography className={classes.header}>Мегапосты</Typography>
+      <div className={classes.header}>Мегапосты</div>
       <GridList cellHeight={148} className={classes.buttonsHolder} cols={1.1}>
         {data &&
           data.map((e, i) => (
@@ -146,14 +152,7 @@ const AdvertsBlock = () => {
               <Fade in>
                 <ButtonBase
                   className={classes.button}
-                  style={{
-                    backgroundImage: `linear-gradient(to right, ${fade(
-                      theme.palette.common.black,
-                      0.7
-                    )}, ${fade(theme.palette.common.black, 0.5)}), url(${
-                      e.imageUrl
-                    })`,
-                  }}
+                  style={getButtonStyles(e.imageUrl)}
                 >
                   <Typography className={classes.title}>{e.title}</Typography>
                   <Typography className={classes.label}>{e.label}</Typography>

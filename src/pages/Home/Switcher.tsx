@@ -7,11 +7,13 @@ import {
   Button,
   ButtonBase,
   ButtonGroup,
+  IconButton,
   SwipeableDrawer,
 } from '@material-ui/core'
 import { ModeObject } from 'src/interfaces'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import SwitcherButtons from './SwitcherButtons'
+import { Icon24Cancel } from '@vkontakte/icons'
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -48,33 +50,39 @@ const useStyles = makeStyles((theme) => ({
     color: '#fff',
   },
   drawerRoot: {
-    borderRadius: 14,
-    border: '1px solid ' + theme.palette.divider,
-    marginBottom: theme.spacing(1),
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
+    WebkitBorderTopLeftRadius: '14px',
+    WebkitBorderTopRightRadius: '14px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   drawer: {
     margin: theme.spacing(0, 0, 2, 0),
   },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    height: 56,
+  },
+  drawerHeaderIcon: {
+    marginRight: 4,
+    marginLeft: -12,
+  },
   drawerHeaderText: {
     fontFamily: 'Google Sans',
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 500,
-    marginBottom: theme.spacing(2),
-    marginTop: theme.spacing(2),
+    width: '100%',
+    textAlign: 'center',
+    position: 'absolute',
+    left: 0,
+    zIndex: -1,
   },
-  dragLine: {
-    width: 48,
-    height: 5,
-    background: theme.palette.divider,
-    borderRadius: 10,
-    position: 'relative',
-    marginTop: theme.spacing(1.5),
-    display: 'block',
-    marginRight: 'auto',
-    marginLeft: 'auto',
-    marginBottom: -5,
+  drawerTitleText: {
+    fontFamily: 'Google Sans',
+    fontSize: 16,
+    fontWeight: 500,
+    marginBottom: theme.spacing(1.5),
+    color: theme.palette.text.secondary,
   },
   applyButton: {
     height: 40,
@@ -155,9 +163,16 @@ const Switcher = ({ handleClick, mode, setMode }) => {
         elevation={0}
       >
         <Container className={classes.drawer}>
-          <span className={classes.dragLine} />
-
-          <Typography className={classes.drawerHeaderText}>
+          <div className={classes.drawerHeader}>
+            <IconButton
+              className={classes.drawerHeaderIcon}
+              onClick={() => setOpen(false)}
+            >
+              <Icon24Cancel />
+            </IconButton>
+            <Typography className={classes.drawerHeaderText}>Период</Typography>
+          </div>
+          <Typography className={classes.drawerTitleText}>
             Сначала показывать
           </Typography>
           <ButtonGroup disableElevation color="primary">
@@ -175,7 +190,10 @@ const Switcher = ({ handleClick, mode, setMode }) => {
           {/** Block for 'new' showMode */}
           {showMode === 'new' && (
             <>
-              <Typography className={classes.drawerHeaderText}>
+              <Typography
+                className={classes.drawerTitleText}
+                style={{ marginTop: 16 }}
+              >
                 Порог рейтинга
               </Typography>
               <SwitcherButtons
@@ -189,7 +207,10 @@ const Switcher = ({ handleClick, mode, setMode }) => {
           {/** Block for 'top' showMode */}
           {showMode === 'top' && (
             <>
-              <Typography className={classes.drawerHeaderText}>
+              <Typography
+                className={classes.drawerTitleText}
+                style={{ marginTop: 16 }}
+              >
                 Период
               </Typography>
               <SwitcherButtons

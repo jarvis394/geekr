@@ -13,6 +13,7 @@ import 'react-lazy-load-image-component/src/effects/opacity.css'
 import 'dayjs/locale/ru'
 import ReactGA from 'react-ga'
 import { GA_ID_STRING } from 'src/config/constants'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 ReactGA.initialize(GA_ID_STRING)
 
@@ -32,7 +33,9 @@ dayjs.updateLocale('ru', {
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </Provider>,
   document.getElementById('root')
 )

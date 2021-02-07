@@ -87,10 +87,8 @@ const useStyles = makeStyles((theme) => ({
         score === 0
           ? theme.palette.background.paper
           : score > 0
-          ? // eslint-disable-next-line indent
-            theme.palette.success.main
-          : // eslint-disable-next-line indent
-            theme.palette.error.main,
+          ? theme.palette.success.main
+          : theme.palette.error.main,
         0.7
       ),
   },

@@ -1,21 +1,12 @@
 import * as React from 'react'
-import { withRouter } from 'react-router-dom'
-import routes from 'src/config/routes'
-import { match } from 'path-to-regexp'
+import { useRoute } from 'src/hooks'
 
-const RouterTitleChange = ({ history }) => {
-  React.useEffect(() => {
-    const unlisten = history.listen((location: Location) => {
-      const path = location.pathname
-      const route = routes.find((e) => match(e.path)(path))
-      const newTitle = route.title ? route.title + ' | habra.' : 'habra.'
-      if (document.title !== newTitle) document.title = newTitle
-    })
-
-    return () => unlisten()
-  }, [history])
+const RouterTitleChange = () => {
+  const route = useRoute()
+  const newTitle = route.title ? route.title + ' | habra.' : 'habra.'
+  if (document.title !== newTitle) document.title = newTitle
 
   return null
 }
 
-export default React.memo(withRouter(RouterTitleChange))
+export default React.memo(RouterTitleChange)
