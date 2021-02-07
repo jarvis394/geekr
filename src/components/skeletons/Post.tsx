@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper'
 import { POST_IMAGE_HEIGHT } from 'src/config/constants'
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginBottom: '15px',
+    marginBottom: '12px',
     background: theme.palette.background.paper,
     borderRadius: 0,
   },
@@ -64,7 +64,7 @@ const PostSkeleton = () => {
               variant="rect"
               width="100%"
               className={classes.skeleton}
-              height={14}
+              height={18}
             />
           </Grid>
           <Grid item xs={12}>
@@ -72,7 +72,7 @@ const PostSkeleton = () => {
               variant="rect"
               width="75%"
               className={classes.skeleton}
-              height={14}
+              height={18}
               style={{ marginTop: 16 }}
             />
           </Grid>
@@ -91,7 +91,7 @@ const PostSkeleton = () => {
                     width={64}
                     style={{ marginTop: 20 }}
                     className={classes.skeleton}
-                    height={20}
+                    height={21}
                   />
                 </Grid>
               ))}
