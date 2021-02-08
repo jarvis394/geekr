@@ -36,7 +36,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   hubLink: {
     color: theme.palette.text.hint,
-    fontWeight: 500,
+    fontFamily: 'Roboto',
+    fontWeight: 400,
+    fontSize: 13,
     transitionDuration: '100ms',
     textDecoration: 'none',
     '&:hover': {
@@ -56,14 +58,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   author: {
     color: theme.palette.primary.light,
     marginRight: theme.spacing(1),
-    fontWeight: 500,
-    fontSize: 14,
+    fontWeight: 700,
+    fontSize: 13,
     textDecoration: 'none',
   },
   ts: {
     color: theme.palette.text.hint,
-    fontWeight: 500,
-    fontSize: 14,
+    fontWeight: 400,
+    fontSize: 13,
   },
   text: {
     marginTop: theme.spacing(3),
@@ -81,7 +83,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     wordBreak: 'break-word',
     hyphens: 'auto',
     marginBottom: theme.spacing(1),
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1.5),
   },
   commentsButton: {
     marginTop: theme.spacing(2),
