@@ -55,6 +55,18 @@ const useStyles = makeStyles((theme) => ({
       lineHeight: '1.5',
       minWidth: 100,
     },
+    '& h1, h2': {
+      fontSize: 20,
+      lineHeight: '26px'
+    },
+    '& h3': {
+      fontSize: 18,
+      lineHeight: '23px'
+    },
+    '& h4, h5, h6': {
+      fontSize: 16,
+      lineHeight: '20px'
+    },
     '& h1, h2, h3, h4, h5, h6': {
       margin: theme.spacing(2) + 'px 0 0 0',
     },
