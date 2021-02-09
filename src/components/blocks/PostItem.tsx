@@ -20,11 +20,20 @@ import { useSelector } from 'src/hooks'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
 import { Chip } from '@material-ui/core'
 import { POST_LABELS as postLabels } from 'src/config/constants'
+import { LazyLoadComponent } from 'react-lazy-load-image-component'
 
 const ld = { lighten, darken }
 const useStyles = makeStyles((theme) => ({
   noDeco: {
     textDecoration: 'none !important',
+  },
+  placeholder: {
+    height: '395px',
+    width: '100vw',
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: theme.palette.background.paper,
+    marginBottom: 12
   },
   postLink: {
     color: theme.palette.text.primary,
@@ -132,7 +141,8 @@ export const PostItem = ({
   const ts = dayjs(post.timePublished).calendar().toLowerCase()
   const { login, avatarUrl } = post.author
   const { titleHtml: unparsedTitle, id, statistics, postFirstImage } = post
-  const { readingCount, favoritesCount, commentsCount, score: sc } = statistics
+  const { readingCount, favoritesCount, commentsCount, score: unformattedScore } = statistics
+  const score = formatNumber(unformattedScore)
   const title = parse(unparsedTitle)
   const reads = formatNumber(readingCount)
   const favorites = formatNumber(
@@ -142,8 +152,9 @@ export const PostItem = ({
   const bottomRow = [
     {
       icon: ThumbsUpDownIcon,
-      count: sc,
+      count: score,
       coloredText: true,
+      number: unformattedScore
     },
     {
       icon: VisibilityIcon,
@@ -198,8 +209,14 @@ export const PostItem = ({
         </Link>
       </Paper>
     )
+    
+    
+  const PostItemPlaceholder = () => (
+    <span className={classes.placeholder} />
+  )
 
   return (
+    <LazyLoadComponent placeholder={<PostItemPlaceholder />}>
     <Paper elevation={0} className={classes.paper} style={style}>
       <Link to={'/user/' + login} className={classes.avatarContainer}>
         <Grid alignItems="center" container direction="row">
@@ -273,7 +290,7 @@ export const PostItem = ({
               <div style={{ fontSize: 12, fontWeight: 600 }}>
                 {item.coloredText ? (
                   <GreenRedNumber
-                    number={item.count}
+                    number={item.number}
                     defaultClass={classes.postBottomRowItem}
                     style={{ fontSize: 12, fontWeight: 600 }}
                   />
@@ -286,6 +303,7 @@ export const PostItem = ({
         </Grid>
       </div>
     </Paper>
+    </LazyLoadComponent>
   )
 }
 

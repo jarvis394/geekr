@@ -60,9 +60,9 @@ const Home = () => {
     ) : null
 
   const postsComponents =
-    posts &&
+    posts && 
     posts.articleIds.map((id, i) => (
-      <PostItem post={posts.articleRefs[id]} key={i} />
+       <PostItem key={id} post={posts.articleRefs[id]} />
     ))
 
   const handlePagination = (_, i) => {
@@ -89,7 +89,7 @@ const Home = () => {
       <Switcher setMode={setMode} mode={mode} handleClick={handleSwitcher} />
       <List className={classes.root}>
         {isFetching &&
-          [...new Array(7)].map((_, i) => <PostSkeleton key={i} />)}
+          [...new Array(4)].map((_, i) => <PostSkeleton key={i} />)}
         {isFetched && !fetchError && posts && (
           <>
             {postsComponents[0]}

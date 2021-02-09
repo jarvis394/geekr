@@ -138,10 +138,18 @@ const FormattedText = ({
         )
       }
       if (name === 'img') {
+        const imgClasses = attribs.class ? attribs.class.split(' ') : []
         if (attribs['data-tex']) {
           const formula = attribs['alt'].slice(1, attribs['alt'].length - 1)
           return (
             <MathJaxNode inline={attribs['data-tex'] === 'inline'}>
+              {formula}
+            </MathJaxNode>
+          )
+        } else if (imgClasses.some(e => e === 'formula')) {
+          const formula = attribs.source
+          return (
+            <MathJaxNode inline={imgClasses.some(e => e === 'inline')}>
               {formula}
             </MathJaxNode>
           )
@@ -161,7 +169,7 @@ const FormattedText = ({
           <LazyLoadImage
             placeholder={
               <img
-                src={attribs.src}
+                src={attribs.src || attribs['data-src']}
                 alt={attribs.alt || 'Image'}
                 style={imgStyles}
                 className={classes.img}

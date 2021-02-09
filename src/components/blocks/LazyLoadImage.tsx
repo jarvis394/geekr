@@ -23,21 +23,23 @@ const LazyLoadImage = (props: LazyLoadImageProps) => {
 
   return (
     <>
-      <LazyLoadImageComponent
-        effect="opacity"
-        wrapperProps={{
-          style: {
-            height: 'auto',
-            alignItems: 'flex-start',
-            width: '100%',
-          },
-        }}
-        onClick={() => setOpen(true)}
-        threshold={500}
-        width={props?.style?.width || 'auto'}
-        height={props?.style?.height || 'auto'}
-        {...props}
-      />
+      <div style={{ overflow: 'hidden', width: '100%' }}>
+        <LazyLoadImageComponent
+          effect="blur"
+          wrapperProps={{
+            style: {
+              height: 'auto',
+              alignItems: 'flex-start',
+              width: '100%',
+            },
+          }}
+          onClick={() => setOpen(true)}
+          threshold={500}
+          width={props?.style?.width || 'auto'}
+          height={props?.style?.height || 'auto'}
+          {...props}
+        />
+      </div>
       {
         <Backdrop
           className={classes.backdrop}
