@@ -6,7 +6,7 @@ const useRoute = () => {
   const location = useLocation()
   const path = location.pathname
   const route = routes.find((e) => match(e.path)(path))
-  return route
+  return route || routes.find((e) => e.path === '/:404*')
 }
 
 export default useRoute
