@@ -1,13 +1,15 @@
 import * as React from 'react'
-import { Button, Grid, Typography } from '@material-ui/core'
+import { Button, Fade, Grid, Typography } from '@material-ui/core'
 import { makeStyles, fade } from '@material-ui/core/styles'
-import { Link } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import dayjs from 'dayjs'
 import FormattedText from '../../formatters/FormattedText'
 import GreenRedNumber from '../../formatters/GreenRedNumber'
 import UserAvatar from '../UserAvatar'
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
+import { Comment as DataComment } from 'src/interfaces'
+import { LazyLoadComponent } from 'react-lazy-load-image-component'
 
 interface Classes {
   isAuthor: boolean
@@ -20,12 +22,24 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     position: 'relative',
     marginTop: theme.spacing(2),
-    transitionDuration: '0.1s',
+    borderBottom: '1px solid ' + fade(theme.palette.divider, 0.06),
+    padding: theme.spacing(0, 2, 1.5, 2),
+    '-webkit-tap-highlight-color': 'transparent !important',
+    textDecoration: 'none',
+    color: theme.palette.text.primary,
+  },
+  wrapper: {
     '&:hover': {
       opacity: '1 !important',
     },
-    borderBottom: '1px solid ' + fade(theme.palette.divider, 0.06),
-    padding: theme.spacing(0, 2, 1.5, 2),
+    transitionDuration: '0.1s',
+  },
+  placeholder: {
+    height: '200px',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: theme.palette.background.default,
   },
   noDeco: {
     textDecoration: 'none !important',
@@ -66,14 +80,19 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontFamily: 'Google Sans',
   },
-  score: {
-    position: 'relative',
-    fontWeight: 800,
-    fontSize: 14,
+  greenRedNumber: {
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  bottomBarScoreWrapper: {
+    color: theme.palette.text.hint,
     flexGrow: 1,
   },
-  scoreColor: {
-    color: theme.palette.text.hint,
+  score: {
+    position: 'relative',
+    fontWeight: 700,
+    fontSize: 13,
   },
   bottomBar: {
     marginTop: theme.spacing(1.5),
@@ -83,7 +102,6 @@ const useStyles = makeStyles((theme) => ({
   thumbsUpDownIcon: {
     fontSize: 16,
     marginRight: theme.spacing(1),
-    color: theme.palette.text.hint,
   },
   replyButton: {
     borderRadius: 16,
@@ -117,8 +135,10 @@ const getOpacity = (value: number) => {
 const MARGIN_LEVEL = 32
 const MAX_LEVEL = 5
 
-const Comment = ({ data }) => {
+const Comment = ({ data }: { data: DataComment }) => {
   const [isFavorite, setIsFavorite] = React.useState(false)
+  const history = useHistory()
+  const location = useLocation()
   const classes = useStyles({
     isAuthor: data.isPostAuthor,
     isFavorite,
@@ -142,59 +162,80 @@ const Comment = ({ data }) => {
   }
 
   return (
-    <div style={{ opacity: commentOpacity }} className={classes.root}>
-      <div style={{ marginLeft: margin }}>
-        {/* Top bar */}
-        <Grid
-          style={{ position: 'relative' }}
-          alignItems="center"
-          container
-          direction="row"
-          className={classes.author}
-        >
-          <UserAvatar
-            src={data.author.avatarUrl}
-            login={data.author.login}
-            className={classes.avatar}
-          />
-          <Typography variant="caption">
-            <Link
-              className={[classes.noDeco, classes.authorLink].join(' ')}
-              to={'/user/' + data.author.login}
-            >
-              {data.author.login}
-            </Link>
-          </Typography>
-          <Typography className={classes.ts} variant="caption">
-            {ts}
-          </Typography>
-        </Grid>
-
-        {/* Message */}
-        <FormattedText className={classes.text}>{message}</FormattedText>
-
-        {/* Bottom bar */}
-        <div className={classes.bottomBar}>
-          <ThumbsUpDownIcon className={classes.thumbsUpDownIcon} />
-          <GreenRedNumber
-            classes={classes.score}
-            defaultClass={classes.scoreColor}
-            number={data.score}
-          />
-          <Button
-            onClick={() => setIsFavorite((p) => !p)}
-            color="primary"
-            size="small"
-            className={classes.favoriteButton}
+    <LazyLoadComponent placeholder={<div className={classes.placeholder} />}>
+      <Fade in>
+        <div className={classes.root}>
+          <div
+            style={{ marginLeft: margin, opacity: commentOpacity }}
+            className={classes.wrapper}
           >
-            <BookmarkIcon className={classes.favoriteIcon} />
-          </Button>
-          <Button color="primary" size="small" className={classes.replyButton}>
-            Ответить
-          </Button>
+            {/* Top bar */}
+            <Grid
+              style={{ position: 'relative' }}
+              onClick={() => history.push(location.pathname + '#' + data.id)}
+              alignItems="center"
+              container
+              direction="row"
+              className={classes.author}
+              id={data.id.toString()}
+            >
+              <UserAvatar
+                src={data.author.avatarUrl}
+                login={data.author.login}
+                className={classes.avatar}
+              />
+              <Typography variant="caption">
+                <Link
+                  className={[classes.noDeco, classes.authorLink].join(' ')}
+                  to={'/user/' + data.author.login}
+                >
+                  {data.author.login}
+                </Link>
+              </Typography>
+              <Typography className={classes.ts} variant="caption">
+                {ts}
+              </Typography>
+            </Grid>
+
+            {/* Message */}
+            <FormattedText className={classes.text}>{message}</FormattedText>
+
+            {/* Bottom bar */}
+            <div className={classes.bottomBar}>
+              <div className={classes.bottomBarScoreWrapper}>
+                <GreenRedNumber
+                  number={data.score}
+                  wrapperProps={{ className: classes.greenRedNumber }}
+                >
+                  <>
+                    <ThumbsUpDownIcon className={classes.thumbsUpDownIcon} />
+                    <Typography className={classes.score}>
+                      {data.score > 0 ? '+' : ''}
+                      {data.score}
+                    </Typography>
+                  </>
+                </GreenRedNumber>
+              </div>
+              <Button
+                onClick={() => setIsFavorite((p) => !p)}
+                color="primary"
+                size="small"
+                className={classes.favoriteButton}
+              >
+                <BookmarkIcon className={classes.favoriteIcon} />
+              </Button>
+              <Button
+                color="primary"
+                size="small"
+                className={classes.replyButton}
+              >
+                Ответить
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </Fade>
+    </LazyLoadComponent>
   )
 }
 

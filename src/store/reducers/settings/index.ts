@@ -11,7 +11,7 @@ const hiddenAuthors = localStorageHiddenAuthors
 const hiddenCompanies = localStorageHiddenCompanies
   ? localStorageHiddenCompanies.split(',')
   : []
-const type = localStorageThemeType || 'light'
+const type = (localStorageThemeType || 'light') as 'light' | 'dark'
 
 const initialState = {
   theme,
@@ -20,7 +20,10 @@ const initialState = {
   hiddenCompanies,
 }
 
-export default (state = initialState, { type, payload }) => {
+export default (
+  state = initialState,
+  { type, payload }
+): typeof initialState => {
   switch (type) {
     case SET_THEME:
       return { ...state, theme: generateTheme(payload), themeType: payload }

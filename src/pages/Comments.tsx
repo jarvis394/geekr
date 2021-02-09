@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Comments from '../components/blocks/Comments/Main'
 import { useParams } from 'react-router'
-import PostItem from '../components/blocks/PostItem'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { getPost } from '../api'
 import { Post } from '../interfaces'
-import PostSkeleton from '../components/skeletons/Post'
+import OutsidePage from 'src/components/blocks/OutsidePage'
 
 const useStyles = makeStyles((theme) => ({
   errorText: {
@@ -42,11 +41,13 @@ const CommentsPage = () => {
     return <Typography className={classes.errorText}>{error}</Typography>
 
   return (
-    <>
-      {!post && <PostSkeleton />}
-      {post && <PostItem style={{ marginBottom: 0 }} post={post} />}
+    <OutsidePage
+      hidePositionBar
+      headerText={post?.titleHtml}
+      shrinkedHeaderText={post?.titleHtml}
+    >
       <Comments post={post} />
-    </>
+    </OutsidePage>
   )
 }
 

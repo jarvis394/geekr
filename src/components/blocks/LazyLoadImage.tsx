@@ -25,7 +25,7 @@ const LazyLoadImage = (props: LazyLoadImageProps) => {
     <>
       <div style={{ overflow: 'hidden', width: '100%' }}>
         <LazyLoadImageComponent
-          effect="blur"
+          effect="opacity"
           wrapperProps={{
             style: {
               height: 'auto',

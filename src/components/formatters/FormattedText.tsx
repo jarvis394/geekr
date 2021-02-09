@@ -146,10 +146,10 @@ const FormattedText = ({
               {formula}
             </MathJaxNode>
           )
-        } else if (imgClasses.some(e => e === 'formula')) {
+        } else if (imgClasses.some((e) => e === 'formula')) {
           const formula = attribs.source
           return (
-            <MathJaxNode inline={imgClasses.some(e => e === 'inline')}>
+            <MathJaxNode inline={imgClasses.some((e) => e === 'inline')}>
               {formula}
             </MathJaxNode>
           )

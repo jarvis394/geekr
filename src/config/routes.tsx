@@ -49,6 +49,13 @@ const routes: Route[] = [
     appBarColor: (theme) => theme.palette.background.default,
   },
   {
+    path: '/company/:alias/blog/:id/comments',
+    component: <CommentsPage />,
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
+  },
+  {
     path: '/company/:alias/blog/:id',
     component: <Post />,
     shouldShowAppBar: false,

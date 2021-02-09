@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { useState, useEffect, useRef, useCallback } from 'react'
-import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { getComments } from '../../../api'
@@ -9,28 +8,24 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import Fade from '@material-ui/core/Fade'
 import { Comment as IComment, Post } from 'src/interfaces'
 import isInViewport from 'src/utils/isInViewport'
-import OutsidePage from '../OutsidePage'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
-    paddingTop: theme.spacing(1),
-  },
-  headerContainer: {
-    marginBottom: theme.spacing(1),
+    paddingTop: theme.spacing(1.5),
   },
   header: {
     fontFamily: 'Google Sans',
     fontWeight: 800,
-    fontSize: 20,
+    fontSize: 24,
+    margin: theme.spacing(0, 2),
   },
   commentsNumber: {
     color: theme.palette.primary.main,
     marginLeft: 4,
   },
   comments: {
-    backgroundColor: theme.palette.background.paper,
-    paddingBottom: theme.spacing(2),
+    backgroundColor: theme.palette.background.default,
     paddingTop: 0.05,
   },
   progress: {
@@ -134,37 +129,29 @@ const Comments = ({ post }: { post: Post }) => {
     return <Typography className={classes.errorText}>{fetchError}</Typography>
 
   return (
-    <OutsidePage
-      hidePositionBar
-      headerText="Комментарии"
-      shrinkedHeaderText={post?.titleHtml}
-    >
-      <div className={classes.root}>
-        <Container className={classes.headerContainer}>
-          <Typography className={classes.header}>
-            Комментарии&nbsp;
-            {commentsLength && (
-              <Fade in={commentsLength !== 0}>
-                <span className={classes.commentsNumber}>{commentsLength}</span>
-              </Fade>
-            )}
-          </Typography>
-        </Container>
-        <div className={classes.comments}>
-          {commentsLength === 0 && (
-            <Typography className={classes.nothingText}>Пусто!</Typography>
-          )}
-          {comments &&
-            comments
-              .slice(0, commentsSliceEnd)
-              .map((node) => <Comment key={node.id} data={node} />)}
-          {commentsLength !== 0 && (!comments || isLoadingNewComments) && (
-            <LinearProgress className={classes.progress} />
-          )}
-          <div ref={commentsEndRef} />
-        </div>
+    <div className={classes.root}>
+      <Typography className={classes.header}>
+        Комментарии&nbsp;
+        {commentsLength && (
+          <Fade in={commentsLength !== 0}>
+            <span className={classes.commentsNumber}>{commentsLength}</span>
+          </Fade>
+        )}
+      </Typography>
+      <div className={classes.comments}>
+        {commentsLength === 0 && (
+          <Typography className={classes.nothingText}>Пусто!</Typography>
+        )}
+        {comments &&
+          comments
+            .slice(0, commentsSliceEnd)
+            .map((node) => <Comment key={node.id} data={node} />)}
+        {commentsLength !== 0 && (!comments || isLoadingNewComments) && (
+          <LinearProgress className={classes.progress} />
+        )}
+        <div ref={commentsEndRef} />
       </div>
-    </OutsidePage>
+    </div>
   )
 }
 

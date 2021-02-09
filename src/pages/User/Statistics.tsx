@@ -47,11 +47,12 @@ export const Statistics = () => {
             {e.field.toUpperCase()}
           </Typography>
           {e.colored ? (
-            <GreenRedNumber
-              noPlusSign
-              number={e.number}
-              classes={classes.headerNumber}
-            />
+            <GreenRedNumber number={e.number}>
+              <Typography className={classes.headerNumber}>
+                {e.number > 0 ? '+' : ''}
+                {e.number}
+              </Typography>
+            </GreenRedNumber>
           ) : (
             <Typography className={classes.headerNumber}>{e.number}</Typography>
           )}

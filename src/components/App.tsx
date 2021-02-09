@@ -88,7 +88,10 @@ const App = (): React.ReactElement => {
   const storeTheme = useSelector((state) => state.settings.theme)
   const theme = createMuiTheme(storeTheme)
   const route = useRoute()
-  const classes = useStyles({ theme, shouldShowAppBar: route.shouldShowAppBar })
+  const classes = useStyles({
+    theme,
+    shouldShowAppBar: route?.shouldShowAppBar || true,
+  })
 
   // Set root classes
   document.body.className = classes.root

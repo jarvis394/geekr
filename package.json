@@ -51,7 +51,7 @@
   "scripts": {
     "start": "npm run start:prod",
     "start:prod": "serve -s build",
-    "start:dev": "react-scripts start && cra-append-sw ./src/sw-custom.js --mode dev",
+    "start:dev": "react-scripts start",
     "build": "react-scripts build && cra-append-sw ./src/sw-custom.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

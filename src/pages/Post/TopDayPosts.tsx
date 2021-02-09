@@ -89,10 +89,12 @@ const Post = ({ data }) => {
         </Link>
       </Grid>
       <Grid item className={classes.postScore}>
-        <GreenRedNumber
-          style={{ fontWeight: 800, fontFamily: 'Google Sans' }}
-          number={score}
-        />
+        <GreenRedNumber number={score}>
+          <Typography style={{ fontWeight: 800, fontFamily: 'Google Sans' }}>
+            {score > 0 ? '+' : ''}
+            {score}
+          </Typography>
+        </GreenRedNumber>
       </Grid>
     </Grid>
   )

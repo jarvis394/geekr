@@ -4,6 +4,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { POST_IMAGE_HEIGHT } from 'src/config/constants'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: '12px',

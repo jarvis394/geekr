@@ -60,9 +60,9 @@ const Home = () => {
     ) : null
 
   const postsComponents =
-    posts && 
+    posts &&
     posts.articleIds.map((id, i) => (
-       <PostItem key={id} post={posts.articleRefs[id]} />
+      <PostItem key={id} post={posts.articleRefs[id]} />
     ))
 
   const handlePagination = (_, i) => {

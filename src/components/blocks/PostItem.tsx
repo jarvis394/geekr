@@ -28,12 +28,12 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none !important',
   },
   placeholder: {
-    height: '395px',
-    width: '100vw',
+    height: '390px',
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: theme.palette.background.paper,
-    marginBottom: 12
+    marginBottom: 12,
   },
   postLink: {
     color: theme.palette.text.primary,
@@ -97,20 +97,34 @@ const useStyles = makeStyles((theme) => ({
   },
   postBottomRow: {
     marginTop: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   postBottomRowItem: {
     color: theme.palette.text.hint,
-    fontSize: 8,
     textDecoration: 'none',
     padding: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    userSelect: 'none',
+    fontWeight: 600,
   },
   postBottomRowItemIcon: {
     fontSize: 16,
     marginRight: theme.spacing(1),
   },
+  postBottomRowItemText: {
+    fontSize: 13,
+    fontWeight: 600,
+  },
   avatarContainer: {
-    // width: '100%',
     padding: theme.spacing(2),
+    display: 'flex',
+    alignItems: 'center',
     textDecoration: 'none !important',
     paddingBottom: (hasImage) => (hasImage ? theme.spacing(2) : 0),
   },
@@ -128,6 +142,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+interface BottomRowItemType {
+  icon: typeof ThumbsUpDownIcon
+  text: string | number
+  coloredText?: boolean
+  number?: number
+  to?: string
+  isActive?: boolean
+  action?: () => void
+}
+
 export const PostItem = ({
   post,
   style,
@@ -141,42 +165,18 @@ export const PostItem = ({
   const ts = dayjs(post.timePublished).calendar().toLowerCase()
   const { login, avatarUrl } = post.author
   const { titleHtml: unparsedTitle, id, statistics, postFirstImage } = post
-  const { readingCount, favoritesCount, commentsCount, score: unformattedScore } = statistics
+  const classes = useStyles(!!postFirstImage)
+  const {
+    readingCount,
+    favoritesCount,
+    commentsCount,
+    score: unformattedScore,
+  } = statistics
   const score = formatNumber(unformattedScore)
   const title = parse(unparsedTitle)
   const reads = formatNumber(readingCount)
-  const favorites = formatNumber(
-    Number(favoritesCount) + (isBookmarked ? 1 : 0)
-  )
+  const favorites = formatNumber(favoritesCount + (isBookmarked ? 1 : 0))
   const comments = formatNumber(Number(commentsCount))
-  const bottomRow = [
-    {
-      icon: ThumbsUpDownIcon,
-      count: score,
-      coloredText: true,
-      number: unformattedScore
-    },
-    {
-      icon: VisibilityIcon,
-      count: reads,
-    },
-    {
-      icon: BookmarkIcon,
-      count: favorites,
-      isButton: true,
-      isActive: isBookmarked,
-      action: () => {
-        setBookmarkState((prev) => !prev)
-      },
-    },
-    {
-      icon: ChatBubbleIcon,
-      count: comments,
-      to: '/post/' + id + '/comments',
-    },
-  ]
-
-  const classes = useStyles(!!postFirstImage)
   const isCorporative = post.isCorporative
   const companyAlias = isCorporative
     ? post.hubs.find((e) => e.type === 'corporative').alias
@@ -184,6 +184,31 @@ export const PostItem = ({
   const postLink = isCorporative
     ? '/company/' + companyAlias + '/blog/' + id
     : '/post/' + id
+  const bottomRow: BottomRowItemType[] = [
+    {
+      icon: ThumbsUpDownIcon,
+      text: score,
+      coloredText: true,
+      number: unformattedScore,
+    },
+    {
+      icon: VisibilityIcon,
+      text: reads,
+    },
+    {
+      icon: BookmarkIcon,
+      text: favorites,
+      isActive: isBookmarked,
+      action: () => {
+        setBookmarkState((prev) => !prev)
+      },
+    },
+    {
+      icon: ChatBubbleIcon,
+      text: comments,
+      to: postLink + '/comments',
+    },
+  ]
 
   // Return troll text for hidden post
   if (
@@ -209,17 +234,56 @@ export const PostItem = ({
         </Link>
       </Paper>
     )
-    
-    
-  const PostItemPlaceholder = () => (
-    <span className={classes.placeholder} />
-  )
+
+  const BottomRowItem = ({ item }: { item: BottomRowItemType }) => {
+    const itemIcon = (
+      <item.icon
+        className={classes.postBottomRowItemIcon}
+        color={item.isActive ? 'primary' : 'inherit'}
+      />
+    )
+    return (
+      <Grid
+        component={item.to ? Link : Grid}
+        xs={3}
+        item
+        to={item.to}
+        onClick={item.action || null}
+        color={item.isActive ? 'primary' : 'default'}
+        style={{
+          cursor: item.action || item.to ? 'pointer' : 'inherit',
+        }}
+        className={classes.postBottomRowItem}
+      >
+        {item.coloredText ? (
+          <GreenRedNumber
+            number={item.number}
+            wrapperProps={{ style: { display: 'flex', alignItems: 'center' } }}
+          >
+            <>
+              {itemIcon}
+              <Typography className={classes.postBottomRowItemText}>
+                {item.number > 0 ? '+' : ''}
+                {item.text}
+              </Typography>
+            </>
+          </GreenRedNumber>
+        ) : (
+          <>
+            {itemIcon}
+            <Typography className={classes.postBottomRowItemText}>
+              {item.text}
+            </Typography>
+          </>
+        )}
+      </Grid>
+    )
+  }
 
   return (
-    <LazyLoadComponent placeholder={<PostItemPlaceholder />}>
-    <Paper elevation={0} className={classes.paper} style={style}>
-      <Link to={'/user/' + login} className={classes.avatarContainer}>
-        <Grid alignItems="center" container direction="row">
+    <LazyLoadComponent placeholder={<div className={classes.placeholder} />}>
+      <Paper elevation={0} className={classes.paper} style={style}>
+        <Link to={'/user/' + login} className={classes.avatarContainer}>
           <UserAvatar
             src={avatarUrl}
             login={login}
@@ -231,10 +295,8 @@ export const PostItem = ({
           <Typography className={classes.postTs} variant="caption">
             {ts}
           </Typography>
-        </Grid>
-      </Link>
-      <div className={classes.imageHolder}>
-        <Link style={{ display: 'flex', width: '100%' }} to={postLink}>
+        </Link>
+        <Link className={classes.imageHolder} to={postLink}>
           {postFirstImage && (
             <LazyLoadImage
               src={postFirstImage}
@@ -243,13 +305,15 @@ export const PostItem = ({
             />
           )}
         </Link>
-      </div>
-      <div style={{ paddingTop: 0 }} className={classes.padding}>
-        <Link className={classes.postLink + ' ' + classes.noDeco} to={postLink}>
-          <Typography className={classes.postTitle}>{title}</Typography>
-        </Link>
+        <div style={{ paddingTop: 0 }} className={classes.padding}>
+          <Link
+            className={classes.postLink + ' ' + classes.noDeco}
+            to={postLink}
+          >
+            <Typography className={classes.postTitle}>{title}</Typography>
+          </Link>
 
-        <div>
+          {/** Post labels */}
           {post.postLabels.map((e, i) => (
             <Chip
               label={postLabels[e].text}
@@ -260,49 +324,14 @@ export const PostItem = ({
               style={{ marginRight: 8, marginTop: 8 }}
             />
           ))}
+
+          <div className={classes.postBottomRow}>
+            {bottomRow.map((e, i) => (
+              <BottomRowItem item={e} key={i} />
+            ))}
+          </div>
         </div>
-        <Grid
-          className={classes.postBottomRow}
-          container
-          style={{ width: '100%' }}
-        >
-          {bottomRow.map((item, i) => (
-            <Grid
-              container
-              direction="row"
-              alignItems="center"
-              justify="center"
-              style={{
-                width: '25%',
-                cursor: item.isButton || item.to ? 'pointer' : 'inherit',
-              }}
-              key={i}
-              to={item.to}
-              color={item.isActive ? 'primary' : 'default'}
-              component={item.to ? Link : Grid}
-              onClick={item.action || null}
-              className={classes.postBottomRowItem}
-            >
-              <item.icon
-                className={classes.postBottomRowItemIcon}
-                color={item.isActive ? 'primary' : 'inherit'}
-              />
-              <div style={{ fontSize: 12, fontWeight: 600 }}>
-                {item.coloredText ? (
-                  <GreenRedNumber
-                    number={item.number}
-                    defaultClass={classes.postBottomRowItem}
-                    style={{ fontSize: 12, fontWeight: 600 }}
-                  />
-                ) : (
-                  item.count
-                )}
-              </div>
-            </Grid>
-          ))}
-        </Grid>
-      </div>
-    </Paper>
+      </Paper>
     </LazyLoadComponent>
   )
 }
