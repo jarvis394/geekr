@@ -1,5 +1,6 @@
 import { SET_THEME, SET_HIDDEN_AUTHORS, SET_HIDDEN_COMPANIES } from './types'
 import generateTheme from 'src/config/theme'
+import { PaletteType } from 'src/config/constants'
 
 const theme = generateTheme()
 const localStorageThemeType = localStorage.getItem('theme')
@@ -11,7 +12,7 @@ const hiddenAuthors = localStorageHiddenAuthors
 const hiddenCompanies = localStorageHiddenCompanies
   ? localStorageHiddenCompanies.split(',')
   : []
-const type = (localStorageThemeType || 'light') as 'light' | 'dark'
+const type = (localStorageThemeType || 'light') as PaletteType
 
 const initialState = {
   theme,
