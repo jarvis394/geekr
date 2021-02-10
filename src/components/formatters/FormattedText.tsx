@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: 'underline',
     },
     '& p': { margin: 0, marginTop: (d) => (d ? 0 : theme.spacing(3)) },
-    '& em': { color: theme.palette.text.hint },
+    '& em': { color: fade(theme.palette.text.primary, 0.9) },
     '& code': {
       background: theme.palette.background.default,
       padding: theme.spacing(0.25),
