@@ -8,6 +8,7 @@ import {
   POST_FETCH,
   POST_FETCH_FULFILLED,
   POST_FETCH_REJECTED,
+  SET_POST_READING_PROGRESS,
   State,
 } from './types'
 import { FetchingState } from 'src/interfaces'
@@ -22,6 +23,11 @@ const initialState: State = {
   post: initialData,
   comments: initialData,
   company: initialData,
+  lastPost: {
+    progress: null,
+    data: null,
+    offset: null,
+  },
 }
 
 export default (storeState = initialState, { type, payload }): State => {
@@ -126,6 +132,16 @@ export default (storeState = initialState, { type, payload }): State => {
           state: FetchingState.Error,
           fetchError: payload,
           data: null,
+        },
+      }
+
+    case SET_POST_READING_PROGRESS:
+      return {
+        ...storeState,
+        lastPost: {
+          progress: payload.progress,
+          data: payload.post,
+          offset: payload.offset,
         },
       }
 

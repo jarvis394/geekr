@@ -12,6 +12,8 @@ import {
   COMPANY_FETCH,
   COMPANY_FETCH_FULFILLED,
   COMPANY_FETCH_REJECTED,
+  SET_POST_READING_PROGRESS,
+  PostReadingProgressProps,
 } from '../reducers/post/types'
 
 /**
@@ -100,3 +102,13 @@ export const getCompany = (alias: string) => async (
     dispatch({ type: COMPANY_FETCH_REJECTED, payload: error })
   }
 }
+
+export const setPostReadingProgress = ({
+  post,
+  progress,
+  offset,
+}: PostReadingProgressProps) => (dispatch) =>
+  dispatch({
+    type: SET_POST_READING_PROGRESS,
+    payload: { post, progress, offset },
+  })

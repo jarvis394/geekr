@@ -17,10 +17,15 @@ import BottomBar from './BottomBar'
 import SimilarPosts from './SimilarPosts'
 import TopDayPosts from './TopDayPosts'
 import { Chip, Link as MUILink } from '@material-ui/core'
-import { POST_LABELS as postLabels } from 'src/config/constants'
+import {
+  chromeAddressBarHeight,
+  POST_LABELS as postLabels,
+} from 'src/config/constants'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
+import { setPostReadingProgress } from 'src/store/actions/post'
+import isMobile from 'is-mobile'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -217,16 +222,41 @@ const Post = () => {
     <PostViewSkeleton />
   )
 
+  const getScrollProgress = () => {
+    const position = window.pageYOffset
+    const windowHeight =
+      document.documentElement.scrollHeight -
+      document.documentElement.clientHeight
+    return Math.min(
+      position / (windowHeight - (isMobile() ? chromeAddressBarHeight : 0)),
+      1
+    )
+  }
+
   // Start fetching post data
   useEffect(() => {
     dispatch(getPost(id))
     companyAlias && dispatch(getCompany(companyAlias))
-  }, [dispatch, id, companyAlias])
+
+    // Write progress data to the store
+    return () => {
+      const progress = getScrollProgress()
+      if (progress >= 0.1 && progress <= 0.9) {
+        dispatch(
+          setPostReadingProgress({
+            post,
+            progress,
+            offset: window.pageYOffset,
+          })
+        )
+      }
+    }
+  }, [dispatch, id, companyAlias, post])
 
   if (post) document.title = post.titleHtml
   if (fetchError) return <ErrorComponent message={fetchError} />
   if (companyFetchError)
-    console.error("Couldn't fetch company data:", companyFetchError)
+    console.error('Could not fetch company data:', companyFetchError)
 
   return (
     <OutsidePage headerText={post?.titleHtml}>

@@ -10,6 +10,13 @@ export const COMMENTS_FETCH_REJECTED = COMMENTS_FETCH + '_REJECTED'
 export const COMPANY_FETCH = PREFIX + 'COMPANY_FETCH'
 export const COMPANY_FETCH_FULFILLED = COMPANY_FETCH + '_FULFILLED'
 export const COMPANY_FETCH_REJECTED = COMPANY_FETCH + '_REJECTED'
+export const SET_POST_READING_PROGRESS = 'SET_POST_READING_PROGRESS'
+
+export interface PostReadingProgressProps {
+  post: Post
+  offset: number
+  progress: number
+}
 
 export interface State {
   comments: {
@@ -26,5 +33,10 @@ export interface State {
     data: Company
     state: FetchingState
     fetchError: string
+  }
+  lastPost: {
+    data: Post
+    progress: number
+    offset: number
   }
 }

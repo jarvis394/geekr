@@ -21,6 +21,7 @@ import RightIcon from '@material-ui/icons/ChevronRightRounded'
 import { Chip } from '@material-ui/core'
 import { POST_LABELS as postLabels } from 'src/config/constants'
 import { LazyLoadComponent } from 'react-lazy-load-image-component'
+import PostItemSkeleton from 'src/components/skeletons/Post'
 
 const ld = { lighten, darken }
 const useStyles = makeStyles((theme) => ({
@@ -155,17 +156,24 @@ interface BottomRowItemType {
 export const PostItem = ({
   post,
   style,
+  loading,
 }: {
-  post: Post
+  post?: Post
   style?: Record<string, unknown>
+  loading?: boolean
 }) => {
   const hiddenAuthors = useSelector((state) => state.settings.hiddenAuthors)
   const hiddenCompanies = useSelector((state) => state.settings.hiddenCompanies)
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
+  const { titleHtml: unparsedTitle, id, statistics, postFirstImage } =
+    post || {}
+  const classes = useStyles(!!postFirstImage)
+
+  // Return a skeleton if the item is loading
+  if (loading) return <PostItemSkeleton />
+
   const ts = dayjs(post.timePublished).calendar().toLowerCase()
   const { login, avatarUrl } = post.author
-  const { titleHtml: unparsedTitle, id, statistics, postFirstImage } = post
-  const classes = useStyles(!!postFirstImage)
   const {
     readingCount,
     favoritesCount,
@@ -217,7 +225,7 @@ export const PostItem = ({
   )
     return (
       <Paper
-        style={{ padding: 16, display: 'flex' }}
+        style={{ padding: 16, display: 'flex', flexDirection: 'row' }}
         elevation={0}
         className={classes.paper}
       >
