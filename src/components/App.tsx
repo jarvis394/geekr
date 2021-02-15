@@ -90,7 +90,7 @@ const App = (): React.ReactElement => {
   const route = useRoute()
   const classes = useStyles({
     theme,
-    shouldShowAppBar: route?.shouldShowAppBar || true,
+    shouldShowAppBar: route?.shouldShowAppBar,
   })
 
   // Set root classes
