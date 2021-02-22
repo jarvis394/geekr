@@ -3,6 +3,9 @@ import { Paper, Typography, ButtonBase } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded'
 import { useSelector } from 'src/hooks'
+import { useHistory } from 'react-router'
+import getPostLink from 'src/utils/getPostLink'
+import PostLocationState from 'src/interfaces/PostLocationState'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     '&::before': {
       content: '""',
       position: 'absolute',
-      width: '45%',
+      width: (progress: number) => progress * 100 + '%',
       borderTopLeftRadius: 8,
       borderBottomLeftRadius: 8,
       height: '100%',
@@ -33,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'baseline',
+    width: '100%',
   },
   text: {
     fontFamily: 'Google Sans',
@@ -45,45 +49,68 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontSize: 14,
     color: theme.palette.text.hint,
+    textAlign: 'initial',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    flexGrow: 1,
   },
   progress: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
     fontFamily: 'Google Sans',
     fontWeight: 500,
     fontSize: 14,
     color: theme.palette.text.hint,
+    marginLeft: theme.spacing(2),
   },
   icon: {
     marginTop: -1,
   },
-  textWrapper: {
+  textWithIconWrapper: {
     display: 'flex',
     alignItems: 'center',
+    flexDirection: 'row',
+    width: '100%',
+  },
+  textWrapper: {
+    display: 'flex',
+    width: '100%',
     flexDirection: 'row',
   },
 }))
 
 const ContinueReadingButton = () => {
-  const classes = useStyles()
   const post = useSelector((store) => store.post.lastPost.data)
-  // const offset = useSelector(store => store.post.lastPost.offset)
+  const offset = useSelector((store) => store.post.lastPost.offset)
   const progress = useSelector((store) => store.post.lastPost.progress)
+  const classes = useStyles(progress || 0)
+  const history = useHistory<PostLocationState>()
 
   if (!post) return null
 
+  const redirect = () => {
+    const postLink = getPostLink(post)
+    history.push(postLink, {
+      offset,
+    })
+  }
+
   return (
-    <Paper variant="outlined" className={classes.root}>
+    <Paper
+      variant="outlined"
+      className={classes.root}
+      onClick={() => redirect()}
+    >
       <ButtonBase className={classes.button}>
-        <Typography className={classes.title}>{post.titleHtml}</Typography>
         <div className={classes.textWrapper}>
+          <Typography className={classes.title}>{post.titleHtml}</Typography>
+          <Typography className={classes.progress}>
+            {Math.round(progress * 100)}%
+          </Typography>
+        </div>
+        <div className={classes.textWithIconWrapper}>
           <Typography className={classes.text}>Продолжить чтение</Typography>
           <ChevronRightRoundedIcon className={classes.icon} />
         </div>
-        <Typography className={classes.progress}>
-          {Math.round(progress * 100)}%
-        </Typography>
       </ButtonBase>
     </Paper>
   )

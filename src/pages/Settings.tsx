@@ -5,7 +5,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Grid,
   Dialog,
   DialogContent,
   DialogContentText,
@@ -27,13 +26,29 @@ import {
   setHiddenCompanies,
   setTheme,
 } from 'src/store/actions/settings'
-import { THEMES, PaletteType, THEME_NAMES } from 'src/config/constants'
+import {
+  THEMES,
+  PaletteType,
+  THEME_NAMES,
+  APP_BAR_HEIGHT,
+  BOTTOM_BAR_HEIGHT,
+  chromeAddressBarHeight,
+} from 'src/config/constants'
 import { TransitionProps } from '@material-ui/core/transitions'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
 import BackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
+import isMobile from 'is-mobile'
 
 const useStyles = makeStyles((theme) => ({
-  root: { width: '100%', height: '100%', maxWidth: '100vw' },
+  root: {
+    width: '100%',
+    height: `calc(100vh - ${APP_BAR_HEIGHT}px - ${
+      isMobile() ? chromeAddressBarHeight : 0
+    }px - ${BOTTOM_BAR_HEIGHT}px)`,
+    padding: 0,
+    backgroundColor: getContrastPaperColor(theme),
+  },
   title: {
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
@@ -43,15 +58,6 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: 500,
       fontSize: 24,
     },
-  },
-  list: {
-    '& span': { fontSize: 16 },
-    '& p': { fontSize: 14 },
-    height: '100%',
-    padding: 0,
-    backgroundColor: theme.palette.background.paper,
-    borderBottomLeftRadius: theme.shape.borderRadius,
-    borderBottomRightRadius: theme.shape.borderRadius,
   },
   dialogTitle: {
     display: 'flex',
@@ -375,19 +381,11 @@ const Settings = () => {
   const classes = useStyles()
 
   return (
-    <Grid
-      container
-      direction="column"
-      style={{ width: '100%', height: '100vh' }}
-    >
-      <Grid style={{ overflow: 'auto' }} item>
-        <List style={{ overflow: 'auto' }} className={classes.list}>
-          <ThemeMenuListItem />
-          <HiddenAuthorsListItem />
-          <HiddenCompaniesListItem />
-        </List>
-      </Grid>
-    </Grid>
+    <List className={classes.root}>
+      <ThemeMenuListItem />
+      <HiddenAuthorsListItem />
+      <HiddenCompaniesListItem />
+    </List>
   )
 }
 

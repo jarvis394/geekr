@@ -14,6 +14,8 @@ import { APP_BAR_HEIGHT, MIN_WIDTH } from 'src/config/constants'
 import isMobile from 'is-mobile'
 import { chromeAddressBarHeight } from 'src/config/constants'
 import { useScrollTrigger } from 'src/hooks'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
+import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 
 interface StyleProps {
   isShrinked: boolean
@@ -36,7 +38,10 @@ const useStyles = makeStyles((theme) => ({
 
 const useAppBarStyles = makeStyles((theme) => ({
   header: {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: ({ isShrinked }: StyleProps) =>
+      isShrinked
+        ? getInvertedContrastPaperColor(theme)
+        : getContrastPaperColor(theme),
     color: theme.palette.text.primary,
     position: 'fixed',
     willChange: 'transform',
@@ -44,6 +49,17 @@ const useAppBarStyles = makeStyles((theme) => ({
     transform: ({ isShrinked }: StyleProps) =>
       `translateZ(0) translateY(${isShrinked ? -16 : 0}px)`,
     transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1)',
+    '&::before': {
+      position: 'absolute',
+      width: ({ scrollProgress }: StyleProps) => scrollProgress * 100 + '%',
+      background:
+        theme.palette.type === 'dark'
+          ? 'rgba(255, 255, 255, .1)'
+          : 'rgba(0, 0, 0, .1)',
+      height: '100%',
+      content: '""',
+      transform: 'translateZ(0)',
+    },
   },
   toolbar: {
     margin: 'auto',
@@ -72,17 +88,6 @@ const useAppBarStyles = makeStyles((theme) => ({
     display: 'flex',
     width: '100%',
     flexDirection: 'column',
-    '&::before': {
-      position: 'absolute',
-      width: ({ scrollProgress }: StyleProps) => scrollProgress * 100 + '%',
-      background:
-        theme.palette.type === 'dark'
-          ? 'rgba(255, 255, 255, .1)'
-          : 'rgba(0, 0, 0, .1)',
-      height: '100%',
-      content: '""',
-      transform: 'translateZ(0)',
-    },
   },
   content: {
     display: 'flex',

@@ -19,9 +19,9 @@ const initialState: State = {
     fetchError: null,
     data: null,
   },
-} as State
+}
 
-export default (reducerState = initialState, { type, payload }) => {
+export default (reducerState = initialState, { type, payload }): State => {
   switch (type) {
     case SET_TOKEN: {
       return {

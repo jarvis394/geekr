@@ -6,7 +6,7 @@ import {
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import { Backdrop, makeStyles } from '@material-ui/core'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   backdrop: {
     zIndex: 2000,
     '& > div.react-transform-component': {
@@ -14,6 +14,12 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
       height: '100%',
     },
+  },
+  imageWrapper: {
+    height: 'auto',
+    display: 'flex',
+    alignItems: 'flex-start',
+    width: 'auto',
   },
 }))
 
@@ -23,23 +29,15 @@ const LazyLoadImage = (props: LazyLoadImageProps) => {
 
   return (
     <>
-      <div style={{ overflow: 'hidden', width: '100%' }}>
-        <LazyLoadImageComponent
-          effect="opacity"
-          wrapperProps={{
-            style: {
-              height: 'auto',
-              alignItems: 'flex-start',
-              width: '100%',
-            },
-          }}
-          onClick={() => setOpen(true)}
-          threshold={500}
-          width={props?.style?.width || 'auto'}
-          height={props?.style?.height || 'auto'}
-          {...props}
-        />
-      </div>
+      <LazyLoadImageComponent
+        effect="opacity"
+        wrapperClassName={classes.imageWrapper}
+        onClick={() => setOpen(true)}
+        threshold={100}
+        width={props?.style?.width || 'auto'}
+        height={props?.style?.height || 'auto'}
+        {...props}
+      />
       {
         <Backdrop
           className={classes.backdrop}

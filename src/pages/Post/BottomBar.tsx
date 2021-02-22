@@ -107,9 +107,9 @@ const BottomBar = ({ post }: { post: Post }) => {
   const { score: sc, favoritesCount, commentsCount, readingCount } = statistics
 
   const classes = useStyles(sc)
-  const score = formatNumber(Number(sc))
+  const score = Number(sc)
   const comments = formatNumber(Number(commentsCount))
-  const favorites = Number(formatNumber(Number(favoritesCount)))
+  const favorites = Number(favoritesCount)
   const reads = formatNumber(Number(readingCount))
   const history = useHistory()
   const share = () => {
@@ -154,7 +154,7 @@ const BottomBar = ({ post }: { post: Post }) => {
       <Card
         icon={<ThumbsUpDownIcon />}
         className={classes.scoreCard}
-        amount={score > 0 ? '+' + score : score}
+        amount={score > 0 ? '+' + formatNumber(score) : formatNumber(score)}
         text={'голосов'}
       />
     )
@@ -165,7 +165,7 @@ const BottomBar = ({ post }: { post: Post }) => {
       <Card
         icon={<BookmarkIcon />}
         className={classes.favoritesCard}
-        amount={favorites + (isBookmarked ? 1 : 0)}
+        amount={formatNumber(favorites + (isBookmarked ? 1 : 0))}
         text={'в закладках'}
         onClick={() => setBookmarkState((prev) => !prev)}
       />

@@ -2,6 +2,7 @@ import * as React from 'react'
 import Skeleton from '@material-ui/lab/Skeleton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { GridListTile } from '@material-ui/core'
+import { ADVERTS_BLOCK_HEIGHT } from 'src/config/constants'
 
 const useStyles = makeStyles((theme) => ({
   skeleton: {
@@ -24,7 +25,7 @@ const AdvertsBlockSkeleton = () => {
             variant="rect"
             className={classes.skeleton}
             key={i}
-            height={148}
+            height={ADVERTS_BLOCK_HEIGHT}
           />
         </GridListTile>
       ))}

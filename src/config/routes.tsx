@@ -14,6 +14,8 @@ import Login from 'src/pages/Login'
 import { Theme } from '@material-ui/core'
 import Services from 'src/pages/Services'
 import Home from 'src/pages/Home/index'
+import Me from 'src/pages/Me'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 interface Route {
   path: string | string[]
@@ -75,7 +77,7 @@ const routes: Route[] = [
     title: 'Настройки',
     shouldShowAppBar: true,
     shouldAppBarChangeColors: false,
-    appBarColor: (theme) => theme.palette.background.default,
+    appBarColor: (theme) => getContrastPaperColor(theme),
   },
   {
     path: '/habra-about',
@@ -161,6 +163,13 @@ const routes: Route[] = [
     component: <Home />,
     shouldShowAppBar: true,
     shouldAppBarChangeColors: true,
+  },
+  {
+    path: '/me',
+    component: <Me />,
+    shouldShowAppBar: true,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/',

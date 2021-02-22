@@ -13,8 +13,10 @@ export const GA_ID_STRING = 'UA-188053191-1'
 export const MIN_WIDTH = 900
 
 export const POST_IMAGE_HEIGHT = 212
+export const ADVERTS_BLOCK_HEIGHT = 128
 export const BOTTOM_BAR_HEIGHT = 52
 export const APP_BAR_HEIGHT = 48
+export const POST_READING_PROGRESS_KEY = 'POST_READING_PROGRESS'
 
 export const RATING_MODES: ModeObject[] = [
   {

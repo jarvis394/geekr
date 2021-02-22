@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { fade, makeStyles } from '@material-ui/core/styles'
-import { useParams } from 'react-router'
+import { useLocation, useParams } from 'react-router'
 import { getPost, getCompany } from 'src/store/actions/post'
 import { Link } from 'react-router-dom'
 import PostViewSkeleton from 'src/components/skeletons/PostView'
@@ -26,12 +26,15 @@ import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import { setPostReadingProgress } from 'src/store/actions/post'
 import isMobile from 'is-mobile'
+import PostLocationState from 'src/interfaces/PostLocationState'
+import isDarkTheme from 'src/utils/isDarkTheme'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: '100%',
     maxWidth: '100vw',
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: getContrastPaperColor(theme),
     paddingBottom: theme.spacing(2),
   },
   hubs: {
@@ -51,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   post: {
-    background: theme.palette.background.default,
+    background: getContrastPaperColor(theme),
   },
   authorBar: { paddingTop: theme.spacing(2.5) },
   avatar: {
@@ -78,7 +81,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     lineHeight: '1.56',
     wordBreak: 'break-word',
     hyphens: 'auto',
-    color: theme.palette.type === 'dark' ? '#eee' : theme.palette.text.primary,
+    color: isDarkTheme(theme) ? '#eee' : theme.palette.text.primary,
   },
   title: {
     fontWeight: 800,
@@ -95,7 +98,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   companyHeaderLink: {
     display: 'flex',
-    background: theme.palette.background.default,
+    background: getContrastPaperColor(theme),
     flexDirection: 'column',
   },
   companyHeader: {
@@ -129,6 +132,8 @@ const Post = () => {
   const classes = useStyles()
   const isTranslated = post && post.postLabels.some((e) => e === 'translation')
   const shouldShowContents = post && (companyAlias ? post && company : post)
+  const location = useLocation<PostLocationState>()
+  const offset = location.state ? location.state.offset : 0
   const labels =
     shouldShowContents &&
     post.postLabels.map((e, i) => {
@@ -238,10 +243,19 @@ const Post = () => {
     dispatch(getPost(id))
     companyAlias && dispatch(getCompany(companyAlias))
 
-    // Write progress data to the store
+    if (offset !== 0 && post) {
+      setImmediate(() =>
+        window.scrollTo({
+          top: offset,
+          behavior: 'smooth',
+        })
+      )
+    }
+
+    // Write progress data to the store when the component unloads
     return () => {
       const progress = getScrollProgress()
-      if (progress >= 0.1 && progress <= 0.9) {
+      if (progress >= 0.15 && progress <= 0.8) {
         dispatch(
           setPostReadingProgress({
             post,
@@ -249,9 +263,17 @@ const Post = () => {
             offset: window.pageYOffset,
           })
         )
+      } else {
+        dispatch(
+          setPostReadingProgress({
+            post: null,
+            progress: null,
+            offset: null,
+          })
+        )
       }
     }
-  }, [dispatch, id, companyAlias, post])
+  }, [dispatch, id, companyAlias, post, offset])
 
   if (post) document.title = post.titleHtml
   if (fetchError) return <ErrorComponent message={fetchError} />
@@ -262,6 +284,7 @@ const Post = () => {
     <OutsidePage headerText={post?.titleHtml}>
       <div className={classes.root}>
         {contents}
+
         {/* Bottom bar with some article info */}
         {post && <BottomBar post={post} />}
 

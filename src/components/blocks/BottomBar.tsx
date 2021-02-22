@@ -13,6 +13,7 @@ import { Icon20HomeOutline } from '@vkontakte/icons'
 import { Icon28ServicesOutline } from '@vkontakte/icons'
 import { Icon28SettingsOutline } from '@vkontakte/icons'
 import { Icon28Profile } from '@vkontakte/icons'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 interface TabObject {
   label: string
@@ -26,12 +27,13 @@ const useStyles = makeStyles((theme) => ({
   root: {
     position: 'fixed',
     bottom: 0,
+    left: 0,
     zIndex: theme.zIndex.appBar,
     width: '100%',
     willChange: 'transform',
   },
   container: {
-    background: theme.palette.background.default,
+    background: getContrastPaperColor(theme),
     height: BOTTOM_BAR_HEIGHT,
   },
   item: {
@@ -76,9 +78,9 @@ const tabs: TabObject[] = [
   {
     label: 'Профиль',
     icon: <Icon28Profile width={24} height={24} />,
-    to: () => '/companies',
-    match: /\/companies\/?$/,
-    tab: 'companies',
+    to: () => '/me',
+    match: /\/me\/?$/,
+    tab: 'me',
   },
 ]
 const findPathValue = (path: string): number => {
@@ -88,9 +90,9 @@ const findPathValue = (path: string): number => {
 
 const BottomBar = () => {
   const classes = useStyles()
-  const route = useRoute()
   const history = useHistory()
   const location = useLocation()
+  const route = useRoute()
   const [isShown, setShown] = React.useState(false)
   const [value, setValue] = useState<number>(findPathValue(location.pathname))
   const handleChange = (

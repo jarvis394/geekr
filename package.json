@@ -46,13 +46,14 @@
     "serve": "^11.3.2",
     "src": "^1.1.2",
     "tti-polyfill": "^0.2.2",
+    "web-vitals": "^1.1.0",
     "workbox-build": "^5.1.2"
   },
   "scripts": {
     "start": "npm run start:prod",
     "start:prod": "serve -s build",
     "start:dev": "react-scripts start",
-    "build": "react-scripts build && cra-append-sw ./src/sw-custom.js",
+    "build": "react-scripts build && cra-append-sw ./src/sw-custom.ts",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "npm run lint:eslint && npm run lint:prettier",

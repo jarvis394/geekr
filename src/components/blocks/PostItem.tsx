@@ -21,7 +21,7 @@ import RightIcon from '@material-ui/icons/ChevronRightRounded'
 import { Chip } from '@material-ui/core'
 import { POST_LABELS as postLabels } from 'src/config/constants'
 import { LazyLoadComponent } from 'react-lazy-load-image-component'
-import PostItemSkeleton from 'src/components/skeletons/Post'
+import getPostLink from 'src/utils/getPostLink'
 
 const ld = { lighten, darken }
 const useStyles = makeStyles((theme) => ({
@@ -40,6 +40,14 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     '&:visited > p': {
       color: ld[theme.palette.type + 'en'](theme.palette.text.primary, 0.4),
+    },
+    padding: theme.spacing(0, 2),
+    fontWeight: 800,
+    fontFamily: '"Google Sans"',
+    fontSize: 20,
+    marginTop: (hasImage) => (hasImage ? 0 : theme.spacing(1)),
+    '& .searched-item': {
+      color: theme.palette.primary.light, // Highlight the search query in post's title
     },
   },
   paper: {
@@ -64,16 +72,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     height: '100%',
     objectFit: 'cover',
-    width: '100%',
-  },
-  postTitle: {
-    fontWeight: 800,
-    fontFamily: '"Google Sans"',
-    fontSize: 20,
-    marginTop: (hasImage) => (hasImage ? 0 : theme.spacing(1)),
-    '& .searched-item': {
-      color: theme.palette.primary.light, // Highlight the search query in post's title
-    },
+    width: '100vw',
   },
   previewHTML: {
     marginTop: theme.spacing(1),
@@ -97,7 +96,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.shape.borderRadius,
   },
   postBottomRow: {
-    marginTop: theme.spacing(2),
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -107,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
   postBottomRowItem: {
     color: theme.palette.text.hint,
     textDecoration: 'none',
-    padding: 0,
+    padding: (hasImage) => theme.spacing(hasImage ? 2 : 1.5, 0, 2, 0),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -141,6 +139,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     textDecoration: 'none',
   },
+  labelsContainer: {
+    padding: theme.spacing(0, 2),
+  },
 }))
 
 interface BottomRowItemType {
@@ -156,21 +157,17 @@ interface BottomRowItemType {
 export const PostItem = ({
   post,
   style,
-  loading,
+  hideImage,
 }: {
   post?: Post
   style?: Record<string, unknown>
-  loading?: boolean
+  hideImage?: boolean
 }) => {
   const hiddenAuthors = useSelector((state) => state.settings.hiddenAuthors)
   const hiddenCompanies = useSelector((state) => state.settings.hiddenCompanies)
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
-  const { titleHtml: unparsedTitle, id, statistics, postFirstImage } =
-    post || {}
-  const classes = useStyles(!!postFirstImage)
-
-  // Return a skeleton if the item is loading
-  if (loading) return <PostItemSkeleton />
+  const { titleHtml: unparsedTitle, statistics, postFirstImage } = post || {}
+  const classes = useStyles(!!postFirstImage && !hideImage)
 
   const ts = dayjs(post.timePublished).calendar().toLowerCase()
   const { login, avatarUrl } = post.author
@@ -189,9 +186,7 @@ export const PostItem = ({
   const companyAlias = isCorporative
     ? post.hubs.find((e) => e.type === 'corporative').alias
     : null
-  const postLink = isCorporative
-    ? '/company/' + companyAlias + '/blog/' + id
-    : '/post/' + id
+  const postLink = getPostLink(post)
   const bottomRow: BottomRowItemType[] = [
     {
       icon: ThumbsUpDownIcon,
@@ -220,8 +215,8 @@ export const PostItem = ({
 
   // Return troll text for hidden post
   if (
-    hiddenAuthors.some((e) => e === login) ||
-    (post.isCorporative && hiddenCompanies.some((e) => e === companyAlias))
+    hiddenAuthors.includes(login) ||
+    (isCorporative && hiddenCompanies.includes(companyAlias))
   )
     return (
       <Paper
@@ -304,24 +299,22 @@ export const PostItem = ({
             {ts}
           </Typography>
         </Link>
-        <Link className={classes.imageHolder} to={postLink}>
-          {postFirstImage && (
+        {postFirstImage && !hideImage && (
+          <Link className={classes.imageHolder} to={postLink}>
             <LazyLoadImage
               src={postFirstImage}
               alt={'Post header image'}
               className={classes.image}
             />
-          )}
-        </Link>
-        <div style={{ paddingTop: 0 }} className={classes.padding}>
-          <Link
-            className={classes.postLink + ' ' + classes.noDeco}
-            to={postLink}
-          >
-            <Typography className={classes.postTitle}>{title}</Typography>
           </Link>
+        )}
 
-          {/** Post labels */}
+        <Link className={classes.postLink + ' ' + classes.noDeco} to={postLink}>
+          {title}
+        </Link>
+
+        {/** Post labels */}
+        <div className={classes.labelsContainer}>
           {post.postLabels.map((e, i) => (
             <Chip
               label={postLabels[e].text}
@@ -332,12 +325,12 @@ export const PostItem = ({
               style={{ marginRight: 8, marginTop: 8 }}
             />
           ))}
+        </div>
 
-          <div className={classes.postBottomRow}>
-            {bottomRow.map((e, i) => (
-              <BottomRowItem item={e} key={i} />
-            ))}
-          </div>
+        <div className={classes.postBottomRow}>
+          {bottomRow.map((e, i) => (
+            <BottomRowItem item={e} key={i} />
+          ))}
         </div>
       </Paper>
     </LazyLoadComponent>

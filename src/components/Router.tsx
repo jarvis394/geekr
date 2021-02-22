@@ -1,29 +1,6 @@
 import * as React from 'react'
-import {
-  Switch,
-  Route as ReactRouterRoute,
-  useLocation,
-} from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import routes from 'src/config/routes'
-import { Fade } from '@material-ui/core'
-import ReactGA from 'react-ga'
-
-const Route = ({ children, key, ...props }) => {
-  const location = useLocation()
-
-  React.useEffect(() => {
-    ReactGA.set({ page: location.pathname })
-    ReactGA.pageview(location.pathname)
-  }, [location.pathname])
-
-  return (
-    <Fade in key={key}>
-      <div>
-        <ReactRouterRoute {...props}>{children}</ReactRouterRoute>
-      </div>
-    </Fade>
-  )
-}
 
 const Router = () => (
   <Switch>

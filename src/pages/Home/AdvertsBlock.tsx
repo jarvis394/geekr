@@ -7,20 +7,15 @@ import {
   Fade,
   useTheme,
 } from '@material-ui/core'
-import {
-  darken,
-  fade,
-  lighten,
-  makeStyles,
-  ThemeOptions,
-} from '@material-ui/core/styles'
+import { darken, fade, lighten, makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
 import { getAdverts } from 'src/store/actions/home'
 import { useDispatch } from 'react-redux'
 import AdvertsBlockSkeleton from '../../components/skeletons/AdvertsBlockSkeleton'
 import isMobile from 'is-mobile'
+import { ADVERTS_BLOCK_HEIGHT } from 'src/config/constants'
+import isDarkTheme from 'src/utils/isDarkTheme'
 
-const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(1),
@@ -95,6 +90,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 18,
     fontWeight: 800,
     textAlign: 'initial',
+    display: '-webkit-box',
+    '-webkit-line-clamp': 2,
+    '-webkit-box-orient': 'vertical',
+    overflow: 'hidden',
     color: theme.palette.getContrastText(theme.palette.common.black),
   },
   label: {
@@ -137,7 +136,11 @@ const AdvertsBlock = () => {
   return (
     <div className={classes.root}>
       <div className={classes.header}>Мегапосты</div>
-      <GridList cellHeight={148} className={classes.buttonsHolder} cols={1.1}>
+      <GridList
+        cellHeight={ADVERTS_BLOCK_HEIGHT}
+        className={classes.buttonsHolder}
+        cols={1.1}
+      >
         {data &&
           data.map((e, i) => (
             <GridListTile
