@@ -81,8 +81,8 @@ const LazyLoadImage = (props) => {
   const items = [
     {
       src: props.src,
-      w: style.width !== 'auto' ? style.width : 1200,
-      h: style.height !== 'auto' ? style.height : 900,
+      w: style && style?.width !== 'auto' ? style.width : 1200,
+      h: style && style?.height !== 'auto' ? style.height : 900,
       title: alt,
     },
   ]
