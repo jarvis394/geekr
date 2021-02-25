@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import ProgressiveImage from 'react-lazy-progressive-image'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
-import { Backdrop, CircularProgress, Fade, makeStyles } from '@material-ui/core'
+import { CircularProgress, Fade, makeStyles } from '@material-ui/core'
 import { MIN_WIDTH } from 'src/config/constants'
+import { PhotoSwipe } from 'react-photoswipe'
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -33,43 +34,59 @@ interface ImageProps {
   src: string
   loading: boolean
   isVisible: boolean
+  style: Record<string, string | number>
+  alt: string
+  className: string
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
+
+const ImageUnmemoized = ({
+  src,
+  loading,
+  style,
+  alt,
+  className,
+  setOpen,
+}: ImageProps) => {
+  const classes = useStyles()
+  if (loading && (!src || src === '/img/image-loader.svg'))
+    return (
+      <div className={classes.imagePlaceholder + ' ' + className} style={style}>
+        <Fade in timeout={500} style={{ transitionDelay: '1s' }}>
+          <div>
+            <CircularProgress />
+          </div>
+        </Fade>
+      </div>
+    )
+
+  return (
+    <Fade in timeout={250}>
+      <img
+        onClick={() => setOpen(true)}
+        className={classes.image + ' ' + className}
+        width={style?.width || 'auto'}
+        height={style?.height || 'auto'}
+        style={style}
+        src={src}
+        alt={alt || 'Image'}
+      />
+    </Fade>
+  )
+}
+const Image = React.memo(ImageUnmemoized)
 
 const LazyLoadImage = (props) => {
   const [isOpen, setOpen] = useState(false)
-  const classes = useStyles()
   const { style, alt, className } = props
-
-  const ImageUnmemoized = ({ src, loading }: ImageProps) => {
-    if (loading && (!src || src === '/img/image-loader.svg'))
-      return (
-        <div
-          className={classes.imagePlaceholder + ' ' + className}
-          style={style}
-        >
-          <Fade in timeout={500} style={{ transitionDelay: '1s' }}>
-            <div>
-              <CircularProgress />
-            </div>
-          </Fade>
-        </div>
-      )
-
-    return (
-      <Fade in={!isOpen} timeout={250}>
-        <img
-          onClick={() => setOpen(true)}
-          className={classes.image + ' ' + className}
-          width={style?.width || 'auto'}
-          height={style?.height || 'auto'}
-          style={style}
-          src={src}
-          alt={alt || 'Image'}
-        />
-      </Fade>
-    )
-  }
-  const Image = React.memo(ImageUnmemoized)
+  const items = [
+    {
+      src: props.src,
+      w: style?.width || 1200,
+      h: style?.height || 900,
+      title: alt,
+    },
+  ]
 
   return (
     <>
@@ -81,28 +98,22 @@ const LazyLoadImage = (props) => {
         }}
       >
         {(src: string, loading: boolean, isVisible: boolean) => (
-          <Image src={src} loading={loading} isVisible={isVisible} />
+          <Image
+            src={src}
+            setOpen={setOpen}
+            loading={loading}
+            isVisible={isVisible}
+            style={style}
+            alt={alt}
+            className={className}
+          />
         )}
       </ProgressiveImage>
-      {
-        <Backdrop
-          className={classes.backdrop}
-          open={isOpen}
-          onClick={() => setOpen(false)}
-          unmountOnExit
-          mountOnEnter
-        >
-          <TransformWrapper>
-            <TransformComponent key={props.src}>
-              <img
-                style={{ width: '100%', zIndex: 2001 }}
-                src={props.src}
-                alt={props.alt}
-              />
-            </TransformComponent>
-          </TransformWrapper>
-        </Backdrop>
-      }
+      <PhotoSwipe
+        isOpen={isOpen}
+        items={items}
+        onClose={() => setOpen(false)}
+      />
     </>
   )
 }
