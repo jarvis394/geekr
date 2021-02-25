@@ -8,6 +8,7 @@ import LazyLoadImage from '../blocks/LazyLoadImage'
 import Details from '../blocks/Details'
 import Iframe from 'react-iframe'
 import { Node as MathJaxNode } from '@nteract/mathjax'
+import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 
 type FloatType = 'left' | 'right'
 interface IframeResizeData {
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     '& p': { margin: 0, marginTop: (d) => (d ? 0 : theme.spacing(3)) },
     '& em': { color: fade(theme.palette.text.primary, 0.75) },
     '& code': {
-      background: theme.palette.background.default,
+      background: getInvertedContrastPaperColor(theme),
       padding: theme.spacing(0.25),
       borderRadius: theme.shape.borderRadius,
       wordBreak: 'break-word',
