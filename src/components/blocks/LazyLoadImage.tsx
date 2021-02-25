@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import ProgressiveImage from 'react-lazy-progressive-image'
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import { CircularProgress, Fade, makeStyles } from '@material-ui/core'
 import { MIN_WIDTH } from 'src/config/constants'
 import { PhotoSwipe } from 'react-photoswipe'
