@@ -10,11 +10,17 @@ import CommentsIocn from '@material-ui/icons/CommentRounded'
 import { Icon28ShareOutline as ShareIcon } from '@vkontakte/icons'
 import formatNumber from 'src/utils/formatNumber'
 import { Post } from 'src/interfaces'
-import { Button, ButtonBase, fade, Typography } from '@material-ui/core'
+import { Button, ButtonBase, fade, Theme, Typography } from '@material-ui/core'
 import { useHistory } from 'react-router'
 import { useSnackbar } from 'notistack'
 
-const useStyles = makeStyles((theme) => ({
+const getScoreColor = (score: number, theme: Theme) => {
+  if (score === 0) return theme.palette.background.paper
+  else if (score > 0) return theme.palette.success.main
+  else if (score < 0) return theme.palette.error.main
+}
+
+const useStyles = makeStyles<Theme, { score: number }, string>((theme) => ({
   container: {
     maxWidth,
     backgroundColor: theme.palette.background.default,
@@ -82,15 +88,8 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.background.paper,
   },
   scoreCard: {
-    background: (score) =>
-      fade(
-        score === 0
-          ? theme.palette.background.paper
-          : score > 0
-          ? theme.palette.success.main
-          : theme.palette.error.main,
-        0.7
-      ),
+    background: ({ score }: { score: number }) =>
+      fade(getScoreColor(score, theme), 0.7),
   },
   favoritesCard: {
     background: fade(theme.palette.primary.main, 0.7),
@@ -106,7 +105,7 @@ const BottomBar = ({ post }: { post: Post }) => {
   const { id, titleHtml: title, statistics } = post
   const { score: sc, favoritesCount, commentsCount, readingCount } = statistics
 
-  const classes = useStyles(sc)
+  const classes = useStyles({ score: sc })
   const score = Number(sc)
   const comments = formatNumber(Number(commentsCount))
   const favorites = Number(favoritesCount)

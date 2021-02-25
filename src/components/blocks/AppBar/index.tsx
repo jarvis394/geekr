@@ -72,6 +72,7 @@ const useStyles = makeStyles((theme) => ({
   },
   headerTitleWrapper: {
     display: 'flex',
+    alignItems: 'center',
     flexGrow: 1,
   },
   offline: {

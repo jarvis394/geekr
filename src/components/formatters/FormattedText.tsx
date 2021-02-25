@@ -119,6 +119,7 @@ const FormattedText = ({
   >({})
   const theme = useTheme()
   const options: HTMLReactParserOptions = {
+    trim: true,
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === 'pre') {
         const firstChild = children[0]
@@ -167,14 +168,7 @@ const FormattedText = ({
 
         return (
           <LazyLoadImage
-            placeholder={
-              <img
-                src={attribs.src || attribs['data-src']}
-                alt={attribs.alt || 'Image'}
-                style={imgStyles}
-                className={classes.img}
-              />
-            }
+            placeholderSrc={attribs.src}
             // First try to load src from 'data-src' attribute
             // If not found, then use default 'src' attribute
             src={attribs['data-src'] || attribs.src}
