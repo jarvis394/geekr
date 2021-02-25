@@ -5,6 +5,8 @@ import { PaletteType as MUIPaletteType } from '@material-ui/core'
 export const API_URL = 'https://m.habr.com/kek/'
 export const API_TOKEN_URL = 'https://jarvis394-backend.ml/habra/'
 
+export const GA_ID_STRING = 'UA-188053191-1'
+
 /**
  * Minimal application width to stay with the drawer
  */

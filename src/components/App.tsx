@@ -14,6 +14,7 @@ import Tabs from './blocks/Tabs/RouterTabs'
 import ScrollRestoration from 'react-scroll-restoration'
 import RouterTitleChange from './RouterTitleChange'
 import { SnackbarProvider } from 'notistack'
+import useAnalytics from 'src/hooks/useAnalytics'
 
 const chromeAddressBarHeight = 56
 const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
@@ -78,6 +79,8 @@ const App = (): React.ReactElement => {
   const storeTheme = useSelector((state) => state.settings.theme)
   const theme = createMuiTheme(storeTheme)
   const classes = useStyles(theme)
+
+  useAnalytics()
 
   // Set root classes
   document.body.className = classes.root

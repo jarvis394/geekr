@@ -11,6 +11,10 @@ import calendarPlugin from 'dayjs/plugin/calendar'
 import updateLocalePlugin from 'dayjs/plugin/updateLocale'
 import 'react-lazy-load-image-component/src/effects/opacity.css'
 import 'dayjs/locale/ru'
+import ReactGA from 'react-ga'
+import { GA_ID_STRING } from 'src/config/constants'
+
+ReactGA.initialize(GA_ID_STRING)
 
 dayjs.locale('ru')
 dayjs.extend(relativeTimePlugin)
