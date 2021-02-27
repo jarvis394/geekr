@@ -12,6 +12,11 @@ export const GA_ID_STRING = 'UA-188053191-1'
  */
 export const MIN_WIDTH = 900
 
+/**
+ * Negative threshold for VisibilitySensor in PostItem component
+ */
+export const POST_ITEM_VISIBILITY_THRESHOLD = -250
+
 export const POST_IMAGE_HEIGHT = 212
 export const ADVERTS_BLOCK_HEIGHT = 128
 export const BOTTOM_BAR_HEIGHT = 52

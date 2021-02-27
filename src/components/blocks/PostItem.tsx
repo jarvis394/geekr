@@ -14,14 +14,17 @@ import dayjs from 'dayjs'
 import parse from 'html-react-parser'
 import { Post } from 'src/interfaces'
 import UserAvatar from './UserAvatar'
-import { POST_IMAGE_HEIGHT } from 'src/config/constants'
+import {
+  POST_IMAGE_HEIGHT,
+  POST_ITEM_VISIBILITY_THRESHOLD,
+} from 'src/config/constants'
 import LazyLoadImage from './LazyLoadImage'
 import { useSelector } from 'src/hooks'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
 import { Chip } from '@material-ui/core'
 import { POST_LABELS as postLabels } from 'src/config/constants'
-import { LazyLoadComponent } from 'react-lazy-load-image-component'
 import getPostLink from 'src/utils/getPostLink'
+import VisibilitySensor from 'react-visibility-sensor'
 
 const ld = { lighten, darken }
 const useStyles = makeStyles((theme) => ({
@@ -66,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     height: (hasImage) => (hasImage ? POST_IMAGE_HEIGHT : '100%'),
     marginBottom: (hasImage) => (hasImage ? theme.spacing(2) : 0),
+    background: theme.palette.action.hover,
   },
   image: {
     maxWidth: '100%',
@@ -167,6 +171,7 @@ export const PostItem = ({
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
   const { titleHtml: unparsedTitle, statistics, postFirstImage } = post || {}
   const classes = useStyles(!!postFirstImage && !hideImage)
+  const [isRendered, setIsRendered] = React.useState(false)
 
   const ts = dayjs(post.timePublished).calendar().toLowerCase()
   const { login, avatarUrl } = post.author
@@ -283,56 +288,74 @@ export const PostItem = ({
   }
 
   return (
-    <LazyLoadComponent placeholder={<div className={classes.placeholder} />}>
-      <Paper elevation={0} className={classes.paper} style={style}>
-        <Link to={'/user/' + login} className={classes.avatarContainer}>
-          <UserAvatar
-            src={avatarUrl}
-            login={login}
-            className={classes.postAvatar}
-          />
-          <Typography className={classes.postAuthor} variant="caption">
-            {login}
-          </Typography>
-          <Typography className={classes.postTs} variant="caption">
-            {ts}
-          </Typography>
-        </Link>
-        {postFirstImage && !hideImage && (
-          <Link className={classes.imageHolder} to={postLink}>
-            <LazyLoadImage
-              src={postFirstImage}
-              alt={'Post header image'}
-              className={classes.image}
-            />
-          </Link>
-        )}
+    <VisibilitySensor
+      partialVisibility
+      offset={{
+        top: POST_ITEM_VISIBILITY_THRESHOLD,
+        bottom: POST_ITEM_VISIBILITY_THRESHOLD,
+      }}
+      active={!isRendered}
+      onChange={(newIsVisible) => setIsRendered(newIsVisible)}
+    >
+      {({ isVisible }) => (
+        <>
+          {!isVisible && <div className={classes.placeholder} />}
+          {isVisible && (
+            <Paper elevation={0} className={classes.paper} style={style}>
+              <Link to={'/user/' + login} className={classes.avatarContainer}>
+                <UserAvatar
+                  src={avatarUrl}
+                  login={login}
+                  className={classes.postAvatar}
+                />
+                <Typography className={classes.postAuthor} variant="caption">
+                  {login}
+                </Typography>
+                <Typography className={classes.postTs} variant="caption">
+                  {ts}
+                </Typography>
+              </Link>
+              {postFirstImage && !hideImage && (
+                <Link className={classes.imageHolder} to={postLink}>
+                  <LazyLoadImage
+                    src={postFirstImage}
+                    alt={'Post header image'}
+                    className={classes.image}
+                  />
+                </Link>
+              )}
 
-        <Link className={classes.postLink + ' ' + classes.noDeco} to={postLink}>
-          {title}
-        </Link>
+              <Link
+                className={classes.postLink + ' ' + classes.noDeco}
+                to={postLink}
+              >
+                {title}
+              </Link>
 
-        {/** Post labels */}
-        <div className={classes.labelsContainer}>
-          {post.postLabels.map((e, i) => (
-            <Chip
-              label={postLabels[e].text}
-              variant="outlined"
-              color="primary"
-              size="small"
-              key={i}
-              style={{ marginRight: 8, marginTop: 8 }}
-            />
-          ))}
-        </div>
+              {/** Post labels */}
+              <div className={classes.labelsContainer}>
+                {post.postLabels.map((e, i) => (
+                  <Chip
+                    label={postLabels[e].text}
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    key={i}
+                    style={{ marginRight: 8, marginTop: 8 }}
+                  />
+                ))}
+              </div>
 
-        <div className={classes.postBottomRow}>
-          {bottomRow.map((e, i) => (
-            <BottomRowItem item={e} key={i} />
-          ))}
-        </div>
-      </Paper>
-    </LazyLoadComponent>
+              <div className={classes.postBottomRow}>
+                {bottomRow.map((e, i) => (
+                  <BottomRowItem item={e} key={i} />
+                ))}
+              </div>
+            </Paper>
+          )}
+        </>
+      )}
+    </VisibilitySensor>
   )
 }
 

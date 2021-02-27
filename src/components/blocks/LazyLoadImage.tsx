@@ -1,29 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import ProgressiveImage from 'react-lazy-progressive-image'
 import { CircularProgress, Fade, makeStyles } from '@material-ui/core'
-import { MIN_WIDTH } from 'src/config/constants'
 import { PhotoSwipe } from 'react-photoswipe'
 
 const useStyles = makeStyles((theme) => ({
-  backdrop: {
-    zIndex: 2000,
-    '& > div.react-transform-component': {
-      overflow: 'auto',
-      width: '100%',
-      height: '100%',
-    },
-  },
   image: {
     height: 'auto',
     maxWidth: '100%',
     backgroundColor: theme.palette.action.hover,
   },
   imagePlaceholder: {
-    backgroundColor: theme.palette.action.hover,
-    height: '50vw',
-    maxHeight: MIN_WIDTH / 2,
     display: 'flex',
-    justifyContent: 'center',
     width: '100%',
     alignItems: 'center',
   },
@@ -39,53 +26,79 @@ interface ImageProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ImageUnmemoized = ({
-  src,
-  loading,
-  style,
-  alt,
-  className,
-  setOpen,
-}: ImageProps) => {
-  const classes = useStyles()
-  if (loading && (!src || src === '/img/image-loader.svg'))
-    return (
-      <div className={classes.imagePlaceholder + ' ' + className} style={style}>
-        <Fade in timeout={500} style={{ transitionDelay: '1s' }}>
-          <div>
-            <CircularProgress />
-          </div>
-        </Fade>
-      </div>
-    )
+const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
+  function ImageComponent(
+    { src, loading, style, alt, className, setOpen },
+    ref
+  ) {
+    const classes = useStyles()
+    if (loading && (!src || src === '/img/image-loader.svg'))
+      return (
+        <div
+          className={classes.imagePlaceholder + ' ' + className}
+          style={style}
+        >
+          <Fade in timeout={500} style={{ transitionDelay: '1s' }}>
+            <div>
+              <CircularProgress size="1.5rem" thickness={4.5} />
+            </div>
+          </Fade>
+        </div>
+      )
 
-  return (
-    <Fade in timeout={250}>
-      <img
-        onClick={() => setOpen(true)}
-        className={classes.image + ' ' + className}
-        width={style?.width || 'auto'}
-        height={style?.height || 'auto'}
-        style={style}
-        src={src}
-        alt={alt || 'Image'}
-      />
-    </Fade>
-  )
-}
+    return (
+      <Fade in timeout={250}>
+        <img
+          ref={ref}
+          onClick={() => !loading && setOpen(true)}
+          className={classes.image + ' ' + className}
+          width={style?.width || 'auto'}
+          height={style?.height || 'auto'}
+          style={style}
+          src={src}
+          alt={alt || 'Image'}
+        />
+      </Fade>
+    )
+  }
+)
 const Image = React.memo(ImageUnmemoized)
 
 const LazyLoadImage = (props) => {
   const [isOpen, setOpen] = useState(false)
+  const imageRef = useRef<HTMLImageElement>(null)
   const { style, alt, className } = props
-  const items = [
+  const items: PhotoSwipe.Item[] = [
     {
       src: props.src,
       w: style && style?.width !== 'auto' ? style.width : 1200,
       h: style && style?.height !== 'auto' ? style.height : 900,
-      title: alt,
     },
   ]
+  const pswpOptions: PhotoSwipe.UIFramework = {
+    showHideOpacity: true,
+    bgOpacity: 0.8,
+    fullscreenEl: false,
+    zoomEl: false,
+    shareEl: false,
+    counterEl: false,
+    arrowEl: false,
+    captionEl: false,
+  }
+
+  // Set image dimensions after it is done loading
+  // PhotoSwipe requires image dimensions to be set before it is opened,
+  // so we set them as soon as the image (in FormattedText, probably) is loaded.
+  // User cannot open PhotoSwipe before image loads.
+  useEffect(() => {
+    if (imageRef.current !== null) {
+      const imageWidth = imageRef.current.naturalWidth
+      const imageHeight = imageRef.current.naturalHeight
+      items[0].w = imageWidth
+      items[0].h = imageHeight
+    }
+    // needs isOpen to update on every close, somewhy resets after close-open
+  }, [imageRef.current, isOpen])
 
   return (
     <>
@@ -98,6 +111,7 @@ const LazyLoadImage = (props) => {
       >
         {(src: string, loading: boolean, isVisible: boolean) => (
           <Image
+            ref={imageRef}
             src={src}
             setOpen={setOpen}
             loading={loading}
@@ -108,11 +122,14 @@ const LazyLoadImage = (props) => {
           />
         )}
       </ProgressiveImage>
-      <PhotoSwipe
-        isOpen={isOpen}
-        items={items}
-        onClose={() => setOpen(false)}
-      />
+      {isOpen && imageRef.current && (
+        <PhotoSwipe
+          options={pswpOptions}
+          isOpen={isOpen}
+          items={items}
+          onClose={() => setOpen(false)}
+        />
+      )}
     </>
   )
 }

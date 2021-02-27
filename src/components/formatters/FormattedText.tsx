@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid ' + theme.palette.divider,
     borderRadius: theme.shape.borderRadius,
     padding: theme.spacing(2) + 'px !important',
-    background: theme.palette.background.default + ' !important',
+    background: getInvertedContrastPaperColor(theme) + ' !important',
     color: theme.palette.text.primary + ' !important',
   },
   iframe: {

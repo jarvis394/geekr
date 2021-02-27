@@ -52,6 +52,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&:hover': {
       color: theme.palette.primary.light,
     },
+    ...theme.typography.body2,
+  },
+  hubWrapper: {
+    color: theme.palette.text.hint,
+    '&::after': {
+      content: '",\u2004"',
+    },
+    '&:last-child::after': {
+      content: '""',
+    },
   },
   post: {
     background: getContrastPaperColor(theme),
@@ -196,12 +206,11 @@ const Post = () => {
         <Typography className={classes.title}>{post.titleHtml}</Typography>
         <div className={classes.hubs}>
           {post.hubs.map((hub, i) => (
-            <Typography key={i} variant="body2" component="span">
+            <span key={i} className={classes.hubWrapper}>
               <Link className={classes.hubLink} to={'/hub/' + hub.alias}>
                 {hub.title}
-                {post.hubs.length - 1 !== i && ', '}
               </Link>
-            </Typography>
+            </span>
           ))}
         </div>
         {labels}
