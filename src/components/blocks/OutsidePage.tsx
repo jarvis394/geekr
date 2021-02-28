@@ -9,13 +9,15 @@ import {
   Typography,
 } from '@material-ui/core'
 import BackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 import { APP_BAR_HEIGHT, MIN_WIDTH } from 'src/config/constants'
 import isMobile from 'is-mobile'
 import { chromeAddressBarHeight } from 'src/config/constants'
 import { useScrollTrigger } from 'src/hooks'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
+import getCachedMode from 'src/utils/getCachedMode'
+import OutsidePageLocationState from 'src/interfaces/OutsidePageLocationState'
 
 interface StyleProps {
   isShrinked: boolean
@@ -143,13 +145,18 @@ const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
 const UnshrinkedContent = ({ isShrinked, headerText }) => {
   const classes = useAppBarStyles({ isShrinked, scrollProgress: 0 })
   const history = useHistory()
+  const location = useLocation<OutsidePageLocationState>()
+  const defaultBackLink = getCachedMode().to + '/p/1'
+  const backLinkData = location.state.from
+  const backLink = backLinkData || defaultBackLink
+
   return (
-    <Fade in={!isShrinked}>
+    <Fade in={!isShrinked} appear={false}>
       <div className={classes.content}>
         <IconButton
           disableRipple={isShrinked}
           className={classes.headerIcon}
-          onClick={() => (isShrinked ? {} : history.goBack())}
+          onClick={() => (isShrinked ? {} : history.push(backLink))}
         >
           <BackRoundedIcon />
         </IconButton>

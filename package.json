@@ -20,6 +20,7 @@
     "habra-auth": "^2.3.3",
     "html-react-parser": "^1.2.4",
     "is-mobile": "^2.2.2",
+    "material-auto-rotating-carousel": "^3.0.2",
     "notistack": "^1.0.3",
     "number-to-words-ru": "^2.3.0",
     "path-to-regexp": "^6.2.0",
