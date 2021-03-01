@@ -13,11 +13,11 @@ import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
 import UserAvatar from 'src/components/blocks/UserAvatar'
 import { UserExtended } from 'src/interfaces/User'
-import { Link } from 'react-router-dom'
 import { useSelector } from 'src/hooks'
 import ProfileChildrenSkeleton from 'src/components/skeletons/ProfileChildren'
 import { useDispatch } from 'react-redux'
 import { getProfileChildren } from 'src/store/actions/profile'
+import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -89,7 +89,7 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const Item = ({ data }: { data: UserExtended }) => (
     <ListItem
       style={{ paddingLeft: 0, paddingRight: 0 }}
-      component={Link}
+      component={LinkToOutsidePage}
       to={'/user/' + data.login}
     >
       <ListItemAvatar>

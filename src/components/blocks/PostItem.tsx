@@ -1,7 +1,6 @@
 import * as React from 'react'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import { Link } from 'react-router-dom'
 import Paper from '@material-ui/core/Paper'
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import VisibilityIcon from '@material-ui/icons/Visibility'
@@ -21,10 +20,13 @@ import {
 import LazyLoadImage from './LazyLoadImage'
 import { useSelector } from 'src/hooks'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
-import { Chip } from '@material-ui/core'
+import { Chip, fade } from '@material-ui/core'
 import { POST_LABELS as postLabels } from 'src/config/constants'
 import getPostLink from 'src/utils/getPostLink'
 import VisibilitySensor from 'react-visibility-sensor'
+import { useLocation, useHistory } from 'react-router-dom'
+import OutsidePageLocationState from 'src/interfaces/OutsidePageLocationState'
+import LinkToOutsidePage from './LinkToOutsidePage'
 
 const ld = { lighten, darken }
 const useStyles = makeStyles((theme) => ({
@@ -114,6 +116,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     userSelect: 'none',
     fontWeight: 600,
+    '-webkit-tap-highlight-color': fade(theme.palette.background.paper, 0.3),
   },
   postBottomRowItemIcon: {
     fontSize: 16,
@@ -141,6 +144,8 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Google Sans',
     fontWeight: 500,
     textDecoration: 'none',
+    display: 'flex',
+    alignItems: 'center',
   },
   labelsContainer: {
     padding: theme.spacing(0, 2),
@@ -152,7 +157,6 @@ interface BottomRowItemType {
   text: string | number
   coloredText?: boolean
   number?: number
-  to?: string
   isActive?: boolean
   action?: () => void
 }
@@ -172,7 +176,9 @@ export const PostItem = ({
   const { titleHtml: unparsedTitle, statistics, postFirstImage } = post || {}
   const classes = useStyles(!!postFirstImage && !hideImage)
   const [isRendered, setIsRendered] = React.useState(false)
-
+  const history = useHistory<OutsidePageLocationState>()
+  const location = useLocation()
+  const currentLocation = location.pathname
   const ts = dayjs(post.timePublished).calendar().toLowerCase()
   const { login, avatarUrl } = post.author
   const {
@@ -213,7 +219,11 @@ export const PostItem = ({
     {
       icon: ChatBubbleIcon,
       text: comments,
-      to: postLink + '/comments',
+      action: () => {
+        history.push(postLink + '/comments', {
+          from: currentLocation,
+        })
+      },
     },
   ]
 
@@ -229,16 +239,12 @@ export const PostItem = ({
         className={classes.paper}
       >
         <Typography className={classes.trollText}>Тут был тролль</Typography>
-        <Link
-          className={classes.trollLink}
-          to={postLink}
-          style={{ display: 'flex', alignItems: 'center' }}
-        >
+        <LinkToOutsidePage className={classes.trollLink} to={postLink}>
           <Typography className={classes.trollLink}>
             всё равно читать
           </Typography>
           <RightIcon />
-        </Link>
+        </LinkToOutsidePage>
       </Paper>
     )
 
@@ -251,14 +257,12 @@ export const PostItem = ({
     )
     return (
       <Grid
-        component={item.to ? Link : Grid}
         xs={3}
         item
-        to={item.to}
-        onClick={item.action || null}
+        onClick={item.action}
         color={item.isActive ? 'primary' : 'default'}
         style={{
-          cursor: item.action || item.to ? 'pointer' : 'inherit',
+          cursor: item.action ? 'pointer' : 'inherit',
         }}
         className={classes.postBottomRowItem}
       >
@@ -302,7 +306,10 @@ export const PostItem = ({
           {!isVisible && <div className={classes.placeholder} />}
           {isVisible && (
             <Paper elevation={0} className={classes.paper} style={style}>
-              <Link to={'/user/' + login} className={classes.avatarContainer}>
+              <LinkToOutsidePage
+                to={'/user/' + login}
+                className={classes.avatarContainer}
+              >
                 <UserAvatar
                   src={avatarUrl}
                   login={login}
@@ -314,23 +321,26 @@ export const PostItem = ({
                 <Typography className={classes.postTs} variant="caption">
                   {ts}
                 </Typography>
-              </Link>
+              </LinkToOutsidePage>
               {postFirstImage && !hideImage && (
-                <Link className={classes.imageHolder} to={postLink}>
+                <LinkToOutsidePage
+                  className={classes.imageHolder}
+                  to={postLink}
+                >
                   <LazyLoadImage
                     src={postFirstImage}
                     alt={'Post header image'}
                     className={classes.image}
                   />
-                </Link>
+                </LinkToOutsidePage>
               )}
 
-              <Link
+              <LinkToOutsidePage
                 className={classes.postLink + ' ' + classes.noDeco}
                 to={postLink}
               >
                 {title}
-              </Link>
+              </LinkToOutsidePage>
 
               {/** Post labels */}
               <div className={classes.labelsContainer}>

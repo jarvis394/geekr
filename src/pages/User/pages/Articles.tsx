@@ -5,9 +5,10 @@ import Pagination from 'src/components/blocks/Pagination'
 import { useParams, useHistory } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { getProfileArticles } from 'src/store/actions/profile'
-import { List, makeStyles } from '@material-ui/core'
+import { List, makeStyles, useTheme } from '@material-ui/core'
 import PostSkeleton from 'src/components/skeletons/Post'
 import ErrorComponent from 'src/components/blocks/Error'
+import OutsidePage from 'src/components/blocks/OutsidePage'
 
 interface ArticlesPathParams {
   page: string
@@ -21,11 +22,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Articles = () => {
+const UserArticles = () => {
   const params = useParams() as ArticlesPathParams
   const currentPage = Number(params.page)
   const history = useHistory()
   const classes = useStyles()
+  const theme = useTheme()
   const dispatch = useDispatch()
   const isFetched = useSelector((state) => state.profile.articles.fetched)
   const isFetching = useSelector((state) => state.profile.articles.fetching)
@@ -58,23 +60,32 @@ const Articles = () => {
   }, [profile.login, currentPage, dispatch])
 
   return (
-    <List className={classes.root}>
-      {isFetching && [...new Array(7)].map((_, i) => <PostSkeleton key={i} />)}
-      {isFetched &&
-        !fetchError &&
-        data &&
-        data.articleIds.map((id: number) => (
-          <PostItem post={data.articleRefs[id]} key={id} />
-        ))}
-      {fetchError && (
-        <ErrorComponent
-          message={fetchError.error.message}
-          to={`/user/${profile.login}/articles/1`}
-        />
-      )}
-      <PaginationComponent />
-    </List>
+    <OutsidePage
+      headerText={'Публикации'}
+      hidePositionBar
+      backgroundColor={theme.palette.background.paper}
+      shrinkedBackgroundColor={theme.palette.background.paper}
+      shrinkedHeaderText={'Публикации'}
+    >
+      <List className={classes.root}>
+        {isFetching &&
+          [...new Array(4)].map((_, i) => <PostSkeleton key={i} />)}
+        {isFetched &&
+          !fetchError &&
+          data &&
+          data.articleIds.map((id: number) => (
+            <PostItem post={data.articleRefs[id]} key={id} />
+          ))}
+        {fetchError && (
+          <ErrorComponent
+            message={fetchError.error.message}
+            to={`/user/${profile.login}`}
+          />
+        )}
+        <PaginationComponent />
+      </List>
+    </OutsidePage>
   )
 }
 
-export default Articles
+export default UserArticles

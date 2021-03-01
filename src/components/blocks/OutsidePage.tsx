@@ -22,6 +22,8 @@ import OutsidePageLocationState from 'src/interfaces/OutsidePageLocationState'
 interface StyleProps {
   isShrinked: boolean
   scrollProgress: number
+  backgroundColor?: string
+  shrinkedBackgroundColor?: string
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -40,10 +42,14 @@ const useStyles = makeStyles((theme) => ({
 
 const useAppBarStyles = makeStyles((theme) => ({
   header: {
-    backgroundColor: ({ isShrinked }: StyleProps) =>
+    backgroundColor: ({
+      isShrinked,
+      backgroundColor,
+      shrinkedBackgroundColor,
+    }: StyleProps) =>
       isShrinked
-        ? getInvertedContrastPaperColor(theme)
-        : getContrastPaperColor(theme),
+        ? backgroundColor || getInvertedContrastPaperColor(theme)
+        : shrinkedBackgroundColor || getContrastPaperColor(theme),
     color: theme.palette.text.primary,
     position: 'fixed',
     willChange: 'transform',
@@ -126,10 +132,12 @@ const useAppBarStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  children?: unknown
-  headerText?: unknown
-  hidePositionBar?: boolean
-  shrinkedHeaderText?: unknown
+  children: unknown
+  headerText: unknown
+  hidePositionBar: boolean
+  shrinkedHeaderText: unknown
+  shrinkedBackgroundColor: string
+  backgroundColor: string
 }
 
 const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
@@ -147,7 +155,7 @@ const UnshrinkedContent = ({ isShrinked, headerText }) => {
   const history = useHistory()
   const location = useLocation<OutsidePageLocationState>()
   const defaultBackLink = getCachedMode().to + '/p/1'
-  const backLinkData = location.state.from
+  const backLinkData = location?.state?.from
   const backLink = backLinkData || defaultBackLink
 
   return (
@@ -176,6 +184,8 @@ const NavBarUnmemoized = ({
   headerText,
   shrinkedHeaderText,
   hidePositionBar = false,
+  shrinkedBackgroundColor,
+  backgroundColor,
 }) => {
   const isShrinked = useScrollTrigger({
     threshold: 48,
@@ -183,7 +193,12 @@ const NavBarUnmemoized = ({
   const [scrollProgress, setScrollProgress] = useState(
     hidePositionBar ? 0 : Math.min(window.pageYOffset / 48, 1)
   )
-  const classes = useAppBarStyles({ isShrinked, scrollProgress })
+  const classes = useAppBarStyles({
+    isShrinked,
+    scrollProgress,
+    backgroundColor,
+    shrinkedBackgroundColor,
+  })
   const scrollCallback = () =>
     requestAnimationFrame(() => {
       const position = window.pageYOffset
@@ -228,9 +243,15 @@ const NavBarUnmemoized = ({
 }
 const NavBar = React.memo(NavBarUnmemoized)
 
-const OutsidePage = ({ children, ...props }: Props) => {
+const OutsidePage = ({ children, ...props }: Partial<Props>) => {
+  const {
+    headerText,
+    hidePositionBar,
+    shrinkedHeaderText,
+    backgroundColor,
+    shrinkedBackgroundColor,
+  } = props
   const classes = useStyles()
-  const { headerText, hidePositionBar, shrinkedHeaderText } = props
 
   return (
     <div className={classes.root}>
@@ -238,6 +259,8 @@ const OutsidePage = ({ children, ...props }: Props) => {
         headerText={headerText}
         shrinkedHeaderText={shrinkedHeaderText}
         hidePositionBar={hidePositionBar}
+        backgroundColor={backgroundColor}
+        shrinkedBackgroundColor={shrinkedBackgroundColor}
       />
       <div className={classes.children}>{children}</div>
     </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
-import { RATING_MODES as modes } from '../../config/constants'
+import { MIN_WIDTH, RATING_MODES as modes } from '../../config/constants'
 import {
   Button,
   ButtonBase,
@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
     WebkitBorderTopRightRadius: '14px',
     marginLeft: 'auto',
     marginRight: 'auto',
+    maxWidth: MIN_WIDTH,
   },
   drawer: {
     margin: theme.spacing(0, 0, 2, 0),

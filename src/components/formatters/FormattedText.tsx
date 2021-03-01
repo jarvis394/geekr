@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     '& a': {
       color: theme.palette.primary.main,
       textDecoration: 'none',
+      '-webkit-tap-highlight-color': 'transparent !important',
     },
     '& a:hover': {
       color: fade(theme.palette.primary.main, 0.8),

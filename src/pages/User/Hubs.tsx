@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux'
 import { getProfileHubs } from 'src/store/actions/profile'
 import { useSelector } from 'src/hooks'
 import { Hub } from 'src/interfaces'
+import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -66,7 +67,7 @@ const HubsItem = ({ data }: { data: Hub }) => {
     <Grid
       item
       className={classes.item}
-      component={Link}
+      component={LinkToOutsidePage}
       to={'/hub/' + data.alias}
     >
       <Chip

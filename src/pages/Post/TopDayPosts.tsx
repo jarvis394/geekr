@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Paper, Grid, IconButton } from '@material-ui/core'
-import BookmarkIconActive from '@material-ui/icons/BookmarkRounded'
-import BookmarkIcon from '@material-ui/icons/BookmarkBorderRounded'
-import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
-import { makeStyles } from '@material-ui/core/styles'
-import { Link } from 'react-router-dom'
+import { Typography, Paper } from '@material-ui/core'
+import { makeStyles, fade } from '@material-ui/core/styles'
 import { Posts } from 'src/interfaces'
 import DensePostsSkeleton from 'src/components/skeletons/DensePostsSkeleton'
-import dayjs from 'dayjs'
 import { getPosts } from 'src/api'
+import DensePostItem from './DensePostItem'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,83 +18,21 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 800,
     color: theme.palette.primary.main,
     fontSize: 24,
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(1),
     lineHeight: '24px',
-  },
-  link: {
-    textDecoration: 'none',
-  },
-  post: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    display: 'flex',
-  },
-  postTitle: {
-    fontFamily: 'Google Sans',
-    fontWeight: 500,
-    fontSize: 17,
-    color: theme.palette.text.primary,
-  },
-  postTs: {
-    color: theme.palette.text.hint,
-    fontWeight: 500,
-    fontSize: 12,
-  },
-  postScore: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   error: {
     color: theme.palette.error.light,
     fontWeight: 800,
   },
-  divider: {
-    height: 32,
-    margin: '0 ' + theme.spacing(1) + 'px',
-  },
-  iconButton: {
-    padding: 10,
-    marginRight: theme.spacing(1),
-    color: (isBookmarked) =>
-      isBookmarked ? theme.palette.primary.main : theme.palette.text.hint,
+  postItem: {
+    paddingTop: theme.spacing(1.5),
+    marginTop: theme.spacing(0.5),
+    '&:not(:first-child)': {
+      borderTop: '1px solid ' + fade(theme.palette.divider, 0.05),
+    },
   },
 }))
-
-const Post = ({ data }) => {
-  const [isBookmarked, setBookmarkedState] = useState<boolean>(false)
-  const classes = useStyles(isBookmarked)
-  const { id, titleHtml: title, timePublished: tsUnparsed, statistics } = data
-  const { score } = statistics
-  const ts = dayjs(tsUnparsed).calendar()
-
-  return (
-    <Grid className={classes.post}>
-      <Grid item>
-        <IconButton
-          onClick={() => setBookmarkedState((prev) => !prev)}
-          className={classes.iconButton}
-        >
-          {isBookmarked ? <BookmarkIconActive /> : <BookmarkIcon />}
-        </IconButton>
-      </Grid>
-      <Grid item style={{ flexGrow: 1, marginRight: 8 }}>
-        <Link to={'/post/' + id} className={classes.link}>
-          <Typography className={classes.postTitle}>{title}</Typography>
-          <Typography className={classes.postTs}>{ts}</Typography>
-        </Link>
-      </Grid>
-      <Grid item className={classes.postScore}>
-        <GreenRedNumber number={score}>
-          <Typography style={{ fontWeight: 800, fontFamily: 'Google Sans' }}>
-            {score > 0 ? '+' : ''}
-            {score}
-          </Typography>
-        </GreenRedNumber>
-      </Grid>
-    </Grid>
-  )
-}
 
 const TopDayPosts = () => {
   const classes = useStyles()
@@ -125,11 +59,19 @@ const TopDayPosts = () => {
           Произошла ошибка при запросе
         </Typography>
       )}
-      {!data && <DensePostsSkeleton n={5} />}
-      {data &&
-        data.articleIds
-          .slice(0, 5)
-          .map((id, i) => <Post data={data.articleRefs[id]} key={i} />)}
+      <div>
+        {!data && <DensePostsSkeleton n={5} />}
+        {data &&
+          data.articleIds
+            .slice(0, 5)
+            .map((id, i) => (
+              <DensePostItem
+                className={classes.postItem}
+                post={data.articleRefs[id]}
+                key={i}
+              />
+            ))}
+      </div>
     </Paper>
   )
 }

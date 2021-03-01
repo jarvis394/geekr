@@ -21,7 +21,14 @@ export const RegisteredTime = () => {
   }
   return (
     <Typography variant="caption" className={classes.hintColor}>
-      {text} {timeRegistered(user.time_invited, user.time_registered)}
+      {user.sex !== '0' && (
+        <>
+          {text} {timeRegistered(user.time_invited, user.time_registered)}
+        </>
+      )}
+      {user.sex === '0' && (
+        <>Дата регистрации: {dayjs(user.time_registered).fromNow()}</>
+      )}
     </Typography>
   )
 }

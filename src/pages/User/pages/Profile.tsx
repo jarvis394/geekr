@@ -13,6 +13,7 @@ import Children from '../Children'
 import Companies from '../Companies'
 import Hubs from '../Hubs'
 import ProfileLinks from '../ProfileLinks'
+import { useSelector } from 'src/hooks'
 
 export const useStyles = makeStyles((theme) => {
   const t =
@@ -55,8 +56,9 @@ export const useStyles = makeStyles((theme) => {
   }
 })
 
-const Profile = ({ user }) => {
+const Profile = () => {
   const classes = useStyles()
+  const user = useSelector((state) => state.profile.profile.user.data)
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   useEffect(() => {}, [user.login])

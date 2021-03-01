@@ -1,10 +1,12 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Button, Typography } from '@material-ui/core'
+import { Badge, Button, Typography } from '@material-ui/core'
 import { Icon28CommentOutline } from '@vkontakte/icons'
 import { Icon20BookmarkOutline } from '@vkontakte/icons'
 import { Icon28ArticleOutline } from '@vkontakte/icons'
 import { useHistory, useLocation } from 'react-router-dom'
+import OutsidePageLocationState from 'src/interfaces/OutsidePageLocationState'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,40 +34,54 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(0.5),
     fontFamily: 'Google Sans',
   },
+  badge: {
+    top: 3,
+  },
 }))
 
 const ProfileLinks = () => {
   const location = useLocation()
-  const history = useHistory()
+  const history = useHistory<OutsidePageLocationState>()
+  const profile = useSelector((state) => state.profile.profile.user.data)
   const classes = useStyles()
   const buttons = [
     {
       icon: Icon28ArticleOutline,
-      to: location.pathname + '/articles/1',
+      to: location.pathname + '/articles/p/1',
       text: 'Публикации',
+      badgeContent: profile.counters.posts,
     },
     {
       icon: Icon28CommentOutline,
-      to: location.pathname + '/comments/1',
+      to: location.pathname + '/comments/p/1',
       text: 'Комментарии',
       style: { transform: 'scale(1.1)' },
+      badgeContent: profile.counters.comments,
     },
     {
       icon: Icon20BookmarkOutline,
-      to: location.pathname + '/favorites/1',
+      to: location.pathname + '/favorites/articles/p/1',
       text: 'Закладки',
+      badgeContent: profile.counters.favorites,
     },
   ]
 
   return (
     <div className={classes.root}>
-      {buttons.map(({ icon: Icon, text, style, to }, i) => (
+      {buttons.map(({ icon: Icon, text, style, to, badgeContent }, i) => (
         <Button
           key={i}
           classes={{ root: classes.button, label: classes.buttonLabel }}
-          onClick={() => history.push(to)}
+          onClick={() => history.push(to, { from: location.pathname })}
         >
-          <Icon width={28} height={28} style={style} />
+          <Badge
+            classes={{ badge: classes.badge }}
+            badgeContent={badgeContent}
+            color="primary"
+            invisible={badgeContent === '0'}
+          >
+            <Icon width={28} height={28} style={style} />
+          </Badge>
           <Typography className={classes.buttonText}>{text}</Typography>
         </Button>
       ))}

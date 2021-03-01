@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 800,
     fontSize: 24,
     marginTop: theme.spacing(1),
+    textAlign: 'center',
   },
 }))
 

@@ -15,6 +15,10 @@ import { Theme } from '@material-ui/core'
 import Services from 'src/pages/Services'
 import Home from 'src/pages/Home/index'
 import Me from 'src/pages/Me'
+import UserArticles from 'src/pages/User/pages/Articles'
+import UserComments from 'src/pages/User/pages/Comments'
+import UserFavoriteArticles from 'src/pages/User/pages/FavArticles'
+import UserFavoriteComments from 'src/pages/User/pages/FavComments'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 interface Route {
@@ -104,36 +108,36 @@ const routes: Route[] = [
     appBarColor: (theme) => theme.palette.background.default,
   },
   {
-    path: '/user/:login/favorites/comments/:page',
-    component: <User path="favoritesComments" />,
+    path: '/user/:login/favorites/comments/p/:page',
+    component: <UserFavoriteComments />,
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
   },
   {
-    path: '/user/:login/favorites/articles/:page',
-    component: <User path="favoritesArticles" />,
+    path: '/user/:login/favorites/articles/p/:page',
+    component: <UserFavoriteArticles />,
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
   },
   {
-    path: '/user/:login/comments/:page',
-    component: <User path="comments" />,
+    path: '/user/:login/comments/p/:page',
+    component: <UserComments />,
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
   },
   {
-    path: '/user/:login/articles/:page',
-    component: <User path="articles" />,
+    path: '/user/:login/articles/p/:page',
+    component: <UserArticles />,
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
   },
   {
     path: '/user/:login',
-    component: <User path="profile" />,
+    component: <User />,
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,

@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
+import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -24,12 +25,16 @@ export const InvitedTime = () => {
   const wasInvitedText = user.sex === '1' ? 'был приглашён' : 'была приглашена'
   return (
     user.time_invited && (
-      <Typography variant="caption" color="textSecondary">
-        {textTimeInvited} {wasInvitedText}{' '}
+      <Typography variant="caption" color="textSecondary" align="center">
+        {textTimeInvited}{' '}
+        {user.sex === '0' ? 'было получено приглашение от' : wasInvitedText}{' '}
         {user.invited_by_login ? (
-          <Link className={classes.link} to={'/user/' + user.invited_by_login}>
+          <LinkToOutsidePage
+            className={classes.link}
+            to={'/user/' + user.invited_by_login}
+          >
             @{user.invited_by_login}
-          </Link>
+          </LinkToOutsidePage>
         ) : (
           'НЛО'
         )}
