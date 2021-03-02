@@ -7,12 +7,16 @@ import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import CommentsIocn from '@material-ui/icons/CommentRounded'
+import ThumbDownAltRoundedIcon from '@material-ui/icons/ThumbDownAltRounded'
+import ThumbUpAltRoundedIcon from '@material-ui/icons/ThumbUpAltRounded'
 import { Icon28ShareOutline as ShareIcon } from '@vkontakte/icons'
 import formatNumber from 'src/utils/formatNumber'
 import { Post } from 'src/interfaces'
 import { Button, ButtonBase, fade, Theme, Typography } from '@material-ui/core'
 import { useHistory } from 'react-router'
 import { useSnackbar } from 'notistack'
+import { useState } from 'react'
+import BottomDrawer from 'src/components/blocks/BottomDrawer'
 
 const getScoreColor = (score: number, theme: Theme) => {
   if (score === 0) return theme.palette.background.paper
@@ -84,6 +88,35 @@ const useStyles = makeStyles<Theme, { score: number }, string>((theme) => ({
     fontWeight: 500,
     color: fade(theme.palette.text.primary, 0.5),
   },
+  scoreDrawerText: {
+    fontFamily: 'Google Sans',
+    fontSize: 18,
+    fontWeight: 800,
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+  scoreDrawerButton: {
+    padding: theme.spacing(1.5),
+    flexGrow: 1,
+    borderRadius: 8,
+    marginTop: theme.spacing(3),
+    // Thumbs Up
+    '&:nth-child(1)': {
+      backgroundColor: fade(theme.palette.success.light, 0.7),
+      marginRight: theme.spacing(1),
+    },
+    // Thumbs Down
+    '&:nth-child(2)': {
+      backgroundColor: fade(theme.palette.error.light, 0.7),
+      marginLeft: theme.spacing(1),
+    },
+  },
+  scoreDrawerScore: {
+    fontWeight: 600,
+    fontFamily: 'Roboto',
+    fontSize: 16,
+    marginRight: theme.spacing(1),
+  },
   viewsCard: {
     background: theme.palette.background.paper,
   },
@@ -149,13 +182,56 @@ const BottomBar = ({ post }: { post: Post }) => {
     )
   })
   const ScoreCard = React.memo(function ScoreCardUnmemoized() {
+    const [isScoreCardDrawerOpen, setScoreCardDrawerOpen] = useState(false)
+    const total = statistics.votesCount
+    const positive = (total + score) / 2
+    const negative = (total - score) / 2
+
     return (
-      <Card
-        icon={<ThumbsUpDownIcon />}
-        className={classes.scoreCard}
-        amount={score > 0 ? '+' + formatNumber(score) : formatNumber(score)}
-        text={'голосов'}
-      />
+      <>
+        <Card
+          icon={<ThumbsUpDownIcon />}
+          className={classes.scoreCard}
+          amount={score > 0 ? '+' + formatNumber(score) : formatNumber(score)}
+          text={'голосов'}
+          onClick={() => setScoreCardDrawerOpen((prev) => !prev)}
+        />
+        <BottomDrawer
+          isOpen={isScoreCardDrawerOpen}
+          setOpen={setScoreCardDrawerOpen}
+          headerText={'Голоса'}
+        >
+          <Typography className={classes.scoreDrawerText}>
+            Всего голосов: {total}
+          </Typography>
+          <Grid container direction="row">
+            <Grid
+              item
+              component={ButtonBase}
+              className={classes.scoreDrawerButton}
+              onClick={() => setScoreCardDrawerOpen(false)}
+            >
+              <span className={classes.scoreDrawerScore}>
+                {positive !== 0 && '+'}
+                {positive}
+              </span>
+              <ThumbUpAltRoundedIcon />
+            </Grid>
+            <Grid
+              item
+              component={ButtonBase}
+              className={classes.scoreDrawerButton}
+              onClick={() => setScoreCardDrawerOpen(false)}
+            >
+              <span className={classes.scoreDrawerScore}>
+                {negative !== 0 && '-'}
+                {negative}
+              </span>
+              <ThumbDownAltRoundedIcon />
+            </Grid>
+          </Grid>
+        </BottomDrawer>
+      </>
     )
   })
   const FavoritesCard = React.memo(function FavoritesCardUnmemoized() {

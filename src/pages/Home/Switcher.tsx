@@ -14,6 +14,7 @@ import { ModeObject } from 'src/interfaces'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import SwitcherButtons from './SwitcherButtons'
 import { Icon24Cancel } from '@vkontakte/icons'
+import BottomDrawer from 'src/components/blocks/BottomDrawer'
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -148,91 +149,66 @@ const Switcher = ({ handleClick, mode, setMode }) => {
         </div>
       </ButtonBase>
 
-      <SwipeableDrawer
-        open={isOpen}
-        anchor="bottom"
-        onClose={() => setOpen(false)}
-        onOpen={() => setOpen(true)}
-        disableBackdropTransition
-        disableDiscovery
-        disableSwipeToOpen
-        classes={{
-          paper: classes.drawerRoot,
-        }}
-        className={classes.margin}
-        style={{ zIndex: 5000 }}
-        elevation={0}
-      >
-        <Container className={classes.drawer}>
-          <div className={classes.drawerHeader}>
-            <IconButton
-              className={classes.drawerHeaderIcon}
-              onClick={() => setOpen(false)}
+      <BottomDrawer headerText={'Период'} isOpen={isOpen} setOpen={setOpen}>
+        <Typography className={classes.drawerTitleText}>
+          Сначала показывать
+        </Typography>
+        <ButtonGroup disableElevation color="primary">
+          {showModes.map((e, i) => (
+            <Button
+              onClick={() => handleShowModeChange(e.mode)}
+              variant={e.mode === showMode ? 'contained' : 'outlined'}
+              key={i}
             >
-              <Icon24Cancel />
-            </IconButton>
-            <Typography className={classes.drawerHeaderText}>Период</Typography>
-          </div>
-          <Typography className={classes.drawerTitleText}>
-            Сначала показывать
-          </Typography>
-          <ButtonGroup disableElevation color="primary">
-            {showModes.map((e, i) => (
-              <Button
-                onClick={() => handleShowModeChange(e.mode)}
-                variant={e.mode === showMode ? 'contained' : 'outlined'}
-                key={i}
-              >
-                {e.text}
-              </Button>
-            ))}
-          </ButtonGroup>
+              {e.text}
+            </Button>
+          ))}
+        </ButtonGroup>
 
-          {/** Block for 'new' showMode */}
-          {showMode === 'new' && (
-            <>
-              <Typography
-                className={classes.drawerTitleText}
-                style={{ marginTop: 16 }}
-              >
-                Порог рейтинга
-              </Typography>
-              <SwitcherButtons
-                data={switcherButtonsDataNew}
-                onChange={onChange}
-                currentValue={drawerMode.mode}
-              />
-            </>
-          )}
+        {/** Block for 'new' showMode */}
+        {showMode === 'new' && (
+          <>
+            <Typography
+              className={classes.drawerTitleText}
+              style={{ marginTop: 16 }}
+            >
+              Порог рейтинга
+            </Typography>
+            <SwitcherButtons
+              data={switcherButtonsDataNew}
+              onChange={onChange}
+              currentValue={drawerMode.mode}
+            />
+          </>
+        )}
 
-          {/** Block for 'top' showMode */}
-          {showMode === 'top' && (
-            <>
-              <Typography
-                className={classes.drawerTitleText}
-                style={{ marginTop: 16 }}
-              >
-                Период
-              </Typography>
-              <SwitcherButtons
-                data={switcherButtonsDataTop}
-                onChange={onChange}
-                currentValue={drawerMode.mode}
-              />
-            </>
-          )}
-          <Button
-            color="primary"
-            disableElevation
-            className={classes.applyButton}
-            fullWidth
-            variant="contained"
-            onClick={handleApplyClick}
-          >
-            Применить
-          </Button>
-        </Container>
-      </SwipeableDrawer>
+        {/** Block for 'top' showMode */}
+        {showMode === 'top' && (
+          <>
+            <Typography
+              className={classes.drawerTitleText}
+              style={{ marginTop: 16 }}
+            >
+              Период
+            </Typography>
+            <SwitcherButtons
+              data={switcherButtonsDataTop}
+              onChange={onChange}
+              currentValue={drawerMode.mode}
+            />
+          </>
+        )}
+        <Button
+          color="primary"
+          disableElevation
+          className={classes.applyButton}
+          fullWidth
+          variant="contained"
+          onClick={handleApplyClick}
+        >
+          Применить
+        </Button>
+      </BottomDrawer>
     </>
   )
 }
