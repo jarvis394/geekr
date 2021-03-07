@@ -13,7 +13,7 @@ import { Icon28ShareOutline as ShareIcon } from '@vkontakte/icons'
 import formatNumber from 'src/utils/formatNumber'
 import { Post } from 'src/interfaces'
 import { Button, ButtonBase, fade, Theme, Typography } from '@material-ui/core'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import BottomDrawer from 'src/components/blocks/BottomDrawer'
@@ -139,6 +139,7 @@ const BottomBar = ({ post }: { post: Post }) => {
   const { score: sc, favoritesCount, commentsCount, readingCount } = statistics
 
   const classes = useStyles({ score: sc })
+  const location = useLocation()
   const score = Number(sc)
   const comments = formatNumber(Number(commentsCount))
   const favorites = Number(favoritesCount)
@@ -253,7 +254,11 @@ const BottomBar = ({ post }: { post: Post }) => {
         className={classes.commentsCard}
         amount={comments}
         text={'комментариев'}
-        onClick={() => history.push('/post/' + id + '/comments')}
+        onClick={() =>
+          history.push('/post/' + id + '/comments', {
+            from: location.pathname,
+          })
+        }
       />
     )
   })
