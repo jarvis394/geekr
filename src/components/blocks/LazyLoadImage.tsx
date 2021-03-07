@@ -8,12 +8,19 @@ const useStyles = makeStyles((theme) => ({
     height: 'auto',
     maxWidth: '100%',
     backgroundColor: theme.palette.action.hover,
+    filter: (loading) => (loading ? 'blur(5px)' : ''),
+    clipPath: (loading) => (loading ? 'inset(0)' : ''),
   },
   imagePlaceholder: {
     display: 'flex',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  blurred: {
+    filter: 'blur(5px)',
+    clipPath: 'inset(0)',
+    background: theme.palette.action.hover,
   },
 }))
 
@@ -32,7 +39,7 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
     { src, loading, style, alt, className, setOpen },
     ref
   ) {
-    const classes = useStyles()
+    const classes = useStyles(loading)
     if (loading && (!src || src === '/img/image-loader.svg'))
       return (
         <div
@@ -57,7 +64,7 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
           height={style?.height || 'auto'}
           style={style}
           src={src}
-          alt={alt || 'Image'}
+          alt={alt || 'Изображение не загружено'}
         />
       </Fade>
     )
@@ -85,6 +92,7 @@ const LazyLoadImage = (props) => {
     counterEl: false,
     arrowEl: false,
     captionEl: false,
+    tapToClose: true,
   }
 
   // Set image dimensions after it is done loading

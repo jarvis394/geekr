@@ -106,6 +106,7 @@ const useStyles = makeStyles((theme) => ({
   iframe: {
     width: '100%',
     minWidth: '100%',
+    marginTop: theme.spacing(4),
   },
 }))
 
@@ -174,7 +175,7 @@ const FormattedText = ({
             // First try to load src from 'data-src' attribute
             // If not found, then use default 'src' attribute
             src={attribs['data-src'] || attribs.src}
-            alt={attribs.alt || 'Image'}
+            alt={attribs.alt || 'Изображение не загружено'}
             style={imgStyles}
             className={classes.img}
           />
@@ -195,7 +196,7 @@ const FormattedText = ({
       if (name === 'div' && attribs.class === 'spoiler') {
         const title: string = children.find(
           (e) => e.attribs && e.attribs.class === 'spoiler_title'
-        ).children[0].data
+        ).children[0]?.data
         const data = children.find(
           (e) => e.attribs && e.attribs.class === 'spoiler_text'
         ).children
@@ -204,7 +205,7 @@ const FormattedText = ({
       }
       if (name === 'details' && attribs.class === 'spoiler') {
         const title: string = children.find((e) => e.name === 'summary')
-          .children[0].data
+          .children[0]?.data
         const data = children.find(
           (e) => e.attribs && e.attribs.class === 'spoiler__content'
         ).children

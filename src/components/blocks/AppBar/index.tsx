@@ -171,7 +171,11 @@ const AppBarComponent = () => {
               >
                 habra.
               </Typography>
-              <Offline>
+              <Offline
+                polling={{
+                  url: 'https://ipv4.icanhazip.com',
+                }}
+              >
                 <WifiOffRoundedIcon className={classes.offline} />
               </Offline>
             </div>

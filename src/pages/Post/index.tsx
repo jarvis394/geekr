@@ -121,6 +121,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: theme.spacing(1),
     display: 'flex',
     fontSize: 14,
+    borderRadius: 2,
+    '-webkit-tap-highlight-color': 'transparent !important',
+    textDecoration: 'none !important',
+    '&:active': {
+      opacity: 0.9,
+    },
   },
 }))
 
@@ -140,7 +146,7 @@ const Post = () => {
   const { id: strigifiedId, alias: companyAlias } = useParams<Params>()
   const id = Number(strigifiedId)
   const classes = useStyles()
-  const isTranslated = post && post.postLabels.some((e) => e === 'translation')
+  const isTranslated = post && !!post.translationData
   const shouldShowContents = post && (companyAlias ? post && company : post)
   const location = useLocation<PostLocationState>()
   const offset = location.state ? location.state.offset : 0
