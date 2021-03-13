@@ -6,7 +6,7 @@ import { useParams, useHistory } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { getProfileArticles } from 'src/store/actions/profile'
 import { List, makeStyles, useTheme } from '@material-ui/core'
-import PostSkeleton from 'src/components/skeletons/Post'
+import PostSkeleton from 'src/components/skeletons/PostItem'
 import ErrorComponent from 'src/components/blocks/Error'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 

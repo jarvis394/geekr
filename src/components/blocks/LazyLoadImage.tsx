@@ -8,6 +8,8 @@ const useStyles = makeStyles((theme) => ({
     height: 'auto',
     maxWidth: '100%',
     backgroundColor: theme.palette.action.hover,
+    '-webkit-tap-highlight-color': 'transparent',
+    cursor: 'pointer',
     filter: (loading) => (loading ? 'blur(5px)' : ''),
     clipPath: (loading) => (loading ? 'inset(0)' : ''),
   },

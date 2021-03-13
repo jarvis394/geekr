@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Typography, Paper } from '@material-ui/core'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import { Posts } from 'src/interfaces'
-import DensePostsSkeleton from 'src/components/skeletons/DensePostsSkeleton'
+import DensePostsSkeleton from 'src/components/skeletons/DensePosts'
 import getSimilar from 'src/api/getSimilar'
 import DensePostItem from './DensePostItem'
 
