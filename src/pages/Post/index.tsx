@@ -99,6 +99,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: theme.spacing(1),
     display: 'flex',
     fontSize: 14,
+    borderRadius: 2,
+    '-webkit-tap-highlight-color': 'transparent !important',
+    textDecoration: 'none !important',
+    '&:active': {
+      opacity: 0.9,
+    },
   },
 }))
 
@@ -111,7 +117,7 @@ const Post = () => {
   const [shouldShowCompanyHeader, setCompanyHeaderState] = useState<boolean>(
     post?.isCorporative || true
   )
-  const isTranslated = post && post.postLabels.some((e) => e === 'translation')
+  const isTranslated = post && !!post.translationData
   const shouldShowContents =
     post && (shouldShowCompanyHeader ? post && company : post)
   const labels =

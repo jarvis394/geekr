@@ -66,7 +66,7 @@ const showModes: { text: string; mode: ShowMode }[] = [
 
 // Bad thing to do, but who cares. Checker doesn't know about browser process,
 // so it shows an error, thinking it's NodeJS `process`
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 const isIOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
 

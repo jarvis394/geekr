@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography } from '@material-ui/core'
-import numToWord, { ConvertOptions } from 'number-to-words-ru'
+import numToWord from 'number-to-words-ru'
 import { makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
 

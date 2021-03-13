@@ -102,7 +102,11 @@ const Component = () => {
                 className={classes.link}
               >
                 habra.
-                <Offline>
+                <Offline
+                  polling={{
+                    url: 'https://ipv4.icanhazip.com',
+                  }}
+                >
                   <WifiOffRoundedIcon className={classes.offline} />
                 </Offline>
               </Link>

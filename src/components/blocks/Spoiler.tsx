@@ -42,7 +42,7 @@ const Spoiler = ({ children, title }) => {
   const classes = useStyles(isOpen)
 
   return (
-    <div>
+    <>
       <b
         onClick={() => setOpenState((prev) => !prev)}
         className={classes.title}
@@ -54,7 +54,7 @@ const Spoiler = ({ children, title }) => {
           {ReactDOMServer.renderToStaticMarkup(children)}
         </FormattedText>
       </Collapse>
-    </div>
+    </>
   )
 }
 

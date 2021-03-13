@@ -9,10 +9,10 @@ import dayjs from 'dayjs'
 import relativeTimePlugin from 'dayjs/plugin/relativeTime'
 import calendarPlugin from 'dayjs/plugin/calendar'
 import updateLocalePlugin from 'dayjs/plugin/updateLocale'
-import 'react-lazy-load-image-component/src/effects/opacity.css'
 import 'dayjs/locale/ru'
 import ReactGA from 'react-ga'
 import { GA_ID_STRING } from 'src/config/constants'
+import 'react-photoswipe/dist/photoswipe.css'
 
 ReactGA.initialize(GA_ID_STRING)
 
