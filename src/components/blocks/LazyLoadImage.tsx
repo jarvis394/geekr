@@ -1,28 +1,35 @@
 import React, { useState, useRef, useEffect } from 'react'
 import ProgressiveImage from 'react-lazy-progressive-image'
-import { CircularProgress, Fade, makeStyles } from '@material-ui/core'
+import { CircularProgress, Fade, makeStyles, Theme } from '@material-ui/core'
 import { PhotoSwipe } from 'react-photoswipe'
+import { POST_ITEM_VISIBILITY_THRESHOLD } from 'src/config/constants'
 
-const useStyles = makeStyles((theme) => ({
+interface StylesProps {
+  isLoading: boolean
+}
+
+const useStyles = makeStyles<Theme, StylesProps>((theme) => ({
   image: {
     height: 'auto',
     maxWidth: '100%',
-    backgroundColor: theme.palette.action.hover,
+    verticalAlign: 'middle',
     '-webkit-tap-highlight-color': 'transparent',
     cursor: 'pointer',
-    filter: (loading) => (loading ? 'blur(5px)' : ''),
-    clipPath: (loading) => (loading ? 'inset(0)' : ''),
+    filter: ({ isLoading }) => (isLoading ? 'blur(5px)' : ''),
+    clipPath: ({ isLoading }) => (isLoading ? 'inset(0)' : ''),
+    color: theme.palette.text.secondary,
+    fontStyle: 'italic',
+    fontSize: 12,
   },
   imagePlaceholder: {
-    display: 'flex',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: 'auto',
+    maxWidth: '100%',
+    verticalAlign: 'middle',
+    display: 'inline-block',
   },
   blurred: {
     filter: 'blur(5px)',
     clipPath: 'inset(0)',
-    background: theme.palette.action.hover,
   },
 }))
 
@@ -41,16 +48,31 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
     { src, loading, style, alt, className, setOpen },
     ref
   ) {
-    const classes = useStyles(loading)
+    const [hasError, setHasError] = React.useState(false)
+    // If image is not loaded, the useStyles `isLoading` prop should be false
+    const classes = useStyles({
+      isLoading: hasError ? false : loading,
+    })
+
     if (loading && (!src || src === '/img/image-loader.svg'))
       return (
         <div
           className={classes.imagePlaceholder + ' ' + className}
           style={style}
         >
-          <Fade in timeout={500} style={{ transitionDelay: '1s' }}>
+          <Fade
+            in
+            timeout={1000}
+            style={{
+              transitionDelay: '1s',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             <div>
-              <CircularProgress size="1.5rem" thickness={4.5} />
+              <CircularProgress size="1.25rem" thickness={5} />
             </div>
           </Fade>
         </div>
@@ -60,13 +82,14 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
       <Fade in timeout={250}>
         <img
           ref={ref}
-          onClick={() => !loading && setOpen(true)}
+          onClick={() => !loading && !hasError && setOpen(true)}
           className={classes.image + ' ' + className}
           width={style?.width || 'auto'}
           height={style?.height || 'auto'}
           style={style}
           src={src}
           alt={alt || 'Изображение не загружено'}
+          onError={() => setHasError(true)}
         />
       </Fade>
     )
@@ -118,6 +141,10 @@ const LazyLoadImage = (props) => {
         src={props.src}
         visibilitySensorProps={{
           partialVisibility: true,
+          offset: {
+            top: POST_ITEM_VISIBILITY_THRESHOLD,
+            bottom: POST_ITEM_VISIBILITY_THRESHOLD,
+          },
         }}
       >
         {(src: string, loading: boolean, isVisible: boolean) => (
