@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
       color: fade(theme.palette.primary.main, 0.8),
       textDecoration: 'underline',
     },
+    '& h1+p, h2+p, h3+p, h4+p': {
+      marginTop: (d) => (d ? 0 : theme.spacing(1.5))
+    },
     '& p': { margin: 0, marginTop: (d) => (d ? 0 : theme.spacing(3)) },
     '& em': { color: fade(theme.palette.text.primary, 0.75) },
     '& code': {
@@ -57,8 +60,18 @@ const useStyles = makeStyles((theme) => ({
       lineHeight: '1.5',
       minWidth: 100,
     },
+    '& h1, h2, h3': {
+      fontSize: 24,
+      lineHeight: '30px',
+    },
+    '& h4, h5, h6': {
+      fontSize: 20,
+      lineHeight: '26px',
+    },
     '& h1, h2, h3, h4, h5, h6': {
-      margin: theme.spacing(2) + 'px 0 0 0',
+      margin: `${theme.spacing(4)}px 0 0 0`,
+      fontFamily: 'Google Sans',
+      fontWeight: 800
     },
     '& blockquote': {
       margin: '12px 0',
@@ -71,9 +84,7 @@ const useStyles = makeStyles((theme) => ({
     '& hr': {
       border: 'none',
       borderBottom: '1px solid ' + theme.palette.divider,
-      marginTop: theme.spacing(4),
-      marginBottom: theme.spacing(4),
-      maxWidth: 256,
+      margin: theme.spacing(1, 2)
     },
     '& figure': {
       margin: 0,

@@ -12,7 +12,7 @@ export interface ComponentWithUserParams {
   classes?: string
 }
 
-interface UserParams {
+export interface UserParams {
   login: string
 }
 

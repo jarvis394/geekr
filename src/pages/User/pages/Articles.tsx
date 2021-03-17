@@ -4,11 +4,12 @@ import PostItem from 'src/components/blocks/PostItem'
 import Pagination from 'src/components/blocks/Pagination'
 import { useParams, useHistory } from 'react-router'
 import { useDispatch } from 'react-redux'
-import { getProfileArticles } from 'src/store/actions/profile'
+import { getProfile, getProfileArticles } from 'src/store/actions/profile'
 import { List, makeStyles, useTheme } from '@material-ui/core'
 import PostSkeleton from 'src/components/skeletons/PostItem'
 import ErrorComponent from 'src/components/blocks/Error'
 import OutsidePage from 'src/components/blocks/OutsidePage'
+import { UserParams } from '..'
 
 interface ArticlesPathParams {
   page: string
@@ -29,6 +30,7 @@ const UserArticles = () => {
   const classes = useStyles()
   const theme = useTheme()
   const dispatch = useDispatch()
+  const isProfileFetched = useSelector((state) => state.profile.profile.user.fetched)
   const isFetched = useSelector((state) => state.profile.articles.fetched)
   const isFetching = useSelector((state) => state.profile.articles.fetching)
   const fetchError = useSelector((state) => state.profile.articles.error)
@@ -39,6 +41,7 @@ const UserArticles = () => {
   const pagesCount = useSelector(
     (state) => state.profile.articles.data.pagesCount
   )
+  const { login } = useParams<UserParams>()
 
   const PaginationComponent = () =>
     pagesCount ? (
@@ -52,12 +55,16 @@ const UserArticles = () => {
 
   const handlePagination = (_: never, i: number) => {
     if (i === currentPage) return
-    else history.push(`/user/${profile.login}/articles/${i}`)
+    else history.push(`/user/${login}/articles/${i}`)
   }
 
   useEffect(() => {
-    dispatch(getProfileArticles(profile.login, currentPage))
-  }, [profile.login, currentPage, dispatch])
+    if (!isProfileFetched) {
+      dispatch(getProfile(login))
+    } else {
+      dispatch(getProfileArticles(login, currentPage))
+    }
+  }, [profile, currentPage, dispatch])
 
   return (
     <OutsidePage
@@ -76,12 +83,7 @@ const UserArticles = () => {
           data.articleIds.map((id: number) => (
             <PostItem post={data.articleRefs[id]} key={id} />
           ))}
-        {fetchError && (
-          <ErrorComponent
-            message={fetchError.error.message}
-            to={`/user/${profile.login}`}
-          />
-        )}
+        {fetchError && <ErrorComponent message={fetchError.error.message} />}
         <PaginationComponent />
       </List>
     </OutsidePage>

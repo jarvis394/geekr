@@ -5,7 +5,7 @@ const LinkToOutsidePage = ({
   to,
   children,
   ...props
-}: { to: string } & LinkProps & React.RefAttributes<HTMLAnchorElement>) => {
+}: { to: string } & LinkProps & React.RefAttributes<HTMLAnchorElement>, ref) => {
   const location = useLocation()
 
   return (
@@ -16,6 +16,7 @@ const LinkToOutsidePage = ({
           from: location.pathname,
         },
       }}
+      ref={ref}
       {...props}
     >
       {children}
@@ -23,4 +24,4 @@ const LinkToOutsidePage = ({
   )
 }
 
-export default React.memo(LinkToOutsidePage)
+export default React.memo(React.forwardRef(LinkToOutsidePage))
