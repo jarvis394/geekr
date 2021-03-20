@@ -29,6 +29,8 @@ import isMobile from 'is-mobile'
 import PostLocationState from 'src/interfaces/PostLocationState'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
+import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
+import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -84,6 +86,20 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.text.hint,
     fontWeight: 400,
     fontSize: 13,
+    flexGrow: 1,
+  },
+  score: {
+    fontWeight: 700,
+    fontSize: 13,
+    marginLeft: theme.spacing(1)
+  },
+  scoreIcon: {
+    fontSize: '1rem',
+  },
+  scoreWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    color: theme.palette.text.secondary,
   },
   text: {
     marginTop: theme.spacing(3),
@@ -208,6 +224,18 @@ const Post = () => {
           <Typography className={classes.ts}>
             {dayjs(post.timePublished).fromNow()}
           </Typography>
+          <GreenRedNumber
+            number={post.statistics.score}
+            wrapperProps={{ className: classes.scoreWrapper }}
+          >
+            <>
+              <ThumbsUpDownIcon className={classes.scoreIcon} />
+              <Typography className={classes.score}>
+                {post.statistics.score > 0 ? '+' : ''}
+                {post.statistics.score}
+              </Typography>
+            </>
+          </GreenRedNumber>
         </Grid>
         <Typography className={classes.title}>{post.titleHtml}</Typography>
         <div className={classes.hubs}>
@@ -266,29 +294,28 @@ const Post = () => {
         })
       )
     }
-
-    // Write progress data to the store when the component unloads
-    return () => {
-      const progress = getScrollProgress()
-      if (progress >= 0.15 && progress <= 0.8) {
-        dispatch(
-          setPostReadingProgress({
-            post,
-            progress,
-            offset: window.pageYOffset,
-          })
-        )
-      } else {
-        dispatch(
-          setPostReadingProgress({
-            post: null,
-            progress: null,
-            offset: null,
-          })
-        )
-      }
-    }
   }, [dispatch, id, companyAlias, post, offset])
+
+  const onBackClickHandler = () => {
+    const progress = getScrollProgress()
+    if (progress >= 0.15 && progress <= 0.8) {
+      dispatch(
+        setPostReadingProgress({
+          post,
+          progress,
+          offset: window.pageYOffset,
+        })
+      )
+    } else {
+      dispatch(
+        setPostReadingProgress({
+          post: null,
+          progress: null,
+          offset: null,
+        })
+      )
+    }
+  }
 
   if (post) document.title = post.titleHtml
   if (fetchError) return <ErrorComponent message={fetchError} />
@@ -296,7 +323,10 @@ const Post = () => {
     console.error('Could not fetch company data:', companyFetchError)
 
   return (
-    <OutsidePage headerText={post?.titleHtml}>
+    <OutsidePage
+      headerText={post?.titleHtml}
+      onBackClick={() => onBackClickHandler()}
+    >
       <div className={classes.root}>
         {contents}
 

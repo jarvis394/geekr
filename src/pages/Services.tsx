@@ -18,7 +18,7 @@ import { Icon24ChevronCompactRight } from '@vkontakte/icons'
 import { Icon28Users3Outline } from '@vkontakte/icons'
 import { Icon24EducationOutline } from '@vkontakte/icons'
 import { Icon28FireOutline } from '@vkontakte/icons'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 
 const makeCardTextColor = (theme: Theme, hasSubtext: boolean) => {
   if (theme.palette.type === 'dark') {
@@ -145,9 +145,17 @@ const Button = ({ text, icon: Icon, color, to }: ButtonProps) => {
 const Card = ({ text, subtext, icon: Icon, to }: CardProps) => {
   const classes = useCardStyles(!!subtext)
   const history = useHistory()
+  const location = useLocation()
 
   return (
-    <ButtonBase onClick={() => history.push(to)} className={classes.root}>
+    <ButtonBase
+      onClick={() =>
+        history.push(to, {
+          from: location.pathname,
+        })
+      }
+      className={classes.root}
+    >
       <div className={classes.header}>
         <Icon width={24} height={24} />
         <Typography className={classes.text}>{text}</Typography>
@@ -224,7 +232,23 @@ const Services = () => {
         icon={Icon28Users3Outline}
         subtext="Справка о том, как написать первую статью"
       />
-      <Card to="/rules" text="Правила сайта" icon={Icon24EducationOutline} />
+      <Card to="/habra-about" text="О сайте" icon={Icon24EducationOutline} />
+      <Grid container>
+        <Grid item xs={6}>
+          <Card
+            to="/habra-about"
+            text="О сайте"
+            icon={Icon24EducationOutline}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Card
+            to="/habra-about"
+            text="О сайте"
+            icon={Icon24EducationOutline}
+          />
+        </Grid>
+      </Grid>
     </div>
   )
 }

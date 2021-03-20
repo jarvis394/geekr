@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper, Typography, ButtonBase } from '@material-ui/core'
+import { Paper, Typography, ButtonBase, fade } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded'
 import { useSelector } from 'src/hooks'
@@ -10,7 +10,7 @@ import PostLocationState from 'src/interfaces/PostLocationState'
 const useStyles = makeStyles((theme) => ({
   root: {
     borderRadius: 8,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: fade(theme.palette.background.paper, 0.5),
     display: 'flex',
     flexDirection: 'column',
     marginTop: theme.spacing(1.5),
@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
       height: '100%',
       background:
         theme.palette.type === 'dark'
-          ? 'rgba(255, 255, 255, .1)'
-          : 'rgba(0, 0, 0, .1)',
+          ? 'rgba(255, 255, 255, .05)'
+          : 'rgba(0, 0, 0, .05)',
     },
   },
   button: {
@@ -43,6 +43,11 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 800,
     fontSize: 18,
     marginTop: -2,
+    flexGrow: 1,
+    textAlign: 'initial',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
   },
   title: {
     fontFamily: 'Google Sans',
@@ -102,13 +107,13 @@ const ContinueReadingButton = () => {
     >
       <ButtonBase className={classes.button}>
         <div className={classes.textWrapper}>
-          <Typography className={classes.title}>{post.titleHtml}</Typography>
+          <Typography className={classes.title}>Продолжить чтение</Typography>
           <Typography className={classes.progress}>
             {Math.round(progress * 100)}%
           </Typography>
         </div>
         <div className={classes.textWithIconWrapper}>
-          <Typography className={classes.text}>Продолжить чтение</Typography>
+          <Typography className={classes.text}>{post.titleHtml}</Typography>
           <ChevronRightRoundedIcon className={classes.icon} />
         </div>
       </ButtonBase>

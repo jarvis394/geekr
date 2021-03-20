@@ -21,6 +21,7 @@ interface Options {
   threshold: number
   disableHysteresis: boolean
   target: Window
+  triggerValue: boolean
   trigger: boolean
 }
 
@@ -69,15 +70,15 @@ const useScrollTrigger = (options: Partial<Options> = {}) => {
     getTrigger = defaultTrigger,
     target = defaultTarget,
     threshold = defaultThreshold,
+    triggerValue = target.pageYOffset > threshold
   } = options
   const store: StoreRef = React.useRef({
     position: target.pageYOffset,
     previousScroll: target.pageYOffset,
     direction: undefined,
   })
-  const defaultTriggerValue = target.pageYOffset > threshold
   const [trigger, setTrigger] = React.useState(() =>
-    getTrigger(store, { trigger: defaultTriggerValue, target, threshold })
+    getTrigger(store, { trigger: triggerValue, target, threshold })
   )
 
   React.useEffect(() => {

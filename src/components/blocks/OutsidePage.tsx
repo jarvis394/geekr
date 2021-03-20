@@ -138,6 +138,7 @@ interface Props {
   shrinkedHeaderText: unknown
   shrinkedBackgroundColor: string
   backgroundColor: string
+  onBackClick: () => unknown
 }
 
 const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
@@ -150,7 +151,7 @@ const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
     </Fade>
   )
 }
-const UnshrinkedContent = ({ isShrinked, headerText }) => {
+const UnshrinkedContent = ({ isShrinked, headerText, onBackClick }) => {
   const classes = useAppBarStyles({ isShrinked, scrollProgress: 0 })
   const history = useHistory()
   const location = useLocation<OutsidePageLocationState>()
@@ -158,13 +159,18 @@ const UnshrinkedContent = ({ isShrinked, headerText }) => {
   const backLinkData = location?.state?.from
   const backLink = backLinkData || defaultBackLink
 
+  const onClick = () => {
+    onBackClick && onBackClick()
+    history.push(backLink)
+  }
+
   return (
     <Fade in={!isShrinked} appear={false}>
       <div className={classes.content}>
         <IconButton
           disableRipple={isShrinked}
           className={classes.headerIcon}
-          onClick={() => (isShrinked ? {} : history.push(backLink))}
+          onClick={() => (isShrinked ? {} : onClick())}
         >
           <BackRoundedIcon />
         </IconButton>
@@ -186,13 +192,13 @@ const NavBarUnmemoized = ({
   hidePositionBar = false,
   shrinkedBackgroundColor,
   backgroundColor,
+  onBackClick,
 }) => {
   const isShrinked = useScrollTrigger({
     threshold: 48,
+    triggerValue: false
   })
-  const [scrollProgress, setScrollProgress] = useState(
-    hidePositionBar ? 0 : Math.min(window.pageYOffset / 48, 1)
-  )
+  const [scrollProgress, setScrollProgress] = useState(0)
   const classes = useAppBarStyles({
     isShrinked,
     scrollProgress,
@@ -227,6 +233,7 @@ const NavBarUnmemoized = ({
             <UnshrinkedContent
               isShrinked={isShrinked}
               headerText={headerText}
+              onBackClick={onBackClick}
             />
             <ShrinkedContent
               isShrinked={isShrinked}
@@ -250,6 +257,7 @@ const OutsidePage = ({ children, ...props }: Partial<Props>) => {
     shrinkedHeaderText,
     backgroundColor,
     shrinkedBackgroundColor,
+    onBackClick,
   } = props
   const classes = useStyles()
 
@@ -261,6 +269,7 @@ const OutsidePage = ({ children, ...props }: Partial<Props>) => {
         hidePositionBar={hidePositionBar}
         backgroundColor={backgroundColor}
         shrinkedBackgroundColor={shrinkedBackgroundColor}
+        onBackClick={onBackClick}
       />
       <div className={classes.children}>{children}</div>
     </div>
