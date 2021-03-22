@@ -30,7 +30,19 @@ export const modeTokenPaths = {
   alltime: 'top/alltime',
 }
 
-export default async (mode: Mode, page: number, token?: string) =>
+interface Params {
+  mode: Mode
+  page: number
+  hubAlias?: string
+  token?: string
+}
+
+export default async ({
+  mode,
+  page,
+  hubAlias,
+  token,
+}: Params) =>
   // token ? await makeRequest<Posts>({
   //   path: modeTokenPaths[mode],
   //   params: {
@@ -44,5 +56,6 @@ export default async (mode: Mode, page: number, token?: string) =>
     params: {
       ...modeParams[mode],
       page: page.toString(),
+      hub: hubAlias || ''
     },
   })

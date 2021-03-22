@@ -137,6 +137,7 @@ interface Props {
   hidePositionBar: boolean
   shrinkedHeaderText: unknown
   shrinkedBackgroundColor: string
+  disableShrinking: boolean
   backgroundColor: string
   onBackClick: () => unknown
 }
@@ -193,6 +194,7 @@ const NavBarUnmemoized = ({
   shrinkedBackgroundColor,
   backgroundColor,
   onBackClick,
+  disableShrinking
 }) => {
   const isShrinked = useScrollTrigger({
     threshold: 48,
@@ -200,7 +202,7 @@ const NavBarUnmemoized = ({
   })
   const [scrollProgress, setScrollProgress] = useState(0)
   const classes = useAppBarStyles({
-    isShrinked,
+    isShrinked: disableShrinking ? false : isShrinked,
     scrollProgress,
     backgroundColor,
     shrinkedBackgroundColor,
@@ -219,11 +221,11 @@ const NavBarUnmemoized = ({
     })
 
   useEffect(() => {
-    if (!hidePositionBar) {
+    if (!hidePositionBar && !disableShrinking) {
       window.addEventListener('scroll', scrollCallback)
       return () => window.removeEventListener('scroll', scrollCallback)
     } else return () => null
-  }, [hidePositionBar])
+  }, [hidePositionBar, disableShrinking])
 
   return (
     <AppBar className={classes.header} elevation={0}>
@@ -231,12 +233,12 @@ const NavBarUnmemoized = ({
         <div className={classes.marginContainer}>
           <div className={classes.content}>
             <UnshrinkedContent
-              isShrinked={isShrinked}
+              isShrinked={disableShrinking ? false : isShrinked}
               headerText={headerText}
               onBackClick={onBackClick}
             />
             <ShrinkedContent
-              isShrinked={isShrinked}
+              isShrinked={disableShrinking ? false : isShrinked}
               shrinkedHeaderText={shrinkedHeaderText || headerText}
             />
           </div>
@@ -257,6 +259,7 @@ const OutsidePage = ({ children, ...props }: Partial<Props>) => {
     shrinkedHeaderText,
     backgroundColor,
     shrinkedBackgroundColor,
+    disableShrinking,
     onBackClick,
   } = props
   const classes = useStyles()
@@ -270,6 +273,7 @@ const OutsidePage = ({ children, ...props }: Partial<Props>) => {
         backgroundColor={backgroundColor}
         shrinkedBackgroundColor={shrinkedBackgroundColor}
         onBackClick={onBackClick}
+        disableShrinking={disableShrinking}
       />
       <div className={classes.children}>{children}</div>
     </div>

@@ -30,7 +30,7 @@ export default (reducerState = initialState, { type, payload }): State => {
       }
     }
 
-    case GET_PROFILE: {
+    case GET_PROFILE + '_FETCH': {
       return {
         ...reducerState,
         profile: {

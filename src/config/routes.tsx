@@ -20,6 +20,9 @@ import UserComments from 'src/pages/User/pages/Comments'
 import UserFavoriteArticles from 'src/pages/User/pages/FavArticles'
 import UserFavoriteComments from 'src/pages/User/pages/FavComments'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
+import Hub from 'src/pages/Hub/index'
+import HubAuthors from 'src/pages/Hub/pages/Authors'
+import HubCompanies from 'src/pages/Hub/pages/Companies'
 
 interface Route {
   path: string | string[]
@@ -103,6 +106,27 @@ const routes: Route[] = [
     path: '/hubs/p/:page',
     component: <Hubs />,
     title: 'Хабы',
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
+  },
+  {
+    path: '/hub/:alias/companies/p/:page',
+    component: <HubCompanies />,
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
+  },
+  {
+    path: '/hub/:alias/authors/p/:page',
+    component: <HubAuthors />,
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
+  },
+  {
+    path: '/hub/:alias/p/:page',
+    component: <Hub />,
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,

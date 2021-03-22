@@ -6,6 +6,7 @@ import hubs from './hubs'
 import profile from './profile'
 import user from './user'
 import post from './post'
+import hub from './hub'
 
 export default combineReducers({
   news,
@@ -15,4 +16,5 @@ export default combineReducers({
   user,
   profile,
   post,
+  hub
 })

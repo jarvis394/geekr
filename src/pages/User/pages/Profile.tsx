@@ -14,47 +14,27 @@ import Companies from '../Companies'
 import Hubs from '../Hubs'
 import ProfileLinks from '../ProfileLinks'
 import { useSelector } from 'src/hooks'
+import fadedLinearGradient from 'src/utils/fadedLinearGradient'
 
-export const useStyles = makeStyles((theme) => {
-  const t =
-    theme.palette.type === 'light'
-      ? lighten(theme.palette.background.default, 1)
-      : darken(theme.palette.background.paper, 0.2)
-  return {
-    topBlock: {
-      background: `linear-gradient(to top,
-      ${t},
-      ${fade(t, 0.98)},
-      ${fade(t, 0.94)},
-      ${fade(t, 0.88)},
-      ${fade(t, 0.8)},
-      ${fade(t, 0.71)},
-      ${fade(t, 0.61)},
-      ${fade(t, 0.5)},
-      ${fade(t, 0.39)},
-      ${fade(t, 0.29)},
-      ${fade(t, 0.2)},
-      ${fade(t, 0.12)},
-      ${fade(t, 0.06)},
-      ${fade(t, 0.02)},
-      ${fade(t, 0.0)})`,
-      display: 'flex',
-      alignItems: 'center',
-      flexDirection: 'column',
-      padding: theme.spacing(2),
-      paddingBottom: 0,
-    },
-    mainBlock: {
-      paddingRight: theme.spacing(2),
-      paddingLeft: theme.spacing(2),
-      paddingBottom: theme.spacing(2),
-      backgroundColor: theme.palette.background.default,
-    },
-    blockMargin: {
-      marginTop: theme.spacing(2),
-    },
-  }
-})
+export const useStyles = makeStyles((theme) => ({
+  topBlock: {
+    background: fadedLinearGradient(theme),
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    padding: theme.spacing(2),
+    paddingBottom: 0,
+  },
+  mainBlock: {
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    backgroundColor: theme.palette.background.default,
+  },
+  blockMargin: {
+    marginTop: theme.spacing(2),
+  },
+}))
 
 const Profile = () => {
   const classes = useStyles()

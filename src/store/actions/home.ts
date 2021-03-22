@@ -19,7 +19,7 @@ export const getPosts = (mode: Mode, page: number) => async (
   dispatch({ type, payload: mode })
 
   try {
-    const data = await api.getPosts(mode, page, token)
+    const data = await api.getPosts({ mode, page, token })
     const pagesCount = data?.pagesCount
 
     dispatch({

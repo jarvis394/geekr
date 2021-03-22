@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import {
   Button as MUIButton,
   Divider,
@@ -18,7 +18,10 @@ import { Icon24ChevronCompactRight } from '@vkontakte/icons'
 import { Icon28Users3Outline } from '@vkontakte/icons'
 import { Icon24EducationOutline } from '@vkontakte/icons'
 import { Icon28FireOutline } from '@vkontakte/icons'
+import { Icon28LogoVkOutline } from '@vkontakte/icons'
 import { useHistory, useLocation } from 'react-router'
+import { Icon24InfoCircleOutline } from '@vkontakte/icons'
+import GitHubIcon from '@material-ui/icons/GitHub'
 
 const makeCardTextColor = (theme: Theme, hasSubtext: boolean) => {
   if (theme.palette.type === 'dark') {
@@ -48,9 +51,15 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0, 1),
     marginTop: theme.spacing(0.5),
   },
-  button: {},
+  wrapper: {
+    margin: theme.spacing(0, 1),
+  },
   buttonLabel: {
     textTransform: 'none',
+  },
+  dividerTitle: {
+    marginLeft: theme.spacing(1),
+    color: theme.palette.text.hint,
   },
 }))
 
@@ -75,17 +84,22 @@ const useButtonStyles = makeStyles((theme) => ({
   },
 }))
 
-const useCardStyles = makeStyles((theme) => ({
+const useCardLinkStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(1, 1.5),
     borderRadius: 8,
+    width: '100%',
     display: 'flex',
     alignItems: 'initial',
     flexDirection: 'column',
     textAlign: 'left',
     background: (s) => theme.palette.background[s ? 'paper' : 'default'],
     marginTop: theme.spacing(1),
-    margin: theme.spacing(0, 1),
+  },
+  a: {
+    padding: theme.spacing(1, 1.5),
+    textDecoration: 'none',
+    color: 'initail',
+    '-webkit-tap-highlight-color': 'transparent',
   },
   text: {
     fontSize: 16,
@@ -102,6 +116,40 @@ const useCardStyles = makeStyles((theme) => ({
   },
   headerIcon: {
     marginRight: -8,
+    width: 24,
+    height: 24,
+  },
+}))
+
+const useCardStyles = makeStyles((theme) => ({
+  root: {
+    padding: theme.spacing(1, 1.5),
+    borderRadius: 8,
+    width: '100%',
+    display: 'flex',
+    alignItems: 'initial',
+    flexDirection: 'column',
+    textAlign: 'left',
+    background: (s) => theme.palette.background[s ? 'paper' : 'default'],
+    marginTop: theme.spacing(1),
+  },
+  text: {
+    fontSize: 16,
+    marginLeft: theme.spacing(1),
+    fontWeight: 500,
+    fontFamily: 'Google Sans',
+    flexGrow: 1,
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    color: (s) => makeCardTextColor(theme, s as boolean),
+  },
+  headerIcon: {
+    marginRight: -8,
+    width: 24,
+    height: 24,
   },
   subtext: {
     fontSize: 13,
@@ -122,9 +170,10 @@ interface ButtonProps {
 
 interface CardProps {
   text: string
-  icon: typeof Icon36Newsfeed
+  icon: typeof Icon36Newsfeed | typeof GitHubIcon
   subtext?: string
   to: string
+  paper?: boolean
 }
 
 const Button = ({ text, icon: Icon, color, to }: ButtonProps) => {
@@ -133,7 +182,11 @@ const Button = ({ text, icon: Icon, color, to }: ButtonProps) => {
 
   return (
     <MUIButton
-      onClick={() => history.push(to)}
+      onClick={() =>
+        history.push(to, {
+          from: location.pathname,
+        })
+      }
       classes={{ root: classes.root, label: classes.rootLabel }}
     >
       <Icon width={32} height={32} fill={color} />
@@ -142,8 +195,8 @@ const Button = ({ text, icon: Icon, color, to }: ButtonProps) => {
   )
 }
 
-const Card = ({ text, subtext, icon: Icon, to }: CardProps) => {
-  const classes = useCardStyles(!!subtext)
+const Card = ({ text, subtext, icon: Icon, to, paper }: CardProps) => {
+  const classes = useCardStyles(paper || !!subtext)
   const history = useHistory()
   const location = useLocation()
 
@@ -170,6 +223,21 @@ const Card = ({ text, subtext, icon: Icon, to }: CardProps) => {
       {subtext && (
         <Typography className={classes.subtext}>{subtext}</Typography>
       )}
+    </ButtonBase>
+  )
+}
+
+const CardLink = ({ text, icon: Icon, to }: CardProps) => {
+  const classes = useCardLinkStyles()
+
+  return (
+    <ButtonBase className={classes.root}>
+      <a href={to} target="_blank" rel="noreferrer" className={classes.a}>
+        <div className={classes.header}>
+          <Icon width={24} height={24} />
+          <Typography className={classes.text}>{text}</Typography>
+        </div>
+      </a>
     </ButtonBase>
   )
 }
@@ -214,41 +282,49 @@ const Services = () => {
         </Grid>
       </Grid>
       <Divider className={classes.divider} />
-      <Card
-        to="/megaprojects/p/1"
-        text="Мегапроекты"
-        icon={Icon28FireOutline}
-        subtext="Проекты, созданные контент-студией Хабра"
-      />
-      <Card
-        to="/sandbox/p/1"
-        text="Песочница"
-        icon={Icon24CubeBoxOutline}
-        subtext="Статьи, ожидающие одобрения от сообщества"
-      />
-      <Card
-        to="/how-to-become-an-author"
-        text="Как стать автором"
-        icon={Icon28Users3Outline}
-        subtext="Справка о том, как написать первую статью"
-      />
-      <Card to="/habra-about" text="О сайте" icon={Icon24EducationOutline} />
-      <Grid container>
-        <Grid item xs={6}>
-          <Card
-            to="/habra-about"
-            text="О сайте"
-            icon={Icon24EducationOutline}
-          />
+      <div className={classes.wrapper}>
+        <Card
+          to="/megaprojects/p/1"
+          text="Мегапроекты"
+          icon={Icon28FireOutline}
+          subtext="Проекты, созданные контент-студией Хабра"
+        />
+        <Card
+          to="/sandbox/p/1"
+          text="Песочница"
+          icon={Icon24CubeBoxOutline}
+          subtext="Статьи, ожидающие одобрения от сообщества"
+        />
+        <Card
+          to="/how-to-become-an-author"
+          text="Как стать автором"
+          icon={Icon28Users3Outline}
+          subtext="Справка о том, как написать первую статью"
+        />
+        <Card to="/habra-about" text="О сайте" icon={Icon24InfoCircleOutline} />
+      </div>
+      <Divider className={classes.divider} style={{ marginTop: 8 }} />
+      <div className={classes.wrapper} style={{ marginTop: 6 }}>
+        <Typography variant="caption" className={classes.dividerTitle}>
+          Социальные сети
+        </Typography>
+        <Grid container spacing={1}>
+          <Grid item xs={6}>
+            <CardLink
+              to="https://vk.com/tarnatovski"
+              text="ВКонтакте"
+              icon={Icon28LogoVkOutline}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <CardLink
+              to="https://github.com/jarvis394/habra"
+              text="GitHub"
+              icon={GitHubIcon}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <Card
-            to="/habra-about"
-            text="О сайте"
-            icon={Icon24EducationOutline}
-          />
-        </Grid>
-      </Grid>
+      </div>
     </div>
   )
 }

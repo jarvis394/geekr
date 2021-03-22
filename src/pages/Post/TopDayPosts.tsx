@@ -42,7 +42,7 @@ const TopDayPosts = () => {
   useEffect(() => {
     const get = async () => {
       try {
-        setData(await getPosts('daily', 1))
+        setData(await getPosts({ mode: 'daily', page: 1 }))
       } catch (e) {
         console.warn('Could not fetch top day posts:', e.message)
         setError(e.message)

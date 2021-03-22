@@ -13,11 +13,7 @@ import Pagintaion from '../components/blocks/Pagination'
 import EmptySVG from '../components/svg/Empty'
 import SearchSVG from '../components/svg/Search'
 import { Posts } from '../interfaces'
-
-/**
- * Custom hook for getting query from the URL
- */
-const useQuery = () => new URLSearchParams(useLocation().search)
+import useQuery from '../hooks/useQuery'
 
 const useStyles = makeStyles((theme) => ({
   root: {
