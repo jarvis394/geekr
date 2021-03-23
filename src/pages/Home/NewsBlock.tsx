@@ -116,7 +116,7 @@ const NewsItem = React.memo(
   }
 )
 
-const NewsBlock = () => {
+const NewsBlock = ({ hubAlias }: { hubAlias?: string }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const isFetched = useSelector((state) => state.news.block.fetched)
@@ -125,7 +125,7 @@ const NewsBlock = () => {
   const news = useSelector((state) => state.news.block.data)
 
   useEffect(() => {
-    dispatch(getNewsPromo())
+    dispatch(getNewsPromo(hubAlias))
   }, [dispatch])
 
   const GoToNewsButton = () => (

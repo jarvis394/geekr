@@ -9,12 +9,12 @@ import {
 } from '@material-ui/core'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import { Hub } from 'src/interfaces'
-import { Link } from 'react-router-dom'
 import FlashOnRoundedIcon from '@material-ui/icons/FlashOnRounded'
 import GroupRoundedIcon from '@material-ui/icons/GroupRounded'
 import FormattedText from 'src/components/formatters/FormattedText'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
 import formatNumber from 'src/utils/formatNumber'
+import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -75,7 +75,7 @@ const Item = ({ data }: { data: Hub }) => {
       dense
       button
       className={classes.root}
-      component={Link}
+      component={LinkToOutsidePage}
       to={'/hub/' + data.alias + '/p/1'}
       alignItems="flex-start"
     >

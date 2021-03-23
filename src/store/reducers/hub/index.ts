@@ -5,7 +5,8 @@ import {
   HubExtended,
   Posts,
 } from 'src/interfaces'
-import { typeCorrespondings } from './types'
+import getPostFirstImage from 'src/utils/getPostFirstImage'
+import { GET_POSTS, typeCorrespondings } from './types'
 
 interface FetchBaseInterface<T> {
   state: FetchingState
@@ -42,16 +43,24 @@ export default (reducerState = initialState, { type, payload }): State => {
     if (type.endsWith('FETCH')) {
       return {
         ...reducerState,
-        profile: {
+        [field]: {
           state: FetchingState.Fetching,
           fetchError: null,
           data: null,
         },
       }
     } else if (type.endsWith('FETCH_FULFILLED')) {
+      if (field === typeCorrespondings[GET_POSTS]) {
+        for (const id in payload.articleRefs) {
+          payload.articleRefs[id].postFirstImage = getPostFirstImage(
+            payload.articleRefs[id]
+          )
+        }
+      }
+
       return {
         ...reducerState,
-        profile: {
+        [field]: {
           state: FetchingState.Fetched,
           fetchError: null,
           data: payload,
@@ -60,7 +69,7 @@ export default (reducerState = initialState, { type, payload }): State => {
     } else if (type.endsWith('FETCH_REJECTED')) {
       return {
         ...reducerState,
-        profile: {
+        [field]: {
           state: FetchingState.Error,
           fetchError: payload,
           data: null,

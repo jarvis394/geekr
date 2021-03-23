@@ -2,8 +2,8 @@ import { GET_AUTHORS, GET_COMPANIES, GET_NEWS, GET_POSTS, GET_PROFILE } from '..
 import getHubProfile from 'src/api/getHub'
 import getHubAuthorsRequest from 'src/api/getHubAuthors'
 import getHubCompaniesRequest from 'src/api/getHubCompanies'
+import getHubPostsRequest from 'src/api/getHubPosts'
 import getNewsPromo from 'src/api/getNewsPromo'
-import { getPosts } from 'src/api'
 import { Mode } from 'src/config/constants'
 
 /**
@@ -60,7 +60,7 @@ export const getHubPosts = (mode: Mode, page: number, alias: string) => async (d
   dispatch({ type })
 
   try {
-    const data = await getPosts({ mode, page, hubAlias: alias })
+    const data = await getHubPostsRequest({ mode, page, alias })
 
     dispatch({
       type: type + '_FULFILLED',

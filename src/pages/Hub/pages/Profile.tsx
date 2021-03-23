@@ -1,16 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import useSelector from 'src/hooks/useSelector'
 import fadedLinearGradient from 'src/utils/fadedLinearGradient'
 import {
   Avatar,
-  Button,
   ButtonBase,
   darken,
-  Grid,
   lighten,
+  List,
   Typography,
 } from '@material-ui/core'
+import Switcher from 'src/pages/Home/Switcher'
+import { Mode, RATING_MODES as modes } from 'src/config/constants'
+import ErrorComponent from 'src/components/blocks/Error'
+import Pagination from 'src/components/blocks/Pagination'
+import PostItem from 'src/components/blocks/PostItem'
+import PostSkeleton from 'src/components/skeletons/PostItem'
+import { FetchingState } from 'src/interfaces'
+import NewsBlock from 'src/pages/Home/NewsBlock'
+import { useHistory, useParams } from 'react-router'
+import { HubParams } from '..'
+import { getHubPosts } from 'src/store/actions/hub'
+import { useDispatch } from 'react-redux'
+
+import { Icon28Users3Outline } from '@vkontakte/icons'
+import { Icon24WorkOutline } from '@vkontakte/icons'
 
 const useStyles = makeStyles((theme) => ({
   topBlock: {
@@ -21,9 +35,6 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 0,
   },
   mainBlock: {
-    paddingRight: theme.spacing(2),
-    paddingLeft: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
     backgroundColor: theme.palette.background.default,
   },
 }))
@@ -115,7 +126,7 @@ const useDescriptionStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(2),
   },
   title: {
     fontFamily: 'Google Sans',
@@ -127,6 +138,46 @@ const useDescriptionStyles = makeStyles((theme) => ({
     fontSize: 14,
   },
 }))
+
+const useLinksStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginBottom: theme.spacing(2),
+  },
+  button: {
+    boxShadow: '0px 1px 5px -1px rgb(0 0 0 / 5%), 0px 5px 8px 0px rgb(0 0 0 / 2%)',
+    padding: theme.spacing(1, 1.5),
+    borderRadius: 8,
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    textAlign: 'left',
+    background: theme.palette.background.paper,
+    '&:nth-child(1)': {
+      marginRight: theme.spacing(1),
+    },
+    '&:nth-child(2)': {
+      marginLeft: theme.spacing(1),
+    },
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: 500,
+    fontFamily: 'Google Sans',
+    flexGrow: 1,
+    marginLeft: theme.spacing(1),
+  },
+}))
+
+const usePostsStyles = makeStyles({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingBottom: 0,
+  },
+})
 
 const Information = () => {
   const profile = useSelector((state) => state.hub.profile.data)
@@ -167,6 +218,7 @@ const Information = () => {
 const Description = () => {
   const profile = useSelector((state) => state.hub.profile.data)
   const classes = useDescriptionStyles()
+
   return (
     <div className={classes.root}>
       <Typography className={classes.title}>{profile.titleHtml}</Typography>
@@ -177,15 +229,111 @@ const Description = () => {
   )
 }
 
+const Links = () => {
+  const profile = useSelector((state) => state.hub.profile.data)
+  const classes = useLinksStyles()
+
+  return (
+    <div className={classes.root}>
+      <ButtonBase className={classes.button}>
+        <Icon28Users3Outline />
+        <Typography className={classes.text}>Авторы</Typography>
+      </ButtonBase>
+      <ButtonBase className={classes.button}>
+        <Icon24WorkOutline />
+        <Typography className={classes.text}>Компании</Typography>
+      </ButtonBase>
+    </div>
+  )
+}
+
+const Posts = ({ mode }) => {
+  const classes = usePostsStyles()
+  const { alias } = useParams<HubParams>()
+  const data = useSelector((state) => state.hub.posts.data)
+  const fetchState = useSelector((state) => state.hub.posts.state)
+  const fetchError = useSelector((state) => state.hub.posts.fetchError)
+  const pagesCount = useSelector((state) => state.hub.posts.data?.pagesCount)
+  const params = useParams<{ page: string }>()
+  const currentPage = Number(params.page)
+  const history = useHistory()
+  const postsComponents =
+    data &&
+    data.articleIds.map((id, i) => (
+      <PostItem key={id} post={data.articleRefs[id]} />
+    ))
+  const PaginationComponent = () =>
+    pagesCount ? (
+      <Pagination
+        disabled={!data}
+        handleChange={handlePagination}
+        steps={pagesCount}
+        currentStep={currentPage}
+      />
+    ) : null
+
+  const handlePagination = (_, i) => {
+    const currentModeObject = modes.find((e) => e.mode === mode)
+    if (i === currentPage) return
+    if (currentModeObject.mode === 'all') {
+      history.push('/hub/' + alias + '/p/' + i)
+    } else {
+      history.push('/hub/' + alias + currentModeObject.to + '/p/' + i)
+    }
+  }
+
+  return (
+    <List className={classes.root}>
+      {fetchState === FetchingState.Fetching &&
+        [...new Array(4)].map((_, i) => <PostSkeleton key={i} />)}
+      {fetchState === FetchingState.Fetched && data && (
+        <>
+          {postsComponents[0]}
+          {currentPage === 1 && <NewsBlock hubAlias={alias} />}
+          {postsComponents.slice(1)}
+        </>
+      )}
+      {fetchError && <ErrorComponent message="Не удалось получить статьи" />}
+      <PaginationComponent />
+    </List>
+  )
+}
+
 const Profile = () => {
   const classes = useStyles()
-  const profile = useSelector((state) => state.hub.profile.data)
+  const dispatch = useDispatch()
+  const { alias } = useParams<HubParams>()
+  const [mode, setMode] = useState<Mode>('all')
+  const history = useHistory()
+  const params = useParams<{ page: string }>()
+  const currentPage = Number(params.page)
+
+  const handleSwitcher = React.useCallback(
+    ({ mode: newMode, to }) => {
+      setMode(newMode)
+      if (newMode === 'all') {
+        history.push('/hub/' + alias + '/p/1')
+      } else {
+        history.push('/hub/' + alias + to + '/p/1')
+      }
+    },
+    [history]
+  )
+
+  useEffect(() => {
+    dispatch(getHubPosts(mode, currentPage, alias))
+  }, [mode, currentPage, alias])
 
   return (
     <>
       <div className={classes.topBlock}>
         <Information />
         <Description />
+        <Links />
+      </div>
+      <div className={classes.mainBlock}>
+        <Switcher mode={mode} setMode={setMode} handleClick={handleSwitcher} />
+        <Posts mode={mode} />
       </div>
     </>
   )
