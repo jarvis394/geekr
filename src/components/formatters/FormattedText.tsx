@@ -97,6 +97,12 @@ const useStyles = makeStyles((theme) => ({
         lineHeight: '18px',
       },
     },
+    '& sup': {
+      color: theme.palette.text.secondary,
+      marginTop: theme.spacing(1),
+      fontSize: 14,
+      display: 'block'
+    },
     // MathJaxNode overflow fix
     '& span.mjx-chtml': {
       whiteSpace: 'normal',

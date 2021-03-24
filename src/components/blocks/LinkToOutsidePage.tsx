@@ -13,7 +13,7 @@ const LinkToOutsidePage = ({
       to={{
         pathname: to,
         state: {
-          from: location.pathname,
+          from: location.pathname + location.search,
         },
       }}
       ref={ref}

@@ -6,6 +6,7 @@ import {
   GridListTile,
   Fade,
   useTheme,
+  Button,
 } from '@material-ui/core'
 import { darken, fade, lighten, makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
@@ -13,8 +14,14 @@ import { getAdverts } from 'src/store/actions/home'
 import { useDispatch } from 'react-redux'
 import AdvertsBlockSkeleton from '../../components/skeletons/AdvertsBlock'
 import isMobile from 'is-mobile'
-import { ADVERTS_BLOCK_HEIGHT } from 'src/config/constants'
+import {
+  ADVERTS_BLOCK_HEIGHT,
+  ADVERTS_BLOCK_MAX_WIDTH,
+} from 'src/config/constants'
 import isDarkTheme from 'src/utils/isDarkTheme'
+import { Link } from 'react-router-dom'
+import { Icon28FireCircleFillRed } from '@vkontakte/icons'
+import { Icon24ChevronCompactRight } from '@vkontakte/icons'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -110,7 +117,42 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     color: theme.palette.text.primary,
     '-webkit-tap-highlight-color': 'transparent !important',
+    maxWidth: ADVERTS_BLOCK_MAX_WIDTH,
+    margin: theme.spacing(0, 0, 0, 2),
   },
+  tileMegaprojects: {
+    textDecoration: 'none',
+    color: theme.palette.text.primary,
+    '-webkit-tap-highlight-color': 'transparent !important',
+    width: 'auto !important',
+    padding: '2px ' + theme.spacing(2) + 'px !important',
+  },
+  buttonMegaprojects: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    background: theme.palette.background.paper + ' !important',
+    boxShadow:
+      '0px 1px 5px -1px rgb(0 0 0 / 5%), 0px 5px 8px 0px rgb(0 0 0 / 2%)',
+    flexDirection: 'column',
+    borderRadius: 8,
+    fontWeight: 500,
+    fontFamily: 'Google Sans',
+    fontSize: 15,
+    padding: theme.spacing(0, 2),
+  },
+  iconMegaprojects: {
+    marginBottom: theme.spacing(1.5),
+  },
+  iconRightMegaprojects: {
+    marginLeft: theme.spacing(0.5),
+    marginTop: 2,
+  },
+  tileTileMegaprojects: {
+    overflow: 'visible'
+  }
 }))
 
 const AdvertsBlock = () => {
@@ -118,7 +160,7 @@ const AdvertsBlock = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const data = useSelector((store) => store.home.adverts.data)
-  const fetching = useSelector((store) => store.home.adverts.fetching)
+  const fetched = useSelector((store) => store.home.adverts.fetched)
   const error = useSelector((store) => store.home.adverts.error)
   const getButtonStyles = (imageUrl: string) => ({
     backgroundImage: `linear-gradient(to right, ${fade(
@@ -141,16 +183,13 @@ const AdvertsBlock = () => {
         className={classes.buttonsHolder}
         cols={1.1}
       >
-        {data &&
+        {fetched &&
           data.map((e, i) => (
             <GridListTile
               className={classes.tile}
               component={'a'}
               href={e.linkUrl}
               key={i}
-              style={{
-                padding: `0 ${i === data.length - 1 ? '16px' : '0'} 0 16px`,
-              }}
             >
               <Fade in>
                 <ButtonBase
@@ -163,7 +202,31 @@ const AdvertsBlock = () => {
               </Fade>
             </GridListTile>
           ))}
-        {fetching && <AdvertsBlockSkeleton />}
+        {!fetched && <AdvertsBlockSkeleton />}
+        <GridListTile
+          to={'/megaprojects/p/1'}
+          className={classes.tileMegaprojects}
+          component={Link}
+          classes={{
+            tile: classes.tileTileMegaprojects
+          }}
+        >
+          <ButtonBase className={classes.buttonMegaprojects}>
+            <Icon28FireCircleFillRed
+              width={48}
+              height={48}
+              className={classes.iconMegaprojects}
+            />
+            <span style={{ display: 'flex', alignItems: 'center' }}>
+              Мегапроекты
+              <Icon24ChevronCompactRight
+                width={18}
+                height={22}
+                className={classes.iconRightMegaprojects}
+              />
+            </span>
+          </ButtonBase>
+        </GridListTile>
       </GridList>
     </div>
   )

@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   list: {
     backgroundColor: getContrastPaperColor(theme),
     marginTop: theme.spacing(-1),
-    paddingTop: 0
+    paddingTop: 0,
   },
   pagination: {
     paddingTop: theme.spacing(2),
@@ -43,7 +43,7 @@ const useNoResultsStyles = makeStyles((theme) => ({
     fontFamily: 'Google Sans',
     fontSize: 18,
     textAlign: 'center',
-    maxWidth: '75%'
+    maxWidth: '75%',
   },
   svg: {
     marginTop: theme.spacing(4),
@@ -89,11 +89,12 @@ const Hubs = () => {
 
     if (!currentQuery || currentQuery === '')
       return dispatch({ type: HUBS_PREFIX + 'SEARCH_CLEAR' })
-    if (!currentQuery || currentQuery.length <= 3 || query === currentQuery) return false
+    if (!currentQuery || currentQuery.length <= 3 || query === currentQuery)
+      return false
 
     dispatch(getHubsSearchResults(currentQuery))
     history.push('/hubs/p/1?q=' + currentQuery, {
-      from: location.pathname
+      from: location.pathname,
     })
 
     return true
@@ -105,7 +106,12 @@ const Hubs = () => {
   }
 
   useEffect(() => {
-    dispatch(getHubsList(currentPage))
+    const currentQuery = inputRef.current ? inputRef.current.value : null
+    if (currentQuery) {
+      dispatch(getHubsSearchResults(currentQuery))
+    } else {
+      dispatch(getHubsList(currentPage))
+    }
   }, [currentPage, dispatch])
 
   return fetchError ? (
@@ -121,7 +127,7 @@ const Hubs = () => {
           storeSearchResults.hubIds.map((e: string, i: number) => (
             <Item data={storeSearchResults.hubRefs[e]} key={i} />
           ))}
-        {isFetched && query && storeSearchResults.length === 0 && (
+        {isFetched && query && storeSearchResults.pagesCount === 0 && (
           <NoResults />
         )}
         {isFetched &&

@@ -25,6 +25,7 @@ import { useDispatch } from 'react-redux'
 
 import { Icon28Users3Outline } from '@vkontakte/icons'
 import { Icon24WorkOutline } from '@vkontakte/icons'
+import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 
 const useStyles = makeStyles((theme) => ({
   topBlock: {
@@ -146,8 +147,8 @@ const useLinksStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   button: {
-    boxShadow: '0px 1px 5px -1px rgb(0 0 0 / 5%), 0px 5px 8px 0px rgb(0 0 0 / 2%)',
-    padding: theme.spacing(1, 1.5),
+    boxShadow:
+      '0px 1px 5px -1px rgb(0 0 0 / 7%), 0px 5px 8px 0px rgb(0 0 0 / 4%)',
     borderRadius: 8,
     width: '100%',
     display: 'flex',
@@ -161,6 +162,15 @@ const useLinksStyles = makeStyles((theme) => ({
     '&:nth-child(2)': {
       marginLeft: theme.spacing(1),
     },
+  },
+  link: {
+    padding: theme.spacing(1, 1.5),
+    color: theme.palette.text.primary,
+    textDecoration: 'none',
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   text: {
     fontSize: 16,
@@ -230,18 +240,22 @@ const Description = () => {
 }
 
 const Links = () => {
-  const profile = useSelector((state) => state.hub.profile.data)
+  const { alias } = useParams<HubParams>()
   const classes = useLinksStyles()
 
   return (
     <div className={classes.root}>
       <ButtonBase className={classes.button}>
-        <Icon28Users3Outline />
-        <Typography className={classes.text}>Авторы</Typography>
+        <LinkToOutsidePage className={classes.link} to={'/hub/' + alias + '/authors/p/1'}>
+          <Icon28Users3Outline />
+          <Typography className={classes.text}>Авторы</Typography>
+        </LinkToOutsidePage>
       </ButtonBase>
       <ButtonBase className={classes.button}>
-        <Icon24WorkOutline />
-        <Typography className={classes.text}>Компании</Typography>
+        <LinkToOutsidePage className={classes.link} to={'/hub/' + alias + '/companies/p/1'}>
+          <Icon24WorkOutline />
+          <Typography className={classes.text}>Компании</Typography>
+        </LinkToOutsidePage>
       </ButtonBase>
     </div>
   )

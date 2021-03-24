@@ -21,13 +21,6 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     '-webkit-tap-highlight-color': 'transparent !important',
   },
-  primaryText: {
-    color: theme.palette.text.primary,
-    '& .searched-item': {
-      color: theme.palette.primary.main,
-      fontWeight: 500,
-    },
-  },
   statistics: {
     marginTop: theme.spacing(0.5),
   },
@@ -43,7 +36,14 @@ const useStyles = makeStyles((theme) => ({
   statisticsItemText: {
     marginLeft: theme.spacing(1),
   },
-  title: theme.typography.body2
+  title: {
+    ...theme.typography.body2,
+    color: theme.palette.text.primary,
+    '& em.searched-item': {
+      color: theme.palette.primary.main,
+      fontWeight: 500,
+    },
+  }
 }))
 
 const Item = ({ data }: { data: Hub }) => {
@@ -83,7 +83,6 @@ const Item = ({ data }: { data: Hub }) => {
         <Avatar src={data.imageUrl} alt={data.titleHtml} />
       </ListItemAvatar>
       <ListItemText
-        primaryTypographyProps={{ className: classes.primaryText }}
         disableTypography
         primary={
           <FormattedText className={classes.title}>
@@ -98,14 +97,22 @@ const Item = ({ data }: { data: Hub }) => {
             <Grid container className={classes.statistics}>
               {statistics.map((e, i) => (
                 <Grid item xs={6} key={i} className={classes.statisticsItem}>
-                  <e.icon className={classes.statisticsItemIcon} />
                   {e.colored && (
-                    <GreenRedNumber number={e.value}>
-                      <StatisticsItemText text={e.value} />
+                    <GreenRedNumber
+                      number={e.value}
+                      wrapperProps={{ className: classes.statisticsItem }}
+                    >
+                      <>
+                        <e.icon />
+                        <StatisticsItemText text={e.value} />
+                      </>
                     </GreenRedNumber>
                   )}
                   {!e.colored && (
-                    <StatisticsItemText text={formatNumber(e.value)} />
+                    <>
+                      <e.icon className={classes.statisticsItemIcon} />
+                      <StatisticsItemText text={formatNumber(e.value)} />
+                    </>
                   )}
                 </Grid>
               ))}

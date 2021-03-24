@@ -28,7 +28,7 @@ const Hub = () => {
 
   return (
     <OutsidePage
-      headerText={alias ? alias : null}
+      headerText={profile ? profile.titleHtml : null}
       shrinkedHeaderText={profileFetchingState === FetchingState.Fetched ? profile.titleHtml : alias}
       hidePositionBar
     >

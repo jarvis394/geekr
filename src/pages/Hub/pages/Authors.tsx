@@ -1,10 +1,11 @@
 import React from 'react'
+import OutsidePage from 'src/components/blocks/OutsidePage'
 
 const Authors = () => {
   return (
-    <div>
+    <OutsidePage headerText="Авторы">
       
-    </div>
+    </OutsidePage>
   )
 }
 

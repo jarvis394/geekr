@@ -43,7 +43,7 @@ const SearchBar = ({ inputRef = null, onSubmit: onSubmitProp }) => {
         <InputBase
           name="q"
           inputRef={inputRef}
-          value={query}
+          defaultValue={query}
           placeholder={'Поиск среди хабов'}
           classes={{
             root: classes.inputRoot,

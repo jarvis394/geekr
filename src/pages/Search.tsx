@@ -14,6 +14,7 @@ import EmptySVG from '../components/svg/Empty'
 import SearchSVG from '../components/svg/Search'
 import { Posts } from '../interfaces'
 import useQuery from '../hooks/useQuery'
+import getPostFirstImage from 'src/utils/getPostFirstImage'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -167,6 +168,11 @@ const SearchResultsScreen = ({ q }) => {
     const get = async () => {
       try {
         const d = await getSearchResults(q, currentPage, 'relevance')
+        for (const id in d.articleRefs) {
+          d.articleRefs[id].postFirstImage = getPostFirstImage(
+            d.articleRefs[id]
+          )
+        }
         setData(d)
         if (!pagesCount) setPagesCount(d.pagesCount)
       } catch (e) {
@@ -189,6 +195,7 @@ const SearchResultsScreen = ({ q }) => {
       <Pagintaion
         disabled={!data}
         steps={pagesCount}
+        currentStep={currentPage}
         handleChange={handleChange}
       />
     </div>

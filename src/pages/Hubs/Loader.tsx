@@ -16,7 +16,7 @@ const Item = () => (
 
 const Loader = () => (
   <>
-    {[...new Array(10)].map((_, i) => (
+    {[...new Array(16)].map((_, i) => (
       <Item key={i} />
     ))}
   </>
