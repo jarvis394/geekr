@@ -1,10 +1,11 @@
 import React from 'react'
+import OutsidePage from 'src/components/blocks/OutsidePage'
 
 const Companies = () => {
   return (
-    <div>
+    <OutsidePage headerText="Компании" hidePositionBar disableShrinking>
       
-    </div>
+    </OutsidePage>
   )
 }
 

@@ -11,6 +11,7 @@ import ProfileSkeleton from 'src/components/skeletons/HubProfile'
 
 export interface HubParams {
   alias: string
+  page?: string
 }
 
 const Hub = () => {

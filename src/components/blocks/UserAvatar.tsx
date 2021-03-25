@@ -5,8 +5,8 @@ import UserPlaceholder from '../svg/UserPlaceholder'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 20,
-    height: 20,
+    width: 40,
+    height: 40,
     borderRadius: theme.shape.borderRadius,
   },
 }))
@@ -34,7 +34,7 @@ const UserAvatar = ({
     : true
 
   return (
-    <div {...props} className={className + ' ' + classes.root}>
+    <div {...props} className={[classes.root, className].join(' ')}>
       {!state && <Avatar className={className || classes.root} src={src} />}
       {state && <UserPlaceholder num={login.length} />}
     </div>
