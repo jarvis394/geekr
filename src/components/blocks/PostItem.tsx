@@ -346,20 +346,6 @@ export const PostItem = ({
                 {title}
               </LinkToOutsidePage>
 
-              {/** Post labels */}
-              <div className={classes.labelsContainer}>
-                {post.postLabels.map((e, i) => (
-                  <Chip
-                    label={postLabels[e].text}
-                    variant="outlined"
-                    color="primary"
-                    size="small"
-                    key={i}
-                    style={{ marginRight: 8, marginTop: 8 }}
-                  />
-                ))}
-              </div>
-
               <div className={classes.postBottomRow}>
                 {bottomRow.map((e, i) => (
                   <BottomRowItem item={e} key={i} />
