@@ -239,18 +239,6 @@ export const PostItem = ({
               <Typography className={classes.postTitle}>{title}</Typography>
             </Link>
           </Grid>
-          <Grid item xs={12}>
-            {post.postLabels.map((e, i) => (
-              <Chip
-                label={postLabels[e].text}
-                variant="outlined"
-                color="primary"
-                size="small"
-                key={i}
-                style={{ marginRight: 8, marginTop: 8 }}
-              />
-            ))}
-          </Grid>
           <Grid
             className={classes.postBottomRow}
             container
