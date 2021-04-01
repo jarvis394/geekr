@@ -166,6 +166,22 @@ const Post = () => {
   const shouldShowContents = post && (companyAlias ? post && company : post)
   const location = useLocation<PostLocationState>()
   const offset = location.state ? location.state.offset : 0
+  const labels =
+    shouldShowContents &&
+    post.postLabels.map((e, i) => {
+      const labelData = postLabels[e.type]
+      return (
+        <Chip
+          label={labelData.text}
+          variant="outlined"
+          color="primary"
+          size="small"
+          key={i}
+          component={labelData.link ? MUILink : 'span'}
+          style={{ marginRight: 8, marginTop: 8 }}
+        />
+      )
+    })
   const contents = shouldShowContents ? (
     <>
       {/** Company header */}
@@ -227,6 +243,7 @@ const Post = () => {
             </span>
           ))}
         </div>
+        {labels}
         {isTranslated && (
           <MUILink
             href={post.translationData.originalUrl}

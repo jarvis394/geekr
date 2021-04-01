@@ -6,7 +6,6 @@ import {
   GridListTile,
   Fade,
   useTheme,
-  Button,
 } from '@material-ui/core'
 import { darken, fade, lighten, makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
@@ -181,7 +180,7 @@ const AdvertsBlock = () => {
       <GridList
         cellHeight={ADVERTS_BLOCK_HEIGHT}
         className={classes.buttonsHolder}
-        cols={1.1}
+        cols={1.2}
       >
         {fetched &&
           data.map((e, i) => (

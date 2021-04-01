@@ -1,6 +1,9 @@
 import { ModeObject } from '../interfaces'
 import { UserSettings } from '../interfaces'
 import { PaletteType as MUIPaletteType } from '@material-ui/core'
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
+
+const _theme = createMuiTheme()
 
 export const API_URL = 'https://m.habr.com/kek/'
 export const API_TOKEN_URL = 'https://jarvis394-backend.ml/habra/'
@@ -10,7 +13,7 @@ export const GA_ID_STRING = 'UA-188053191-1'
 /**
  * Minimal application width to stay with the drawer
  */
-export const MIN_WIDTH = 900
+export const MIN_WIDTH = _theme.breakpoints.values.md
 
 /**
  * Negative threshold for VisibilitySensor in PostItem component
@@ -19,7 +22,7 @@ export const POST_ITEM_VISIBILITY_THRESHOLD = -250
 
 export const POST_IMAGE_HEIGHT = 212
 export const ADVERTS_BLOCK_HEIGHT = 128
-export const ADVERTS_BLOCK_MAX_WIDTH = 456
+export const ADVERTS_BLOCK_MAX_WIDTH = 496
 export const BOTTOM_BAR_HEIGHT = 52
 export const APP_BAR_HEIGHT = 48
 export const POST_READING_PROGRESS_KEY = 'POST_READING_PROGRESS'
@@ -99,7 +102,10 @@ export const RATING_MODES: ModeObject[] = [
   },
 ]
 
-export const POST_LABELS = {
+export const POST_LABELS: Record<string, {
+  text: string
+  link?: string
+}> = {
   tutorial: { text: 'Туториал' },
   translation: { text: 'Перевод' },
   sandbox: { text: 'Из песочницы' },

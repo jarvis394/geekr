@@ -1,5 +1,6 @@
 import Flow from './Flow'
 import { HubPost } from './Hub'
+import PostLabel from './PostLabel'
 import { User } from './User'
 
 export default interface Post {
@@ -28,7 +29,7 @@ export default interface Post {
     vkShareImageUrl: string
   }
   polls: never[]
-  postLabels: string[]
+  postLabels: PostLabel[]
   postType: string
   statistics: {
     commentsCount: number
