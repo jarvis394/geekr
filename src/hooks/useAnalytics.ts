@@ -15,7 +15,8 @@ const useAnalytics = () => {
     })
   }
   useEffect(() => {
-    ReactGA.set({ page: location.pathname })
+    ReactGA.set({ dimension1: 2 })
+    ReactGA.set({ page: location.pathname, appVersion: 2 })
     ReactGA.pageview(location.pathname)
     getCLS(reportVitalsToGA)
     getFID(reportVitalsToGA)
