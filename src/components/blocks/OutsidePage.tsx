@@ -154,16 +154,27 @@ const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
 }
 const UnshrinkedContent = ({ isShrinked, headerText, onBackClick }) => {
   const classes = useAppBarStyles({ isShrinked, scrollProgress: 0 })
+  const [headerTextUpdated, setHeaderTextUpdated] = useState(false)
   const history = useHistory()
   const location = useLocation<OutsidePageLocationState>()
   const defaultBackLink = getCachedMode().to + '/p/1'
   const backLinkData = location?.state?.from
   const backLink = backLinkData || defaultBackLink
+  const text = (
+    <Typography className={classes.headerTitle}>{headerText}</Typography>
+  )
 
   const onClick = () => {
     onBackClick && onBackClick()
     history.push(backLink)
   }
+
+  // Remove fade effect on a title if it was set by default
+  // If the title is being fetched (ex. Post),
+  // we need to change the state and render Fade component
+  useEffect(() => {
+    !headerTextUpdated && setHeaderTextUpdated(!headerText)
+  }, [headerText])
 
   return (
     <Fade in={!isShrinked} appear={false}>
@@ -175,13 +186,7 @@ const UnshrinkedContent = ({ isShrinked, headerText, onBackClick }) => {
         >
           <BackRoundedIcon />
         </IconButton>
-        {headerText && (
-          <Fade in>
-            <Typography className={classes.headerTitle}>
-              {headerText}
-            </Typography>
-          </Fade>
-        )}
+        {headerText && headerTextUpdated ? <Fade in>{text}</Fade> : text}
       </div>
     </Fade>
   )
@@ -194,11 +199,11 @@ const NavBarUnmemoized = ({
   shrinkedBackgroundColor,
   backgroundColor,
   onBackClick,
-  disableShrinking
+  disableShrinking,
 }) => {
   const isShrinked = useScrollTrigger({
     threshold: 48,
-    triggerValue: false
+    triggerValue: false,
   })
   const [scrollProgress, setScrollProgress] = useState(0)
   const classes = useAppBarStyles({

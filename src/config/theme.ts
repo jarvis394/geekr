@@ -48,6 +48,18 @@ const generateTheme = (themeType?: PaletteType): ThemeOptions => ({
       },
     },
   },
+  props: {
+    // Ripple on IconButtons is delayed and not very effective in performance
+    // So we change its styles to custom ones
+    MuiIconButton: {
+      TouchRippleProps: {
+        classes: {
+          rippleVisible: 'IconButton_TouchRipple-rippleVisible',
+          childLeaving: 'IconButton_TouchRipple-childLeaving'
+        },
+      },
+    },
+  },
 })
 
 export default generateTheme

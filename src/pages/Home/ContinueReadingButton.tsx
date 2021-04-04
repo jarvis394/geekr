@@ -83,6 +83,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+import { Icon20DismissDark } from '@vkontakte/icons'
+
 const ContinueReadingButton = () => {
   const post = useSelector((store) => store.post.lastPost.data)
   const offset = useSelector((store) => store.post.lastPost.offset)

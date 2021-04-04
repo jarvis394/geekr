@@ -142,9 +142,9 @@ export const BACKGROUND_COLORS_PAPER = {
 }
 
 export const THEME_NAMES = {
-  light: 'Светлая тема',
-  dark: 'Тёмная тема',
-  oled: 'Тема для OLED экранов',
+  light: 'Светлая',
+  dark: 'Тёмная',
+  oled: 'Для OLED экранов',
   sepia: 'Ночной режим',
 }
 

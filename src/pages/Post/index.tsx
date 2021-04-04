@@ -279,6 +279,7 @@ const Post = () => {
 
   // Start fetching post data
   useEffect(() => {
+    console.log('getting post', id)
     dispatch(getPost(id))
     companyAlias && dispatch(getCompany(companyAlias))
 
@@ -290,7 +291,7 @@ const Post = () => {
         })
       )
     }
-  }, [dispatch, id, companyAlias, post, offset])
+  }, [dispatch, id, companyAlias, offset])
 
   const onBackClickHandler = () => {
     const progress = getScrollProgress()

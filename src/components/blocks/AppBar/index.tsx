@@ -9,7 +9,7 @@ import Avatar from '@material-ui/core/Avatar'
 import { useHistory, useLocation } from 'react-router-dom'
 import { APP_BAR_HEIGHT, MIN_WIDTH, RATING_MODES } from 'src/config/constants'
 import PermIdentityRoundedIcon from '@material-ui/icons/PermIdentityRounded'
-import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
+import { Icon28SettingsOutline } from '@vkontakte/icons'
 import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
 import { useRoute, useSelector } from 'src/hooks'
@@ -179,8 +179,12 @@ const AppBarComponent = () => {
                 <WifiOffRoundedIcon className={classes.offline} />
               </Offline>
             </div>
-            <IconButton onClick={() => history.push('/search')}>
-              <SearchRoundedIcon />
+            <IconButton
+              onClick={() =>
+                history.push('/settings', { from: location.pathname + location.search })
+              }
+            >
+              <Icon28SettingsOutline width={24} height={24} />
             </IconButton>
             {!shouldShowUser && (
               <IconButton onClick={() => (token ? '' : history.push('/auth'))}>

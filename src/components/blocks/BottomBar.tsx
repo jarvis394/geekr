@@ -11,7 +11,7 @@ import { useRoute } from 'src/hooks'
 import { Icon28Newsfeed } from '@vkontakte/icons'
 import { Icon20HomeOutline } from '@vkontakte/icons'
 import { Icon28ServicesOutline } from '@vkontakte/icons'
-import { Icon28SettingsOutline } from '@vkontakte/icons'
+import { Icon24Search } from '@vkontakte/icons'
 import { Icon28Profile } from '@vkontakte/icons'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
@@ -69,11 +69,11 @@ const tabs: TabObject[] = [
     tab: 'services',
   },
   {
-    label: 'Настройки',
-    icon: <Icon28SettingsOutline width={24} height={24} />,
-    to: () => '/settings',
-    match: /\/settings\/?$/,
-    tab: 'settings',
+    label: 'Поиск',
+    icon: <Icon24Search width={24} height={24} />,
+    to: () => '/search',
+    match: /\/search(\/p\/([0-9]+)\/?)?$/,
+    tab: 'search',
   },
   {
     label: 'Профиль',

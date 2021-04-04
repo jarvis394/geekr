@@ -26,6 +26,32 @@ interface StyleProps {
 }
 
 const useStyles = makeStyles({
+  // Needed for IconButton touch ripple tweaks
+  '@global': {
+    '@keyframes enter': {
+      '0%': {
+        opacity: 0.1,
+      },
+      '100%': {
+        opacity: 0.15,
+      },
+    },
+    '@keyframes exit': {
+      '0%': {
+        opacity: 1,
+      },
+      '100%': {
+        opacity: 0,
+      },
+    },
+    '.IconButton_TouchRipple-rippleVisible': {
+      animation: 'enter 0ms ease',
+      opacity: 0.15,
+    },
+    '.IconButton_TouchRipple-childLeaving': {
+      animation: 'exit 255ms ease',
+    },
+  },
   app: ({ shouldShowAppBar }: StyleProps) => ({
     display: 'flex',
     minHeight: `calc(100vh - ${APP_BAR_HEIGHT}px - ${

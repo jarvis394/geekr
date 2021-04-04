@@ -27,6 +27,7 @@ export default (
 ): typeof initialState => {
   switch (type) {
     case SET_THEME:
+      localStorage.setItem('theme', payload)
       return { ...state, theme: generateTheme(payload), themeType: payload }
 
     case SET_HIDDEN_AUTHORS:

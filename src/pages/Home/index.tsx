@@ -15,7 +15,7 @@ import { getPosts } from 'src/store/actions/home'
 import { useSelector } from 'src/hooks'
 import getCachedMode from 'src/utils/getCachedMode'
 import AdvertsBlock from './AdvertsBlock'
-import ContinueReadingButton from 'src/components/blocks/ContinueReadingButton'
+import ContinueReadingButton from 'src/pages/Home/ContinueReadingButton'
 
 const useStyles = makeStyles((theme) => ({
   root: {
