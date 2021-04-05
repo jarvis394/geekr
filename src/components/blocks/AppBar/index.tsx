@@ -8,8 +8,8 @@ import IconButton from '@material-ui/core/IconButton'
 import Avatar from '@material-ui/core/Avatar'
 import { useHistory, useLocation } from 'react-router-dom'
 import { APP_BAR_HEIGHT, MIN_WIDTH, RATING_MODES } from 'src/config/constants'
-import PermIdentityRoundedIcon from '@material-ui/icons/PermIdentityRounded'
 import { Icon28SettingsOutline } from '@vkontakte/icons'
+import { Icon24UserOutline } from '@vkontakte/icons'
 import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
 import { useRoute, useSelector } from 'src/hooks'
@@ -188,7 +188,7 @@ const AppBarComponent = () => {
             </IconButton>
             {!shouldShowUser && (
               <IconButton onClick={() => (token ? '' : history.push('/auth'))}>
-                <PermIdentityRoundedIcon />
+                <Icon24UserOutline width={24} height={24} />
               </IconButton>
             )}
             {shouldShowUser && (

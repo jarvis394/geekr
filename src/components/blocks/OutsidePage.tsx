@@ -20,10 +20,11 @@ import getCachedMode from 'src/utils/getCachedMode'
 import OutsidePageLocationState from 'src/interfaces/OutsidePageLocationState'
 
 interface StyleProps {
-  isShrinked: boolean
-  scrollProgress: number
+  isShrinked?: boolean
+  scrollProgress?: number
   backgroundColor?: string
   shrinkedBackgroundColor?: string
+  disableShrinking?: boolean
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -56,7 +57,8 @@ const useAppBarStyles = makeStyles((theme) => ({
     flexGrow: 1,
     transform: ({ isShrinked }: StyleProps) =>
       `translateZ(0) translateY(${isShrinked ? -16 : 0}px)`,
-    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1)',
+    transition: ({ disableShrinking }: StyleProps) =>
+      disableShrinking ? 'none' : 'all .3s cubic-bezier(0.4, 0, 0.2, 1)',
     '&::before': {
       position: 'absolute',
       width: ({ scrollProgress }: StyleProps) => scrollProgress * 100 + '%',
@@ -143,7 +145,7 @@ interface Props {
 }
 
 const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
-  const classes = useAppBarStyles({ isShrinked, scrollProgress: 0 })
+  const classes = useAppBarStyles({})
   return (
     <Fade in={isShrinked} unmountOnExit mountOnEnter>
       <Typography className={classes.shrinkedHeaderTitle}>
@@ -152,8 +154,12 @@ const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
     </Fade>
   )
 }
-const UnshrinkedContent = ({ isShrinked, headerText, onBackClick }) => {
-  const classes = useAppBarStyles({ isShrinked, scrollProgress: 0 })
+const UnshrinkedContent = ({
+  headerText,
+  onBackClick,
+  isShrinked
+}) => {
+  const classes = useAppBarStyles({})
   const [headerTextUpdated, setHeaderTextUpdated] = useState(false)
   const history = useHistory()
   const location = useLocation<OutsidePageLocationState>()
@@ -211,6 +217,7 @@ const NavBarUnmemoized = ({
     scrollProgress,
     backgroundColor,
     shrinkedBackgroundColor,
+    disableShrinking
   })
   const scrollCallback = () =>
     requestAnimationFrame(() => {

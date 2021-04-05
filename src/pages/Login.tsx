@@ -18,6 +18,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import { useSnackbar } from 'notistack'
 import { getToken } from 'habra-auth'
+import OutsidePage from 'src/components/blocks/OutsidePage'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -72,11 +73,12 @@ const Login = () => {
       setFetchingState(FetchingState.Fetching)
 
       // Get login data with user's email and password
-      const data = await getToken(email, password)
+      const data = await getToken({ email, password, fetch: window.fetch })
 
       dispatch(setToken(data.access_token))
       setFetchingState(FetchingState.Fetched)
     } catch (e) {
+      console.error('Error when trying to log in:', e)
       setFetchingState(FetchingState.Error)
     }
   }
@@ -97,59 +99,65 @@ const Login = () => {
   }, [state, history, enqueueSnackbar])
 
   return (
-    <form className={classes.root} onSubmit={handleLoginSubmit}>
-      <Paper className={classes.paper}>
-        <Grid container direction="column" className={classes.grid}>
-          <Grid item>
-            <Typography className={classes.headerTitle}>Вход</Typography>
+    <OutsidePage headerText={'Авторизация'} disableShrinking>
+      <form className={classes.root} onSubmit={handleLoginSubmit}>
+        <Paper className={classes.paper}>
+          <Grid container direction="column" className={classes.grid}>
+            <Grid item>
+              <Typography className={classes.headerTitle}>Вход</Typography>
+            </Grid>
+            <Grid item className={classes.input}>
+              <Typography className={classes.inputLabel}>
+                Электропочта
+              </Typography>
+              <TextField
+                autoFocus
+                autoComplete="email"
+                name="email"
+                size="small"
+                fullWidth
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item className={classes.input}>
+              <Typography className={classes.inputLabel}>Пароль</Typography>
+              <OutlinedInput
+                autoComplete="current-password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                fullWidth
+                margin="dense"
+                endAdornment={
+                  <InputAdornment position="end" style={{ marginRight: -8 }}>
+                    <IconButton
+                      onClick={() => setShowPassword((prev) => !prev)}
+                    >
+                      {showPassword ? (
+                        <VisibilityIcon color="disabled" />
+                      ) : (
+                        <VisibilityOffIcon color="disabled" />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </Grid>
+            <Grid item>
+              <Button
+                disableElevation
+                className={classes.loginButton}
+                fullWidth
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
+                Войти
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item className={classes.input}>
-            <Typography className={classes.inputLabel}>Электропочта</Typography>
-            <TextField
-              autoFocus
-              autoComplete="email"
-              name="email"
-              size="small"
-              fullWidth
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item className={classes.input}>
-            <Typography className={classes.inputLabel}>Пароль</Typography>
-            <OutlinedInput
-              autoComplete="current-password"
-              name="password"
-              type={showPassword ? 'text' : 'password'}
-              fullWidth
-              margin="dense"
-              endAdornment={
-                <InputAdornment position="end" style={{ marginRight: -8 }}>
-                  <IconButton onClick={() => setShowPassword((prev) => !prev)}>
-                    {showPassword ? (
-                      <VisibilityIcon color="disabled" />
-                    ) : (
-                      <VisibilityOffIcon color="disabled" />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </Grid>
-          <Grid item>
-            <Button
-              disableElevation
-              className={classes.loginButton}
-              fullWidth
-              variant="contained"
-              color="primary"
-              type="submit"
-            >
-              Войти
-            </Button>
-          </Grid>
-        </Grid>
-      </Paper>
-    </form>
+        </Paper>
+      </form>
+    </OutsidePage>
   )
 }
 

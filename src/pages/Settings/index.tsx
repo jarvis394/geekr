@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { fade, Typography } from '@material-ui/core'
 import OutsidePage from 'src/components/blocks/OutsidePage'
-import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 import { Icon24PaletteOutline } from '@vkontakte/icons'
@@ -11,6 +10,8 @@ import { Icon24HideOutline } from '@vkontakte/icons'
 import { Icon24ChevronRight } from '@vkontakte/icons'
 import { Icon243SquareOutline } from '@vkontakte/icons'
 import { Icon28ArticleOutline } from '@vkontakte/icons'
+import { Icon28GlobeOutline } from '@vkontakte/icons'
+import isDarkTheme from 'src/utils/isDarkTheme'
 
 const items = [
   {
@@ -26,20 +27,26 @@ const items = [
   {
     icon: Icon243SquareOutline,
     to: '/interface',
-    text: 'Интерфейс',
+    text: 'Настройки интерфейса',
   },
   {
     icon: Icon28ArticleOutline,
     to: '/article',
-    text: 'Настройки чтения',
+    text: 'Параметры чтения',
+  },
+  {
+    icon: Icon28GlobeOutline,
+    to: '/language',
+    text: 'Язык приложения',
   },
 ]
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: theme.spacing(1),
+    paddingTop: theme.spacing(1),
     display: 'flex',
     flexDirection: 'column',
+    backgroundColor: getContrastPaperColor(theme),
   },
   link: {
     display: 'flex',
@@ -50,10 +57,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     '-webkit-tap-highlight-color': 'transparent !important',
     '&:hover': {
-      backgroundColor: fade(getInvertedContrastPaperColor(theme), 0.5),
+      backgroundColor: fade(theme.palette.common[isDarkTheme(theme) ? 'white' : 'black'], 0.05),
     },
     '&:active': {
-      backgroundColor: getInvertedContrastPaperColor(theme),
+      background: fade(theme.palette.common[isDarkTheme(theme) ? 'white' : 'black'], 0.2),
     },
   },
   linkText: {
@@ -73,7 +80,7 @@ const Settings = () => {
   const classes = useStyles()
 
   return (
-    <OutsidePage headerText={'Настройки'}>
+    <OutsidePage headerText={'Настройки'} disableShrinking>
       <div className={classes.root}>
         {items.map((e, i) => (
           <Link to={{

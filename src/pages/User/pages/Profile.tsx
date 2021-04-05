@@ -15,6 +15,7 @@ import Hubs from '../Hubs'
 import ProfileLinks from '../ProfileLinks'
 import { useSelector } from 'src/hooks'
 import fadedLinearGradient from 'src/utils/fadedLinearGradient'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 export const useStyles = makeStyles((theme) => ({
   topBlock: {
@@ -29,7 +30,7 @@ export const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     paddingBottom: theme.spacing(2),
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: getContrastPaperColor(theme),
   },
   blockMargin: {
     marginTop: theme.spacing(2),

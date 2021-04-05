@@ -15,6 +15,7 @@ import { getProfileHubs } from 'src/store/actions/profile'
 import { useSelector } from 'src/hooks'
 import { Hub } from 'src/interfaces'
 import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     background:
       'linear-gradient(0deg,' +
-      theme.palette.background.paper +
+      getContrastPaperColor(theme) +
       ',transparent)',
     bottom: 0,
     pointerEvents: 'none',
@@ -68,7 +69,7 @@ const HubsItem = ({ data }: { data: Hub }) => {
       item
       className={classes.item}
       component={LinkToOutsidePage}
-      to={'/hub/' + data.alias}
+      to={'/hub/' + data.alias + '/p/1'}
     >
       <Chip
         style={{ cursor: 'pointer' }}

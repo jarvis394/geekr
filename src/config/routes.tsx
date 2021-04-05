@@ -25,7 +25,7 @@ import Hub from 'src/pages/Hub/index'
 import HubAuthors from 'src/pages/Hub/pages/Authors'
 import HubCompanies from 'src/pages/Hub/pages/Companies'
 
-interface Route {
+export interface Route {
   path: string | string[]
   component: MemoExoticComponent<() => React.ReactElement> | React.ReactElement
   title?: string
@@ -34,7 +34,7 @@ interface Route {
   shouldAppBarChangeColors?: boolean
 }
 
-const routes: Route[] = [
+export const routes: Route[] = [
   {
     path: '/services',
     component: <Services />,
@@ -231,10 +231,8 @@ const routes: Route[] = [
     path: '/:404*',
     component: <NotFound />,
     title: '404',
-    shouldShowAppBar: true,
+    shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
   },
 ]
-
-export default routes

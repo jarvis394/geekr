@@ -18,6 +18,7 @@ import ProfileChildrenSkeleton from 'src/components/skeletons/ProfileChildren'
 import { useDispatch } from 'react-redux'
 import { getProfileChildren } from 'src/store/actions/profile'
 import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -50,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     background:
       'linear-gradient(0deg,' +
-      theme.palette.background.paper +
+      getContrastPaperColor(theme) +
       ',transparent)',
     bottom: 0,
     pointerEvents: 'none',

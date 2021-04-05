@@ -6,14 +6,14 @@ import { Paper } from '@material-ui/core'
 import { useLocation, useHistory } from 'react-router-dom'
 import getCachedMode from 'src/utils/getCachedMode'
 import { BOTTOM_BAR_HEIGHT } from 'src/config/constants'
-import { useRoute } from 'src/hooks'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 import { Icon28Newsfeed } from '@vkontakte/icons'
 import { Icon20HomeOutline } from '@vkontakte/icons'
 import { Icon28ServicesOutline } from '@vkontakte/icons'
 import { Icon24Search } from '@vkontakte/icons'
 import { Icon28Profile } from '@vkontakte/icons'
-import getContrastPaperColor from 'src/utils/getContrastPaperColor'
+import { useRoute } from 'src/hooks'
 
 interface TabObject {
   label: string
@@ -89,10 +89,10 @@ const findPathValue = (path: string): number => {
 }
 
 const BottomBar = () => {
+  const route = useRoute()
   const classes = useStyles()
   const history = useHistory()
   const location = useLocation()
-  const route = useRoute()
   const [isShown, setShown] = React.useState(false)
   const [value, setValue] = useState<number>(findPathValue(location.pathname))
   const handleChange = (
