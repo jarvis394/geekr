@@ -12,6 +12,8 @@ import {
   Typography,
   Grid,
   useTheme,
+  GridSize,
+  ButtonBase,
 } from '@material-ui/core'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import fadedLinearGradient from 'src/utils/fadedLinearGradient'
@@ -32,27 +34,46 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1.5),
   },
   previewContainer: {
-    width: '100%',
-    margin: 0,
-    padding: theme.spacing(1.5, 2),
-    background: fadedLinearGradient(theme),
-  },
-  previewItem: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  previewBox: {
-    width: 48,
-    height: 48,
-    borderRadius: 4,
-    marginRight: theme.spacing(1),
-  },
-  previewTitle: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(1),
+    position: 'relative',
+    // padding: theme.spacing(1.5, 2),
+    // background: fadedLinearGradient(theme),
   },
   border: {
     border: '1px solid ' + theme.palette.divider,
+  },
+  floatText: {
+    position: 'absolute',
+    marginTop: 4,
+    marginLeft: 8,
+    fontSize: 14,
+    fontWeight: 700,
+    color: theme.palette.getContrastText(theme.palette.primary.main),
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    maxWidth: 'calc(100% - ' + theme.spacing(2) + 'px)',
+  },
+  darkText: {
+    color: theme.palette.getContrastText(theme.palette.background.default),
+  },
+  paletteSymbolContainer: {
+    height: 30,
+    left: '50%',
+    position: 'absolute',
+    top: '50%',
+    width: 30,
+    transform: 'translate(-50%, -50%)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 16,
+    fontWeight: 700,
+    background: theme.palette.getContrastText(theme.palette.primary.main),
+    color: theme.palette.primary.main,
+    borderRadius: '50%',
+  },
+  gridItem: {
+    position: 'relative',
   },
 }))
 
@@ -68,70 +89,88 @@ const Appearance = () => {
   ) => {
     dispatch(setTheme(themeType as PaletteType))
   }
-  const primaryPalette = [
-    { text: 'palette.primary.light', color: theme.palette.primary.light },
-    { text: 'palette.primary.main', color: theme.palette.primary.main },
-    { text: 'palette.primary.dark', color: theme.palette.primary.dark },
-  ]
-  const surfacePalette = [
-    {
-      text: 'palette.background.default',
-      color: theme.palette.background.default,
-    },
-    { text: 'palette.background.paper', color: theme.palette.background.paper },
-  ]
+
+  const PaletteGridItem = ({
+    width,
+    color,
+    text,
+    darkText,
+    withSymbol,
+  }: {
+    width: number
+    color: string
+    text: string
+    darkText?: boolean
+    withSymbol?: boolean
+  }) => (
+    <Grid
+      item
+      component={ButtonBase}
+      xs={width as boolean | GridSize}
+      style={{
+        paddingBottom: '50%',
+        background: color,
+        color: theme.palette.getContrastText(color),
+        position: 'relative',
+        alignItems: 'baseline',
+        justifyContent: 'start',
+      }}
+    >
+      <Typography
+        className={classes.floatText + (darkText ? ' ' + classes.darkText : '')}
+      >
+        {text}
+      </Typography>
+      {withSymbol && <span className={classes.paletteSymbolContainer}>P</span>}
+    </Grid>
+  )
 
   return (
     <OutsidePage headerText={'Внешний вид'} disableShrinking>
-      <Grid container className={classes.previewContainer}>
-        <Grid item xs={isExtended ? 6 : 12}>
-          <Typography
-            variant="body1"
-            className={classes.previewTitle}
-            style={{ marginTop: 0 }}
-          >
-            Акцент
-          </Typography>
-          <Grid container spacing={2}>
-            {primaryPalette.map((e, i) => (
-              <Grid key={i} item xs={12} className={classes.previewItem}>
-                <div
-                  className={classes.previewBox}
-                  style={{ backgroundColor: e.color }}
-                />
-                <div>
-                  <Typography variant="body2">{e.text}</Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    {e.color}
-                  </Typography>
-                </div>
-              </Grid>
-            ))}
+      <Grid container className={classes.previewContainer} direction="row">
+        <Grid item xs={6}>
+          <Grid container direction="column">
+            <PaletteGridItem
+              width={12}
+              color={theme.palette.primary.main}
+              text="main"
+              withSymbol
+            />
+            <Grid container direction="row">
+              <PaletteGridItem
+                width={6}
+                color={theme.palette.primary.light}
+                text="light"
+              />
+              <PaletteGridItem
+                width={6}
+                color={theme.palette.primary.dark}
+                text="dark"
+              />
+            </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={isExtended ? 6 : 12}>
-          <Typography
-            variant="body1"
-            className={classes.previewTitle}
-            style={{ [isExtended ? 'marginTop' : '']: 0 }}
-          >
-            Поверхности
-          </Typography>
-          <Grid container spacing={2}>
-            {surfacePalette.map((e, i) => (
-              <Grid key={i} item xs={12} className={classes.previewItem}>
-                <div
-                  className={[classes.previewBox, classes.border].join(' ')}
-                  style={{ backgroundColor: e.color }}
-                />
-                <div>
-                  <Typography variant="body2">{e.text}</Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    {e.color}
-                  </Typography>
-                </div>
-              </Grid>
-            ))}
+        <Grid item xs={6}>
+          <Grid container direction="column">
+            <PaletteGridItem
+              width={12}
+              color={theme.palette.background.paper}
+              darkText
+              text="paper"
+            />
+            <Grid container direction="row">
+              <PaletteGridItem
+                width={6}
+                color={theme.palette.background.default}
+                darkText
+                text="default"
+              />
+              <PaletteGridItem
+                width={6}
+                color={theme.palette.text.primary}
+                text="text"
+              />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
