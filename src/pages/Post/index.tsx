@@ -19,6 +19,7 @@ import TopDayPosts from './TopDayPosts'
 import { Chip, Link as MUILink } from '@material-ui/core'
 import {
   chromeAddressBarHeight,
+  MIN_WIDTH,
   POST_LABELS as postLabels,
 } from 'src/config/constants'
 import OutsidePage from 'src/components/blocks/OutsidePage'
@@ -27,7 +28,6 @@ import { useDispatch } from 'react-redux'
 import { setPostReadingProgress } from 'src/store/actions/post'
 import isMobile from 'is-mobile'
 import PostLocationState from 'src/interfaces/PostLocationState'
-import isDarkTheme from 'src/utils/isDarkTheme'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
@@ -35,7 +35,7 @@ import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: '100%',
-    maxWidth: '100vw',
+    maxWidth: MIN_WIDTH,
     backgroundColor: getContrastPaperColor(theme),
     paddingBottom: theme.spacing(2),
   },
@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   score: {
     fontWeight: 700,
     fontSize: 13,
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   scoreIcon: {
     fontSize: '1rem',
@@ -107,7 +107,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     lineHeight: '1.56',
     wordBreak: 'break-word',
     hyphens: 'auto',
-    color: isDarkTheme(theme) ? '#eee' : theme.palette.text.primary,
+    color: theme.palette.text.primary,
   },
   title: {
     fontWeight: 800,

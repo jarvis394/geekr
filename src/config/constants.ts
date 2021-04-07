@@ -134,7 +134,7 @@ export const BACKGROUND_COLORS_DEFAULT = {
   dark: '#0e0e0e',
   oled: '#000000',
   sepia: '#f5e2a8',
-  dimmed: '#22272e',
+  dimmed: '#1c2128',
 }
 
 /** Colors for app foreground elements, such as Paper */
@@ -143,7 +143,7 @@ export const BACKGROUND_COLORS_PAPER = {
   dark: '#1d1d1d',
   oled: '#0e0e0e',
   sepia: '#ffecb3',
-  dimmed: '#2d333b',
+  dimmed: '#252c35',
 }
 
 export const THEME_PRIMARY_COLORS = {
@@ -200,10 +200,10 @@ export const THEME_TEXT_COLORS = {
     hint: fade('#5b4636', 0.38),
   },
   dimmed: {
-    primary: '#c5d3e2',
-    secondary: fade('#c5d3e2', 0.54),
-    disabled: fade('#c5d3e2', 0.38),
-    hint: fade('#c5d3e2', 0.38),
+    primary: '#cdd9e5',
+    secondary: fade('#cdd9e5', 0.54),
+    disabled: fade('#cdd9e5', 0.38),
+    hint: fade('#cdd9e5', 0.38),
   }
 }
 
