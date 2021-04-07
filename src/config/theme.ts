@@ -6,6 +6,8 @@ import {
   BACKGROUND_COLORS_PAPER,
   THEME_TYPES,
   PaletteType,
+  THEME_PRIMARY_COLORS,
+  THEME_TEXT_COLORS,
 } from './constants'
 
 const localStorageThemeType = localStorage.getItem('theme')
@@ -27,18 +29,23 @@ export const makePrimaryColors = (
   main: string
   light: string
   dark: string
-} => ({
-  main: THEME_TYPES[t] === 'dark' ? blue.A100 : blue.A400,
-  light: THEME_TYPES[t] === 'dark' ? blue.A100 : blue.A200,
-  dark: THEME_TYPES[t] === 'dark' ? darken(blue.A100, 0.1) : blue.A700,
-})
+} => (THEME_PRIMARY_COLORS[t])
+
+export const makeTextColors = (
+  t: PaletteType
+): {
+  primary: string
+  secondary: string
+  disabled: string
+  hint: string
+} => (THEME_TEXT_COLORS[t])
 
 const generateTheme = (themeType?: PaletteType): ThemeOptions => ({
   palette: {
     type: THEME_TYPES[themeType || type],
-    primary: makePrimaryColors(themeType ? themeType : type),
-    secondary: { main: '#fff' },
-    background: makeBackgroundColors(themeType ? themeType : type),
+    primary: makePrimaryColors(themeType || type),
+    background: makeBackgroundColors(themeType || type),
+    text: makeTextColors(themeType || type),
   },
   shape: { borderRadius: 4 },
   overrides: {

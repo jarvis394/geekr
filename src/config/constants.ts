@@ -1,7 +1,8 @@
 import { ModeObject } from '../interfaces'
 import { UserSettings } from '../interfaces'
-import { PaletteType as MUIPaletteType } from '@material-ui/core'
+import { darken, fade, lighten, PaletteType as MUIPaletteType } from '@material-ui/core'
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
+import { blue, teal } from '@material-ui/core/colors'
 
 const _theme = createMuiTheme()
 
@@ -125,36 +126,103 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   theme: 'light',
 }
 
-export const THEMES: PaletteType[] = ['light', 'dark', 'oled', 'sepia']
+export const THEMES: PaletteType[] = ['light', 'dark', 'oled', 'sepia', 'dimmed']
 
+/** Colors for app background */
 export const BACKGROUND_COLORS_DEFAULT = {
   light: '#fafafa',
   dark: '#0e0e0e',
   oled: '#000000',
   sepia: '#f5e2a8',
+  dimmed: '#22272e',
 }
 
+/** Colors for app foreground elements, such as Paper */
 export const BACKGROUND_COLORS_PAPER = {
   light: '#ffffff',
   dark: '#1d1d1d',
   oled: '#0e0e0e',
   sepia: '#ffecb3',
+  dimmed: '#2d333b',
+}
+
+export const THEME_PRIMARY_COLORS = {
+  light: {
+    main: blue.A400,
+    light: blue.A200,
+    dark: blue.A700,
+  },
+  dark: {
+    main: blue.A100,
+    light: lighten(blue.A100, 0.05),
+    dark: darken(blue.A100, 0.1),
+  },
+  oled: {
+    main: blue.A100,
+    light: lighten(blue.A100, 0.05),
+    dark: darken(blue.A100, 0.1),
+  },
+  sepia: {
+    main: '#679f9d',
+    light: lighten('#679f9d', 0.05),
+    dark: darken('#679f9d', 0.1),
+  },
+  dimmed: {
+    main: blue.A100,
+    light: lighten(blue.A100, 0.05),
+    dark: darken(blue.A100, 0.1),
+  },
+}
+
+export const THEME_TEXT_COLORS = {
+  light: {
+    primary: 'rgb(0, 0, 0, 0.87)',
+    secondary: 'rgb(0, 0, 0, 0.54)',
+    disabled: 'rgba(0, 0, 0, 0.38)',
+    hint: 'rgba(0, 0, 0, 0.38)',
+  },
+  dark: {
+    primary: '#e9e9e9',
+    secondary: fade('#e9e9e9', 0.54),
+    disabled: fade('#e9e9e9', 0.38),
+    hint: fade('#e9e9e9', 0.38),
+  },
+  oled: {
+    primary: '#e9e9e9',
+    secondary: fade('#e9e9e9', 0.54),
+    disabled: fade('#e9e9e9', 0.38),
+    hint: fade('#e9e9e9', 0.38),
+  },
+  sepia: {
+    primary: '#5b4636',
+    secondary: fade('#5b4636', 0.54),
+    disabled: fade('#5b4636', 0.38),
+    hint: fade('#5b4636', 0.38),
+  },
+  dimmed: {
+    primary: '#c5d3e2',
+    secondary: fade('#c5d3e2', 0.54),
+    disabled: fade('#c5d3e2', 0.38),
+    hint: fade('#c5d3e2', 0.38),
+  }
 }
 
 export const THEME_NAMES = {
   light: 'Светлая',
   dark: 'Тёмная',
-  oled: 'Для OLED экранов',
+  oled: 'OLED',
   sepia: 'Ночной режим',
+  dimmed: 'Ночная тема',
 }
 
-export type PaletteType = 'light' | 'dark' | 'oled' | 'sepia'
+export type PaletteType = 'light' | 'dark' | 'oled' | 'sepia' | 'dimmed'
 
 export const THEME_TYPES: Record<PaletteType, MUIPaletteType> = {
   light: 'light',
   dark: 'dark',
   oled: 'dark',
   sepia: 'light',
+  dimmed: 'dark',
 }
 
 export type Mode =

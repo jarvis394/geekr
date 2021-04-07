@@ -8,7 +8,6 @@ import DensePostItem from './DensePostItem'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: theme.palette.background.default,
     marginTop: theme.spacing(2),
     padding: theme.spacing(0, 2),
     borderRadius: 0,

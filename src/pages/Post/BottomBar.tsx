@@ -17,6 +17,7 @@ import { useHistory, useLocation } from 'react-router'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import BottomDrawer from 'src/components/blocks/BottomDrawer'
+import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 
 const getScoreColor = (score: number, theme: Theme) => {
   if (score === 0) return theme.palette.background.paper
@@ -27,7 +28,6 @@ const getScoreColor = (score: number, theme: Theme) => {
 const useStyles = makeStyles<Theme, { score: number }, string>((theme) => ({
   container: {
     maxWidth,
-    backgroundColor: theme.palette.background.default,
     color: theme.palette.text.primary,
     position: 'relative',
     flexGrow: 1,
@@ -118,7 +118,7 @@ const useStyles = makeStyles<Theme, { score: number }, string>((theme) => ({
     marginRight: theme.spacing(1),
   },
   viewsCard: {
-    background: theme.palette.background.paper,
+    background: getInvertedContrastPaperColor(theme),
   },
   scoreCard: {
     background: ({ score }: { score: number }) =>

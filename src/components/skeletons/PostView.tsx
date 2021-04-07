@@ -3,10 +3,11 @@ import Skeleton from '@material-ui/lab/Skeleton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    background: theme.palette.background.default,
+    background: getContrastPaperColor(theme),
     borderRadius: 0,
     overflow: 'auto',
     paddingBottom: theme.spacing(2),

@@ -279,7 +279,6 @@ const Post = () => {
 
   // Start fetching post data
   useEffect(() => {
-    console.log('getting post', id)
     dispatch(getPost(id))
     companyAlias && dispatch(getCompany(companyAlias))
 
