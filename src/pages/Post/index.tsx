@@ -330,21 +330,21 @@ const Post = () => {
         <title>{(post ? post.titleHtml : 'Публикация') + ' | habra.'}</title>
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@habrahabr" />
-        <meta name="twitter:title" content={post?.titleHtml} />
+        <meta name="twitter:title" content={post?.titleHtml || 'Публикация | habra.'} />
         <meta name="description" content={post?.metadata.metaDescription} />
         <meta itemProp="description" content={post?.metadata.metaDescription} />
         <meta property="og:description" content={post?.metadata.metaDescription} />
         <meta property="aiturec:description" content={post?.metadata.metaDescription} />
         <meta name="twitter:description" content={post?.metadata.metaDescription} />
-        <meta itemProp="image" content={getPostSocialImage(post)} />
-        <meta property="og:image" content={getPostSocialImage(post)} />
-        <meta property="vk:image" content={getPostSocialImage(post)} />
-        <meta name="twitter:image" content={getPostSocialImage(post)} />
+        <meta itemProp="image" content={getPostSocialImage(post) || 'https://jarvis394-backend.ml/habra/social?t=%D0%9C%D0%B0%D0%BC%D0%B0,%20%D1%8F%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BB%20%D0%A5%D0%B0%D0%B1%D1%80&s=%D0%A0%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0'} />
+        <meta property="og:image" content={getPostSocialImage(post) || 'https://jarvis394-backend.ml/habra/social?t=%D0%9C%D0%B0%D0%BC%D0%B0,%20%D1%8F%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BB%20%D0%A5%D0%B0%D0%B1%D1%80&s=%D0%A0%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0'} />
+        <meta property="vk:image" content={getPostSocialImage(post) || 'https://jarvis394-backend.ml/habra/social?t=%D0%9C%D0%B0%D0%BC%D0%B0,%20%D1%8F%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BB%20%D0%A5%D0%B0%D0%B1%D1%80&s=%D0%A0%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0'} />
+        <meta name="twitter:image" content={getPostSocialImage(post) || 'https://jarvis394-backend.ml/habra/social?t=%D0%9C%D0%B0%D0%BC%D0%B0,%20%D1%8F%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BB%20%D0%A5%D0%B0%D0%B1%D1%80&s=%D0%A0%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0'} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={process.env.PUBLIC_URL + getPostLink(post)} />
-        <meta itemProp="name" content={post?.titleHtml} />
-        <meta property="og:title" content={post?.titleHtml} />
-        <meta property="aiturec:title" content={post?.titleHtml} />
+        <meta itemProp="name" content={post?.titleHtml || 'Публикация | habra.'} />
+        <meta property="og:title" content={post?.titleHtml || 'Публикация | habra.'} />
+        <meta property="aiturec:title" content={post?.titleHtml || 'Публикация | habra.'} />
         <meta property="aiturec:item_id" content={post?.id.toString()} />
         <meta property="aiturec:datetime" content={post?.timePublished} />
         <script type="application/ld+json">{formatLdJsonSchema(post)}</script>
