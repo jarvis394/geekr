@@ -3,7 +3,7 @@
  * @param s JSON string
  * @param fallbackData Fallback data to return on parsing error
  */
-export default (s: string, fallbackData?: Record<string, unknown>) => {
+export default <T = Record<string, unknown>, U = Record<string, unknown>>(s: string, fallbackData?: U): T | U => {
   try {
     return JSON.parse(s)
   } catch (e) {

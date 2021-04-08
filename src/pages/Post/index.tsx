@@ -34,6 +34,7 @@ import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import MetaTags from 'react-meta-tags'
 import getPostLink from 'src/utils/getPostLink'
 import getPostSocialImage from 'src/utils/getPostSocialImage'
+import formatLdJsonSchema from 'src/utils/formatLdJsonSchema'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -320,7 +321,6 @@ const Post = () => {
   if (companyFetchError)
     console.error('Could not fetch company data:', companyFetchError)
 
-  console.log(process.env.PUBLIC_URL)
   return (
     <OutsidePage
       headerText={post?.titleHtml}
@@ -334,15 +334,20 @@ const Post = () => {
         <meta name="description" content={post?.metadata.metaDescription} />
         <meta itemProp="description" content={post?.metadata.metaDescription} />
         <meta property="og:description" content={post?.metadata.metaDescription} />
+        <meta property="aiturec:description" content={post?.metadata.metaDescription} />
         <meta name="twitter:description" content={post?.metadata.metaDescription} />
         <meta itemProp="image" content={getPostSocialImage(post)} />
         <meta property="og:image" content={getPostSocialImage(post)} />
         <meta property="vk:image" content={getPostSocialImage(post)} />
         <meta name="twitter:image" content={getPostSocialImage(post)} />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={process.env.PUBLIC_URL + '/' + getPostLink(post)} />
+        <meta property="og:url" content={process.env.PUBLIC_URL + getPostLink(post)} />
         <meta itemProp="name" content={post?.titleHtml} />
         <meta property="og:title" content={post?.titleHtml} />
+        <meta property="aiturec:title" content={post?.titleHtml} />
+        <meta property="aiturec:item_id" content={post?.id.toString()} />
+        <meta property="aiturec:datetime" content={post?.timePublished} />
+        <script type="application/ld+json">{formatLdJsonSchema(post)}</script>
       </MetaTags>
       <div className={classes.root}>
         {contents}

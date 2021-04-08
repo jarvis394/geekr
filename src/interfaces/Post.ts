@@ -3,6 +3,31 @@ import { HubPost } from './Hub'
 import PostLabel from './PostLabel'
 import { User } from './User'
 
+export interface SchemaJsonLd {
+  '@context': string
+  '@type': string
+  mainEntityOfPage: {
+    '@type': string
+    '@id': string
+  }
+  headline: string
+  datePublished: string
+  dateModified: string
+  author: { '@type': string; name: string }
+  publisher: {
+    '@type': string
+    name: string
+    logo: {
+      '@type': string
+      url: string
+    }
+  }
+  description: string
+  url: string
+  about: string[]
+  image: string[]
+}
+
 export default interface Post {
   id: string | number
   author: User
