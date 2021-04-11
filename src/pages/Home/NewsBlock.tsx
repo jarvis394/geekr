@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useEffect } from 'react'
-import { Paper, Grid, Typography, Box as div, Button } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { Paper, Grid, Typography, Button } from '@material-ui/core'
+import { makeStyles, fade } from '@material-ui/core/styles'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
 import numToWord from 'number-to-words-ru'
 import { Link } from 'react-router-dom'
@@ -11,12 +11,17 @@ import { useDispatch } from 'react-redux'
 import { getNewsPromo } from 'src/store/actions/news'
 import { useSelector } from 'src/hooks'
 import { Post } from 'src/interfaces'
+import { MIN_WIDTH } from 'src/config/constants'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: theme.spacing(1.5),
     padding: theme.spacing(2),
     borderRadius: 0,
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      borderRadius: 8,
+      border: '1px solid ' + fade(theme.palette.divider, 0.05)
+    }
   },
   header: {
     fontFamily: 'Google Sans',

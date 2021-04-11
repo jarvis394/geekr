@@ -25,7 +25,6 @@ import {
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
-import { setPostReadingProgress } from 'src/store/actions/post'
 import isMobile from 'is-mobile'
 import PostLocationState from 'src/interfaces/PostLocationState'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
@@ -42,6 +41,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: MIN_WIDTH,
     backgroundColor: getContrastPaperColor(theme),
     paddingBottom: theme.spacing(2),
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      borderRadius: 8,
+      backgroundColor: theme.palette.background.paper + ' !important',
+      border: '1px solid ' + fade(theme.palette.divider, 0.05),
+      marginTop: theme.spacing(1.5),
+      marginBottom: theme.spacing(1.5)
+    },
   },
   hubs: {
     wordBreak: 'break-word',
@@ -68,9 +74,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&:last-child::after': {
       content: '""',
     },
-  },
-  post: {
-    background: getContrastPaperColor(theme),
   },
   authorBar: { paddingTop: theme.spacing(2.5) },
   avatar: {
@@ -201,7 +204,7 @@ const Post = () => {
         </div>
       )}
 
-      <Container className={classes.post}>
+      <Container>
         {/** Post header */}
         <Grid
           className={classes.authorBar}
@@ -270,17 +273,6 @@ const Post = () => {
     <PostViewSkeleton />
   )
 
-  const getScrollProgress = () => {
-    const position = window.pageYOffset
-    const windowHeight =
-      document.documentElement.scrollHeight -
-      document.documentElement.clientHeight
-    return Math.min(
-      position / (windowHeight - (isMobile() ? chromeAddressBarHeight : 0)),
-      1
-    )
-  }
-
   // Start fetching post data
   useEffect(() => {
     dispatch(getPost(id))
@@ -296,36 +288,12 @@ const Post = () => {
     }
   }, [dispatch, id, companyAlias, offset])
 
-  const onBackClickHandler = () => {
-    const progress = getScrollProgress()
-    if (progress >= 0.15 && progress <= 0.8) {
-      dispatch(
-        setPostReadingProgress({
-          post,
-          progress,
-          offset: window.pageYOffset,
-        })
-      )
-    } else {
-      dispatch(
-        setPostReadingProgress({
-          post: null,
-          progress: null,
-          offset: null,
-        })
-      )
-    }
-  }
-
   if (fetchError) return <ErrorComponent message={fetchError} />
   if (companyFetchError)
     console.error('Could not fetch company data:', companyFetchError)
 
   return (
-    <OutsidePage
-      headerText={post?.titleHtml}
-      onBackClick={() => onBackClickHandler()}
-    >
+    <OutsidePage headerText={post?.titleHtml}>
       <MetaTags>
         <title>{(post ? post.titleHtml : 'Публикация') + ' | habra.'}</title>
         <meta name="twitter:card" content="summary_large_image" />
@@ -333,15 +301,27 @@ const Post = () => {
         <meta name="twitter:title" content={post?.titleHtml} />
         <meta name="description" content={post?.metadata.metaDescription} />
         <meta itemProp="description" content={post?.metadata.metaDescription} />
-        <meta property="og:description" content={post?.metadata.metaDescription} />
-        <meta property="aiturec:description" content={post?.metadata.metaDescription} />
-        <meta name="twitter:description" content={post?.metadata.metaDescription} />
+        <meta
+          property="og:description"
+          content={post?.metadata.metaDescription}
+        />
+        <meta
+          property="aiturec:description"
+          content={post?.metadata.metaDescription}
+        />
+        <meta
+          name="twitter:description"
+          content={post?.metadata.metaDescription}
+        />
         <meta itemProp="image" content={getPostSocialImage(post)} />
         <meta property="og:image" content={getPostSocialImage(post)} />
         <meta property="vk:image" content={getPostSocialImage(post)} />
         <meta name="twitter:image" content={getPostSocialImage(post)} />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={process.env.PUBLIC_URL + getPostLink(post)} />
+        <meta
+          property="og:url"
+          content={process.env.PUBLIC_URL + getPostLink(post)}
+        />
         <meta itemProp="name" content={post?.titleHtml} />
         <meta property="og:title" content={post?.titleHtml} />
         <meta property="aiturec:title" content={post?.titleHtml} />

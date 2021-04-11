@@ -18,6 +18,7 @@ import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 import getCachedMode from 'src/utils/getCachedMode'
 import OutsidePageLocationState from 'src/interfaces/OutsidePageLocationState'
+import useMediaExtendedQuery from 'src/hooks/useMediaExtendedQuery'
 
 interface StyleProps {
   isShrinked?: boolean
@@ -70,6 +71,9 @@ const useAppBarStyles = makeStyles((theme) => ({
       content: '""',
       transform: 'translateZ(0)',
     },
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      backgroundColor: theme.palette.background.paper + ' !important'
+    }
   },
   toolbar: {
     margin: 'auto',
@@ -111,11 +115,25 @@ const useAppBarStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     zIndex: 1,
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      display: 'none',
+    },
   },
   divider: {
     width: ({ isShrinked }: StyleProps) =>
       isShrinked ? '100%' : 'calc(100% - 32px)',
     transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1)',
+  },
+  dividerHolderFullWidth: {
+    display: 'none',
+    justifyContent: 'center',
+    zIndex: 1,
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      display: 'flex',
+    },
+  },
+  dividerFullWidth: {
+    width: '100%',
   },
   shrinkedHeaderTitle: {
     fontFamily: 'Google Sans',
@@ -154,11 +172,7 @@ const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
     </Fade>
   )
 }
-const UnshrinkedContent = ({
-  headerText,
-  onBackClick,
-  isShrinked
-}) => {
+const UnshrinkedContent = ({ headerText, onBackClick, isShrinked }) => {
   const classes = useAppBarStyles({})
   const [headerTextUpdated, setHeaderTextUpdated] = useState(false)
   const history = useHistory()
@@ -212,12 +226,13 @@ const NavBarUnmemoized = ({
     triggerValue: false,
   })
   const [scrollProgress, setScrollProgress] = useState(0)
+  const isExtended = useMediaExtendedQuery()
   const classes = useAppBarStyles({
-    isShrinked: disableShrinking ? false : isShrinked,
+    isShrinked: (disableShrinking || isExtended) ? false : isShrinked,
     scrollProgress,
     backgroundColor,
     shrinkedBackgroundColor,
-    disableShrinking
+    disableShrinking,
   })
   const scrollCallback = () =>
     requestAnimationFrame(() => {
@@ -245,12 +260,12 @@ const NavBarUnmemoized = ({
         <div className={classes.marginContainer}>
           <div className={classes.content}>
             <UnshrinkedContent
-              isShrinked={disableShrinking ? false : isShrinked}
+              isShrinked={disableShrinking || isExtended ? false : isShrinked}
               headerText={headerText}
               onBackClick={onBackClick}
             />
             <ShrinkedContent
-              isShrinked={disableShrinking ? false : isShrinked}
+              isShrinked={disableShrinking || isExtended ? false : isShrinked}
               shrinkedHeaderText={shrinkedHeaderText || headerText}
             />
           </div>
@@ -259,6 +274,9 @@ const NavBarUnmemoized = ({
           </div>
         </div>
       </Toolbar>
+      <div className={classes.dividerHolderFullWidth}>
+        <Divider className={classes.dividerFullWidth} />
+      </div>
     </AppBar>
   )
 }

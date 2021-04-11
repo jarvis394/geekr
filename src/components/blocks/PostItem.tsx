@@ -14,6 +14,7 @@ import parse from 'html-react-parser'
 import { Post } from 'src/interfaces'
 import UserAvatar from './UserAvatar'
 import {
+  MIN_WIDTH,
   POST_IMAGE_HEIGHT,
   POST_ITEM_VISIBILITY_THRESHOLD,
 } from 'src/config/constants'
@@ -61,6 +62,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     marginBottom: theme.spacing(1.5),
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      border: '1px solid ' + fade(theme.palette.divider, 0.05),
+      borderRadius: 8
+    }
   },
   padding: {
     padding: theme.spacing(2),

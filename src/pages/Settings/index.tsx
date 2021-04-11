@@ -12,6 +12,7 @@ import { Icon243SquareOutline } from '@vkontakte/icons'
 import { Icon28ArticleOutline } from '@vkontakte/icons'
 import { Icon28GlobeOutline } from '@vkontakte/icons'
 import isDarkTheme from 'src/utils/isDarkTheme'
+import { MIN_WIDTH } from 'src/config/constants'
 
 const items = [
   {
@@ -43,15 +44,20 @@ const items = [
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingTop: theme.spacing(1),
+    padding: theme.spacing(1, 0),
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: getContrastPaperColor(theme),
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      marginTop: theme.spacing(1.5),
+      border: '1px solid ' + fade(theme.palette.divider, 0.05),
+      borderRadius: 8,
+      backgroundColor: theme.palette.background.paper
+    }
   },
   link: {
     display: 'flex',
     padding: theme.spacing(1.5, 2),
-    backgroundColor: getContrastPaperColor(theme),
     textDecoration: 'none',
     color: theme.palette.text.primary,
     alignItems: 'center',

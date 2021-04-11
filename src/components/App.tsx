@@ -19,6 +19,7 @@ import BottomBar from './blocks/BottomBar'
 import useTitleChange from 'src/hooks/useTitleChange'
 import useAnalytics from 'src/hooks/useAnalytics'
 import isDarkTheme from 'src/utils/isDarkTheme'
+import useAutoChangeTheme from 'src/hooks/useAutoChangeTheme'
 
 interface StyleProps {
   theme: ThemeOptions
@@ -112,6 +113,7 @@ const App = () => {
   })
 
   useTitleChange()
+  useAutoChangeTheme()
   useAnalytics()
 
   // Set root classes

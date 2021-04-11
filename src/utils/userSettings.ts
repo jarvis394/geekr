@@ -1,27 +1,37 @@
 import { UserSettings } from '../interfaces'
-import { DEFAULT_USER_SETTINGS } from '../config/constants'
+import { DEFAULT_USER_SETTINGS, USER_SETTINGS_KEY } from '../config/constants'
 
-export const SETTINGS = 'habra_userSettings'
-
-export const get = (): UserSettings | false => {
-  const data = localStorage.getItem(SETTINGS)
+// TODO: refactor to return { success: boolean, data: UserSettings }
+// to show a notification that settings are being overwritten with defaults
+export const get = (): UserSettings => {
+  const data = localStorage.getItem(USER_SETTINGS_KEY)
   let res: UserSettings
 
-  if (!data) return false
+  if (!data) return DEFAULT_USER_SETTINGS
 
   try {
     res = JSON.parse(data)
   } catch (e) {
     console.error('Cannot parse user settings:', e, '\nGot:', data)
-    return false
+    return DEFAULT_USER_SETTINGS
+  }
+
+  for (const key in DEFAULT_USER_SETTINGS) {
+    if (!res[key]) {
+      res[key] = DEFAULT_USER_SETTINGS[key]
+    }
   }
 
   return res
 }
 
-export const set = (key: string, value: string): void => {
+export const set = (payload: Partial<UserSettings>): UserSettings => {
   const data = get() || DEFAULT_USER_SETTINGS
-  data[key] = value
+  
+  for (const key in payload) {
+    data[key] = payload[key]
+  }
 
-  localStorage.setItem(SETTINGS, JSON.stringify(data))
+  localStorage.setItem(USER_SETTINGS_KEY, JSON.stringify(data))
+  return data
 }

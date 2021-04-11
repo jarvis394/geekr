@@ -1,24 +1,13 @@
-import { SET_THEME, SET_HIDDEN_AUTHORS, SET_HIDDEN_COMPANIES } from './types'
+import { SET_SETTINGS, GET_SETTINGS } from './types'
 import generateTheme from 'src/config/theme'
-import { PaletteType } from 'src/config/constants'
+import * as userSettings from 'src/utils/userSettings'
 
-const theme = generateTheme()
-const localStorageThemeType = localStorage.getItem('theme')
-const localStorageHiddenAuthors = localStorage.getItem('hiddenAuthors')
-const localStorageHiddenCompanies = localStorage.getItem('hiddenCompanies')
-const hiddenAuthors = localStorageHiddenAuthors
-  ? localStorageHiddenAuthors.split(',')
-  : []
-const hiddenCompanies = localStorageHiddenCompanies
-  ? localStorageHiddenCompanies.split(',')
-  : []
-const type = (localStorageThemeType || 'light') as PaletteType
+const userLocalSettings = userSettings.get()
+const theme = generateTheme(userLocalSettings.themeType)
 
 const initialState = {
   theme,
-  themeType: type,
-  hiddenAuthors,
-  hiddenCompanies,
+  ...userLocalSettings,
 }
 
 export default (
@@ -26,17 +15,20 @@ export default (
   { type, payload }
 ): typeof initialState => {
   switch (type) {
-    case SET_THEME:
-      localStorage.setItem('theme', payload)
-      return { ...state, theme: generateTheme(payload), themeType: payload }
+    case SET_SETTINGS: {
+      const newSettings = userSettings.set(payload)
+      const hasThemeChanged = state.themeType !== newSettings.themeType
+      state = {
+        ...newSettings,
+        theme: hasThemeChanged
+          ? generateTheme(newSettings.themeType)
+          : state.theme,
+      }
+      return { theme: state.theme, ...userSettings.set(payload) }
+    }
 
-    case SET_HIDDEN_AUTHORS:
-      localStorage.setItem('hiddenAuthors', payload)
-      return { ...state, hiddenAuthors: payload }
-
-    case SET_HIDDEN_COMPANIES:
-      localStorage.setItem('hiddenCompanies', payload)
-      return { ...state, hiddenCompanies: payload }
+    case GET_SETTINGS:
+      return { theme: state.theme, ...userSettings.get() }
 
     default:
       return state

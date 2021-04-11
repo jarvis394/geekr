@@ -9,12 +9,13 @@ import {
   THEME_PRIMARY_COLORS,
   THEME_TEXT_COLORS,
 } from './constants'
+import * as userSettings from 'src/utils/userSettings'
 
-const localStorageThemeType = localStorage.getItem('theme')
+const localStorageThemeType = userSettings.get().themeType
 const type = (localStorageThemeType || 'light') as MUIPaletteType
 
 export const makeBackgroundColors = (
-  t: PaletteType
+  t: PaletteType | string
 ): {
   default: string
   paper: string
@@ -24,7 +25,7 @@ export const makeBackgroundColors = (
 })
 
 export const makePrimaryColors = (
-  t: PaletteType
+  t: PaletteType | string
 ): {
   main: string
   light: string
@@ -32,7 +33,7 @@ export const makePrimaryColors = (
 } => (THEME_PRIMARY_COLORS[t])
 
 export const makeTextColors = (
-  t: PaletteType
+  t: PaletteType | string
 ): {
   primary: string
   secondary: string
@@ -40,7 +41,7 @@ export const makeTextColors = (
   hint: string
 } => (THEME_TEXT_COLORS[t])
 
-const generateTheme = (themeType?: PaletteType): ThemeOptions => ({
+const generateTheme = (themeType?: PaletteType | string): ThemeOptions => ({
   palette: {
     type: THEME_TYPES[themeType || type],
     primary: makePrimaryColors(themeType || type),

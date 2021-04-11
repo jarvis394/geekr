@@ -2,7 +2,7 @@ import * as React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
-import { MIN_WIDTH as maxWidth } from 'src/config/constants'
+import { MIN_WIDTH as maxWidth, MIN_WIDTH } from 'src/config/constants'
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import VisibilityIcon from '@material-ui/icons/Visibility'
@@ -119,6 +119,9 @@ const useStyles = makeStyles<Theme, { score: number }, string>((theme) => ({
   },
   viewsCard: {
     background: getInvertedContrastPaperColor(theme),
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      background: theme.palette.action.hover + ' !important'
+    }
   },
   scoreCard: {
     background: ({ score }: { score: number }) =>

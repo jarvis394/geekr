@@ -8,12 +8,10 @@ import {
   POST_FETCH,
   POST_FETCH_FULFILLED,
   POST_FETCH_REJECTED,
-  SET_POST_READING_PROGRESS,
   State,
 } from './types'
 import { POST_READING_PROGRESS_KEY } from 'src/config/constants'
 import { FetchingState } from 'src/interfaces'
-import safeJSONParse from 'src/utils/safeJSONParse'
 
 const initialData = {
   data: null,
@@ -21,22 +19,10 @@ const initialData = {
   fetchError: null,
 }
 
-const lastPostInitialData = {
-  data: null,
-  offset: null,
-  progress: null,
-}
-const lastPostData: State['lastPost'] =
-  safeJSONParse(
-    localStorage.getItem(POST_READING_PROGRESS_KEY),
-    lastPostInitialData
-  ) || lastPostInitialData
-
 const initialState: State = {
   post: initialData,
   comments: initialData,
   company: initialData,
-  lastPost: lastPostData,
 }
 
 export default (storeState = initialState, { type, payload }): State => {
@@ -143,19 +129,6 @@ export default (storeState = initialState, { type, payload }): State => {
           data: null,
         },
       }
-
-    case SET_POST_READING_PROGRESS: {
-      const data = {
-        progress: payload.progress,
-        data: payload.post,
-        offset: payload.offset,
-      }
-      localStorage.setItem(POST_READING_PROGRESS_KEY, JSON.stringify(data))
-      return {
-        ...storeState,
-        lastPost: data,
-      }
-    }
 
     default:
       return storeState

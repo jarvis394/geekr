@@ -15,7 +15,6 @@ import { getPosts } from 'src/store/actions/home'
 import { useSelector } from 'src/hooks'
 import getCachedMode from 'src/utils/getCachedMode'
 import AdvertsBlock from './AdvertsBlock'
-import ContinueReadingButton from 'src/pages/Home/ContinueReadingButton'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,7 +85,6 @@ const Home = () => {
 
   return (
     <>
-      {currentPage === 1 && <ContinueReadingButton />}
       {currentPage === 1 && <AdvertsBlock />}
       <Switcher setMode={setMode} mode={mode} handleClick={handleSwitcher} />
       <List className={classes.root}>

@@ -10,12 +10,16 @@ import ErrorComponent from '../components/blocks/Error'
 import { useDispatch } from 'react-redux'
 import { getNews } from 'src/store/actions/news'
 import { useSelector } from 'src/hooks'
+import { MIN_WIDTH } from 'src/config/constants'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
     padding: 0,
     width: '100%',
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      paddingTop: theme.spacing(1.5)
+    }
   },
 }))
 

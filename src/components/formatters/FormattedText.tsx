@@ -105,6 +105,19 @@ const useStyles = makeStyles((theme) => ({
         lineHeight: '18px',
       },
     },
+    '& figure.float': {
+      float: 'left',
+      maxWidth: '50%',
+      marginRight: theme.spacing(4)
+    },
+    '& figure+p': {
+      marginTop: theme.spacing(4)
+    },
+    '& figure.float+p:after': {
+      content: '""',
+      display: 'block',
+      clear: 'both',
+    },
     '& sup': {
       color: theme.palette.text.secondary,
       marginTop: theme.spacing(1),

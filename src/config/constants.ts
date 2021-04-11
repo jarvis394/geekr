@@ -2,7 +2,7 @@ import { ModeObject } from '../interfaces'
 import { UserSettings } from '../interfaces'
 import { darken, fade, lighten, PaletteType as MUIPaletteType } from '@material-ui/core'
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
-import { blue, teal } from '@material-ui/core/colors'
+import { blue } from '@material-ui/core/colors'
 
 const _theme = createMuiTheme()
 
@@ -26,7 +26,10 @@ export const ADVERTS_BLOCK_HEIGHT = 128
 export const ADVERTS_BLOCK_MAX_WIDTH = 496
 export const BOTTOM_BAR_HEIGHT = 52
 export const APP_BAR_HEIGHT = 48
+
+/** Local Storage keys */
 export const POST_READING_PROGRESS_KEY = 'POST_READING_PROGRESS'
+export const USER_SETTINGS_KEY = 'habra_USER_SETTINGS'
 
 export const RATING_MODES: ModeObject[] = [
   {
@@ -123,7 +126,13 @@ export const DEFAULT_UPDATE_INTERVAL = HOUR / 4
 export const chromeAddressBarHeight = 56
 
 export const DEFAULT_USER_SETTINGS: UserSettings = {
-  theme: 'light',
+  themeType: 'light',
+  customThemes: [],
+  hiddenAuthors: [],
+  hiddenCompanies: [],
+  preferredDarkTheme: 'dark',
+  preferredLightTheme: 'light',
+  autoChangeTheme: false
 }
 
 export const THEMES: PaletteType[] = ['light', 'dark', 'oled', 'sepia', 'dimmed']
@@ -140,7 +149,7 @@ export const BACKGROUND_COLORS_DEFAULT = {
 /** Colors for app foreground elements, such as Paper */
 export const BACKGROUND_COLORS_PAPER = {
   light: '#ffffff',
-  dark: '#1d1d1d',
+  dark: '#181818',
   oled: '#0e0e0e',
   sepia: '#ffecb3',
   dimmed: '#252c35',

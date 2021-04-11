@@ -43,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: (props: StyleProps) =>
       makeAppBarBackgroundColor({ ...props, theme }),
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      backgroundColor: theme.palette.background.paper + ' !important'
+    },
     color: theme.palette.text.primary,
     position: 'fixed',
     height: APP_BAR_HEIGHT + 1,
@@ -101,7 +104,17 @@ const useStyles = makeStyles((theme) => ({
     transition: 'all 0.1s ' + theme.transitions.easing['easeOut'],
     width: ({ isTransformed }: StyleProps) =>
       `calc(100% - ${isTransformed ? 0 : theme.spacing(2) * 2}px)`,
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      display: 'none'
+    }
   },
+  dividerWrapperFullWidth: {
+    width: '100%',
+    display: 'none',
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      display: 'flex'
+    }
+  }
 }))
 
 const dividerStyle = { width: '100%' }
@@ -203,6 +216,9 @@ const AppBarComponent = () => {
             <Divider style={dividerStyle} />
           </div>
         </Toolbar>
+        <div className={classes.dividerWrapperFullWidth}>
+          <Divider style={dividerStyle} />
+        </div>
       </AppBar>
     </>
   )
