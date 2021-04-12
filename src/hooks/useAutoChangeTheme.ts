@@ -25,7 +25,12 @@ const useAutoChangeTheme = () => {
         })
       )
     }
-  }, [prefersDarkMode])
+  }, [
+    prefersDarkMode,
+    isAutoThemeChange,
+    preferredDarkTheme,
+    preferredLightTheme,
+  ])
 }
 
 export default useAutoChangeTheme

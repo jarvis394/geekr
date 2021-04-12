@@ -43,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const useAppBarStyles = makeStyles((theme) => ({
+  toolbarIcons: {
+    marginRight: theme.spacing(2),
+    display: 'flex'
+  },
   header: {
     backgroundColor: ({
       isShrinked,
@@ -110,6 +114,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     alignItems: 'center',
     transform: 'translateZ(0)',
     height: APP_BAR_HEIGHT + 1,
+    flexGrow: 1
   },
   dividerHolder: {
     display: 'flex',
@@ -159,6 +164,7 @@ interface Props {
   shrinkedBackgroundColor: string
   disableShrinking: boolean
   backgroundColor: string
+  toolbarIcons: JSX.Element
   onBackClick: () => unknown
 }
 
@@ -212,6 +218,17 @@ const UnshrinkedContent = ({ headerText, onBackClick, isShrinked }) => {
   )
 }
 
+const ToolbarIconsWrapper = ({ isShrinked, children }) => {
+  const classes = useAppBarStyles({})
+  return (
+    <Fade in={!isShrinked}>
+      <div className={classes.toolbarIcons}>
+        {children}
+      </div>
+    </Fade>
+  )
+}
+
 const NavBarUnmemoized = ({
   headerText,
   shrinkedHeaderText,
@@ -220,15 +237,17 @@ const NavBarUnmemoized = ({
   backgroundColor,
   onBackClick,
   disableShrinking,
-}) => {
-  const isShrinked = useScrollTrigger({
+  toolbarIcons
+}: Partial<Props>) => {
+  const isShrinkedTrigger = useScrollTrigger({
     threshold: 48,
     triggerValue: false,
   })
   const [scrollProgress, setScrollProgress] = useState(0)
   const isExtended = useMediaExtendedQuery()
+  const isShrinked = (disableShrinking || isExtended) ? false : isShrinkedTrigger
   const classes = useAppBarStyles({
-    isShrinked: (disableShrinking || isExtended) ? false : isShrinked,
+    isShrinked,
     scrollProgress,
     backgroundColor,
     shrinkedBackgroundColor,
@@ -260,14 +279,17 @@ const NavBarUnmemoized = ({
         <div className={classes.marginContainer}>
           <div className={classes.content}>
             <UnshrinkedContent
-              isShrinked={disableShrinking || isExtended ? false : isShrinked}
+              isShrinked={isShrinked}
               headerText={headerText}
               onBackClick={onBackClick}
             />
             <ShrinkedContent
-              isShrinked={disableShrinking || isExtended ? false : isShrinked}
+              isShrinked={isShrinked}
               shrinkedHeaderText={shrinkedHeaderText || headerText}
             />
+            <ToolbarIconsWrapper isShrinked={isShrinked}>
+              {toolbarIcons}
+            </ToolbarIconsWrapper>
           </div>
           <div className={classes.dividerHolder}>
             <Divider className={classes.divider} />
@@ -283,28 +305,11 @@ const NavBarUnmemoized = ({
 const NavBar = React.memo(NavBarUnmemoized)
 
 const OutsidePage = ({ children, ...props }: Partial<Props>) => {
-  const {
-    headerText,
-    hidePositionBar,
-    shrinkedHeaderText,
-    backgroundColor,
-    shrinkedBackgroundColor,
-    disableShrinking,
-    onBackClick,
-  } = props
   const classes = useStyles()
 
   return (
     <div className={classes.root}>
-      <NavBar
-        headerText={headerText}
-        shrinkedHeaderText={shrinkedHeaderText}
-        hidePositionBar={hidePositionBar}
-        backgroundColor={backgroundColor}
-        shrinkedBackgroundColor={shrinkedBackgroundColor}
-        onBackClick={onBackClick}
-        disableShrinking={disableShrinking}
-      />
+      <NavBar {...props} />
       <div className={classes.children}>{children}</div>
     </div>
   )

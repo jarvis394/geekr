@@ -24,21 +24,17 @@ import {
   FormControl,
   darken,
   lighten,
-  List,
   ListItem,
   ListItemText,
   Switch,
-  Divider,
   fade,
-  useMediaQuery,
 } from '@material-ui/core'
-import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import fadedLinearGradient from 'src/utils/fadedLinearGradient'
-import useMediaExtendedQuery from 'src/hooks/useMediaExtendedQuery'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
 import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 import isMobile from 'is-mobile'
 import isDarkTheme from 'src/utils/isDarkTheme'
+import { useHistory } from 'react-router'
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -138,7 +134,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const usePaletteGridItemStyles = makeStyles((theme) => ({
+export const usePaletteGridItemStyles = makeStyles((theme) => ({
   gridItem: {
     position: 'relative',
     alignItems: 'baseline',
@@ -326,7 +322,7 @@ const Switcher = ({
 }) => {
   const [isChecked, setChecked] = useState(checked)
   const onClick = () => {
-    setChecked(prev => !prev)
+    setChecked((prev) => !prev)
     onSwitcherClick()
   }
 
@@ -338,17 +334,38 @@ const Switcher = ({
   )
 }
 
-const Appearance = () => {
+/**
+ * Support function for textToThemeField constant
+ */
+export const getValueByKeys = (o: Record<string, never>, s: string) => {
+  let res = o
+  s.split('.').forEach(e => { res = res[e] })
+  return res
+}
+
+// TODO: do a better solution
+/**
+ * When changing text or path for a value for Item in OneByTwoGrid or SingleRowGrid
+ * be sure to change it here.
+ */
+export const textToThemeField = {
+  main: 'palette.primary.main',
+  light: 'palette.primary.light',
+  dark: 'palette.primary.dark',
+  paper: 'palette.background.paper',
+  default: 'palette.background.default',
+  text: 'palette.text.primary',
+}
+
+export const OneByTwoGrid = ({ component: Item = PaletteGridItem }) => {
   const classes = useStyles()
   const theme = useTheme()
-  const dispatch = useDispatch()
-  const autoChangeTheme = useSelector((state) => state.settings.autoChangeTheme)
 
-  const oneByTwoGrid = (
+  return (
     <div className={classes.oneByTwoGrid}>
       <Grid item xs={6}>
         <Grid container direction="column">
-          <PaletteGridItem
+          <Item
             width={12}
             color={theme.palette.primary.main}
             text="main"
@@ -356,13 +373,13 @@ const Appearance = () => {
             withSymbol
           />
           <Grid container direction="row">
-            <PaletteGridItem
+            <Item
               width={6}
               height={1}
               color={theme.palette.primary.light}
               text="light"
             />
-            <PaletteGridItem
+            <Item
               width={6}
               height={1}
               color={theme.palette.primary.dark}
@@ -373,20 +390,20 @@ const Appearance = () => {
       </Grid>
       <Grid item xs={6}>
         <Grid container direction="column">
-          <PaletteGridItem
+          <Item
             width={12}
             height={0.5}
             color={theme.palette.background.paper}
             text="paper"
           />
           <Grid container direction="row">
-            <PaletteGridItem
+            <Item
               width={6}
               height={1}
               color={theme.palette.background.default}
               text="default"
             />
-            <PaletteGridItem
+            <Item
               width={6}
               height={1}
               color={theme.palette.text.primary}
@@ -397,7 +414,13 @@ const Appearance = () => {
       </Grid>
     </div>
   )
-  const singleRowGrid = (
+}
+
+export const SingleRowGrid = ({ component: Item = PaletteGridItem }) => {
+  const theme = useTheme()
+  const classes = useStyles()
+
+  return (
     <Grid
       item
       xs={12}
@@ -405,38 +428,38 @@ const Appearance = () => {
       direction="row"
       className={classes.singleRowGrid}
     >
-      <PaletteGridItem
+      <Item
         width={2}
         height={1}
         color={theme.palette.primary.light}
         text="light"
       />
-      <PaletteGridItem
+      <Item
         width={2}
         height={1}
         color={theme.palette.primary.main}
         text="main"
         withSymbol
       />
-      <PaletteGridItem
+      <Item
         width={2}
         height={1}
         color={theme.palette.primary.dark}
         text="dark"
       />
-      <PaletteGridItem
+      <Item
         width={2}
         height={1}
         color={theme.palette.background.default}
         text="default"
       />
-      <PaletteGridItem
+      <Item
         width={2}
         height={1}
         color={theme.palette.background.paper}
         text="paper"
       />
-      <PaletteGridItem
+      <Item
         width={2}
         height={1}
         color={theme.palette.text.primary}
@@ -444,13 +467,20 @@ const Appearance = () => {
       />
     </Grid>
   )
+}
+
+const Appearance = () => {
+  const classes = useStyles()
+  const history = useHistory()
+  const dispatch = useDispatch()
+  const autoChangeTheme = useSelector((state) => state.settings.autoChangeTheme)
 
   return (
     <OutsidePage headerText={'Внешний вид'} disableShrinking>
       <Grid container className={classes.previewContainer} direction="row">
         <Typography className={classes.sectionHeader}>Палитра</Typography>
-        {singleRowGrid}
-        {oneByTwoGrid}
+        <SingleRowGrid />
+        <OneByTwoGrid />
       </Grid>
       <div className={classes.section}>
         <Typography className={classes.sectionHeader}>Темы</Typography>
@@ -464,7 +494,14 @@ const Appearance = () => {
             <ThemeCard type={e} key={i} />
           ))}
           <div style={{ display: 'inline-flex' }}>
-            <ButtonBase className={classes.newThemeButton}>
+            <ButtonBase
+              className={classes.newThemeButton}
+              onClick={() =>
+                history.push('/settings/appearance/new-theme', {
+                  from: history.location.pathname,
+                })
+              }
+            >
               <AddCircleRoundedIcon />
               <Typography className={classes.newThemeButtonText}>
                 Создать
@@ -481,8 +518,10 @@ const Appearance = () => {
           Настройки
         </Typography>
         <Switcher
-          primary="Использовать системную тему"
-          secondary="Внешний вид приложения будет меняться автоматически при изменении темы на устройстве"
+          primary={'Использовать системную тему'}
+          secondary={
+            'Внешний вид приложения будет меняться автоматически при изменении темы на устройстве'
+          }
           checked={autoChangeTheme}
           onClick={() => {
             dispatch(

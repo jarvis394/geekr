@@ -2,6 +2,7 @@ import React, { MemoExoticComponent } from 'react'
 import Post from 'src/pages/Post'
 import Settings from 'src/pages/Settings/index'
 import SettingsAppearance from 'src/pages/Settings/Appearance'
+import SettingsNewTheme from 'src/pages/Settings/NewTheme'
 import Search from 'src/pages/Search'
 import News from 'src/pages/News'
 import NotFound from 'src/pages/NotFound'
@@ -78,6 +79,14 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+  },
+  {
+    path: '/settings/appearance/new-theme',
+    component: <SettingsNewTheme />,
+    title: 'Новая тема',
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => getContrastPaperColor(theme),
   },
   {
     path: '/settings/appearance',
