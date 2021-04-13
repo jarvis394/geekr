@@ -105,7 +105,7 @@ const useStyles = makeStyles({
 
 const App = () => {
   const storeTheme = useSelector((state) => state.settings.theme)
-  const theme = createMuiTheme(storeTheme)
+  const theme = React.useMemo(() => createMuiTheme(storeTheme), [storeTheme])
   const route = useRoute()
   const classes = useStyles({
     theme,
