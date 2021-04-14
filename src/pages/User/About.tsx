@@ -4,7 +4,6 @@ import FormattedText from 'src/components/formatters/FormattedText'
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
-import { useDispatch } from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -19,8 +18,6 @@ export const About = ({
   classes: additionalClasses,
 }: ComponentWithUserParams) => {
   const classes = useStyles()
-  const dispatch = useDispatch()
-  const profile = useSelector((store) => store.profile.profile.card.data)
   const whois = useSelector((store) => store.profile.profile.whois.data)
 
   return (

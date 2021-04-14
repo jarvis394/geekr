@@ -68,7 +68,7 @@ const Companies = ({ classes: additionalClasses }: ComponentWithUserParams) => {
       <ListItemText
         style={{ margin: 0 }}
         primaryTypographyProps={{ color: 'textPrimary' }}
-        primary={data.alias}
+        primary={data.titleHtml}
         secondary={data.descriptionHtml || 'Компания'}
       />
     </ListItem>

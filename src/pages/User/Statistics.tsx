@@ -35,7 +35,7 @@ export const Statistics = () => {
     { field: 'Рейтинг', number: user.rating },
   ]
 
-  if (user.ratingPos !== 0) {
+  if (user.ratingPos) {
     items.push({ field: 'Позиция', number: user.ratingPos })
   }
 
