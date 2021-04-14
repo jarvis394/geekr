@@ -20,13 +20,13 @@ export const Badges = ({
   classes: additionalClasses,
 }: ComponentWithUserParams) => {
   const classes = useStyles()
-  const user = useSelector((store) => store.profile.profile.user.data)
+  const whois = useSelector((store) => store.profile.profile.whois.data)
 
-  return user.badges ? (
+  return whois.badgets ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>Значки</Typography>
       <Grid spacing={1} container className={classes.badges}>
-        {Object.values(user.badges).map((e, i) => (
+        {whois.badgets.map((e, i) => (
           <Grid key={i} item>
             <Chip
               style={{ cursor: 'help' }}

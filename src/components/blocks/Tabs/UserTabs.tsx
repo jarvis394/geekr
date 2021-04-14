@@ -31,7 +31,7 @@ const Counter = ({ children }) => {
 const generateTabs = (user: UserExtendedObject): TabObject[] => [
   {
     label: 'Профиль',
-    to: () => (user ? `/user/${user.login}/` : null),
+    to: () => (user ? `/user/${user.alias}/` : null),
     match: /\/user\/(\w|\d)+\/?$/,
     tab: 'profile',
   },
@@ -39,10 +39,10 @@ const generateTabs = (user: UserExtendedObject): TabObject[] => [
     label: (
       <>
         Публикации
-        {user && <Counter>{user.counters.posts}</Counter>}
+        {user && <Counter>{user.counterStats.postCount}</Counter>}
       </>
     ),
-    to: () => (user ? `/user/${user.login}/articles/1` : null),
+    to: () => (user ? `/user/${user.alias}/articles/1` : null),
     match: /\/user\/(\w|\d)+\/articles\/([0-9]+)\/?$/,
     tab: 'articles',
   },
@@ -50,10 +50,10 @@ const generateTabs = (user: UserExtendedObject): TabObject[] => [
     label: (
       <>
         Комментарии
-        {user && <Counter>{user.counters.comments}</Counter>}
+        {user && <Counter>{user.counterStats.commentCount}</Counter>}
       </>
     ),
-    to: () => (user ? `/user/${user.login}/comments/1` : null),
+    to: () => (user ? `/user/${user.alias}/comments/1` : null),
     match: /\/user\/(\w|\d)+\/comments\/([0-9]+)\/?$/,
     tab: 'comments',
   },
@@ -61,17 +61,17 @@ const generateTabs = (user: UserExtendedObject): TabObject[] => [
     label: (
       <>
         Закладки
-        {user && <Counter>{user.counters.favorites}</Counter>}
+        {user && <Counter>{user.counterStats.favoriteCount}</Counter>}
       </>
     ),
-    to: () => (user ? `/user/${user.login}/favorites/articles/1` : null),
+    to: () => (user ? `/user/${user.alias}/favorites/articles/1` : null),
     match: /\/user\/(\w|\d)+\/favorites\/(articles|comments)\/([0-9]+)\/?$/,
     tab: 'favorites',
   },
 ]
 
 const UserTabs = () => {
-  const user = useSelector((state) => state.profile.profile.user.data)
+  const user = useSelector((state) => state.profile.profile.card.data)
   const tabs = generateTabs(user)
   const findPath = (path: string): TabObject => {
     return tabs.find((e) => path.match(e.match))

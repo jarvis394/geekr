@@ -13,12 +13,12 @@ const useStyles = makeStyles((theme) => ({
 
 const UserAvatar = ({
   src,
-  login,
+  alias,
   className,
   ...props
 }: {
   src: string
-  login: string
+  alias: string
   className?: string
 }) => {
   const habrStubPaths = [
@@ -36,7 +36,7 @@ const UserAvatar = ({
   return (
     <div {...props} className={[classes.root, className].join(' ')}>
       {!state && <Avatar className={className || classes.root} src={src} />}
-      {state && <UserPlaceholder num={login.length} />}
+      {state && <UserPlaceholder num={alias?.length || 0} />}
     </div>
   )
 }

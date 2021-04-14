@@ -12,8 +12,8 @@ const useStyles = makeStyles((theme) => ({
 
 export const RegisteredTime = () => {
   const classes = useStyles()
-  const user = useSelector((store) => store.profile.profile.user.data)
-  const text = user.sex === '1' ? 'Зарегистрировался' : 'Зарегистрировалась'
+  const user = useSelector((store) => store.profile.profile.card.data)
+  const text = user.gender === '1' ? 'Зарегистрировался' : 'Зарегистрировалась'
   const timeRegistered = (ti?: string, tr?: string) => {
     if (ti && ti === tr) {
       return 'в то же время'
@@ -21,14 +21,14 @@ export const RegisteredTime = () => {
   }
   return (
     <Typography variant="caption" className={classes.hintColor}>
-      {user.sex !== '0' && (
+      {/* {user.gender !== '0' && (
         <>
           {text} {timeRegistered(user.time_invited, user.time_registered)}
         </>
       )}
-      {user.sex === '0' && (
+      {user.gender === '0' && (
         <>Дата регистрации: {dayjs(user.time_registered).fromNow()}</>
-      )}
+      )} */}
     </Typography>
   )
 }

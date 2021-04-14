@@ -1,6 +1,7 @@
 import * as api from 'src/api/profile'
 import {
-  PROFILE_DATA,
+  PROFILE_CARD,
+  PROFILE_WHOIS,
   PROFILE_CHILDREN,
   PROFILE_COMPANIES,
   PROFILE_HUBS,
@@ -40,51 +41,64 @@ export const request = async ({
   }
 }
 
-export const getProfile = (login: string) => async (dispatch) => {
+export const getProfileCard = (alias: string) => async (dispatch) => {
   return await request({
-    method: 'getProfile',
-    storeType: PROFILE_DATA,
-    params: [login],
+    method: 'getProfileCard',
+    storeType: PROFILE_CARD,
+    params: [alias],
     dispatch,
+    v2: true
   })
 }
 
-export const getProfileCompanies = (login: string) => async (dispatch) => {
+export const getProfileWhois = (alias: string) => async (dispatch) => {
+  return await request({
+    method: 'getProfileWhois',
+    storeType: PROFILE_WHOIS,
+    params: [alias],
+    dispatch,
+    v2: true
+  })
+}
+
+export const getProfileCompanies = (alias: string) => async (dispatch) => {
   return await request({
     method: 'getProfileCompanies',
     storeType: PROFILE_COMPANIES,
-    params: [login],
+    params: [alias],
     dispatch,
+    v2: true
   })
 }
 
-export const getProfileChildren = (login: string) => async (dispatch) => {
+export const getProfileChildren = (alias: string) => async (dispatch) => {
   return await request({
     method: 'getProfileChildren',
     storeType: PROFILE_CHILDREN,
-    params: [login],
+    params: [alias],
     dispatch,
+    v2: true
   })
 }
 
-export const getProfileHubs = (login: string) => async (dispatch) => {
+export const getProfileHubs = (alias: string) => async (dispatch) => {
   return await request({
     method: 'getProfileHubs',
     storeType: PROFILE_HUBS,
-    params: [login],
+    params: [alias],
     v2: true,
     dispatch,
   })
 }
 
-export const getProfileArticles = (login: string, page: number) => async (
+export const getProfileArticles = (alias: string, page: number) => async (
   dispatch
 ) => {
   const type = PROFILE_ARTICLES + 'FETCH'
   dispatch({ type })
 
   try {
-    const data = await api.getProfileArticles(login, page)
+    const data = await api.getProfileArticles(alias, page)
 
     dispatch({
       type: type + '_FULFILLED',

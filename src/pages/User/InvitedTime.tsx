@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Typography } from '@material-ui/core'
 import dayjs from 'dayjs'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
 import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
+import { useDispatch } from 'react-redux'
+import { getProfileWhois } from 'src/store/actions/profile'
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -19,21 +21,23 @@ const useStyles = makeStyles((theme) => ({
 
 export const InvitedTime = () => {
   const classes = useStyles()
-  const user = useSelector((store) => store.profile.profile.user.data)
-  const timeInvited = dayjs(user.time_invited).fromNow()
+  const user = useSelector((store) => store.profile.profile.card.data)
+  const whois = useSelector((store) => store.profile.profile.whois.data)
+  const timeInvited = dayjs(whois.invitedBy.timeCreated).fromNow()
   const textTimeInvited = timeInvited[0].toUpperCase() + timeInvited.slice(1)
-  const wasInvitedText = user.sex === '1' ? 'был приглашён' : 'была приглашена'
+  const wasInvitedText = user.gender === '1' ? 'был приглашён' : 'была приглашена'
+  
   return (
-    user.time_invited && (
+    whois.invitedBy.timeCreated && (
       <Typography variant="caption" color="textSecondary" align="center">
         {textTimeInvited}{' '}
-        {user.sex === '0' ? 'было получено приглашение от' : wasInvitedText}{' '}
-        {user.invited_by_login ? (
+        {user.gender === '0' ? 'было получено приглашение от' : wasInvitedText}{' '}
+        {whois.invitedBy.issuerLogin ? (
           <LinkToOutsidePage
             className={classes.link}
-            to={'/user/' + user.invited_by_login}
+            to={'/user/' + whois.invitedBy.issuerLogin}
           >
-            @{user.invited_by_login}
+            @{whois.invitedBy.issuerLogin}
           </LinkToOutsidePage>
         ) : (
           'НЛО'

@@ -181,15 +181,15 @@ const Comment = ({ data }: { data: DataComment }) => {
             >
               <UserAvatar
                 src={data.author.avatarUrl}
-                login={data.author.login}
+                alias={data.author.alias}
                 className={classes.avatar}
               />
               <Typography variant="caption">
                 <Link
                   className={[classes.noDeco, classes.authorLink].join(' ')}
-                  to={'/user/' + data.author.login}
+                  to={'/user/' + data.author.alias}
                 >
-                  {data.author.login}
+                  {data.author.alias}
                 </Link>
               </Typography>
               <Typography className={classes.ts} variant="caption">

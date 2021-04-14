@@ -48,9 +48,7 @@ interface PaletteItem {
   items: PaletteGridItem[]
 }
 
-interface CurrentTheme {
-  palette: Omit<CustomTheme, 'name'>
-}
+type CurrentTheme = CustomTheme
 
 interface StyleProps {
   currentTheme: CurrentTheme
@@ -464,6 +462,8 @@ const NewTheme = () => {
     item: null,
   })
   const defaultTheme = {
+    name: 'Новая тема',
+    type: Date.now().toString(),
     palette: {
       type: theme.palette.type,
       primary: {
@@ -484,9 +484,8 @@ const NewTheme = () => {
     },
   }
   const [isTitleEditDialogOpen, setTitleEditDialogOpen] = useState(false)
-  const [themeTitle, setThemeTitle] = useState('Новая тема')
   const titleInputRef = useRef<HTMLInputElement>()
-  const [currentTheme, setCurrentTheme] = useState<CurrentTheme>(defaultTheme)
+  const [currentTheme, setCurrentTheme] = useState<CustomTheme>(defaultTheme)
   const classes = useStyles()
   const customThemes = useSelector(store => store.settings.customThemes)
   const dispatch = useDispatch()
@@ -496,12 +495,9 @@ const NewTheme = () => {
   ])
 
   const handleSaveClick = () => {
-    const customTheme: CustomTheme = {
-      ...currentTheme.palette,
-      name: themeTitle
-    }
+    const isAlreadySavedLocally = customThemes.some(e => e.type === currentTheme.type)
     dispatch(setSettings({
-      customThemes: customThemes.concat([customTheme])
+      customThemes: customThemes.concat(isAlreadySavedLocally ? [] : [currentTheme])
     }))
     enqueueSnackbar('Тема сохранена', {
       variant: 'success',
@@ -513,12 +509,16 @@ const NewTheme = () => {
   }
   const handleTitleEditDialogClose = () => {
     if (titleInputRef.current.value) {
-      setThemeTitle(titleInputRef.current.value)
+      setCurrentTheme((prev) => ({
+        ...prev,
+        name: titleInputRef.current.value,
+      }))
       setTitleEditDialogOpen(false)
     }
   }
   const handleThemeTypeChange = (_event, type: string) => {
     setCurrentTheme((prev) => ({
+      ...prev,
       palette: {
         ...prev.palette,
         type: type as PaletteType,
@@ -569,7 +569,7 @@ const NewTheme = () => {
     <OutsidePage
       hidePositionBar
       disableShrinking
-      headerText={themeTitle}
+      headerText={currentTheme.name}
       toolbarIcons={toolbarIcons}
     >
       <Alert severity="info" className={classes.infoAlert}>

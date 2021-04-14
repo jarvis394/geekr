@@ -13,6 +13,7 @@ import {
   THEME_NAMES,
   THEME_PRIMARY_COLORS,
   THEME_TEXT_COLORS,
+  THEME_TYPES
 } from 'src/config/constants'
 import {
   Radio,
@@ -28,6 +29,7 @@ import {
   ListItemText,
   Switch,
   fade,
+  Divider,
 } from '@material-ui/core'
 import fadedLinearGradient from 'src/utils/fadedLinearGradient'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
@@ -35,6 +37,7 @@ import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperCol
 import isMobile from 'is-mobile'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import { useHistory } from 'react-router'
+import { CustomTheme } from 'src/interfaces/UserSettings'
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -228,17 +231,34 @@ const useThemeCardStyles = makeStyles((theme) => ({
   },
 }))
 
-const ThemeCard = ({ type }: { type: PaletteType }) => {
-  const paper = BACKGROUND_COLORS_PAPER[type]
-  const defaultColor = BACKGROUND_COLORS_DEFAULT[type]
-  const primaryColor = THEME_PRIMARY_COLORS[type]
-  const textColor = THEME_TEXT_COLORS[type]
+const makeCustomThemeFromThemeType = (type: PaletteType): CustomTheme => ({
+  name: THEME_NAMES[type],
+  type,
+  palette: {
+    type: THEME_TYPES[type],
+    primary: THEME_PRIMARY_COLORS[type],
+    background: {
+      paper: BACKGROUND_COLORS_PAPER[type],
+      default: BACKGROUND_COLORS_DEFAULT[type]
+    },
+    text: THEME_TEXT_COLORS[type],
+  },
+})
+
+const ThemeCard = ({ theme, editable = false }: {
+  theme: CustomTheme
+  editable?: boolean
+}) => {
+  const paper = theme.palette.background.paper
+  const defaultColor = theme.palette.background.default
+  const primaryColor = theme.palette.primary.main
+  const textColor = theme.palette.text.primary
   const dispatch = useDispatch()
-  const classes = useThemeCardStyles({ color: textColor.primary })
+  const classes = useThemeCardStyles({ color: textColor })
   const themeType = useSelector((state) => state.settings.themeType)
-  const isCurrent = themeType === type
+  const isCurrent = themeType === theme.type
   const changeTheme: React.MouseEventHandler<HTMLButtonElement> = (_event) => {
-    if (!isCurrent) dispatch(setSettings({ themeType: type }))
+    if (!isCurrent) dispatch(setSettings({ themeType: theme.type }))
   }
 
   return (
@@ -251,10 +271,11 @@ const ThemeCard = ({ type }: { type: PaletteType }) => {
         className={`${classes.box} ${isCurrent ? classes.border : ''}`}
         style={{ background: paper }}
       >
+        {/* {editable && } */}
         <Grid
           item
           xs={6}
-          style={{ background: primaryColor.main, borderTopLeftRadius: 12 }}
+          style={{ background: primaryColor, borderTopLeftRadius: 12 }}
           className={classes.item}
         />
         <Grid
@@ -266,7 +287,7 @@ const ThemeCard = ({ type }: { type: PaletteType }) => {
         <div className={classes.radioHolder}>
           <Radio
             disableRipple
-            value={type}
+            value={theme.type}
             color="primary"
             checked={isCurrent}
             classes={{
@@ -275,7 +296,7 @@ const ThemeCard = ({ type }: { type: PaletteType }) => {
           />
         </div>
       </Grid>
-      <Typography className={classes.type}>{THEME_NAMES[type]}</Typography>
+      <Typography className={classes.type}>{theme.name}</Typography>
     </div>
   )
 }
@@ -332,29 +353,6 @@ const Switcher = ({
       <Switch disableRipple checked={isChecked} color="primary" />
     </ListItem>
   )
-}
-
-/**
- * Support function for textToThemeField constant
- */
-export const getValueByKeys = (o: Record<string, never>, s: string) => {
-  let res = o
-  s.split('.').forEach(e => { res = res[e] })
-  return res
-}
-
-// TODO: do a better solution
-/**
- * When changing text or path for a value for Item in OneByTwoGrid or SingleRowGrid
- * be sure to change it here.
- */
-export const textToThemeField = {
-  main: 'palette.primary.main',
-  light: 'palette.primary.light',
-  dark: 'palette.primary.dark',
-  paper: 'palette.background.paper',
-  default: 'palette.background.default',
-  text: 'palette.text.primary',
 }
 
 export const OneByTwoGrid = ({ component: Item = PaletteGridItem }) => {
@@ -473,7 +471,8 @@ const Appearance = () => {
   const classes = useStyles()
   const history = useHistory()
   const dispatch = useDispatch()
-  const autoChangeTheme = useSelector((state) => state.settings.autoChangeTheme)
+  const customThemes = useSelector((store) => store.settings.customThemes)
+  const autoChangeTheme = useSelector((store) => store.settings.autoChangeTheme)
 
   return (
     <OutsidePage headerText={'Внешний вид'} disableShrinking>
@@ -491,7 +490,11 @@ const Appearance = () => {
           className={classes.themeCardsContainer}
         >
           {THEMES.map((e, i) => (
-            <ThemeCard type={e} key={i} />
+            <ThemeCard theme={makeCustomThemeFromThemeType(e)} key={i} />
+          ))}
+          <Divider orientation="vertical" />
+          {customThemes.map((e, i) => (
+            <ThemeCard theme={e} editable key={i} />
           ))}
           <div style={{ display: 'inline-flex' }}>
             <ButtonBase

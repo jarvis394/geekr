@@ -185,7 +185,7 @@ export const PostItem = ({
   const location = useLocation()
   const currentLocation = location.pathname
   const ts = dayjs(post.timePublished).calendar().toLowerCase()
-  const { login, avatarUrl } = post.author
+  const { alias, avatarUrl } = post.author
   const {
     readingCount,
     favoritesCount,
@@ -234,7 +234,7 @@ export const PostItem = ({
 
   // Return troll text for hidden post
   if (
-    hiddenAuthors.includes(login) ||
+    hiddenAuthors.includes(alias) ||
     (isCorporative && hiddenCompanies.includes(companyAlias))
   )
     return (
@@ -312,16 +312,16 @@ export const PostItem = ({
           {isVisible && (
             <Paper elevation={0} className={classes.paper} style={style}>
               <LinkToOutsidePage
-                to={'/user/' + login}
+                to={'/user/' + alias}
                 className={classes.avatarContainer}
               >
                 <UserAvatar
                   src={avatarUrl}
-                  login={login}
+                  alias={alias}
                   className={classes.postAvatar}
                 />
                 <Typography className={classes.postAuthor} variant="caption">
-                  {login}
+                  {alias}
                 </Typography>
                 <Typography className={classes.postTs} variant="caption">
                   {ts}

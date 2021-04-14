@@ -2,21 +2,24 @@ import { PaletteType } from 'src/config/constants'
 
 export interface CustomTheme {
   name: string
-  type: 'dark' | 'light'
-  primary: {
-    main: string
-    light: string
-    dark: string
-  }
-  background: {
-    paper: string
-    default: string
-  }
-  text: {
-    primary: string
-    secondary: string
-    disabled: string
-    hint: string
+  type: string
+  palette: {
+    type: 'dark' | 'light'
+    primary: {
+      main: string
+      light: string
+      dark: string
+    }
+    background: {
+      paper: string
+      default: string
+    }
+    text: {
+      primary: string
+      secondary: string
+      disabled: string
+      hint: string
+    }
   }
 }
 

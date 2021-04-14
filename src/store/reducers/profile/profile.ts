@@ -1,7 +1,7 @@
 import { State, fieldsMap, typesMap } from './types'
 
 const initialState: State = {}
-;['hubs', 'user', 'companies', 'children'].forEach(
+fieldsMap.forEach(
   (e: string) =>
     (initialState[e] = {
       data: null,
@@ -14,7 +14,7 @@ const initialState: State = {}
 export default (
   state = initialState,
   { type, payload }: { type: string; payload: { data: never; error?: string } }
-) => {
+): State => {
   const actionHandler = (type: string) => {
     if (type.endsWith('FETCH')) {
       return {

@@ -91,7 +91,7 @@ export const getCompany = (alias: string) => async (
   dispatch({ type: COMPANY_FETCH })
 
   try {
-    const data = (await apiGetCompany(alias)).data
+    const data = (await apiGetCompany(alias))
     dispatch({
       type: COMPANY_FETCH_FULFILLED,
       payload: data,

@@ -42,27 +42,27 @@ const useStyles = makeStyles((theme) => ({
 const ProfileLinks = () => {
   const location = useLocation()
   const history = useHistory<OutsidePageLocationState>()
-  const profile = useSelector((state) => state.profile.profile.user.data)
+  const profile = useSelector((state) => state.profile.profile.card.data)
   const classes = useStyles()
   const buttons = [
     {
       icon: Icon28ArticleOutline,
       to: location.pathname + '/articles/p/1',
       text: 'Публикации',
-      badgeContent: profile.counters.posts,
+      badgeContent: profile.counterStats.postCount,
     },
     {
       icon: Icon28CommentOutline,
       to: location.pathname + '/comments/p/1',
       text: 'Комментарии',
       style: { transform: 'scale(1.1)' },
-      badgeContent: profile.counters.comments,
+      badgeContent: profile.counterStats.commentCount,
     },
     {
       icon: Icon20BookmarkOutline,
       to: location.pathname + '/favorites/articles/p/1',
       text: 'Закладки',
-      badgeContent: profile.counters.favorites,
+      badgeContent: profile.counterStats.favoriteCount,
     },
   ]
 
@@ -78,7 +78,7 @@ const ProfileLinks = () => {
             classes={{ badge: classes.badge }}
             badgeContent={badgeContent}
             color="primary"
-            invisible={badgeContent === '0'}
+            invisible={badgeContent === 0}
           >
             <Icon width={28} height={28} style={style} />
           </Badge>

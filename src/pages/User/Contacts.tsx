@@ -29,7 +29,7 @@ export const Contacts = ({
   classes: additionalClasses,
 }: ComponentWithUserParams) => {
   const classes = useStyles()
-  const user = useSelector((store) => store.profile.profile.user.data)
+  const user = useSelector((store) => store.profile.profile.card.data)
   const options: HTMLReactParserOptions = {
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === 'a') {
@@ -46,17 +46,18 @@ export const Contacts = ({
       }
     },
   }
-  return user.contacts.length !== 0 ? (
-    <div className={additionalClasses}>
-      <Typography className={classes.blockTitle}>Контакты</Typography>
-      <Grid container>
-        {user.contacts.map((e, i) => (
-          <Grid key={i} item className={classes.contactsItem}>
-            <Typography>{e.title}</Typography>
-            {parse(e.link, options)}
-          </Grid>
-        ))}
-      </Grid>
-    </div>
-  ) : null
+  return null
+  // return user.contacts.length !== 0 ? (
+  //   <div className={additionalClasses}>
+  //     <Typography className={classes.blockTitle}>Контакты</Typography>
+  //     <Grid container>
+  //       {user.contacts.map((e, i) => (
+  //         <Grid key={i} item className={classes.contactsItem}>
+  //           <Typography>{e.title}</Typography>
+  //           {parse(e.link, options)}
+  //         </Grid>
+  //       ))}
+  //     </Grid>
+  //   </div>
+  // ) : null
 }

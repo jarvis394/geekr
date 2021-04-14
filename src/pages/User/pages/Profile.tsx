@@ -39,10 +39,10 @@ export const useStyles = makeStyles((theme) => ({
 
 const Profile = () => {
   const classes = useStyles()
-  const user = useSelector((state) => state.profile.profile.user.data)
+  const user = useSelector((state) => state.profile.profile.card.data)
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  useEffect(() => {}, [user.login])
+  useEffect(() => {}, [user.alias])
 
   return (
     <>

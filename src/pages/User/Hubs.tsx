@@ -87,7 +87,7 @@ const Hubs = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const dispatch = useDispatch()
   const [showAll, setShowAll] = useState<boolean>(false)
   const classes = useStyles()
-  const profile = useSelector((store) => store.profile.profile.user.data)
+  const profile = useSelector((store) => store.profile.profile.card.data)
   const hubs = useSelector((store) => store.profile.profile.hubs.data)
   const isFetched = useSelector((store) => store.profile.profile.hubs.fetched)
   const isFetching = useSelector((store) => store.profile.profile.hubs.fetching)
@@ -96,8 +96,8 @@ const Hubs = ({ classes: additionalClasses }: ComponentWithUserParams) => {
 
   useEffect(() => {
     setShowAll(false)
-    if (!isFetched) dispatch(getProfileHubs(profile.login))
-  }, [profile.login, dispatch, isFetched])
+    if (!isFetched) dispatch(getProfileHubs(profile.alias))
+  }, [profile.alias, dispatch, isFetched])
 
   if (fetchError)
     return (

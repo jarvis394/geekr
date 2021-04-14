@@ -4,7 +4,7 @@ import PostItem from 'src/components/blocks/PostItem'
 import Pagination from 'src/components/blocks/Pagination'
 import { useParams, useHistory } from 'react-router'
 import { useDispatch } from 'react-redux'
-import { getProfile, getProfileArticles } from 'src/store/actions/profile'
+import { getProfileCard, getProfileArticles } from 'src/store/actions/profile'
 import { List, makeStyles, useTheme } from '@material-ui/core'
 import PostSkeleton from 'src/components/skeletons/PostItem'
 import ErrorComponent from 'src/components/blocks/Error'
@@ -30,14 +30,14 @@ const UserArticles = () => {
   const classes = useStyles()
   const theme = useTheme()
   const dispatch = useDispatch()
-  const isProfileFetched = useSelector((state) => state.profile.profile.user.fetched)
+  const isProfileFetched = useSelector((state) => state.profile.profile.card.fetched)
   const isFetched = useSelector((state) => state.profile.articles.fetched)
   const isFetching = useSelector((state) => state.profile.articles.fetching)
   const fetchError = useSelector((state) => state.profile.articles.error)
   const data = useSelector(
     (state) => state.profile.articles.data.pages[currentPage]
   )
-  const profile = useSelector((state) => state.profile.profile.user.data)
+  const profile = useSelector((state) => state.profile.profile.card.data)
   const pagesCount = useSelector(
     (state) => state.profile.articles.data.pagesCount
   )
@@ -60,7 +60,7 @@ const UserArticles = () => {
 
   useEffect(() => {
     if (!isProfileFetched) {
-      dispatch(getProfile(login))
+      dispatch(getProfileCard(login))
     } else {
       dispatch(getProfileArticles(login, currentPage))
     }

@@ -57,13 +57,13 @@ const Item = ({ data }: { data: HubAuthor }) => {
       button
       className={classes.root}
       component={LinkToOutsidePage}
-      to={'/user/' + data.login}
+      to={'/user/' + data.alias}
       alignItems="flex-start"
     >
       <ListItemAvatar>
         <UserAvatar
           src={data.avatarUrl}
-          login={data.login}
+          alias={data.alias}
           className={classes.avatar}
         />
       </ListItemAvatar>

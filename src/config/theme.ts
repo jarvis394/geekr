@@ -11,9 +11,6 @@ import {
 } from './constants'
 import * as userSettings from 'src/utils/userSettings'
 
-const localStorageThemeType = userSettings.get().themeType
-const type = (localStorageThemeType || 'light') as MUIPaletteType
-
 export const makeBackgroundColors = (
   t: PaletteType | string
 ): {
@@ -41,33 +38,45 @@ export const makeTextColors = (
   hint: string
 } => (THEME_TEXT_COLORS[t])
 
-const generateTheme = (themeType?: PaletteType | string): ThemeOptions => ({
-  palette: {
-    type: THEME_TYPES[themeType || type],
-    primary: makePrimaryColors(themeType || type),
-    background: makeBackgroundColors(themeType || type),
-    text: makeTextColors(themeType || type),
-  },
-  shape: { borderRadius: 4 },
-  overrides: {
-    MuiTab: {
-      wrapper: {
-        flexDirection: 'row',
-      },
+export const makeType = (
+  t: PaletteType | string
+): MUIPaletteType => (THEME_TYPES[t])
+
+const generateTheme = (themeType?: PaletteType | string): ThemeOptions => {
+  const localStorageUserSettings = userSettings.get()
+  const localStorageCustomThemes = localStorageUserSettings.customThemes
+  const localStorageThemeType = localStorageUserSettings.themeType
+  const type = (localStorageThemeType || 'light') as MUIPaletteType
+  const customTheme = localStorageCustomThemes.find(e => e.type === type)
+   
+  return {
+    palette: customTheme ? customTheme.palette : {
+      type: makeType(themeType || type),
+      primary: makePrimaryColors(themeType || type),
+      background: makeBackgroundColors(themeType || type),
+      text: makeTextColors(themeType || type),
     },
-  },
-  props: {
-    // Ripple on IconButtons is delayed and not very effective in performance
-    // So we change its styles to custom ones
-    MuiIconButton: {
-      TouchRippleProps: {
-        classes: {
-          rippleVisible: 'IconButton_TouchRipple-rippleVisible',
-          childLeaving: 'IconButton_TouchRipple-childLeaving'
+    shape: { borderRadius: 4 },
+    overrides: {
+      MuiTab: {
+        wrapper: {
+          flexDirection: 'row',
         },
       },
     },
-  },
-})
+    props: {
+      // Ripple on IconButtons is delayed and not very effective in its action
+      // So we change its styles to the custom ones
+      MuiIconButton: {
+        TouchRippleProps: {
+          classes: {
+            rippleVisible: 'IconButton_TouchRipple-rippleVisible',
+            childLeaving: 'IconButton_TouchRipple-childLeaving'
+          },
+        },
+      },
+    },
+  }
+}
 
 export default generateTheme

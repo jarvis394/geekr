@@ -20,17 +20,21 @@ export interface HubsSearchResponse {
 }
 
 export interface Hub {
-  id: number
-  statistics: {
-    rating: number
-    subscribersCount: number
-  }
-  titleHtml: string
-  relatedData: unknown
-  imageUrl: string
-  descriptionHtml: string
   alias: string
   commonTags: string[]
+  descriptionHtml: string
+  id: string
+  imageUrl: string
+  isOfftop: boolean
+  isProfiled: boolean
+  relatedData: Record<string, never>
+  statistics: {
+    subscribersCount: number
+    rating: number
+    authorsCount: number
+    postsCount: number
+  }
+  titleHtml: string
 }
 
 export interface HubPost {
@@ -47,7 +51,6 @@ export interface HubAuthor {
   id: string
   invest: number
   lastPost: Post
-  login: string
   rating: number
   scoreStats: {
     score: number
@@ -56,15 +59,17 @@ export interface HubAuthor {
   speciality: string
 }
 
+export interface HubShort {
+  alias: string
+  id: string
+  title: string
+  titleHtml: string
+  type: string
+}
+
 export interface HubCompany {
   alias: string
-  commonHubs: {
-    alias: string
-    id: string
-    title: string
-    titleHtml: string
-    type: string
-  }[]
+  commonHubs: HubShort[]
   descriptionHtml: string
   id: string
   imageUrl: string
