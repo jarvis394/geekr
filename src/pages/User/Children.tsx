@@ -12,12 +12,12 @@ import {
 import { ComponentWithUserParams } from './index'
 import { makeStyles } from '@material-ui/core/styles'
 import UserAvatar from 'src/components/blocks/UserAvatar'
-import { UserExtended } from 'src/interfaces/User'
-import { Link } from 'react-router-dom'
-import { useSelector } from 'src/hooks'
+import { User } from 'src/interfaces/User'
+import useSelector from 'src/hooks/useSelector'
 import ProfileChildrenSkeleton from 'src/components/skeletons/ProfileChildren'
 import { useDispatch } from 'react-redux'
 import { getProfileChildren } from 'src/store/actions/profile'
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -49,9 +49,7 @@ const useStyles = makeStyles((theme) => ({
   collapseShadow: {
     position: 'absolute',
     background:
-      'linear-gradient(0deg,' +
-      theme.palette.background.default +
-      ',transparent)',
+      'linear-gradient(0deg,' + theme.palette.background.default + ',transparent)',
     bottom: 0,
     pointerEvents: 'none',
     height: 40,
@@ -63,7 +61,7 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const [showAll, setShowAll] = useState<boolean>(false)
   const classes = useStyles()
   const dispatch = useDispatch()
-  const profile = useSelector((store) => store.profile.profile.user.data)
+  const profile = useSelector((store) => store.profile.profile.card.data)
   const childrenData = useSelector(
     (store) => store.profile.profile.children.data
   )
@@ -76,34 +74,37 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const fetchError = useSelector(
     (store) => store.profile.profile.children.error
   )
-  const sorted = (childrenData || []).sort(
-    (a, b) => Date.parse(a.time_registered) - Date.parse(b.time_registered)
-  )
+  const sortingFunction = (a: string, b: string) => {
+    const aRef = childrenData.userRefs[a]
+    const bRef = childrenData.userRefs[b]
+    return aRef.alias.localeCompare(bRef.alias)
+  }
+  const sorted = isFetched ? childrenData.userIds.sort(sortingFunction) : []
   const shouldCollapse = sorted.length > 5
 
   useEffect(() => {
     setShowAll(false)
-    dispatch(getProfileChildren(profile.login))
-  }, [profile.login, dispatch])
+    dispatch(getProfileChildren(profile.alias))
+  }, [profile.alias, dispatch])
 
-  const Item = ({ data }: { data: UserExtended }) => (
+  const Item = ({ data }: { data: User }) => (
     <ListItem
       style={{ paddingLeft: 0, paddingRight: 0 }}
       component={Link}
-      to={'/user/' + data.login}
+      to={'/user/' + data.alias}
     >
       <ListItemAvatar>
         <UserAvatar
           className={classes.avatar}
-          src={data.avatar}
-          login={data.login}
+          src={data.avatarUrl}
+          alias={data.alias}
         />
       </ListItemAvatar>
       <ListItemText
         style={{ margin: 0 }}
         primaryTypographyProps={{ className: classes.link }}
-        primary={'@' + data.login}
-        secondary={data.specializm}
+        primary={'@' + data.alias}
+        secondary={data.speciality}
       />
     </ListItem>
   )
@@ -127,7 +128,7 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
       >
         <List>
           {sorted.map((e) => (
-            <Item data={e} key={e.id} />
+            <Item data={childrenData.userRefs[e]} key={e} />
           ))}
         </List>
         {shouldCollapse && (

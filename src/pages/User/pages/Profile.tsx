@@ -36,7 +36,7 @@ const Profile = ({ user }) => {
   const classes = useStyles()
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  useEffect(() => {}, [user.login])
+  useEffect(() => {}, [user.alias])
 
   return (
     <>

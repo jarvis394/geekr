@@ -1,13 +1,45 @@
-import { Badge, Hub, Company } from '.'
+import { Badge, Hub } from '.'
 
 export interface User {
   id: number
-  login: string
+  alias: string
   fullname: string
   /** Support for API version 1 */
   avatar: string
   avatarUrl: string
   speciality: string
+}
+
+export interface UserCompany {
+  alias: string
+  commonHubs: Hub[]
+  descriptionHtml: string
+  id: string
+  imageUrl: string
+  relatedData: Record<string, never>
+  statistics: {
+    subscribersCount: number
+    rating: number
+    invest: number
+  }
+  titleHtml: string
+}
+
+export interface UserContact {
+  title: string
+  url: string
+  value: string
+}
+
+export interface UserWhois {
+  aboutHtml: string
+  alias: string
+  badgets: Badge[]
+  contacts: UserContact[]
+  invitedBy: {
+    issuerLogin: string
+    timeCreated: string
+  }
 }
 
 export interface UserTag {
@@ -16,55 +48,61 @@ export interface UserTag {
 }
 
 export interface UserCompanies {
-  companies: Company[]
+  pagesCount: number
+  companyIds: string[]
+  companyRefs: UserCompany[]
 }
 
 export interface UserHubs {
-  hubs: Hub[]
+  pagesCount: number
+  hubIds: string[]
+  hubRefs: Hub[]
 }
 
 export interface UserChildren {
-  users: UserExtended[]
+  userRefs: User[]
+  /** Contains users' aliases for some reason (14.04.2021) */
+  userIds: string[]
+  pagesCount: number
+}
+
+export interface UserLocation {
+  id: string
+  title: string
 }
 
 export interface UserExtended {
-  id: string | number
+  alias: string
+  avatarUrl: string
   birthday: string
-  description_html: string
-  common_tags: UserTag[]
-  login: string
-  time_registered: string
-  score: number
+  counterStats: {
+    postCount: number
+    commentCount: number
+    favoriteCount: number
+  }
+  followStats: {
+    followCount: number
+    followersCount: number
+  }
   fullname: string
-  specializm: string
-  /** 1 - male, 0 - female */
-  sex: '1' | '0'
+  gender: string
+  isReadonly: boolean
+  lastActivityDateTime: string
+  location: {
+    city: UserLocation
+    country: UserLocation
+    region: UserLocation
+  }
   rating: number
-  time_invited: string
-  invited_by_login: string
-  contacts: {
-    value: string
-    title: string
-    link: string
-  }[]
-  rating_position: number
-  display_children: boolean
-  path: string
-  geo: {
-    country: string
-    region: string
-    city: string
+  ratingPos: number
+  registerDateTime: string
+  relatedData: Record<string, never>
+  scoreStats: {
+    score: number
+    votesCount: number
   }
-  counters: {
-    posts: string | number
-    comments: string | number
-    followed: string | number
-    followers: string | number
-    favorites: string | number
-  }
-  badges: Badge[]
-  avatar: string
-  is_readonly: boolean
-  is_rc: boolean
-  is_subscribed: boolean
+  score: number
+  votesCount: number
+  speciality: string
+  workplace: { alias: string; title: string }[]
 }

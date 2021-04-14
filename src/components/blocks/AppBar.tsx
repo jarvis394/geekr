@@ -124,9 +124,9 @@ const Component = () => {
             )}
             {shouldShowUser && (
               <IconButton
-                onClick={() => history.push('/user/' + userData.login)}
+                onClick={() => history.push('/user/' + userData.alias)}
               >
-                <Avatar className={classes.avatar} src={userData.avatar} />
+                <Avatar className={classes.avatar} src={userData.avatarUrl} />
               </IconButton>
             )}
           </Toolbar>

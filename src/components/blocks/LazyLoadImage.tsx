@@ -54,7 +54,6 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
           </Fade>
         </div>
       )
-    console.log(loading, src)
 
     return (
       <Fade in timeout={250}>

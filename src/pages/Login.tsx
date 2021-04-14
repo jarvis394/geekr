@@ -72,7 +72,7 @@ const Login = () => {
       setFetchingState(FetchingState.Fetching)
 
       // Get login data with user's email and password
-      const data = await getToken(email, password)
+      const data = await getToken({ email, password })
 
       dispatch(setToken(data.access_token))
       setFetchingState(FetchingState.Fetched)

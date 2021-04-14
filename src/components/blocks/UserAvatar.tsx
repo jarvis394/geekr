@@ -5,20 +5,20 @@ import UserPlaceholder from '../svg/UserPlaceholder'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 20,
-    height: 20,
+    width: 40,
+    height: 40,
     borderRadius: theme.shape.borderRadius,
   },
 }))
 
 const UserAvatar = ({
   src,
-  login,
+  alias,
   className,
   ...props
 }: {
   src: string
-  login: string
+  alias: string
   className?: string
 }) => {
   const habrStubPaths = [
@@ -34,9 +34,9 @@ const UserAvatar = ({
     : true
 
   return (
-    <div {...props} className={className + ' ' + classes.root}>
+    <div {...props} className={[classes.root, className].join(' ')}>
       {!state && <Avatar className={className || classes.root} src={src} />}
-      {state && <UserPlaceholder num={login.length} />}
+      {state && <UserPlaceholder num={alias?.length || 0} />}
     </div>
   )
 }

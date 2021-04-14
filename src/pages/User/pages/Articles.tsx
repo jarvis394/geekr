@@ -33,7 +33,7 @@ const Articles = () => {
   const data = useSelector(
     (state) => state.profile.articles.data.pages[currentPage]
   )
-  const profile = useSelector((state) => state.profile.profile.user.data)
+  const profile = useSelector((state) => state.profile.profile.card.data)
   const pagesCount = useSelector(
     (state) => state.profile.articles.data.pagesCount
   )
@@ -50,12 +50,12 @@ const Articles = () => {
 
   const handlePagination = (_: never, i: number) => {
     if (i === currentPage) return
-    else history.push(`/user/${profile.login}/articles/${i}`)
+    else history.push(`/user/${profile.alias}/articles/${i}`)
   }
 
   useEffect(() => {
-    dispatch(getProfileArticles(profile.login, currentPage))
-  }, [profile.login, currentPage, dispatch])
+    dispatch(getProfileArticles(profile.alias, currentPage))
+  }, [profile.alias, currentPage, dispatch])
 
   return (
     <List className={classes.root}>
@@ -69,7 +69,7 @@ const Articles = () => {
       {fetchError && (
         <ErrorComponent
           message={fetchError.error.message}
-          to={`/user/${profile.login}/articles/1`}
+          to={`/user/${profile.alias}/articles/1`}
         />
       )}
       <PaginationComponent />

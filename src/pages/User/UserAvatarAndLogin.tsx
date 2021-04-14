@@ -24,29 +24,30 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 800,
     fontSize: 24,
     marginTop: theme.spacing(1),
+    textAlign: 'center',
   },
 }))
 
 export const UserAvatarAndLogin = () => {
   const classes = useStyles()
-  const user = useSelector((store) => store.profile.profile.user.data)
+  const user = useSelector((store) => store.profile.profile.card.data)
 
   return (
     <>
       <UserAvatar
         className={classes.avatar}
-        login={user.login}
-        src={user.avatar}
+        alias={user.alias}
+        src={user.avatarUrl}
       />
       {user.fullname ? (
         <>
           <Typography className={classes.login}>{user.fullname}</Typography>
-          <Link to={'/user/' + user.login} className={classes.link}>
-            @{user.login}
+          <Link to={'/user/' + user.alias} className={classes.link}>
+            @{user.alias}
           </Link>
         </>
       ) : (
-        <Typography className={classes.login}>@{user.login}</Typography>
+        <Typography className={classes.login}>@{user.alias}</Typography>
       )}
     </>
   )

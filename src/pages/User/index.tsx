@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
 import Tabs from 'src/components/blocks/Tabs/UserTabs'
-import { getProfile } from 'src/store/actions/profile'
+import { getProfileCard, getProfileWhois } from 'src/store/actions/profile'
 import UserPageSkeleton from 'src/components/skeletons/Profile'
 import ErrorComponent from 'src/components/blocks/Error'
 import Profile from './pages/Profile'
@@ -43,33 +43,42 @@ const routes = {
 const User = ({ path }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const profile = useSelector((state) => state.profile.profile.user.data)
+  const profile = useSelector((state) => state.profile.profile.card.data)
   const isUserFetched = useSelector(
-    (state) => state.profile.profile.user.fetched
+    (state) => state.profile.profile.card.fetched
+  )
+  const isWhoisFetched = useSelector(
+    (state) => state.profile.profile.whois.fetched
   )
   const isUserFetching = useSelector(
-    (state) => state.profile.profile.user.fetching
+    (state) => state.profile.profile.card.fetching
+  )
+  const isWhoisFetching = useSelector(
+    (state) => state.profile.profile.whois.fetching
   )
   const userFetchError = useSelector(
-    (state) => state.profile.profile.user.error
+    (state) => state.profile.profile.card.error
   )
   const { login } = useParams<UserParams>()
   const Component = routes[path] || Profile
 
   useEffect(() => {
-    if (profile?.login !== login) dispatch(getProfile(login))
-  }, [login, profile, dispatch])
+    if (profile?.alias !== login) {
+      dispatch(getProfileCard(login))
+      dispatch(getProfileWhois(login))
+    }
+  }, [login, dispatch])
 
   return (
     <>
       {!userFetchError && <Tabs />}
       {userFetchError && <ErrorComponent message={userFetchError} />}
-      {isUserFetched && (
+      {isUserFetched && isWhoisFetched && (
         <>
           <Component user={profile} />
         </>
       )}
-      {isUserFetching &&
+      {(isUserFetching || isWhoisFetching) &&
         (Component === Profile ? (
           <UserPageSkeleton />
         ) : (

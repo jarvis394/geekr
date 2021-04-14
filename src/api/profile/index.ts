@@ -1,4 +1,5 @@
-export { default as getProfile } from './getProfile'
+export { default as getProfileCard } from './getProfileCard'
+export { default as getProfileWhois } from './getProfileWhois'
 export { default as getProfileArticles } from './getProfileArticles'
 export { default as getProfileChildren } from './getProfileChildren'
 export { default as getProfileComments } from './getProfileComments'

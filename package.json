@@ -17,7 +17,7 @@
     "@welldone-software/why-did-you-render": "^6.0.5",
     "axios": "^0.21.1",
     "dayjs": "^1.10.4",
-    "habra-auth": "^2.3.3",
+    "habra-auth": "^2.4.0",
     "html-react-parser": "^1.2.4",
     "is-mobile": "^2.2.2",
     "material-auto-rotating-carousel": "^3.0.2",

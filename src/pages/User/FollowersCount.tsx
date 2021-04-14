@@ -11,14 +11,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const FollowersCount = () => {
+type Cases = [string, string, string]
+
+export const FollowersCount = (): JSX.Element => {
   const classes = useStyles()
-  const user = useSelector((store) => store.profile.profile.user.data)
-  const followers = Number(user.counters.followers)
-  const followed = Number(user.counters.followed)
-  const followersCases = ['подписчик', 'подписчика', 'подписчиков']
-  const followedCases = ['подписка', 'подписки', 'подписок']
-  const generateOptions = (cases): ConvertOptions => ({
+  const user = useSelector((store) => store.profile.profile.card.data)
+  const followers = Number(user.followStats.followersCount)
+  const followed = Number(user.followStats.followCount)
+  const followersCases: Cases = ['подписчик', 'подписчика', 'подписчиков']
+  const followedCases: Cases = ['подписка', 'подписки', 'подписок']
+  const generateOptions = (cases: Cases): ConvertOptions => ({
     currency: {
       currencyNameCases: cases,
       fractionalPartNameCases: ['', '', ''],

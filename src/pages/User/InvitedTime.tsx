@@ -18,22 +18,27 @@ const useStyles = makeStyles((theme) => ({
 
 export const InvitedTime = () => {
   const classes = useStyles()
-  const user = useSelector((store) => store.profile.profile.user.data)
-  const timeInvited = dayjs(user.time_invited).fromNow()
+  const user = useSelector((store) => store.profile.profile.card.data)
+  const whois = useSelector((store) => store.profile.profile.whois.data)
+  const timeInvited = dayjs(whois?.invitedBy?.timeCreated).fromNow()
   const textTimeInvited = timeInvited[0].toUpperCase() + timeInvited.slice(1)
-  const wasInvitedText = user.sex === '1' ? 'был приглашён' : 'была приглашена'
-  return (
-    user.time_invited && (
-      <Typography variant="caption" color="textSecondary">
-        {textTimeInvited} {wasInvitedText}{' '}
-        {user.invited_by_login ? (
-          <Link className={classes.link} to={'/user/' + user.invited_by_login}>
-            @{user.invited_by_login}
-          </Link>
-        ) : (
-          'НЛО'
-        )}
-      </Typography>
-    )
-  )
+  const wasInvitedText =
+    user.gender === '1' ? 'был приглашён' : 'была приглашена'
+
+  return whois?.invitedBy?.timeCreated ? (
+    <Typography variant="caption" color="textSecondary" align="center">
+      {textTimeInvited}{' '}
+      {user.gender === '0' ? 'было получено приглашение от' : wasInvitedText}{' '}
+      {whois.invitedBy.issuerLogin ? (
+        <Link
+          className={classes.link}
+          to={'/user/' + whois.invitedBy.issuerLogin}
+        >
+          @{whois.invitedBy.issuerLogin}
+        </Link>
+      ) : (
+        'НЛО'
+      )}
+    </Typography>
+  ) : null
 }

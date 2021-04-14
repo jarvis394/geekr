@@ -17,12 +17,12 @@ export const Specialisation = ({
   classes: additionalClasses,
 }: ComponentWithUserParams) => {
   const classes = useStyles()
-  const user = useSelector((store) => store.profile.profile.user.data)
+  const user = useSelector((store) => store.profile.profile.card.data)
 
-  return user.specializm ? (
+  return user.speciality ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>Специализация</Typography>
-      <Typography>{user.specializm}</Typography>
+      <Typography>{user.speciality}</Typography>
     </div>
   ) : null
 }

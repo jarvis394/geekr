@@ -123,13 +123,13 @@ const Post = () => {
   const contents = shouldShowContents ? (
     <>
       {/** Company header */}
-      {company && company?.branding?.headerUrl && (
+      {company && company?.settings?.branding?.imageUrl && (
         <div className={classes.companyHeaderLink}>
-          <a style={{ display: 'flex' }} href={company.branding.headerUrl}>
+          <a style={{ display: 'flex' }} href={company.settings.branding.linkUrl}>
             <img
               alt={company.alias}
               className={classes.companyHeader}
-              src={company.branding.headerImageUrl}
+              src={company.settings.branding.imageUrl}
             />
           </a>
         </div>
@@ -144,16 +144,16 @@ const Post = () => {
           alignItems="center"
         >
           <UserAvatar
-            login={post.author.login}
+            alias={post.author.alias}
             src={post.author.avatarUrl}
             className={classes.avatar}
           />
           <Typography
             component={Link}
-            to={'/user/' + post.author.login}
+            to={'/user/' + post.author.alias}
             className={classes.author}
           >
-            {post.author.login}
+            {post.author.alias}
           </Typography>
           <Typography className={classes.ts}>
             {dayjs(post.timePublished).fromNow()}
@@ -223,7 +223,7 @@ const Post = () => {
     const get = async () => {
       const hub = post.hubs.find((e) => e.type === 'corporative')
       try {
-        hub && setCompany((await getCompany(hub.alias)).data)
+        hub && setCompany((await getCompany(hub.alias)))
       } catch (e) {
         console.warn(`Cannot get company data ${hub.alias}:`, e.message)
         setCompanyHeaderState(false)

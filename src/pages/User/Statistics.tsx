@@ -28,15 +28,15 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const Statistics = () => {
-  const user = useSelector((store) => store.profile.profile.user.data)
+  const user = useSelector((store) => store.profile.profile.card.data)
   const classes = useStyles()
   const items = [
-    { field: 'Карма', number: user.score, colored: true },
+    { field: 'Карма', number: user.scoreStats.score, colored: true },
     { field: 'Рейтинг', number: user.rating },
   ]
 
-  if (user.rating_position !== 0) {
-    items.push({ field: 'Позиция', number: user.rating_position })
+  if (user.ratingPos) {
+    items.push({ field: 'Позиция', number: user.ratingPos })
   }
 
   return (
@@ -48,9 +48,8 @@ export const Statistics = () => {
           </Typography>
           {e.colored ? (
             <GreenRedNumber
-              noPlusSign
-              number={e.number}
               classes={classes.headerNumber}
+              number={e.number}
             />
           ) : (
             <Typography className={classes.headerNumber}>{e.number}</Typography>

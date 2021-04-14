@@ -129,7 +129,7 @@ export const PostItem = ({
   const hiddenCompanies = useSelector((state) => state.settings.hiddenCompanies)
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
   const ts = dayjs(post.timePublished).calendar().toLowerCase()
-  const { login, avatarUrl } = post.author
+  const { alias, avatarUrl } = post.author
   const { titleHtml: unparsedTitle, id, statistics, leadData } = post
   const { readingCount, favoritesCount, commentsCount, score: sc } = statistics
   const { textHtml, imageUrl: leadImage } = leadData
@@ -178,7 +178,7 @@ export const PostItem = ({
 
   // Return troll text for hidden post
   if (
-    hiddenAuthors.some((e) => e === login) ||
+    hiddenAuthors.some((e) => e === alias) ||
     (post.isCorporative && hiddenCompanies.some((e) => e === companyAlias))
   )
     return (
@@ -204,15 +204,15 @@ export const PostItem = ({
   return (
     <Paper elevation={0} className={classes.paper} style={style}>
       <Grid container>
-        <Link to={'/user/' + login} className={classes.avatarContainer}>
+        <Link to={'/user/' + alias} className={classes.avatarContainer}>
           <Grid alignItems="center" container direction="row">
             <UserAvatar
               src={avatarUrl}
-              login={login}
+              alias={alias}
               className={classes.postAvatar}
             />
             <Typography className={classes.postAuthor} variant="caption">
-              {login}
+              {alias}
             </Typography>
             <Typography className={classes.postTs} variant="caption">
               {ts}
