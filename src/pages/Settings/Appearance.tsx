@@ -135,6 +135,17 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 14,
     marginTop: theme.spacing(0.5),
   },
+  dividerHolder: {
+    display: 'inline-flex',
+    flexDirection: 'column',
+    marginLeft: theme.spacing(2),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  divider: {
+    position: 'absolute',
+    height: 96
+  }
 }))
 
 export const usePaletteGridItemStyles = makeStyles((theme) => ({
@@ -492,7 +503,7 @@ const Appearance = () => {
           {THEMES.map((e, i) => (
             <ThemeCard theme={makeCustomThemeFromThemeType(e)} key={i} />
           ))}
-          <Divider orientation="vertical" />
+          <div className={classes.dividerHolder}><Divider className={classes.divider} orientation="vertical" /></div>
           {customThemes.map((e, i) => (
             <ThemeCard theme={e} editable key={i} />
           ))}

@@ -20,10 +20,10 @@ export const About = ({
   const classes = useStyles()
   const whois = useSelector((store) => store.profile.profile.whois.data)
 
-  return (
+  return whois.aboutHtml ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>О себе</Typography>
       <FormattedText>{whois.aboutHtml}</FormattedText>
     </div>
-  )
+  ) : null
 }

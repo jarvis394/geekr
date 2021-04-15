@@ -206,9 +206,9 @@ const AppBarComponent = () => {
             )}
             {shouldShowUser && (
               <IconButton
-                onClick={() => history.push('/user/' + userData.alias)}
+                onClick={() => history.push('/user/' + userData.login)}
               >
-                <Avatar className={classes.avatar} src={userData.avatarUrl} />
+                <Avatar className={classes.avatar} src={userData.avatar} />
               </IconButton>
             )}
           </div>

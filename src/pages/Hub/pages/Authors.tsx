@@ -16,9 +16,14 @@ import UserAvatar from 'src/components/blocks/UserAvatar'
 import { Icon24Flash } from '@vkontakte/icons'
 import formatNumber from 'src/utils/formatNumber'
 import purple from '@material-ui/core/colors/purple'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    backgroundColor: getContrastPaperColor(theme),
+    paddingBottom: 0,
+    marginBottom: theme.spacing(2)
+  },
 }))
 
 const useItemStyles = makeStyles((theme) => ({

@@ -26,6 +26,7 @@ import { useDispatch } from 'react-redux'
 import { Icon28Users3Outline } from '@vkontakte/icons'
 import { Icon24WorkOutline } from '@vkontakte/icons'
 import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
+import isDarkTheme from 'src/utils/isDarkTheme'
 
 const useStyles = makeStyles((theme) => ({
   topBlock: {
@@ -94,8 +95,9 @@ const useInformationStyles = makeStyles((theme) => ({
     background: (isSubscribed) =>
       isSubscribed
         ? theme.palette.success.main
-        : theme.palette.background.default,
-    transition: 'width .2s ease,background-color .2s ease',
+        : theme.palette.background[isDarkTheme(theme) ? 'default' : 'paper'],
+    backgroundSize: '500%',
+    transition: 'width .2s ease, background-color .2s ease',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -170,7 +172,7 @@ const useLinksStyles = makeStyles((theme) => ({
     display: 'flex',
     width: '100%',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   text: {
     fontSize: 16,
@@ -246,13 +248,19 @@ const Links = () => {
   return (
     <div className={classes.root}>
       <ButtonBase className={classes.button}>
-        <LinkToOutsidePage className={classes.link} to={'/hub/' + alias + '/authors/p/1'}>
+        <LinkToOutsidePage
+          className={classes.link}
+          to={'/hub/' + alias + '/authors/p/1'}
+        >
           <Icon28Users3Outline />
           <Typography className={classes.text}>Авторы</Typography>
         </LinkToOutsidePage>
       </ButtonBase>
       <ButtonBase className={classes.button}>
-        <LinkToOutsidePage className={classes.link} to={'/hub/' + alias + '/companies/p/1'}>
+        <LinkToOutsidePage
+          className={classes.link}
+          to={'/hub/' + alias + '/companies/p/1'}
+        >
           <Icon24WorkOutline />
           <Typography className={classes.text}>Компании</Typography>
         </LinkToOutsidePage>

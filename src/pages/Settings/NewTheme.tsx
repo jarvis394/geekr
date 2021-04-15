@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import {
   AppBar,
   Button,
@@ -13,6 +13,7 @@ import {
   FormControlLabel,
   Grid,
   IconButton,
+  InputBase,
   PaletteType,
   Paper,
   Radio,
@@ -25,7 +26,6 @@ import {
 } from '@material-ui/core'
 import { makeStyles, createMuiTheme } from '@material-ui/core/styles'
 import OutsidePage from 'src/components/blocks/OutsidePage'
-import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import { Alert } from '@material-ui/lab'
 import { MIN_WIDTH } from 'src/config/constants'
 import EditRoundedIcon from '@material-ui/icons/EditRounded'
@@ -37,6 +37,7 @@ import { useDispatch } from 'react-redux'
 import { useSelector } from 'src/hooks'
 import { setSettings } from 'src/store/actions/settings'
 import { useSnackbar } from 'notistack'
+import tinycolor from 'tinycolor2'
 
 interface PaletteGridItem {
   text: string
@@ -48,17 +49,19 @@ interface PaletteItem {
   items: PaletteGridItem[]
 }
 
-type CurrentTheme = CustomTheme
-
-interface StyleProps {
-  currentTheme: CurrentTheme
-}
-
 interface ColorPickerState {
   open: boolean
   color?: string
   item?: string
 }
+
+const COLOR_PICKER_PRESET_COLORS = [
+  '#cd9323',
+  '#1a53d8',
+  '#9a2151',
+  '#0d6416',
+  '#8d2808',
+]
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -193,26 +196,51 @@ const usePaletteGridItemStyles = makeStyles((theme) => ({
 }))
 
 const useColorPickerStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: getContrastPaperColor(theme),
-    position: 'relative',
-    [theme.breakpoints.up(MIN_WIDTH)]: {
-      border: '1px solid ' + fade(theme.palette.divider, 0.05),
-      marginTop: theme.spacing(1.5),
-      borderRadius: 8,
-      backgroundColor: theme.palette.background.paper,
+  picker: {
+    width: '100% !important',
+    height: '256px !important',
+    '& .react-colorful': {
+      width: '100%',
     },
   },
-  header: {
-    fontSize: 13,
-    color: theme.palette.text.hint,
-    textTransform: 'uppercase',
+  swatches: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  swatch: {
+    width: 24,
+    height: 24,
+    margin: 4,
+    border: 'none !important',
+    padding: 0,
+    borderRadius: 4,
+    outline: 'none',
+  },
+  input: {
+    color: theme.palette.text.primary,
+    width: '100%',
     fontWeight: 500,
-    lineHeight: 'normal',
-    fontFamily: 'Google Sans',
-    marginBottom: theme.spacing(1.5),
-    paddingBottom: 0,
-    padding: theme.spacing(1.5, 2),
+  },
+  preview: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'start',
+    borderRadius: 4,
+    transition: 'all 250ms 0ms cubic-bezier(0.25, 1, 0.25, 1)',
+    marginBottom: theme.spacing(2),
+  },
+  box: {
+    width: 24,
+    height: 24,
+    flexShrink: 0,
+    marginRight: theme.spacing(2),
+    borderRadius: '50%',
+  },
+  inputHolder: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'baseline',
+    flexGrow: 1,
   },
 }))
 
@@ -277,23 +305,23 @@ const PaletteGridItem = ({
 }
 
 const paletteTextToThemeField = {
-  'primary.light': (t: CurrentTheme, c: string) => {
+  'primary.light': (t: CustomTheme, c: string) => {
     t.palette.primary.light = c
     return t
   },
-  'primary.main': (t: CurrentTheme, c: string) => {
+  'primary.main': (t: CustomTheme, c: string) => {
     t.palette.primary.main = c
     return t
   },
-  'primary.dark': (t: CurrentTheme, c: string) => {
+  'primary.dark': (t: CustomTheme, c: string) => {
     t.palette.primary.dark = c
     return t
   },
-  'background.paper': (t: CurrentTheme, c: string) => {
+  'background.paper': (t: CustomTheme, c: string) => {
     t.palette.background.paper = c
     return t
   },
-  'background.default': (t: CurrentTheme, c: string) => {
+  'background.default': (t: CustomTheme, c: string) => {
     t.palette.background.default = c
     return t
   },
@@ -306,6 +334,34 @@ const paletteTextToThemeField = {
   },
 }
 
+const CustomColorfulPicker = ({ color, presetColors, onChange, ...props }) => {
+  const classes = useColorPickerStyles()
+  const hexString = useMemo(() => {
+    return color.startsWith('#') ? color : tinycolor(color).toHexString()
+  }, [color])
+
+  return (
+    <>
+      <HexColorPicker
+        className={classes.picker}
+        onChange={onChange}
+        color={hexString}
+        {...props}
+      />
+      <div className={classes.swatches}>
+        {presetColors.map((presetColor) => (
+          <button
+            key={presetColor}
+            className={classes.swatch}
+            style={{ background: presetColor }}
+            onClick={() => onChange(presetColor)}
+          />
+        ))}
+      </div>
+    </>
+  )
+}
+
 const ColorPicker = ({
   setState,
   state,
@@ -313,9 +369,10 @@ const ColorPicker = ({
 }: {
   setState: React.Dispatch<React.SetStateAction<ColorPickerState>>
   state: ColorPickerState
-  setCurrentTheme: React.Dispatch<React.SetStateAction<CurrentTheme>>
+  setCurrentTheme: React.Dispatch<React.SetStateAction<CustomTheme>>
 }) => {
   const classes = useColorPickerStyles()
+  const theme = useTheme()
   const [color, setColor] = useState(state.color)
   const handleSubmit = () => {
     setCurrentTheme((theme) =>
@@ -325,28 +382,76 @@ const ColorPicker = ({
       open: false,
     })
   }
+  const handleCancel = () => {
+    setState({
+      open: false,
+      item: state.item,
+      color,
+    })
+  }
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setColor(event.target.value)
+  }
 
   useEffect(() => {
     state.open && setColor(state.color)
   }, [state.color])
 
   return (
-    <BottomDrawer isOpen={state.open} headerText={'Выбор цвета'} disableClose>
-      <HexColorPicker color={color} onChange={setColor} />
-      {color ? color.toString() : 'null'}
-      <Button
-        variant="contained"
-        color="primary"
-        disableElevation
-        onClick={handleSubmit}
-      >
-        Сохранить
-      </Button>
+    <BottomDrawer isOpen={state.open} disableClose headerText={'Выбор цвета'}>
+      <div className={classes.preview}>
+        <div
+          className={classes.box}
+          style={{
+            backgroundColor: color,
+            border:
+              theme.palette.background.paper === color
+                ? '1px solid ' + theme.palette.divider
+                : null,
+          }}
+        />
+        <div className={classes.inputHolder}>
+          <InputBase
+            endAdornment={<EditRoundedIcon color="disabled" />}
+            value={color}
+            onChange={handleInputChange}
+            className={classes.input}
+          />
+        </div>
+      </div>
+      <CustomColorfulPicker
+        presetColors={COLOR_PICKER_PRESET_COLORS}
+        color={color}
+        onChange={setColor}
+      />
+      <Grid container direction="row" spacing={1}>
+        <Grid item xs={6}>
+          <Button
+            fullWidth
+            variant="text"
+            disableElevation
+            onClick={handleCancel}
+          >
+            Отмена
+          </Button>
+        </Grid>
+        <Grid item xs={6}>
+          <Button
+            variant="contained"
+            color="primary"
+            disableElevation
+            fullWidth
+            onClick={handleSubmit}
+          >
+            Сохранить
+          </Button>
+        </Grid>
+      </Grid>
     </BottomDrawer>
   )
 }
 
-const getPaletteItems = (theme: CurrentTheme) => [
+const getPaletteItems = (theme: CustomTheme) => [
   {
     title: 'Акцент',
     items: [
@@ -388,7 +493,7 @@ const getPaletteItems = (theme: CurrentTheme) => [
   },
 ]
 
-const PreviewBox = ({ currentTheme }: { currentTheme: CurrentTheme }) => {
+const PreviewBox = ({ currentTheme }: { currentTheme: CustomTheme }) => {
   const rootClasses = useStyles()
   const classes = usePreviewStyles()
   const buttonVariants: ['contained', 'outlined', 'text'] = [
@@ -487,7 +592,7 @@ const NewTheme = () => {
   const titleInputRef = useRef<HTMLInputElement>()
   const [currentTheme, setCurrentTheme] = useState<CustomTheme>(defaultTheme)
   const classes = useStyles()
-  const customThemes = useSelector(store => store.settings.customThemes)
+  const customThemes = useSelector((store) => store.settings.customThemes)
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
   const paletteItems = React.useMemo(() => getPaletteItems(currentTheme), [
@@ -495,10 +600,16 @@ const NewTheme = () => {
   ])
 
   const handleSaveClick = () => {
-    const isAlreadySavedLocally = customThemes.some(e => e.type === currentTheme.type)
-    dispatch(setSettings({
-      customThemes: customThemes.concat(isAlreadySavedLocally ? [] : [currentTheme])
-    }))
+    const isAlreadySavedLocally = customThemes.some(
+      (e) => e.type === currentTheme.type
+    )
+    dispatch(
+      setSettings({
+        customThemes: customThemes.concat(
+          isAlreadySavedLocally ? [] : [currentTheme]
+        ),
+      })
+    )
     enqueueSnackbar('Тема сохранена', {
       variant: 'success',
       autoHideDuration: 3000,
@@ -507,7 +618,10 @@ const NewTheme = () => {
   const handleTitleEditClick = () => {
     setTitleEditDialogOpen(true)
   }
-  const handleTitleEditDialogClose = () => {
+  const handleTitleEditDialogCancel = () => {
+    setTitleEditDialogOpen(false)
+  }
+  const handleTitleEditDialogSubmit = () => {
     if (titleInputRef.current.value) {
       setCurrentTheme((prev) => ({
         ...prev,
@@ -534,13 +648,15 @@ const NewTheme = () => {
       <IconButton onClick={handleSaveClick}>
         <SaveRoundedIcon />
       </IconButton>
-      <Dialog open={isTitleEditDialogOpen} onClose={handleTitleEditDialogClose}>
+      <Dialog
+        open={isTitleEditDialogOpen}
+        onClose={handleTitleEditDialogSubmit}
+      >
         <DialogTitle>Название темы</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Название новой темы должно быть уникально, оно будет отображаться в
-            настройках рядом с темами по умолчанию. Это название можно будет
-            поменять.
+            Название будет отображаться в настройках рядом с темами по
+            умолчанию. Это название можно будет поменять.
           </DialogContentText>
           <TextField
             inputRef={titleInputRef}
@@ -554,10 +670,10 @@ const NewTheme = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleTitleEditDialogClose} color="primary">
+          <Button onClick={handleTitleEditDialogCancel} color="primary">
             Отмена
           </Button>
-          <Button color="primary" onClick={handleTitleEditDialogClose}>
+          <Button color="primary" onClick={handleTitleEditDialogSubmit}>
             Сохранить
           </Button>
         </DialogActions>
