@@ -21,7 +21,7 @@ const useAnalytics = () => {
     getCLS(reportVitalsToGA)
     getFID(reportVitalsToGA)
     getLCP(reportVitalsToGA)
-  }, [location])
+  }, [location.pathname])
 }
 
 export default useAnalytics
