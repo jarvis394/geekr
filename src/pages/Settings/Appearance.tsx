@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import { useDispatch } from 'react-redux'
@@ -13,7 +13,7 @@ import {
   THEME_NAMES,
   THEME_PRIMARY_COLORS,
   THEME_TEXT_COLORS,
-  THEME_TYPES
+  THEME_TYPES,
 } from 'src/config/constants'
 import {
   Radio,
@@ -30,6 +30,7 @@ import {
   Switch,
   fade,
   Divider,
+  IconButton,
 } from '@material-ui/core'
 import fadedLinearGradient from 'src/utils/fadedLinearGradient'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
@@ -38,6 +39,7 @@ import isMobile from 'is-mobile'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import { useHistory } from 'react-router'
 import { CustomTheme } from 'src/interfaces/UserSettings'
+import { EditRounded } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -144,8 +146,20 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     position: 'absolute',
-    height: 96
-  }
+    height: 96,
+  },
+  editThemeButton: {
+    width: '100%',
+    justifyContent: 'start',
+    padding: theme.spacing(1.5, 2),
+  },
+  editThemeIcon: {
+    marginRight: theme.spacing(2),
+  },
+  editThemeText: {
+    fontWeight: 500,
+    fontFamily: 'Google Sans',
+  },
 }))
 
 export const usePaletteGridItemStyles = makeStyles((theme) => ({
@@ -207,6 +221,7 @@ const useThemeCardStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
     '&:last-child': {
       paddingRight: theme.spacing(2),
     },
@@ -226,6 +241,10 @@ const useThemeCardStyles = makeStyles((theme) => ({
   type: {
     fontSize: 14,
     marginTop: theme.spacing(0.5),
+    maxWidth: 100,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
   radioHolder: {
     height: '50%',
@@ -250,16 +269,13 @@ const makeCustomThemeFromThemeType = (type: PaletteType): CustomTheme => ({
     primary: THEME_PRIMARY_COLORS[type],
     background: {
       paper: BACKGROUND_COLORS_PAPER[type],
-      default: BACKGROUND_COLORS_DEFAULT[type]
+      default: BACKGROUND_COLORS_DEFAULT[type],
     },
     text: THEME_TEXT_COLORS[type],
   },
 })
 
-const ThemeCard = ({ theme, editable = false }: {
-  theme: CustomTheme
-  editable?: boolean
-}) => {
+const ThemeCard = ({ theme }: { theme: CustomTheme }) => {
   const paper = theme.palette.background.paper
   const defaultColor = theme.palette.background.default
   const primaryColor = theme.palette.primary.main
@@ -268,12 +284,24 @@ const ThemeCard = ({ theme, editable = false }: {
   const classes = useThemeCardStyles({ color: textColor })
   const themeType = useSelector((state) => state.settings.themeType)
   const isCurrent = themeType === theme.type
+  const ref = useRef<HTMLDivElement>()
   const changeTheme: React.MouseEventHandler<HTMLButtonElement> = (_event) => {
     if (!isCurrent) dispatch(setSettings({ themeType: theme.type }))
   }
 
+  // Scroll to the element on page first load
+  useEffect(() => {
+    if (ref.current && isCurrent) {
+      ref.current.scrollIntoView({
+        behavior: 'auto',
+        block: 'end',
+        inline: 'center',
+      })
+    }
+  }, [])
+
   return (
-    <div className={classes.root}>
+    <div className={classes.root} ref={ref}>
       <Grid
         component={ButtonBase}
         onClick={changeTheme}
@@ -282,7 +310,6 @@ const ThemeCard = ({ theme, editable = false }: {
         className={`${classes.box} ${isCurrent ? classes.border : ''}`}
         style={{ background: paper }}
       >
-        {/* {editable && } */}
         <Grid
           item
           xs={6}
@@ -484,6 +511,8 @@ const Appearance = () => {
   const dispatch = useDispatch()
   const customThemes = useSelector((store) => store.settings.customThemes)
   const autoChangeTheme = useSelector((store) => store.settings.autoChangeTheme)
+  const themeType = useSelector((state) => state.settings.themeType)
+  const isCustomThemeChosen = customThemes.find((e) => e.type === themeType)
 
   return (
     <OutsidePage headerText={'Внешний вид'} disableShrinking>
@@ -492,7 +521,10 @@ const Appearance = () => {
         <SingleRowGrid />
         <OneByTwoGrid />
       </Grid>
-      <div className={classes.section}>
+      <div
+        className={classes.section}
+        style={{ paddingBottom: isCustomThemeChosen ? 0 : null }}
+      >
         <Typography className={classes.sectionHeader}>Темы</Typography>
         <FormControl
           component="fieldset"
@@ -503,9 +535,11 @@ const Appearance = () => {
           {THEMES.map((e, i) => (
             <ThemeCard theme={makeCustomThemeFromThemeType(e)} key={i} />
           ))}
-          <div className={classes.dividerHolder}><Divider className={classes.divider} orientation="vertical" /></div>
+          <div className={classes.dividerHolder}>
+            <Divider className={classes.divider} orientation="vertical" />
+          </div>
           {customThemes.map((e, i) => (
-            <ThemeCard theme={e} editable key={i} />
+            <ThemeCard theme={e} key={i} />
           ))}
           <div style={{ display: 'inline-flex' }}>
             <ButtonBase
@@ -523,6 +557,21 @@ const Appearance = () => {
             </ButtonBase>
           </div>
         </FormControl>
+        {isCustomThemeChosen && (
+          <ButtonBase
+            className={classes.editThemeButton}
+            onClick={() =>
+              history.push('/settings/appearance/edit-theme/' + themeType, {
+                from: history.location.pathname,
+              })
+            }
+          >
+            <EditRounded className={classes.editThemeIcon} />
+            <Typography className={classes.editThemeText}>
+              Изменить тему
+            </Typography>
+          </ButtonBase>
+        )}
       </div>
       <div className={classes.section}>
         <Typography

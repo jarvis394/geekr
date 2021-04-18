@@ -89,6 +89,14 @@ export const routes: Route[] = [
     appBarColor: (theme) => getContrastPaperColor(theme),
   },
   {
+    path: '/settings/appearance/edit-theme/:themeType',
+    component: <SettingsNewTheme isEditMode />,
+    title: 'Изменение темы',
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => getContrastPaperColor(theme),
+  },
+  {
     path: '/settings/appearance',
     component: <SettingsAppearance />,
     title: 'Внешний вид',

@@ -17,14 +17,14 @@ export default (
   switch (type) {
     case SET_SETTINGS: {
       const newSettings = userSettings.set(payload)
-      const hasThemeChanged = state.themeType !== newSettings.themeType
+      const shouldUpdateTheme = !!payload.themeType
       state = {
         ...newSettings,
-        theme: hasThemeChanged
+        theme: shouldUpdateTheme
           ? generateTheme(newSettings.themeType)
           : state.theme,
       }
-      return { theme: state.theme, ...userSettings.set(payload) }
+      return state
     }
 
     case GET_SETTINGS:

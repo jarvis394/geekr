@@ -9,6 +9,7 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
+  Fade,
   fade,
   FormControlLabel,
   Grid,
@@ -29,6 +30,7 @@ import OutsidePage from 'src/components/blocks/OutsidePage'
 import { Alert } from '@material-ui/lab'
 import { MIN_WIDTH } from 'src/config/constants'
 import EditRoundedIcon from '@material-ui/icons/EditRounded'
+import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded'
 import BottomDrawer from 'src/components/blocks/BottomDrawer'
 import { HexColorPicker } from 'react-colorful'
 import { CustomTheme } from 'src/interfaces/UserSettings'
@@ -38,6 +40,25 @@ import { useSelector } from 'src/hooks'
 import { setSettings } from 'src/store/actions/settings'
 import { useSnackbar } from 'notistack'
 import tinycolor from 'tinycolor2'
+import {
+  deepPurple,
+  pink,
+  red,
+  purple,
+  indigo,
+  blue,
+  lightBlue,
+  cyan,
+  teal,
+  green,
+  lightGreen,
+  lime,
+  yellow,
+  amber,
+  orange,
+  deepOrange,
+} from '@material-ui/core/colors'
+import { Redirect, useHistory, useParams } from 'react-router'
 
 interface PaletteGridItem {
   text: string
@@ -56,11 +77,22 @@ interface ColorPickerState {
 }
 
 const COLOR_PICKER_PRESET_COLORS = [
-  '#cd9323',
-  '#1a53d8',
-  '#9a2151',
-  '#0d6416',
-  '#8d2808',
+  red[500],
+  pink[500],
+  purple[500],
+  deepPurple[500],
+  indigo[500],
+  blue[500],
+  lightBlue[500],
+  cyan[500],
+  teal[500],
+  green[500],
+  lightGreen[500],
+  lime[500],
+  yellow[500],
+  amber[500],
+  orange[500],
+  deepOrange[500],
 ]
 
 const useStyles = makeStyles((theme) => ({
@@ -95,6 +127,14 @@ const useStyles = makeStyles((theme) => ({
   },
   themeNameInput: {
     marginTop: theme.spacing(3),
+  },
+  deleteIcon: {
+    transition: 'all 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important',
+    marginRight: ({
+      isAlreadySavedLocally = false,
+    }: {
+      isAlreadySavedLocally?: boolean
+    }) => (isAlreadySavedLocally ? 0 : -48),
   },
 }))
 
@@ -206,15 +246,19 @@ const useColorPickerStyles = makeStyles((theme) => ({
   swatches: {
     display: 'flex',
     flexWrap: 'wrap',
+    marginTop: theme.spacing(1.5),
+    marginBottom: theme.spacing(1.5),
   },
   swatch: {
-    width: 24,
-    height: 24,
+    width: 32,
+    height: 32,
     margin: 4,
     border: 'none !important',
     padding: 0,
     borderRadius: 4,
     outline: 'none',
+    cursor: 'pointer',
+    '-webkit-tap-highlight-color': fade(theme.palette.divider, 0.3),
   },
   input: {
     color: theme.palette.text.primary,
@@ -494,7 +538,7 @@ const getPaletteItems = (theme: CustomTheme) => [
 ]
 
 const PreviewBox = ({ currentTheme }: { currentTheme: CustomTheme }) => {
-  const rootClasses = useStyles()
+  const rootClasses = useStyles({})
   const classes = usePreviewStyles()
   const buttonVariants: ['contained', 'outlined', 'text'] = [
     'contained',
@@ -559,8 +603,18 @@ const PreviewBox = ({ currentTheme }: { currentTheme: CustomTheme }) => {
   )
 }
 
-const NewTheme = () => {
+const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
   const theme = useTheme()
+  const history = useHistory()
+  const customThemes = useSelector((store) => store.settings.customThemes)
+  const { themeType: paramsThemeType } = useParams<{ themeType: string }>()
+  const editTheme =
+    isEditMode && customThemes.find((e) => e.type === paramsThemeType)
+
+  if (isEditMode && !editTheme) {
+    return <Redirect to="/settings/appearance" />
+  }
+
   const [colorPickerState, setColorPickerState] = useState<ColorPickerState>({
     open: false,
     color: null,
@@ -588,39 +642,82 @@ const NewTheme = () => {
       },
     },
   }
-  const [isTitleEditDialogOpen, setTitleEditDialogOpen] = useState(false)
   const titleInputRef = useRef<HTMLInputElement>()
-  const [currentTheme, setCurrentTheme] = useState<CustomTheme>(defaultTheme)
-  const classes = useStyles()
-  const customThemes = useSelector((store) => store.settings.customThemes)
+  const [isTitleEditDialogOpen, setTitleEditDialogOpen] = useState(false)
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [isSaveDialogOpen, setSaveDialogOpen] = useState(false)
+  const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false)
+  const [currentTheme, setCurrentThemeUnwrapped] = useState<CustomTheme>(
+    isEditMode ? editTheme : defaultTheme
+  )
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
   const paletteItems = React.useMemo(() => getPaletteItems(currentTheme), [
     JSON.stringify(currentTheme),
   ])
+  const isAlreadySavedLocally = React.useMemo(
+    () => customThemes.some((e) => e.type === currentTheme.type),
+    [customThemes]
+  )
+  const classes = useStyles({ isAlreadySavedLocally })
+  const setCurrentTheme: React.Dispatch<React.SetStateAction<CustomTheme>> = (
+    ...props
+  ) => {
+    !hasBeenEdited && setHasBeenEdited(true)
+    setCurrentThemeUnwrapped(...props)
+  }
 
   const handleSaveClick = () => {
-    const isAlreadySavedLocally = customThemes.some(
-      (e) => e.type === currentTheme.type
-    )
+    const newCustomThemes = [...customThemes]
+    if (isAlreadySavedLocally) {
+      const themeIndex = newCustomThemes.findIndex(
+        (e) => e.type === currentTheme.type
+      )
+      newCustomThemes.splice(themeIndex, 1, currentTheme)
+    } else {
+      newCustomThemes.push(currentTheme)
+    }
+
     dispatch(
       setSettings({
-        customThemes: customThemes.concat(
-          isAlreadySavedLocally ? [] : [currentTheme]
-        ),
+        customThemes: newCustomThemes,
       })
     )
+    setHasBeenEdited(false)
     enqueueSnackbar('Тема сохранена', {
       variant: 'success',
       autoHideDuration: 3000,
     })
   }
-  const handleTitleEditClick = () => {
-    setTitleEditDialogOpen(true)
+  const handleSaveDialogCancel = () => setSaveDialogOpen(false)
+  const handleSaveDialogSubmit = () => {
+    handleSaveClick()
+    setSaveDialogOpen(false)
+    history.push('/settings/appearance')
   }
-  const handleTitleEditDialogCancel = () => {
-    setTitleEditDialogOpen(false)
+  const handleDeleteClick = () => setDeleteDialogOpen(true)
+  const handleDeleteDialogCancel = () => setDeleteDialogOpen(false)
+  const handleDeleteDialogSubmit = () => {
+    const newCustomThemes = [...customThemes]
+    const themeIndex = newCustomThemes.findIndex(
+      (e) => e.type === currentTheme.type
+    )
+    newCustomThemes.splice(themeIndex, 1)
+    dispatch(
+      setSettings({
+        customThemes: newCustomThemes,
+        themeType: 'light',
+      })
+    )
+    enqueueSnackbar('Тема удалена', {
+      variant: 'success',
+      autoHideDuration: 3000,
+    })
+    history.push('/settings/appearance')
+    setDeleteDialogOpen(false)
   }
+  const handleTitleEditClick = () => setTitleEditDialogOpen(true)
+  const handleTitleEditDialogCancel = () => setTitleEditDialogOpen(false)
   const handleTitleEditDialogSubmit = () => {
     if (titleInputRef.current.value) {
       setCurrentTheme((prev) => ({
@@ -645,12 +742,19 @@ const NewTheme = () => {
       <IconButton onClick={handleTitleEditClick}>
         <EditRoundedIcon />
       </IconButton>
-      <IconButton onClick={handleSaveClick}>
+      <IconButton onClick={handleSaveClick} disabled={!hasBeenEdited}>
         <SaveRoundedIcon />
       </IconButton>
+      <Fade in={isAlreadySavedLocally}>
+        <IconButton onClick={handleDeleteClick} className={classes.deleteIcon}>
+          <DeleteRoundedIcon />
+        </IconButton>
+      </Fade>
+
+      {/** Title edit Dialog */}
       <Dialog
         open={isTitleEditDialogOpen}
-        onClose={handleTitleEditDialogSubmit}
+        onClose={handleTitleEditDialogCancel}
       >
         <DialogTitle>Название темы</DialogTitle>
         <DialogContent>
@@ -678,8 +782,51 @@ const NewTheme = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/** Delete theme Dialog */}
+      <Dialog open={isDeleteDialogOpen} onClose={handleDeleteDialogCancel}>
+        <DialogTitle>Удалить тему</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Созданную тему будет невозможно восстановить. Вы точно хотите её
+            удалить?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteDialogCancel} color="primary">
+            Отмена
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            disableElevation
+            onClick={handleDeleteDialogSubmit}
+          >
+            Удалить
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
+
+  const onBackClick = (backLinkFunction: () => void) => {
+    // We need to update current theme if it was edited, so colors will be updated
+    if (hasBeenEdited && isEditMode) {
+      dispatch(
+        setSettings({
+          themeType: currentTheme.type,
+        })
+      )
+    }
+
+    // If the theme was edited, but user wants to exit, show saving warning dialog
+    if (hasBeenEdited) {
+      setSaveDialogOpen(true)
+    } else {
+      // Otherwise, exit the page.
+      backLinkFunction()
+    }
+  }
 
   return (
     <OutsidePage
@@ -687,7 +834,31 @@ const NewTheme = () => {
       disableShrinking
       headerText={currentTheme.name}
       toolbarIcons={toolbarIcons}
+      onBackClick={onBackClick}
     >
+      {/** Save theme Dialog */}
+      <Dialog open={isSaveDialogOpen} onClose={handleSaveDialogCancel}>
+        <DialogTitle>Cохранение</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Остались несохранённые изменения, сохранить?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSaveDialogCancel} color="primary">
+            Отмена
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            disableElevation
+            onClick={handleSaveDialogSubmit}
+          >
+            Сохранить
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Alert severity="info" className={classes.infoAlert}>
         Чтобы поменять цвет в теме, нажмите на его поле, а затем выберите нужный
         цвет.

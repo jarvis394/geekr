@@ -165,7 +165,7 @@ interface Props {
   disableShrinking: boolean
   backgroundColor: string
   toolbarIcons: JSX.Element
-  onBackClick: () => unknown
+  onBackClick: (backLinkFunction: () => void) => unknown
 }
 
 const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
@@ -189,10 +189,13 @@ const UnshrinkedContent = ({ headerText, onBackClick, isShrinked }) => {
   const text = (
     <Typography className={classes.headerTitle}>{headerText}</Typography>
   )
+  const backLinkFunction = () => {
+    history.push(backLink)
+  }
 
   const onClick = () => {
-    onBackClick && onBackClick()
-    history.push(backLink)
+    if (onBackClick) onBackClick(backLinkFunction)
+    else history.push(backLink)
   }
 
   // Remove fade effect on a title if it was set by default
