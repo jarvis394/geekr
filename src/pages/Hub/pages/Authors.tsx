@@ -144,4 +144,4 @@ const Authors = () => {
   )
 }
 
-export default Authors
+export default React.memo(Authors)

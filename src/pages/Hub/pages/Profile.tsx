@@ -361,4 +361,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default React.memo(Profile)

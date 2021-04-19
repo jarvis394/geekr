@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 const useAppBarStyles = makeStyles((theme) => ({
   toolbarIcons: {
     marginRight: theme.spacing(2),
-    display: 'flex'
+    display: 'flex',
   },
   header: {
     backgroundColor: ({
@@ -76,8 +76,8 @@ const useAppBarStyles = makeStyles((theme) => ({
       transform: 'translateZ(0)',
     },
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      backgroundColor: theme.palette.background.paper + ' !important'
-    }
+      backgroundColor: theme.palette.background.paper + ' !important',
+    },
   },
   toolbar: {
     margin: 'auto',
@@ -114,7 +114,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     alignItems: 'center',
     transform: 'translateZ(0)',
     height: APP_BAR_HEIGHT + 1,
-    flexGrow: 1
+    flexGrow: 1,
   },
   dividerHolder: {
     display: 'flex',
@@ -168,7 +168,10 @@ interface Props {
   onBackClick: (backLinkFunction: () => void) => unknown
 }
 
-const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
+const ShrinkedContent = ({
+  isShrinked,
+  shrinkedHeaderText,
+}) => {
   const classes = useAppBarStyles({})
   return (
     <Fade in={isShrinked} unmountOnExit mountOnEnter>
@@ -178,9 +181,14 @@ const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
     </Fade>
   )
 }
-const UnshrinkedContent = ({ headerText, onBackClick, isShrinked }) => {
+
+const UnshrinkedContent = ({
+  headerText,
+  onBackClick,
+  isShrinked,
+  headerTextUpdated,
+}) => {
   const classes = useAppBarStyles({})
-  const [headerTextUpdated, setHeaderTextUpdated] = useState(false)
   const history = useHistory()
   const location = useLocation<OutsidePageLocationState>()
   const defaultBackLink = getCachedMode().to + '/p/1'
@@ -198,16 +206,9 @@ const UnshrinkedContent = ({ headerText, onBackClick, isShrinked }) => {
     else history.push(backLink)
   }
 
-  // Remove fade effect on a title if it was set by default
-  // If the title is being fetched (ex. Post),
-  // we need to change the state and render Fade component
-  useEffect(() => {
-    !headerTextUpdated && setHeaderTextUpdated(!headerText)
-  }, [headerText])
-
   return (
     <Fade in={!isShrinked} appear={false}>
-      <div className={classes.content}>
+      <div className={classes.content} style={{ overflow: 'hidden' }}>
         <IconButton
           disableRipple={isShrinked}
           className={classes.headerIcon}
@@ -225,9 +226,7 @@ const ToolbarIconsWrapper = ({ isShrinked, children }) => {
   const classes = useAppBarStyles({})
   return (
     <Fade in={!isShrinked}>
-      <div className={classes.toolbarIcons}>
-        {children}
-      </div>
+      <div className={classes.toolbarIcons}>{children}</div>
     </Fade>
   )
 }
@@ -240,15 +239,16 @@ const NavBarUnmemoized = ({
   backgroundColor,
   onBackClick,
   disableShrinking,
-  toolbarIcons
+  toolbarIcons,
 }: Partial<Props>) => {
   const isShrinkedTrigger = useScrollTrigger({
     threshold: 48,
     triggerValue: false,
   })
+  const [headerTextUpdated, setHeaderTextUpdated] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
   const isExtended = useMediaExtendedQuery()
-  const isShrinked = (disableShrinking || isExtended) ? false : isShrinkedTrigger
+  const isShrinked = disableShrinking || isExtended ? false : isShrinkedTrigger
   const classes = useAppBarStyles({
     isShrinked,
     scrollProgress,
@@ -276,6 +276,13 @@ const NavBarUnmemoized = ({
     } else return () => null
   }, [hidePositionBar, disableShrinking])
 
+  // Remove fade effect on a title if it was set by default
+  // If the title is being fetched (ex. Post),
+  // we need to change the state and render Fade component
+  useEffect(() => {
+    !headerTextUpdated && setHeaderTextUpdated(!headerText)
+  }, [headerText])
+
   return (
     <AppBar className={classes.header} elevation={0}>
       <Toolbar className={classes.toolbar}>
@@ -285,6 +292,7 @@ const NavBarUnmemoized = ({
               isShrinked={isShrinked}
               headerText={headerText}
               onBackClick={onBackClick}
+              headerTextUpdated={headerTextUpdated}
             />
             <ShrinkedContent
               isShrinked={isShrinked}
@@ -318,4 +326,4 @@ const OutsidePage = ({ children, ...props }: Partial<Props>) => {
   )
 }
 
-export default OutsidePage
+export default React.memo(OutsidePage)

@@ -4,4 +4,4 @@ const FavComments = () => {
   return <div></div>
 }
 
-export default FavComments
+export default React.memo(FavComments)

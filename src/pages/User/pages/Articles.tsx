@@ -90,4 +90,4 @@ const UserArticles = () => {
   )
 }
 
-export default UserArticles
+export default React.memo(UserArticles)

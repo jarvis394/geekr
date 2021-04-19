@@ -142,4 +142,4 @@ const Hubs = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   ) : null
 }
 
-export default Hubs
+export default React.memo(Hubs)

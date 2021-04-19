@@ -89,4 +89,4 @@ const ProfileLinks = () => {
   )
 }
 
-export default ProfileLinks
+export default React.memo(ProfileLinks)

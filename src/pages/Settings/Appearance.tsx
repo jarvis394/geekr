@@ -611,4 +611,4 @@ const Appearance = () => {
   )
 }
 
-export default Appearance
+export default React.memo(Appearance)

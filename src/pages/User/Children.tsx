@@ -153,4 +153,4 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   ) : null
 }
 
-export default Children
+export default React.memo(Children)

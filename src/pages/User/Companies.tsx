@@ -94,4 +94,4 @@ const Companies = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   ) : null
 }
 
-export default Companies
+export default React.memo(Companies)

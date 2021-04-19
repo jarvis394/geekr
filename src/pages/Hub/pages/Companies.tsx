@@ -9,4 +9,4 @@ const Companies = () => {
   )
 }
 
-export default Companies
+export default React.memo(Companies)

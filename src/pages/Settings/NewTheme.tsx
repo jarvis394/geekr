@@ -904,4 +904,4 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
   )
 }
 
-export default NewTheme
+export default React.memo(NewTheme)

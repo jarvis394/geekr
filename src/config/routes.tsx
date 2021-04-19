@@ -2,6 +2,7 @@ import React, { MemoExoticComponent } from 'react'
 import Post from 'src/pages/Post'
 import Settings from 'src/pages/Settings/index'
 import SettingsAppearance from 'src/pages/Settings/Appearance'
+import SettingsBlacklist from 'src/pages/Settings/Blacklist'
 import SettingsNewTheme from 'src/pages/Settings/NewTheme'
 import Search from 'src/pages/Search'
 import News from 'src/pages/News'
@@ -100,6 +101,14 @@ export const routes: Route[] = [
     path: '/settings/appearance',
     component: <SettingsAppearance />,
     title: 'Внешний вид',
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => getContrastPaperColor(theme),
+  },
+  {
+    path: '/settings/blacklist',
+    component: <SettingsBlacklist />,
+    title: 'Чёрный список',
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),

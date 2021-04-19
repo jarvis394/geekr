@@ -40,4 +40,4 @@ const Hub = () => {
   )
 }
 
-export default Hub
+export default React.memo(Hub)
