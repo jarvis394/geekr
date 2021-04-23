@@ -39,14 +39,23 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: theme.shape.borderRadius,
       wordBreak: 'break-word',
     },
-    '& div.scrollable-table': {
+    '& div.table, div.scrollable-table': {
       overflow: 'auto',
+      marginTop: theme.spacing(2),
+      wordBreak: 'normal'
     },
     '& table': {
       width: '100%',
       borderCollapse: 'collapse',
     },
     '& table td': {
+      padding: '6px 12px 9px',
+      border: '1px solid ' + theme.palette.text.hint,
+      verticalAlign: 'top',
+      lineHeight: '1.5',
+      minWidth: 100,
+    },
+    '& table th': {
       padding: '6px 12px 9px',
       border: '1px solid ' + theme.palette.text.hint,
       verticalAlign: 'top',
