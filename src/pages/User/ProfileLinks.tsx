@@ -72,7 +72,12 @@ const ProfileLinks = () => {
         <Button
           key={i}
           classes={{ root: classes.button, label: classes.buttonLabel }}
-          onClick={() => history.push(to, { from: location.pathname })}
+          onClick={() =>
+            history.push(to, {
+              from: location.pathname,
+              scroll: window.pageYOffset,
+            })
+          }
         >
           <Badge
             classes={{ badge: classes.badge }}

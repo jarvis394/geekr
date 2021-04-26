@@ -10,12 +10,13 @@ const LinkToOutsidePage = ({
 
   return (
     <Link
-      to={{
+      to={() => ({
         pathname: to,
         state: {
           from: location.pathname + location.search,
+          scroll: window.pageYOffset
         },
-      }}
+      })}
       ref={ref}
       {...props}
     >

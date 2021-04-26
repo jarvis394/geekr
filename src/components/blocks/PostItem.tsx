@@ -103,7 +103,7 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(2.5),
     height: theme.spacing(2.5),
     marginRight: theme.spacing(1),
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: 4,
   },
   postBottomRow: {
     display: 'flex',
@@ -227,6 +227,7 @@ export const PostItem = ({
       action: () => {
         history.push(postLink + '/comments', {
           from: currentLocation,
+          scroll: window.pageYOffset
         })
       },
     },

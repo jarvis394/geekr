@@ -4,6 +4,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
+import { MIN_WIDTH } from 'src/config/constants'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,6 +12,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 0,
     overflow: 'auto',
     paddingBottom: theme.spacing(2),
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      background: theme.palette.background.paper,
+    },
   },
   hubs: {
     background: theme.palette.background.default,

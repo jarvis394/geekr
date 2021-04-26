@@ -260,6 +260,7 @@ const BottomBar = ({ post }: { post: Post }) => {
         onClick={() =>
           history.push('/post/' + id + '/comments', {
             from: location.pathname,
+            scroll: window.pageYOffset
           })
         }
       />

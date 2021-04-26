@@ -192,18 +192,25 @@ const UnshrinkedContent = ({
   const history = useHistory()
   const location = useLocation<OutsidePageLocationState>()
   const defaultBackLink = getCachedMode().to + '/p/1'
-  const backLinkData = location?.state?.from
-  const backLink = backLinkData || defaultBackLink
+  const backLink = location?.state?.from
+  const scroll = location?.state?.scroll
   const text = (
     <Typography className={classes.headerTitle}>{headerText}</Typography>
   )
   const backLinkFunction = () => {
-    history.push(backLink)
+    if (backLink) {
+      history.push(backLink)
+      scroll && setTimeout(() => {
+        window.scrollTo(0, scroll)
+      }, 0)
+    } else {
+      history.push(defaultBackLink)
+    }
   }
 
   const onClick = () => {
     if (onBackClick) onBackClick(backLinkFunction)
-    else history.push(backLink)
+    else backLinkFunction()
   }
 
   return (

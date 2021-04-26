@@ -133,6 +133,7 @@ const DensePostItem = ({
       action: () => {
         history.push(postLink + '/comments', {
           from: currentLocation,
+          scroll: window.pageYOffset
         })
       },
     },

@@ -56,7 +56,7 @@ const generateTheme = (themeType?: PaletteType | string): ThemeOptions => {
       background: makeBackgroundColors(themeType || type),
       text: makeTextColors(themeType || type),
     },
-    shape: { borderRadius: 4 },
+    shape: { borderRadius: 8 },
     overrides: {
       MuiTab: {
         wrapper: {

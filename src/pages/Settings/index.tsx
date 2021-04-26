@@ -13,6 +13,7 @@ import { Icon28ArticleOutline } from '@vkontakte/icons'
 import { Icon28GlobeOutline } from '@vkontakte/icons'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import { MIN_WIDTH } from 'src/config/constants'
+import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 
 const items = [
   {
@@ -52,8 +53,8 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(1.5),
       border: '1px solid ' + fade(theme.palette.divider, 0.05),
       borderRadius: 8,
-      backgroundColor: theme.palette.background.paper
-    }
+      backgroundColor: theme.palette.background.paper,
+    },
   },
   link: {
     display: 'flex',
@@ -63,10 +64,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     '-webkit-tap-highlight-color': 'transparent !important',
     '&:hover': {
-      backgroundColor: fade(theme.palette.common[isDarkTheme(theme) ? 'white' : 'black'], 0.05),
+      backgroundColor: fade(
+        theme.palette.common[isDarkTheme(theme) ? 'white' : 'black'],
+        0.05
+      ),
     },
     '&:active': {
-      background: fade(theme.palette.common[isDarkTheme(theme) ? 'white' : 'black'], 0.2),
+      background: fade(
+        theme.palette.common[isDarkTheme(theme) ? 'white' : 'black'],
+        0.2
+      ),
     },
   },
   linkText: {
@@ -89,10 +96,11 @@ const Settings = () => {
     <OutsidePage headerText={'Настройки'} disableShrinking>
       <div className={classes.root}>
         {items.map((e, i) => (
-          <Link to={{
-            state: { from: '/settings' },
-            pathname: '/settings' + e.to,
-          }} key={i} className={classes.link}>
+          <LinkToOutsidePage
+            to={'/settings' + e.to}
+            key={i}
+            className={classes.link}
+          >
             <e.icon className={classes.linkIcon} width={28} height={28} />
             <Typography className={classes.linkText}>{e.text}</Typography>
             <Icon24ChevronRight
@@ -100,7 +108,7 @@ const Settings = () => {
               width={18}
               height={18}
             />
-          </Link>
+          </LinkToOutsidePage>
         ))}
       </div>
     </OutsidePage>

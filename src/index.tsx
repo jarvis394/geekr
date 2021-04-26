@@ -11,12 +11,15 @@ import calendarPlugin from 'dayjs/plugin/calendar'
 import updateLocalePlugin from 'dayjs/plugin/updateLocale'
 import 'react-lazy-load-image-component/src/effects/opacity.css'
 import 'dayjs/locale/ru'
-import ReactGA from 'react-ga'
-import { GA_ID_STRING } from 'src/config/constants'
 import { BrowserRouter as Router } from 'react-router-dom'
 import 'react-photoswipe/dist/photoswipe.css'
+import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
 
-ReactGA.initialize(GA_ID_STRING)
+const instance = createInstance({
+  urlBase: 'https://matomo.jarvis394-backend.ml/',
+  siteId: 1,
+  linkTracking: false,
+})
 
 dayjs.locale('ru')
 dayjs.extend(relativeTimePlugin)
@@ -33,11 +36,13 @@ dayjs.updateLocale('ru', {
 })
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
-  </Provider>,
+  <MatomoProvider value={instance}>
+    <Provider store={store}>
+      <Router>
+        <App />
+      </Router>
+    </Provider>
+  </MatomoProvider>,
   document.getElementById('root')
 )
 serviceWorker.register(swConfig)

@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: (props: StyleProps) =>
       makeAppBarBackgroundColor({ ...props, theme }),
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      backgroundColor: theme.palette.background.paper + ' !important'
+      backgroundColor: theme.palette.background.paper + ' !important',
     },
     color: theme.palette.text.primary,
     position: 'fixed',
@@ -105,16 +105,16 @@ const useStyles = makeStyles((theme) => ({
     width: ({ isTransformed }: StyleProps) =>
       `calc(100% - ${isTransformed ? 0 : theme.spacing(2) * 2}px)`,
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      display: 'none'
-    }
+      display: 'none',
+    },
   },
   dividerWrapperFullWidth: {
     width: '100%',
     display: 'none',
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      display: 'flex'
-    }
-  }
+      display: 'flex',
+    },
+  },
 }))
 
 const dividerStyle = { width: '100%' }
@@ -194,19 +194,28 @@ const AppBarComponent = () => {
             </div>
             <IconButton
               onClick={() =>
-                history.push('/settings', { from: location.pathname + location.search })
+                history.push('/settings', {
+                  from: location.pathname + location.search,
+                  scroll: window.pageYOffset,
+                })
               }
             >
               <Icon28SettingsOutline width={24} height={24} />
             </IconButton>
             {!shouldShowUser && (
-              <IconButton onClick={() => (token ? '' : history.push('/auth'))}>
+              <IconButton onClick={() => (token ? '' : history.push('/auth', {
+                from: location.pathname + location.search,
+                scroll: window.pageYOffset,
+              }))}>
                 <Icon24UserOutline width={24} height={24} />
               </IconButton>
             )}
             {shouldShowUser && (
               <IconButton
-                onClick={() => history.push('/user/' + userData.login)}
+                onClick={() => history.push('/user/' + userData.login, {
+                  from: location.pathname + location.search,
+                  scroll: window.pageYOffset,
+                })}
               >
                 <Avatar className={classes.avatar} src={userData.avatar} />
               </IconButton>
