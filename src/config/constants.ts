@@ -6,8 +6,12 @@ import { blue } from '@material-ui/core/colors'
 
 const _theme = createMuiTheme()
 
+export const APP_VERSION = 'v2'
+
 export const API_URL = 'https://m.habr.com/kek/'
 export const API_TOKEN_URL = 'https://jarvis394-backend.ml/habra/'
+export const MATOMO_SERVER_URL = 'https://matomo.jarvis394-backend.ml/'
+export const MATOMO_SITE_ID = 2
 
 export const GA_ID_STRING = 'UA-188053191-1'
 

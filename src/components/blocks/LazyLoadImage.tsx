@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import ProgressiveImage from 'react-lazy-progressive-image'
-import { CircularProgress, Fade, makeStyles, Theme } from '@material-ui/core'
+import { CircularProgress, Fade, makeStyles, Portal, Theme } from '@material-ui/core'
 import { PhotoSwipe } from 'react-photoswipe'
 import { POST_ITEM_VISIBILITY_THRESHOLD } from 'src/config/constants'
 
@@ -56,7 +56,7 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
 
     if (loading && (!src || src === '/img/image-loader.svg'))
       return (
-        <div
+        <span
           className={classes.imagePlaceholder + ' ' + className}
           style={style}
         >
@@ -71,11 +71,11 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
               justifyContent: 'center',
             }}
           >
-            <div>
+            <span>
               <CircularProgress size="1.25rem" thickness={5} />
-            </div>
+            </span>
           </Fade>
-        </div>
+        </span>
       )
 
     return (
@@ -101,13 +101,20 @@ const LazyLoadImage = (props) => {
   const [isOpen, setOpen] = useState(false)
   const imageRef = useRef<HTMLImageElement>(null)
   const { style, alt, className } = props
-  const items: PhotoSwipe.Item[] = [
-    {
-      src: props.src,
-      w: style && style?.width !== 'auto' ? style.width : 1200,
-      h: style && style?.height !== 'auto' ? style.height : 900,
-    },
-  ]
+  // Set image dimensions after it is done loading
+  // PhotoSwipe requires image dimensions to be set before it is opened,
+  // so we set them as soon as the image (in FormattedText, probably) is loaded.
+  // User cannot open PhotoSwipe before image loads.
+  const items: PhotoSwipe.Item[] = React.useMemo(
+    () => [
+      {
+        src: props.src,
+        w: imageRef?.current?.naturalWidth || 1200,
+        h: imageRef?.current?.naturalHeight || 900,
+      },
+    ],
+    []
+  )
   const pswpOptions: PhotoSwipe.UIFramework = {
     showHideOpacity: true,
     bgOpacity: 0.8,
@@ -118,21 +125,9 @@ const LazyLoadImage = (props) => {
     arrowEl: false,
     captionEl: false,
     tapToClose: true,
+    pinchToClose: false,
+    maxSpreadZoom: 4,
   }
-
-  // Set image dimensions after it is done loading
-  // PhotoSwipe requires image dimensions to be set before it is opened,
-  // so we set them as soon as the image (in FormattedText, probably) is loaded.
-  // User cannot open PhotoSwipe before image loads.
-  useEffect(() => {
-    if (imageRef.current !== null) {
-      const imageWidth = imageRef.current.naturalWidth
-      const imageHeight = imageRef.current.naturalHeight
-      items[0].w = imageWidth
-      items[0].h = imageHeight
-    }
-    // needs isOpen to update on every close, somewhy resets after close-open
-  }, [imageRef.current, isOpen])
 
   return (
     <>
@@ -161,12 +156,14 @@ const LazyLoadImage = (props) => {
         )}
       </ProgressiveImage>
       {isOpen && imageRef.current && (
-        <PhotoSwipe
-          options={pswpOptions}
-          isOpen={isOpen}
-          items={items}
-          onClose={() => setOpen(false)}
-        />
+        <Portal container={document.body}>
+          <PhotoSwipe
+            options={pswpOptions}
+            isOpen={isOpen}
+            items={items}
+            onClose={() => setOpen(false)}
+          />
+        </Portal>
       )}
     </>
   )

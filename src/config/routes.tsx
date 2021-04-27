@@ -34,6 +34,7 @@ export interface Route {
   shouldShowAppBar?: boolean
   appBarColor?: (theme: Theme) => string
   shouldAppBarChangeColors?: boolean
+  alias: string
 }
 
 export const routes: Route[] = [
@@ -44,6 +45,7 @@ export const routes: Route[] = [
     shouldShowAppBar: true,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'services'
   },
   {
     path: '/auth',
@@ -52,6 +54,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'auth'
   },
   {
     path: '/post/:id/comments',
@@ -59,6 +62,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'comments'
   },
   {
     path: '/company/:alias/blog/:id/comments',
@@ -66,6 +70,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'comments'
   },
   {
     path: '/company/:alias/blog/:id',
@@ -73,6 +78,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'post'
   },
   {
     path: '/post/:id',
@@ -80,6 +86,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'post'
   },
   {
     path: '/settings/appearance/new-theme',
@@ -88,6 +95,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
+    alias: 'new-theme'
   },
   {
     path: '/settings/appearance/edit-theme/:themeType',
@@ -96,6 +104,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
+    alias: 'edit-theme'
   },
   {
     path: '/settings/appearance',
@@ -104,6 +113,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
+    alias: 'appearance'
   },
   {
     path: '/settings/blacklist',
@@ -112,6 +122,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
+    alias: 'blacklist'
   },
   {
     path: '/settings',
@@ -120,6 +131,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
+    alias: 'settings'
   },
   {
     path: '/habra-about',
@@ -128,6 +140,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: true,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'habra-about'
   },
   {
     path: ['/search', '/search/p/:page'],
@@ -136,6 +149,7 @@ export const routes: Route[] = [
     shouldShowAppBar: true,
     shouldAppBarChangeColors: true,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'search'
   },
   {
     path: '/hubs/p/:page',
@@ -144,6 +158,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'hubs'
   },
   {
     path: '/hub/:alias/companies/p/:page',
@@ -151,6 +166,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'hubCompanies'
   },
   {
     path: '/hub/:alias/authors/p/:page',
@@ -158,6 +174,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'hubAuthors'
   },
   {
     path: [
@@ -177,6 +194,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'hub'
   },
   {
     path: '/user/:login/favorites/comments/p/:page',
@@ -184,6 +202,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'userFaviritesComments'
   },
   {
     path: '/user/:login/favorites/articles/p/:page',
@@ -191,6 +210,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'userFaviritesArticles'
   },
   {
     path: '/user/:login/comments/p/:page',
@@ -198,6 +218,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'userComments'
   },
   {
     path: '/user/:login/articles/p/:page',
@@ -205,6 +226,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'userArticles'
   },
   {
     path: '/user/:login',
@@ -212,6 +234,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'user'
   },
   {
     path: '/news/p/:page',
@@ -220,6 +243,7 @@ export const routes: Route[] = [
     shouldShowAppBar: true,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.paper,
+    alias: 'news'
   },
   {
     path: [
@@ -238,6 +262,7 @@ export const routes: Route[] = [
     component: <Home />,
     shouldShowAppBar: true,
     shouldAppBarChangeColors: true,
+    alias: 'feed'
   },
   {
     path: '/me',
@@ -245,6 +270,7 @@ export const routes: Route[] = [
     shouldShowAppBar: true,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'me'
   },
   {
     path: '/',
@@ -252,6 +278,7 @@ export const routes: Route[] = [
     shouldShowAppBar: true,
     shouldAppBarChangeColors: true,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: 'feed'
   },
   {
     path: '/:404*',
@@ -260,5 +287,6 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
+    alias: '404'
   },
 ]

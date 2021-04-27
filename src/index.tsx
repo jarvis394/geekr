@@ -14,11 +14,17 @@ import 'dayjs/locale/ru'
 import { BrowserRouter as Router } from 'react-router-dom'
 import 'react-photoswipe/dist/photoswipe.css'
 import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
+import { MATOMO_SERVER_URL, MATOMO_SITE_ID } from 'src/config/constants'
 
 const instance = createInstance({
-  urlBase: 'https://matomo.jarvis394-backend.ml/',
-  siteId: 1,
+  urlBase: MATOMO_SERVER_URL,
+  siteId: MATOMO_SITE_ID,
   linkTracking: false,
+  configurations: {
+    setRequestMethod: 'POST',
+    setRequestContentType: 'application/json',
+    setDoNotTrack: false
+  }
 })
 
 dayjs.locale('ru')
