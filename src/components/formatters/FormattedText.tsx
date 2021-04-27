@@ -21,26 +21,33 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     verticalAlign: 'middle',
     height: 'auto',
+    borderRadius: 4,
   },
   text: {
     '& a': {
       color: theme.palette.primary.main,
       textDecoration: 'none',
+      '-webkit-tap-highlight-color': 'transparent !important',
     },
     '& a:hover': {
-      color: theme.palette.primary.dark,
+      color: fade(theme.palette.primary.main, 0.8),
       textDecoration: 'underline',
     },
+    '& h1+p, h2+p, h3+p, h4+p': {
+      marginTop: (d) => (d ? 0 : theme.spacing(1.5))
+    },
     '& p': { margin: 0, marginTop: (d) => (d ? 0 : theme.spacing(3)) },
-    '& em': { color: theme.palette.text.hint },
+    '& em': { color: fade(theme.palette.text.primary, 0.75) },
     '& code': {
       background: theme.palette.background.default,
       padding: theme.spacing(0.25),
       borderRadius: theme.shape.borderRadius,
       wordBreak: 'break-word',
     },
-    '& div.scrollable-table': {
+    '& div.table, div.scrollable-table': {
       overflow: 'auto',
+      marginTop: theme.spacing(2),
+      wordBreak: 'normal'
     },
     '& table': {
       width: '100%',
@@ -53,8 +60,25 @@ const useStyles = makeStyles((theme) => ({
       lineHeight: '1.5',
       minWidth: 100,
     },
+    '& table th': {
+      padding: '6px 12px 9px',
+      border: '1px solid ' + theme.palette.text.hint,
+      verticalAlign: 'top',
+      lineHeight: '1.5',
+      minWidth: 100,
+    },
+    '& h1, h2, h3': {
+      fontSize: 24,
+      lineHeight: '30px',
+    },
+    '& h4, h5, h6': {
+      fontSize: 20,
+      lineHeight: '26px',
+    },
     '& h1, h2, h3, h4, h5, h6': {
-      margin: theme.spacing(2) + 'px 0 0 0',
+      margin: `${theme.spacing(4)}px 0 0 0`,
+      fontFamily: 'Google Sans',
+      fontWeight: 800
     },
     '& blockquote': {
       margin: '12px 0',
@@ -67,9 +91,7 @@ const useStyles = makeStyles((theme) => ({
     '& hr': {
       border: 'none',
       borderBottom: '1px solid ' + theme.palette.divider,
-      marginTop: theme.spacing(4),
-      marginBottom: theme.spacing(4),
-      maxWidth: 256,
+      margin: theme.spacing(1, 2)
     },
     '& figure': {
       margin: 0,
@@ -82,6 +104,25 @@ const useStyles = makeStyles((theme) => ({
         lineHeight: '18px',
       },
     },
+    '& figure.float': {
+      float: 'left',
+      maxWidth: '50%',
+      marginRight: theme.spacing(4)
+    },
+    '& figure+p': {
+      marginTop: theme.spacing(4)
+    },
+    '& figure.float+p:after': {
+      content: '""',
+      display: 'block',
+      clear: 'both',
+    },
+    '& sup': {
+      color: theme.palette.text.secondary,
+      marginTop: theme.spacing(1),
+      fontSize: 14,
+      display: 'block'
+    },
     // MathJaxNode overflow fix
     '& span.mjx-chtml': {
       whiteSpace: 'normal',
@@ -89,6 +130,7 @@ const useStyles = makeStyles((theme) => ({
   },
   syntaxHighlighter: {
     margin: 0,
+    marginTop: theme.spacing(2),
     display: 'block',
     tabSize: 4,
     overflow: 'auto',
@@ -117,6 +159,7 @@ const FormattedText = ({
   >({})
   const theme = useTheme()
   const options: HTMLReactParserOptions = {
+    trim: true,
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === 'pre') {
         const firstChild = children[0]
@@ -136,10 +179,18 @@ const FormattedText = ({
         )
       }
       if (name === 'img') {
+        const imgClasses = attribs.class ? attribs.class.split(' ') : []
         if (attribs['data-tex']) {
           const formula = attribs['alt'].slice(1, attribs['alt'].length - 1)
           return (
             <MathJaxNode inline={attribs['data-tex'] === 'inline'}>
+              {formula}
+            </MathJaxNode>
+          )
+        } else if (imgClasses.some((e) => e === 'formula')) {
+          const formula = attribs.source
+          return (
+            <MathJaxNode inline={imgClasses.some((e) => e === 'inline')}>
               {formula}
             </MathJaxNode>
           )
@@ -151,19 +202,13 @@ const FormattedText = ({
           marginLeft: attribs.align === 'right' ? theme.spacing(2) : 0,
           marginBottom: attribs.align ? theme.spacing(1) : 0,
           maxWidth: attribs.align ? '40%' : '100%',
-          width: attribs['data-width'] || 'auto',
+          width: attribs['data-width'] || attribs.width || 'auto',
+          height: attribs['data-height'] || attribs.height || 'auto',
         }
 
         return (
           <LazyLoadImage
-            placeholder={
-              <img
-                src={attribs.src}
-                alt={attribs.alt || 'Изображение не загружено'}
-                style={imgStyles}
-                className={classes.img}
-              />
-            }
+            placeholderSrc={attribs.src}
             // First try to load src from 'data-src' attribute
             // If not found, then use default 'src' attribute
             src={attribs['data-src'] || attribs.src}
@@ -229,4 +274,4 @@ const FormattedText = ({
   )
 }
 
-export default FormattedText
+export default React.memo(FormattedText)

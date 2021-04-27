@@ -78,9 +78,7 @@ const Component = () => {
   const history = useHistory()
   const modeName = useSelector((state) => state.home.mode)
   const userState = useSelector((state) => state.user.profile.state)
-  const userData = useSelector(
-    (state) => state.user.profile.data
-  ) as UserExtended
+  const userData = useSelector((state) => state.user.profile.data)
   const token = useSelector((state) => state.user.token)
   const mode = RATING_MODES.find((e) => e.mode === modeName)
   const shouldFetchUser = !!token
@@ -124,9 +122,9 @@ const Component = () => {
             )}
             {shouldShowUser && (
               <IconButton
-                onClick={() => history.push('/user/' + userData.alias)}
+                onClick={() => history.push('/user/' + userData.login)}
               >
-                <Avatar className={classes.avatar} src={userData.avatarUrl} />
+                <Avatar className={classes.avatar} src={userData.avatar} />
               </IconButton>
             )}
           </Toolbar>

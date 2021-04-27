@@ -1,4 +1,5 @@
-import { FetchingState, UserExtended } from 'src/interfaces'
+import { FetchingState } from 'src/interfaces'
+import { UserExtended } from 'src/interfaces/withToken/User'
 import { SET_TOKEN, GET_PROFILE } from './types'
 
 const cachedToken = localStorage.getItem('token')
@@ -21,7 +22,7 @@ const initialState: State = {
   },
 } as State
 
-export default (reducerState = initialState, { type, payload }) => {
+export default (reducerState = initialState, { type, payload }): State => {
   switch (type) {
     case SET_TOKEN: {
       return {
