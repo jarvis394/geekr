@@ -55,7 +55,7 @@ const UserArticles = () => {
 
   const handlePagination = (_: never, i: number) => {
     if (i === currentPage) return
-    else history.push(`/user/${login}/articles/${i}`)
+    else history.replace(`/user/${login}/articles/${i}`)
   }
 
   useEffect(() => {

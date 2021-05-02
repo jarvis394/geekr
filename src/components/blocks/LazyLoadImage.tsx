@@ -109,11 +109,11 @@ const LazyLoadImage = (props) => {
     () => [
       {
         src: props.src,
-        w: imageRef?.current?.naturalWidth || 1200,
-        h: imageRef?.current?.naturalHeight || 900,
+        w: imageRef?.current?.naturalWidth,
+        h: imageRef?.current?.naturalHeight,
       },
     ],
-    []
+    [imageRef?.current]
   )
   const pswpOptions: PhotoSwipe.UIFramework = {
     showHideOpacity: true,

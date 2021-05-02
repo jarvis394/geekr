@@ -9,16 +9,15 @@ import {
   Typography,
 } from '@material-ui/core'
 import BackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
-import { useHistory, useLocation } from 'react-router'
+import { useHistory } from 'react-router'
 import { APP_BAR_HEIGHT, MIN_WIDTH } from 'src/config/constants'
 import isMobile from 'is-mobile'
 import { chromeAddressBarHeight } from 'src/config/constants'
 import { useScrollTrigger } from 'src/hooks'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
-import getCachedMode from 'src/utils/getCachedMode'
-import OutsidePageLocationState from 'src/interfaces/OutsidePageLocationState'
 import useMediaExtendedQuery from 'src/hooks/useMediaExtendedQuery'
+import getCachedMode from 'src/utils/getCachedMode'
 
 interface StyleProps {
   isShrinked?: boolean
@@ -190,22 +189,12 @@ const UnshrinkedContent = ({
 }) => {
   const classes = useAppBarStyles({})
   const history = useHistory()
-  const location = useLocation<OutsidePageLocationState>()
-  const defaultBackLink = getCachedMode().to + '/p/1'
-  const backLink = location?.state?.from
-  const scroll = location?.state?.scroll
   const text = (
     <Typography className={classes.headerTitle}>{headerText}</Typography>
   )
   const backLinkFunction = () => {
-    if (backLink) {
-      history.push(backLink)
-      scroll && setTimeout(() => {
-        window.scrollTo(0, scroll)
-      }, 0)
-    } else {
-      history.push(defaultBackLink)
-    }
+    if (history.length > 1) history.goBack()
+    else history.push(getCachedMode().to + '/p/1')
   }
 
   const onClick = () => {

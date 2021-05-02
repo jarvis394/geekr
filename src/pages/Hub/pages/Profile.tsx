@@ -298,9 +298,9 @@ const Posts = ({ mode }) => {
     const currentModeObject = modes.find((e) => e.mode === mode)
     if (i === currentPage) return
     if (currentModeObject.mode === 'all') {
-      history.push('/hub/' + alias + '/p/' + i)
+      history.replace('/hub/' + alias + '/p/' + i)
     } else {
-      history.push('/hub/' + alias + currentModeObject.to + '/p/' + i)
+      history.replace('/hub/' + alias + currentModeObject.to + '/p/' + i)
     }
   }
 
@@ -334,9 +334,9 @@ const Profile = () => {
     ({ mode: newMode, to }) => {
       setMode(newMode)
       if (newMode === 'all') {
-        history.push('/hub/' + alias + '/p/1')
+        history.replace('/hub/' + alias + '/p/1')
       } else {
-        history.push('/hub/' + alias + to + '/p/1')
+        history.replace('/hub/' + alias + to + '/p/1')
       }
     },
     [history]

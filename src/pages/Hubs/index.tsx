@@ -93,7 +93,7 @@ const Hubs = () => {
       return false
 
     dispatch(getHubsSearchResults(currentQuery))
-    history.push('/hubs/p/1?q=' + currentQuery, {
+    history.replace('/hubs/p/1?q=' + currentQuery, {
       from: location.pathname,
     })
 
@@ -102,7 +102,7 @@ const Hubs = () => {
 
   const handlePagination = (_: never, i: number) => {
     if (i === currentPage) return
-    history.push('/hubs/p/' + i)
+    history.replace('/hubs/p/' + i)
   }
 
   useEffect(() => {
