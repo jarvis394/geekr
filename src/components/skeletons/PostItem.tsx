@@ -3,13 +3,18 @@ import Skeleton from '@material-ui/lab/Skeleton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
-import { POST_IMAGE_HEIGHT } from 'src/config/constants'
+import { MIN_WIDTH, POST_IMAGE_HEIGHT } from 'src/config/constants'
+import { fade } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: '12px',
     background: theme.palette.background.paper,
     borderRadius: 0,
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      border: '1px solid ' + fade(theme.palette.divider, 0.05),
+      borderRadius: 8
+    }
   },
   padding: {
     padding: theme.spacing(2),

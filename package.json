@@ -42,6 +42,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "react-scroll-restoration": "^1.0.6",
+    "react-sticky-box": "^0.9.3",
     "react-syntax-highlighter": "^15.4.3",
     "react-visibility-sensor": "^5.1.1",
     "react-zoom-pan-pinch": "^1.6.1",

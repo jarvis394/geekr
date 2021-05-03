@@ -1,6 +1,11 @@
-import { HOME_PREFIX, ADVERTS_PREFIX } from './types'
+import {
+  HOME_PREFIX,
+  ADVERTS_PREFIX,
+  SIDEBAR_TOP_COMPANIES,
+  SIDEBAR_MOST_READING,
+} from './types'
 import { RATING_MODES } from 'src/config/constants'
-import { Advert, Posts } from 'src/interfaces'
+import { Advert, FetchingState, Posts } from 'src/interfaces'
 import getCachedMode from 'src/utils/getCachedMode'
 import getPostFirstImage from 'src/utils/getPostFirstImage'
 
@@ -30,10 +35,25 @@ const initialState = {
     error: null,
     data: null as Advert[],
   },
+  sidebar: {
+    mostReading: {
+      state: FetchingState.Idle,
+      fetchError: null,
+      data: null,
+    },
+    topCompanies: {
+      state: FetchingState.Idle,
+      fetchError: null,
+      data: null,
+    },
+  },
   mode: getCachedMode().mode,
 }
 
-export default (state = initialState, { type, payload }) => {
+export default (
+  state = initialState,
+  { type, payload }
+): typeof initialState => {
   switch (type) {
     case HOME_PREFIX + 'FETCH': {
       return {
@@ -84,6 +104,48 @@ export default (state = initialState, { type, payload }) => {
       state.adverts.error = payload
       state.adverts.fetched = false
       state.adverts.fetching = false
+      return state
+    }
+
+    case SIDEBAR_MOST_READING + 'FETCH': {
+      state.sidebar.mostReading.data = null
+      state.sidebar.mostReading.fetchError = null
+      state.sidebar.mostReading.state = FetchingState.Fetching
+      return state
+    }
+
+    case SIDEBAR_MOST_READING + 'FETCH_FULFILLED': {
+      state.sidebar.mostReading.data = payload
+      state.sidebar.mostReading.fetchError = null
+      state.sidebar.mostReading.state = FetchingState.Fetched
+      return state
+    }
+
+    case SIDEBAR_MOST_READING + 'FETCH_REJECTED': {
+      state.sidebar.mostReading.data = null
+      state.sidebar.mostReading.fetchError = payload
+      state.sidebar.mostReading.state = FetchingState.Error
+      return state
+    }
+
+    case SIDEBAR_TOP_COMPANIES + 'FETCH': {
+      state.sidebar.topCompanies.data = null
+      state.sidebar.topCompanies.fetchError = null
+      state.sidebar.topCompanies.state = FetchingState.Fetching
+      return state
+    }
+
+    case SIDEBAR_TOP_COMPANIES + 'FETCH_FULFILLED': {
+      state.sidebar.topCompanies.data = payload
+      state.sidebar.topCompanies.fetchError = null
+      state.sidebar.topCompanies.state = FetchingState.Fetched
+      return state
+    }
+
+    case SIDEBAR_TOP_COMPANIES + 'FETCH_REJECTED': {
+      state.sidebar.topCompanies.data = null
+      state.sidebar.topCompanies.fetchError = payload
+      state.sidebar.topCompanies.state = FetchingState.Error
       return state
     }
 

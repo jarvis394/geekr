@@ -15,6 +15,8 @@ import { getPosts } from 'src/store/actions/home'
 import { useSelector } from 'src/hooks'
 import getCachedMode from 'src/utils/getCachedMode'
 import AdvertsBlock from './AdvertsBlock'
+import MainBlock from 'src/components/blocks/MainBlock'
+import Sidebar from 'src/pages/Home/Sidebar'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,23 +87,26 @@ const Home = () => {
 
   return (
     <>
-      {currentPage === 1 && <AdvertsBlock />}
-      <Switcher setMode={setMode} mode={mode} handleClick={handleSwitcher} />
-      <List className={classes.root}>
-        {isFetching &&
-          [...new Array(4)].map((_, i) => <PostSkeleton key={i} />)}
-        {isFetched && !fetchError && posts && (
-          <>
-            {postsComponents[0]}
-            {currentPage === 1 && <NewsBlock />}
-            {postsComponents.slice(1)}
-          </>
-        )}
-        {fetchError && (
-          <ErrorComponent code={fetchErrorCode} message={fetchErrorMessage} />
-        )}
-        <PaginationComponent />
-      </List>
+      <MainBlock>
+        {currentPage === 1 && <AdvertsBlock />}
+        <Switcher setMode={setMode} mode={mode} handleClick={handleSwitcher} />
+        <List className={classes.root}>
+          {isFetching &&
+            [...new Array(4)].map((_, i) => <PostSkeleton key={i} />)}
+          {isFetched && !fetchError && posts && (
+            <>
+              {postsComponents[0]}
+              {currentPage === 1 && <NewsBlock />}
+              {postsComponents.slice(1)}
+            </>
+          )}
+          {fetchError && (
+            <ErrorComponent code={fetchErrorCode} message={fetchErrorMessage} />
+          )}
+          <PaginationComponent />
+        </List>
+      </MainBlock>
+      <Sidebar />
     </>
   )
 }

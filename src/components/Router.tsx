@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { routes } from 'src/config/routes'
-import { useRoute } from 'src/hooks'
 
 const Router = () => {
   return (

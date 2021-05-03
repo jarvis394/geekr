@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 600,
+    width: '100%',
     flexDirection: 'column',
     height: `calc(100vh - 96px - ${
       isMobile() ? chromeAddressBarHeight : '0'

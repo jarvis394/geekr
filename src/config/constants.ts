@@ -1,10 +1,7 @@
 import { ModeObject } from '../interfaces'
 import { UserSettings } from '../interfaces'
 import { darken, fade, lighten, PaletteType as MUIPaletteType } from '@material-ui/core'
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
 import { blue } from '@material-ui/core/colors'
-
-const _theme = createMuiTheme()
 
 export const APP_VERSION = 'v2'
 
@@ -16,9 +13,9 @@ export const MATOMO_SITE_ID = 2
 export const GA_ID_STRING = 'UA-188053191-1'
 
 /**
- * Minimal application width to stay with the drawer
+ * Minimal application width to stay with the sidebar
  */
-export const MIN_WIDTH = _theme.breakpoints.values.md
+export const MIN_WIDTH = 1096
 
 /**
  * Negative threshold for VisibilitySensor in PostItem component

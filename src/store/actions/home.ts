@@ -2,7 +2,12 @@ import * as api from 'src/api'
 import { Mode } from 'src/config/constants'
 import { shouldUpdate } from 'src/utils/cache'
 import { RootState } from '..'
-import { HOME_PREFIX, ADVERTS_PREFIX } from '../reducers/home/types'
+import {
+  HOME_PREFIX,
+  ADVERTS_PREFIX,
+  SIDEBAR_MOST_READING,
+  SIDEBAR_TOP_COMPANIES,
+} from '../reducers/home/types'
 
 export const getPosts = (mode: Mode, page: number) => async (
   dispatch,
@@ -42,6 +47,40 @@ export const getAdverts = () => async (dispatch) => {
     dispatch({
       type: type + '_FULFILLED',
       payload: data.adverts,
+    })
+  } catch (error) {
+    dispatch({ type: type + '_REJECTED', payload: { error } })
+  }
+}
+
+export const getMostReading = () => async (dispatch) => {
+  const type = SIDEBAR_MOST_READING + 'FETCH'
+
+  dispatch({ type })
+
+  try {
+    const data = await api.getMostReadingArticles()
+
+    dispatch({
+      type: type + '_FULFILLED',
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({ type: type + '_REJECTED', payload: { error } })
+  }
+}
+
+export const getTopCompanies = () => async (dispatch) => {
+  const type = SIDEBAR_TOP_COMPANIES + 'FETCH'
+
+  dispatch({ type })
+
+  try {
+    const data = await api.getCompanies({})
+
+    dispatch({
+      type: type + '_FULFILLED',
+      payload: data,
     })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: { error } })

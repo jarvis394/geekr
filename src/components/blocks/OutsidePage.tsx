@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import BackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 import { APP_BAR_HEIGHT, MIN_WIDTH } from 'src/config/constants'
 import isMobile from 'is-mobile'
 import { chromeAddressBarHeight } from 'src/config/constants'
@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
     minHeight: '100%',
+    width: '100%',
   },
   children: {
     maxWidth: MIN_WIDTH,
@@ -167,10 +168,7 @@ interface Props {
   onBackClick: (backLinkFunction: () => void) => unknown
 }
 
-const ShrinkedContent = ({
-  isShrinked,
-  shrinkedHeaderText,
-}) => {
+const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
   const classes = useAppBarStyles({})
   return (
     <Fade in={isShrinked} unmountOnExit mountOnEnter>
@@ -192,10 +190,12 @@ const UnshrinkedContent = ({
   const text = (
     <Typography className={classes.headerTitle}>{headerText}</Typography>
   )
+  const goHome = () => history.push(getCachedMode().to + '/p/1')
   const backLinkFunction = () => {
-    if (history.length > 1) history.goBack()
-    else history.push(getCachedMode().to + '/p/1')
-  }
+    if (history.length > 1) {
+      history.goBack()
+    } else goHome()
+  } 
 
   const onClick = () => {
     if (onBackClick) onBackClick(backLinkFunction)

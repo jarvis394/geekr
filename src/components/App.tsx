@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
-import { fade, makeStyles, ThemeOptions } from '@material-ui/core/styles/'
+import createMuiTheme, { Theme } from '@material-ui/core/styles/createMuiTheme'
+import { fade, makeStyles } from '@material-ui/core/styles/'
 import AppRouter from './Router'
 import AppBar from './blocks/AppBar'
 import {
@@ -22,7 +22,7 @@ import isDarkTheme from 'src/utils/isDarkTheme'
 import useAutoChangeTheme from 'src/hooks/useAutoChangeTheme'
 
 interface StyleProps {
-  theme: ThemeOptions
+  theme: Theme
   shouldShowAppBar: boolean
 }
 
@@ -59,12 +59,13 @@ const useStyles = makeStyles({
       isMobile() ? chromeAddressBarHeight : 0
     }px - ${shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0}px)`,
     borderRadius: 0,
-    flexDirection: 'column',
+    flexDirection: 'row',
     maxWidth: minWidth,
     margin: `${APP_BAR_HEIGHT}px auto ${
       shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0
-    }px auto`,
+    }px auto`
   }),
+  /** Body class */
   root: ({ theme }: StyleProps) => ({
     /** Disable blue highlight for links. Can be bad for accessibility. */
     '& a': {
@@ -99,6 +100,9 @@ const useStyles = makeStyles({
           ? lighten(theme.palette.background.paper, 0.2)
           : darken(theme.palette.background.paper, 0.2),
       },
+    },
+    '& *::selection': {
+      background: (isDarkTheme(theme) ? darken : lighten)(theme.palette.primary.main, 0.5)
     },
   }),
 })

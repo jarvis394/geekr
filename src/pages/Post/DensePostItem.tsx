@@ -59,7 +59,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    userSelect: 'none',
     fontWeight: 600,
     '-webkit-tap-highlight-color': fade(theme.palette.background.paper, 0.3),
   },
