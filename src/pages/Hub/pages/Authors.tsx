@@ -110,7 +110,7 @@ const Authors = () => {
 
   const handlePagination = (_, i) => {
     if (i === currentPage) return
-    history.push('/hub/' + alias + '/authors/p/' + i, {
+    history.replace('/hub/' + alias + '/authors/p/' + i, {
       from: location.pathname
     })
   }

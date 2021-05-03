@@ -172,7 +172,7 @@ const Comment = ({ data }: { data: DataComment }) => {
             {/* Top bar */}
             <Grid
               style={{ position: 'relative' }}
-              onClick={() => history.push(location.pathname + '#' + data.id)}
+              // onClick={() => history.push(location.pathname + '#' + data.id)}
               alignItems="center"
               container
               direction="row"
