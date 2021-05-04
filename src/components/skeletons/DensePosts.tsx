@@ -4,6 +4,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
+import { MIN_WIDTH } from 'src/config/constants'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,6 +12,9 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(1),
     background: getContrastPaperColor(theme),
     borderRadius: 0,
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      background: theme.palette.background.paper,
+    }
   },
   skeleton: {
     backgroundColor: theme.palette.action.hover,
