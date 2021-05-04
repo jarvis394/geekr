@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { makeStyles, fade, useTheme } from '@material-ui/core/styles'
+import { makeStyles, fade, useTheme, darken, lighten } from '@material-ui/core/styles'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import Spoiler from '../blocks/Spoiler'
@@ -9,6 +9,7 @@ import Details from '../blocks/Details'
 import Iframe from 'react-iframe'
 import { Node as MathJaxNode } from '@nteract/mathjax'
 import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
+import isDarkTheme from 'src/utils/isDarkTheme'
 
 type FloatType = 'left' | 'right'
 interface IframeResizeData {
@@ -140,6 +141,27 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2) + 'px !important',
     background: getInvertedContrastPaperColor(theme) + ' !important',
     color: theme.palette.text.primary + ' !important',
+    '&::-webkit-scrollbar': {
+      height: 18
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background: isDarkTheme(theme)
+        ? lighten(theme.palette.background.paper, 0.08)
+        : darken(theme.palette.background.paper, 0.08),
+      border: '4px solid ' + getInvertedContrastPaperColor(theme),
+      borderRadius: theme.shape.borderRadius,
+      transition: '0.1s',
+      '&:hover': {
+        background: isDarkTheme(theme)
+          ? lighten(theme.palette.background.paper, 0.1)
+          : darken(theme.palette.background.paper, 0.1),
+      },
+      '&:active': {
+        background: isDarkTheme(theme)
+          ? lighten(theme.palette.background.paper, 0.2)
+          : darken(theme.palette.background.paper, 0.2),
+      },
+    },
   },
   iframe: {
     width: '100%',

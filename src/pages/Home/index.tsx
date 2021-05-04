@@ -17,6 +17,7 @@ import getCachedMode from 'src/utils/getCachedMode'
 import AdvertsBlock from './AdvertsBlock'
 import MainBlock from 'src/components/blocks/MainBlock'
 import Sidebar from 'src/pages/Home/Sidebar'
+import UpdateNotification from 'src/components/blocks/UpdateNotification'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -88,6 +89,7 @@ const Home = () => {
   return (
     <>
       <MainBlock>
+        <UpdateNotification />
         {currentPage === 1 && <AdvertsBlock />}
         <Switcher setMode={setMode} mode={mode} handleClick={handleSwitcher} />
         <List className={classes.root}>
