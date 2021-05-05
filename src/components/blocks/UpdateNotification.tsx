@@ -58,7 +58,7 @@ const UpdateNotification = () => {
   return isShown ? (
     <ButtonBase className={classes.root} onClick={onClick}>
       <div className={classes.text}>
-        <Typography className={classes.title}>Доступна новая версия приложения</Typography>
+        <Typography className={classes.title}>Доступно обновление</Typography>
         <Typography className={classes.subtitle}>Обновите страницу, чтобы изменения вступили в силу</Typography>
       </div>
       <RefreshRoundedIcon style={{ color: 'rgb(166, 213, 250)' }} />
