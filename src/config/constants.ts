@@ -29,8 +29,8 @@ export const BOTTOM_BAR_HEIGHT = 52
 export const APP_BAR_HEIGHT = 48
 
 /** Local Storage keys */
-export const POST_READING_PROGRESS_KEY = 'POST_READING_PROGRESS'
 export const USER_SETTINGS_KEY = 'habra_USER_SETTINGS'
+export const COOKIES_SNACKBAR_WAS_SHOWN_KEY = 'habra_COOKIES_SNACKBAR_WAS_SHOWN'
 
 export const RATING_MODES: ModeObject[] = [
   {
@@ -133,7 +133,10 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   hiddenCompanies: [],
   preferredDarkTheme: 'dark',
   preferredLightTheme: 'light',
-  autoChangeTheme: false
+  autoChangeTheme: false,
+  cookiesPreferences: {
+    disableCookies: false,
+  }
 }
 
 export const THEMES: PaletteType[] = ['light', 'dark', 'oled', 'sepia', 'dimmed']

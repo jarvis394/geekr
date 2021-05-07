@@ -22,7 +22,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: getContrastPaperColor(theme),
     paddingBottom: 0,
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column'
   },
 }))
 

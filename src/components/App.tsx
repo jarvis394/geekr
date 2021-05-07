@@ -127,9 +127,7 @@ const App = () => {
     <div className={classes.app}>
       <ThemeProvider theme={theme}>
         <SnackbarProvider>
-          {/** Restores user scroll */}
           <ScrollRestoration />
-
           <AppBar />
           <BottomBar />
           <AppRouter />

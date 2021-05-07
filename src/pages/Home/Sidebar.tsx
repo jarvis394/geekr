@@ -60,7 +60,7 @@ const usePostItemStyles = makeStyles((theme) => ({
     },
     fontWeight: 800,
     fontFamily: '"Google Sans"',
-    fontSize: 16,
+    fontSize: 15,
     marginTop: (hasImage) => (hasImage ? 0 : theme.spacing(1)),
     textDecoration: 'none !important',
     marginBottom: theme.spacing(1),

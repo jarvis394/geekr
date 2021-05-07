@@ -27,7 +27,7 @@ export const makePrimaryColors = (
   main: string
   light: string
   dark: string
-} => (THEME_PRIMARY_COLORS[t])
+} => THEME_PRIMARY_COLORS[t]
 
 export const makeTextColors = (
   t: PaletteType | string
@@ -36,33 +36,38 @@ export const makeTextColors = (
   secondary: string
   disabled: string
   hint: string
-} => (THEME_TEXT_COLORS[t])
+} => THEME_TEXT_COLORS[t]
 
-export const makeType = (
-  t: PaletteType | string
-): MUIPaletteType => (THEME_TYPES[t])
+export const makeType = (t: PaletteType | string): MUIPaletteType =>
+  THEME_TYPES[t]
 
 const generateTheme = (themeType?: PaletteType | string): ThemeOptions => {
   const localStorageUserSettings = userSettings.get()
   const localStorageCustomThemes = localStorageUserSettings.customThemes
   const localStorageThemeType = localStorageUserSettings.themeType
   const type = (localStorageThemeType || 'light') as MUIPaletteType
-  const customTheme = localStorageCustomThemes.find(e => e.type === type)
-   
+  const customTheme = localStorageCustomThemes.find((e) => e.type === type)
+  const defaultPalette = {
+    type: makeType(themeType || type),
+    primary: makePrimaryColors(themeType || type),
+    background: makeBackgroundColors(themeType || type),
+    text: makeTextColors(themeType || type),
+  }
+
   return {
-    palette: customTheme ? customTheme.palette : {
-      type: makeType(themeType || type),
-      primary: makePrimaryColors(themeType || type),
-      background: makeBackgroundColors(themeType || type),
-      text: makeTextColors(themeType || type),
-    },
-    shape: { borderRadius: 8 },
+    palette: customTheme ? customTheme.palette : defaultPalette,
+    shape: { borderRadius: 4 },
     overrides: {
       MuiTab: {
         wrapper: {
           flexDirection: 'row',
         },
       },
+      MuiPaper: {
+        rounded: {
+          borderRadius: 8
+        }
+      }
     },
     props: {
       // Ripple on IconButtons is delayed and not very effective in its action
@@ -71,7 +76,7 @@ const generateTheme = (themeType?: PaletteType | string): ThemeOptions => {
         TouchRippleProps: {
           classes: {
             rippleVisible: 'IconButton_TouchRipple-rippleVisible',
-            childLeaving: 'IconButton_TouchRipple-childLeaving'
+            childLeaving: 'IconButton_TouchRipple-childLeaving',
           },
         },
       },

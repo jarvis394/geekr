@@ -31,6 +31,14 @@ import {
   fade,
   Divider,
   IconButton,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  FormControlLabel,
+  RadioGroup,
 } from '@material-ui/core'
 import fadedLinearGradient from 'src/utils/fadedLinearGradient'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
@@ -42,6 +50,11 @@ import { CustomTheme } from 'src/interfaces/UserSettings'
 import { EditRounded } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
   section: {
     backgroundColor: theme.palette.background.paper,
     marginTop: 12,
@@ -505,107 +518,304 @@ export const SingleRowGrid = ({ component: Item = PaletteGridItem }) => {
   )
 }
 
+interface AddDialogProps {
+  isOpen: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  onSubmit: (login: string) => void
+  placeholder: string
+  title: string
+}
+const AddDialog: React.FC<AddDialogProps> = ({
+  isOpen,
+  setOpen,
+  onSubmit,
+  placeholder,
+  title,
+}) => {
+  const textInputRef = useRef<HTMLInputElement>()
+  const handleClose = () => setOpen(false)
+  const handleSubmit = () => {
+    if (textInputRef.current) {
+      onSubmit(textInputRef.current.value)
+      setOpen(false)
+    }
+  }
+
+  return (
+    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={handleClose}>
+      <DialogTitle style={{ paddingBottom: 0 }} id="add-dialog-title">
+        {title}
+      </DialogTitle>
+      <DialogContent>
+        <TextField
+          inputRef={textInputRef}
+          autoFocus
+          margin="dense"
+          name="title"
+          label="Логин"
+          placeholder={placeholder}
+          type="text"
+          fullWidth
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="default">
+          Отмена
+        </Button>
+        <Button
+          color="primary"
+          variant="contained"
+          disableElevation
+          onClick={handleSubmit}
+        >
+          Добавить
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
+}
+
+export interface ThemeSelectDialogProps {
+  classes?: Record<'paper', string>
+  id: string
+  keepMounted?: boolean
+  value: string
+  open: boolean
+  onClose: (value?: string) => void
+}
+
+const ThemeSelectDialog = (props: ThemeSelectDialogProps) => {
+  const { onClose, value: valueProp, open, ...other } = props
+  const [value, setValue] = React.useState(valueProp)
+  const radioGroupRef = React.useRef<HTMLElement>(null)
+  const customThemes = useSelector((store) => store.settings.customThemes)
+  const options = THEMES.map((e) => makeCustomThemeFromThemeType(e)).concat(
+    customThemes
+  )
+
+  useEffect(() => {
+    if (!open) {
+      setValue(valueProp)
+    }
+  }, [valueProp, open])
+
+  const handleEntering = () => {
+    if (radioGroupRef.current != null) {
+      radioGroupRef.current.focus()
+    }
+  }
+
+  const handleCancel = () => onClose()
+  const handleOk = () => onClose(value)
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue((event.target as HTMLInputElement).value)
+  }
+
+  return (
+    <Dialog
+      disableBackdropClick
+      disableEscapeKeyDown
+      maxWidth="xs"
+      onEntering={handleEntering}
+      aria-labelledby="theme-select-dialog-title"
+      open={open}
+      {...other}
+    >
+      <DialogTitle id="theme-select-dialog-title">Выбор темы</DialogTitle>
+      <DialogContent dividers>
+        <RadioGroup
+          ref={radioGroupRef}
+          aria-label="theme-select"
+          name="theme-select"
+          value={value}
+          onChange={handleChange}
+        >
+          {options.map((option) => (
+            <FormControlLabel
+              value={option.type}
+              key={option.type}
+              control={<Radio color="primary" />}
+              label={option.name}
+            />
+          ))}
+        </RadioGroup>
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={handleCancel} color="primary">
+          Отмена
+        </Button>
+        <Button onClick={handleOk} color="primary">
+          Ok
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
+}
+
 const Appearance = () => {
   const classes = useStyles()
   const history = useHistory()
   const dispatch = useDispatch()
   const customThemes = useSelector((store) => store.settings.customThemes)
   const autoChangeTheme = useSelector((store) => store.settings.autoChangeTheme)
+  const preferredLightTheme = useSelector(
+    (store) => store.settings.preferredLightTheme
+  )
+  const preferredDarkTheme = useSelector(
+    (store) => store.settings.preferredDarkTheme
+  )
   const themeType = useSelector((state) => state.settings.themeType)
-  const isCustomThemeChosen = customThemes.find((e) => e.type === themeType)
+  const isCustomThemeChosen = customThemes.some((e) => e.type === themeType)
+  const preferredLightThemeName =
+    preferredLightTheme in THEME_NAMES
+      ? THEME_NAMES[preferredLightTheme]
+      : customThemes.find((e) => e.type === preferredLightTheme)?.name
+  const preferredDarkThemeName =
+    preferredDarkTheme in THEME_NAMES
+      ? THEME_NAMES[preferredDarkTheme]
+      : customThemes.find((e) => e.type === preferredDarkTheme)?.name
+  const [
+    isPreferredLightThemeDialogOpen,
+    setPreferredLightThemeDialogOpen,
+  ] = useState(false)
+  const [
+    isPreferredDarkThemeDialogOpen,
+    setPreferredDarkThemeDialogOpen,
+  ] = useState(false)
+
+  const handlePreferredLightThemeDialogClose = (value?: string) => {
+    setPreferredLightThemeDialogOpen(false)
+    value && dispatch(
+      setSettings({
+        preferredLightTheme: value,
+      })
+    )
+  }
+  const handlePreferredDarkThemeDialogClose = (value?: string) => {
+    setPreferredDarkThemeDialogOpen(false)
+    value && dispatch(
+      setSettings({
+        preferredDarkTheme: value,
+      })
+    )
+  }
 
   return (
     <OutsidePage headerText={'Внешний вид'} disableShrinking>
-      <Grid container className={classes.previewContainer} direction="row">
-        <Typography className={classes.sectionHeader}>Палитра</Typography>
-        <SingleRowGrid />
-        <OneByTwoGrid />
-      </Grid>
-      <div
-        className={classes.section}
-        style={{ paddingBottom: isCustomThemeChosen ? 0 : null }}
-      >
-        <Typography className={classes.sectionHeader}>Темы</Typography>
-        <FormControl
-          component="fieldset"
-          aria-label="theme-type"
-          name="theme-type"
-          className={classes.themeCardsContainer}
+      <div className={classes.root}>
+        <Grid container className={classes.previewContainer} direction="row">
+          <Typography className={classes.sectionHeader}>Палитра</Typography>
+          <SingleRowGrid />
+          <OneByTwoGrid />
+        </Grid>
+        <div
+          className={classes.section}
+          style={{ paddingBottom: isCustomThemeChosen ? 0 : null }}
         >
-          {THEMES.map((e, i) => (
-            <ThemeCard theme={makeCustomThemeFromThemeType(e)} key={i} />
-          ))}
-          <div className={classes.dividerHolder}>
-            <Divider className={classes.divider} orientation="vertical" />
-          </div>
-          {customThemes.map((e, i) => (
-            <ThemeCard theme={e} key={i} />
-          ))}
-          <div style={{ display: 'inline-flex' }}>
+          <Typography className={classes.sectionHeader}>Темы</Typography>
+          <FormControl
+            component="fieldset"
+            aria-label="theme-type"
+            name="theme-type"
+            className={classes.themeCardsContainer}
+          >
+            {THEMES.map((e, i) => (
+              <ThemeCard theme={makeCustomThemeFromThemeType(e)} key={i} />
+            ))}
+            <div className={classes.dividerHolder}>
+              <Divider className={classes.divider} orientation="vertical" />
+            </div>
+            {customThemes.map((e, i) => (
+              <ThemeCard theme={e} key={i} />
+            ))}
+            <div style={{ display: 'inline-flex' }}>
+              <ButtonBase
+                className={classes.newThemeButton}
+                onClick={() =>
+                  history.push('/settings/appearance/new-theme', {
+                    from: history.location.pathname,
+                  })
+                }
+              >
+                <AddCircleRoundedIcon />
+                <Typography className={classes.newThemeButtonText}>
+                  Создать
+                </Typography>
+              </ButtonBase>
+            </div>
+          </FormControl>
+          {isCustomThemeChosen && (
             <ButtonBase
-              className={classes.newThemeButton}
+              className={classes.editThemeButton}
               onClick={() =>
-                history.push('/settings/appearance/new-theme', {
+                history.push('/settings/appearance/edit-theme/' + themeType, {
                   from: history.location.pathname,
                 })
               }
             >
-              <AddCircleRoundedIcon />
-              <Typography className={classes.newThemeButtonText}>
-                Создать
+              <EditRounded className={classes.editThemeIcon} />
+              <Typography className={classes.editThemeText}>
+                Изменить тему
               </Typography>
             </ButtonBase>
-          </div>
-        </FormControl>
-        {isCustomThemeChosen && (
-          <ButtonBase
-            className={classes.editThemeButton}
-            onClick={() =>
-              history.push('/settings/appearance/edit-theme/' + themeType, {
-                from: history.location.pathname,
-              })
-            }
+          )}
+        </div>
+        <div className={classes.section}>
+          <Typography
+            className={classes.sectionHeader}
+            style={{ marginBottom: 0 }}
           >
-            <EditRounded className={classes.editThemeIcon} />
-            <Typography className={classes.editThemeText}>
-              Изменить тему
-            </Typography>
-          </ButtonBase>
-        )}
-      </div>
-      <div className={classes.section}>
-        <Typography
-          className={classes.sectionHeader}
-          style={{ marginBottom: 0 }}
-        >
-          Настройки
-        </Typography>
-        <Switcher
-          primary={'Использовать системную тему'}
-          secondary={
-            'Внешний вид приложения будет меняться автоматически при изменении темы на устройстве'
-          }
-          checked={autoChangeTheme}
-          onClick={() => {
-            dispatch(
-              setSettings({
-                autoChangeTheme: !autoChangeTheme,
-              })
-            )
-          }}
-        />
-        <ListItem button disabled={!autoChangeTheme}>
-          <ListItemText
-            primary={'Предпочитаемая светлая тема'}
-            secondary={'Светлая'}
+            Настройки
+          </Typography>
+          <Switcher
+            primary={'Использовать системную тему'}
+            secondary={
+              'Внешний вид приложения будет меняться автоматически при изменении темы на устройстве'
+            }
+            checked={autoChangeTheme}
+            onClick={() => {
+              dispatch(
+                setSettings({
+                  autoChangeTheme: !autoChangeTheme,
+                })
+              )
+            }}
           />
-        </ListItem>
-        <ListItem button disabled={!autoChangeTheme}>
-          <ListItemText
-            primary={'Предпочитаемая темная тема'}
-            secondary={'Тёмная'}
+          <ListItem
+            button
+            disabled={!autoChangeTheme}
+            onClick={() => setPreferredLightThemeDialogOpen(true)}
+          >
+            <ListItemText
+              primary={'Предпочитаемая светлая тема'}
+              secondary={preferredLightThemeName}
+            />
+          </ListItem>
+          <ListItem
+            button
+            disabled={!autoChangeTheme}
+            onClick={() => setPreferredDarkThemeDialogOpen(true)}
+          >
+            <ListItemText
+              primary={'Предпочитаемая темная тема'}
+              secondary={preferredDarkThemeName}
+            />
+          </ListItem>
+          <ThemeSelectDialog
+            keepMounted={false}
+            id="preferred-light-theme-select-dialog"
+            open={isPreferredLightThemeDialogOpen}
+            onClose={handlePreferredLightThemeDialogClose}
+            value={preferredLightTheme}
           />
-        </ListItem>
+          <ThemeSelectDialog
+            keepMounted={false}
+            id="preferred-dark-theme-select-dialog"
+            open={isPreferredDarkThemeDialogOpen}
+            onClose={handlePreferredDarkThemeDialogClose}
+            value={preferredDarkTheme}
+          />
+        </div>
       </div>
     </OutsidePage>
   )

@@ -11,6 +11,7 @@ import Profile from './pages/Profile'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import OutsidePage from 'src/components/blocks/OutsidePage'
+import { makeStyles } from '@material-ui/core/styles'
 
 export interface ComponentWithUserParams {
   classes?: string
@@ -20,8 +21,17 @@ export interface UserParams {
   login: string
 }
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  }
+}))
+
 const User = () => {
   const dispatch = useDispatch()
+  const classes = useStyles()
   const profile = useSelector((state) => state.profile.profile.card.data)
   const whois = useSelector((state) => state.profile.profile.whois.data)
   const isUserFetched = useSelector(
@@ -62,11 +72,13 @@ const User = () => {
       hidePositionBar
       shrinkedHeaderText={profile?.fullname}
     >
-      {(userFetchError || whoisFetchError) && (
-        <ErrorComponent message={userFetchError || whoisFetchError} />
-      )}
-      {isUserFetched && isWhoisFetched && <Profile />}
-      {(isUserFetching || isWhoisFetching) && <UserPageSkeleton />}
+      <div className={classes.root}>
+        {(userFetchError || whoisFetchError) && (
+          <ErrorComponent message={userFetchError || whoisFetchError} />
+        )}
+        {isUserFetched && isWhoisFetched && <Profile />}
+        {(isUserFetching || isWhoisFetching) && <UserPageSkeleton />}
+      </div>
     </OutsidePage>
   )
 }

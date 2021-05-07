@@ -10,7 +10,6 @@ import {
   POST_FETCH_REJECTED,
   State,
 } from './types'
-import { POST_READING_PROGRESS_KEY } from 'src/config/constants'
 import { FetchingState } from 'src/interfaces'
 
 const initialData = {

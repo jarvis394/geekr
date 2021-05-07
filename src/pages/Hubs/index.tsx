@@ -19,6 +19,11 @@ import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperCol
 import useQuery from 'src/hooks/useQuery'
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  },
   list: {
     backgroundColor: getContrastPaperColor(theme),
     marginTop: theme.spacing(-1),
@@ -118,35 +123,37 @@ const Hubs = () => {
     <ErrorComponent message={fetchError.error.message} />
   ) : (
     <OutsidePage headerText={headerText} hidePositionBar disableShrinking>
-      <SearchBar inputRef={inputRef} onSubmit={search} />
-      <List className={classes.list}>
-        {isFetching && <Loader />}
-        {isFetched &&
-          query &&
-          storeSearchResults.length !== 0 &&
-          storeSearchResults.hubIds.map((e: string, i: number) => (
-            <Item data={storeSearchResults.hubRefs[e]} key={i} />
-          ))}
-        {isFetched && query && storeSearchResults.pagesCount === 0 && (
-          <NoResults />
+      <div className={classes.root}>
+        <SearchBar inputRef={inputRef} onSubmit={search} />
+        <List className={classes.list}>
+          {isFetching && <Loader />}
+          {isFetched &&
+            query &&
+            storeSearchResults.length !== 0 &&
+            storeSearchResults.hubIds.map((e: string, i: number) => (
+              <Item data={storeSearchResults.hubRefs[e]} key={i} />
+            ))}
+          {isFetched && query && storeSearchResults.pagesCount === 0 && (
+            <NoResults />
+          )}
+          {isFetched &&
+            !query &&
+            data &&
+            data.hubIds.map((e: string, i: number) => (
+              <Item data={data.hubRefs[e]} key={i} />
+            ))}
+        </List>
+        {pagesCount && !query && (
+          <div className={classes.pagination}>
+            <Pagination
+              disabled={isFetching}
+              steps={pagesCount}
+              handleChange={handlePagination}
+              currentStep={currentPage}
+            />
+          </div>
         )}
-        {isFetched &&
-          !query &&
-          data &&
-          data.hubIds.map((e: string, i: number) => (
-            <Item data={data.hubRefs[e]} key={i} />
-          ))}
-      </List>
-      {pagesCount && !query && (
-        <div className={classes.pagination}>
-          <Pagination
-            disabled={isFetching}
-            steps={pagesCount}
-            handleChange={handlePagination}
-            currentStep={currentPage}
-          />
-        </div>
-      )}
+      </div>
     </OutsidePage>
   )
 }

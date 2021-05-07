@@ -4,6 +4,7 @@ import Settings from 'src/pages/Settings/index'
 import SettingsAppearance from 'src/pages/Settings/Appearance'
 import SettingsBlacklist from 'src/pages/Settings/Blacklist'
 import SettingsNewTheme from 'src/pages/Settings/NewTheme'
+import SettingsPrivacy from 'src/pages/Settings/Privacy'
 import Search from 'src/pages/Search'
 import News from 'src/pages/News'
 import NotFound from 'src/pages/NotFound'
@@ -89,13 +90,22 @@ export const routes: Route[] = [
     alias: 'post'
   },
   {
+    path: '/settings/privacy',
+    component: <SettingsPrivacy />,
+    title: 'Приватность',
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => getContrastPaperColor(theme),
+    alias: 'settings-privacy'
+  },
+  {
     path: '/settings/appearance/new-theme',
     component: <SettingsNewTheme />,
     title: 'Новая тема',
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
-    alias: 'new-theme'
+    alias: 'settings-new-theme'
   },
   {
     path: '/settings/appearance/edit-theme/:themeType',
@@ -104,7 +114,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
-    alias: 'edit-theme'
+    alias: 'settings-edit-theme'
   },
   {
     path: '/settings/appearance',
@@ -113,7 +123,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
-    alias: 'appearance'
+    alias: 'settings-appearance'
   },
   {
     path: '/settings/blacklist',
@@ -122,7 +132,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
-    alias: 'blacklist'
+    alias: 'settings-blacklist'
   },
   {
     path: '/settings',

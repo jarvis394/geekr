@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import { fade, makeStyles } from '@material-ui/core/styles'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
@@ -15,11 +15,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  TextField,
 } from '@material-ui/core'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import { setSettings } from 'src/store/actions/settings'
 import AddRoundedIcon from '@material-ui/icons/AddRounded'
+import MainBlock from 'src/components/blocks/MainBlock'
+import Sidebar from 'src/components/blocks/Sidebar'
+import SideBlock from 'src/components/blocks/SideBlock'
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -44,13 +48,13 @@ const useStyles = makeStyles((theme) => ({
   },
   emptyText: {
     padding: theme.spacing(2.5, 0),
-    textAlign: 'center'
+    textAlign: 'center',
   },
   addButton: {
     position: 'absolute',
     right: 0,
-    top: -3
-  }
+    top: -3,
+  },
 }))
 
 const List = ({ items, setItems }) => {
@@ -105,12 +109,67 @@ const List = ({ items, setItems }) => {
   )
 }
 
-const AddDialog = () => {
-  const [isOpen, setOpen] = useState(false)
+interface AddDialogProps {
+  isOpen: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  onSubmit: (login: string) => void
+  placeholder: string
+  title: string
+}
+const AddDialog: React.FC<AddDialogProps> = ({
+  isOpen,
+  setOpen,
+  onSubmit,
+  placeholder,
+  title,
+}) => {
+  const textInputRef = useRef<HTMLInputElement>()
+  const handleClose = () => setOpen(false)
+  const handleSubmit = () => {
+    if (textInputRef.current) {
+      onSubmit(textInputRef.current.value)
+      setOpen(false)
+    }
+  }
+
+  return (
+    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={handleClose}>
+      <DialogTitle style={{ paddingBottom: 0 }} id="add-dialog-title">
+        {title}
+      </DialogTitle>
+      <DialogContent>
+        <TextField
+          inputRef={textInputRef}
+          autoFocus
+          margin="dense"
+          name="title"
+          label="Логин"
+          placeholder={placeholder}
+          type="text"
+          fullWidth
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="default">
+          Отмена
+        </Button>
+        <Button
+          color="primary"
+          variant="contained"
+          disableElevation
+          onClick={handleSubmit}
+        >
+          Добавить
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
 }
 
 const Blacklist = () => {
   const classes = useStyles()
+  const [isAddAuthorDialogOpen, setAddAuthorDialogOpen] = useState(false)
+  const [isAddCompanyDialogOpen, setAddCompanyDialogOpen] = useState(false)
   const hiddenAuthors = useSelector((store) => store.settings.hiddenAuthors)
   const hiddenCompanies = useSelector((store) => store.settings.hiddenCompanies)
   const dispatch = useDispatch()
@@ -126,44 +185,87 @@ const Blacklist = () => {
         hiddenCompanies: items,
       })
     )
-  const addHiddenAuthor = () => {
-    //
+  const addHiddenAuthor = (login: string) => {
+    const newHiddenAuthors = [...hiddenAuthors, login]
+    setHiddenAuthors(newHiddenAuthors)
   }
-  const addHiddenCompany = () => {
-    //
+  const addHiddenCompany = (login: string) => {
+    const newHiddenCompanies = [...hiddenCompanies, login]
+    setHiddenCompanies(newHiddenCompanies)
+  }
+  const openAddHiddenAuthorDialog = () => {
+    setAddAuthorDialogOpen(true)
+  }
+  const openAddHiddenCompanyDialog = () => {
+    setAddCompanyDialogOpen(true)
   }
   const emptyText = (
-    <Typography color="textSecondary" variant="body2" className={classes.emptyText}>
+    <Typography
+      color="textSecondary"
+      variant="body2"
+      className={classes.emptyText}
+    >
       В чёрном списке пока нет элементов.
     </Typography>
   )
 
   return (
     <OutsidePage headerText={'Чёрный список'} disableShrinking>
-      <div className={classes.section}>
-        <Typography className={classes.sectionHeader}>
-          Скрытые авторы
-        </Typography>
-        <IconButton className={classes.addButton} onClick={addHiddenAuthor}>
-          <AddRoundedIcon />
-        </IconButton>
-        {hiddenAuthors.length !== 0 && (
-          <List items={hiddenAuthors} setItems={setHiddenAuthors} />
-        )}
-        {hiddenAuthors.length === 0 && emptyText}
-      </div>
-      <div className={classes.section}>
-        <Typography className={classes.sectionHeader}>
-          Скрытые компании
-        </Typography>
-        <IconButton className={classes.addButton} onClick={addHiddenCompany}>
-          <AddRoundedIcon />
-        </IconButton>
-        {hiddenCompanies.length !== 0 && (
-          <List items={hiddenCompanies} setItems={setHiddenCompanies} />
-        )}
-        {hiddenCompanies.length === 0 && emptyText}
-      </div>
+      <MainBlock>
+        <div className={classes.section}>
+          <Typography className={classes.sectionHeader}>
+            Скрытые авторы
+          </Typography>
+          <IconButton
+            className={classes.addButton}
+            onClick={openAddHiddenAuthorDialog}
+          >
+            <AddRoundedIcon />
+          </IconButton>
+          {hiddenAuthors.length !== 0 && (
+            <List items={hiddenAuthors} setItems={setHiddenAuthors} />
+          )}
+          {hiddenAuthors.length === 0 && emptyText}
+        </div>
+        <div className={classes.section}>
+          <Typography className={classes.sectionHeader}>
+            Скрытые компании
+          </Typography>
+          <IconButton
+            className={classes.addButton}
+            onClick={openAddHiddenCompanyDialog}
+          >
+            <AddRoundedIcon />
+          </IconButton>
+          {hiddenCompanies.length !== 0 && (
+            <List items={hiddenCompanies} setItems={setHiddenCompanies} />
+          )}
+          {hiddenCompanies.length === 0 && emptyText}
+        </div>
+        <AddDialog
+          isOpen={isAddAuthorDialogOpen}
+          setOpen={setAddAuthorDialogOpen}
+          onSubmit={addHiddenAuthor}
+          placeholder={'Например, vasiliy_pupkin'}
+          title={'Добавить автора'}
+        />
+        <AddDialog
+          isOpen={isAddCompanyDialogOpen}
+          setOpen={setAddCompanyDialogOpen}
+          onSubmit={addHiddenCompany}
+          placeholder={'Например, yagoogl'}
+          title={'Добавить компанию'}
+        />
+      </MainBlock>
+      <Sidebar>
+        <SideBlock title={'Информация'}>
+          <Typography variant="body2">
+            Здесь находятся те авторы и компании, которых ты не любишь. Они
+            пропадут из новостной ленты, а вместо них появится табличка о том,
+            что там был тролль.
+          </Typography>
+        </SideBlock>
+      </Sidebar>
     </OutsidePage>
   )
 }

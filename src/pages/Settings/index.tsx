@@ -1,9 +1,11 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { fade, Typography } from '@material-ui/core'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
+import isDarkTheme from 'src/utils/isDarkTheme'
+import { MIN_WIDTH } from 'src/config/constants'
+import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 
 import { Icon24PaletteOutline } from '@vkontakte/icons'
 import { Icon24HideOutline } from '@vkontakte/icons'
@@ -11,9 +13,7 @@ import { Icon24ChevronRight } from '@vkontakte/icons'
 import { Icon243SquareOutline } from '@vkontakte/icons'
 import { Icon28ArticleOutline } from '@vkontakte/icons'
 import { Icon28GlobeOutline } from '@vkontakte/icons'
-import isDarkTheme from 'src/utils/isDarkTheme'
-import { MIN_WIDTH } from 'src/config/constants'
-import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
+import { Icon28PrivacyOutline } from '@vkontakte/icons'
 
 const items = [
   {
@@ -37,6 +37,11 @@ const items = [
     text: 'Параметры чтения',
   },
   {
+    icon: Icon28PrivacyOutline,
+    to: '/privacy',
+    text: 'Приватность',
+  },
+  {
     icon: Icon28GlobeOutline,
     to: '/language',
     text: 'Язык приложения',
@@ -47,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(1, 0),
     display: 'flex',
+    width: '100%',
     flexDirection: 'column',
     backgroundColor: getContrastPaperColor(theme),
     [theme.breakpoints.up(MIN_WIDTH)]: {

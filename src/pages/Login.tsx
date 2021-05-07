@@ -21,7 +21,11 @@ import { getToken } from 'habra-auth'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  },
   paper: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),

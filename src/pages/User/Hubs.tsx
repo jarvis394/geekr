@@ -9,7 +9,6 @@ import {
 } from '@material-ui/core'
 import { ComponentWithUserParams } from './index'
 import { makeStyles, fade } from '@material-ui/core/styles'
-import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { getProfileHubs } from 'src/store/actions/profile'
 import { useSelector } from 'src/hooks'

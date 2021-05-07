@@ -96,6 +96,11 @@ const COLOR_PICKER_PRESET_COLORS = [
 ]
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
   section: {
     backgroundColor: theme.palette.background.paper,
     marginTop: theme.spacing(1.5),
@@ -693,7 +698,7 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
   const handleSaveDialogSubmit = () => {
     handleSaveClick()
     setSaveDialogOpen(false)
-    history.push('/settings/appearance')
+    history.goBack()
   }
   const handleDeleteClick = () => setDeleteDialogOpen(true)
   const handleDeleteDialogCancel = () => setDeleteDialogOpen(false)
@@ -713,7 +718,7 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
       variant: 'success',
       autoHideDuration: 3000,
     })
-    history.push('/settings/appearance')
+    history.goBack()
     setDeleteDialogOpen(false)
   }
   const handleTitleEditClick = () => setTitleEditDialogOpen(true)
@@ -836,70 +841,72 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
       toolbarIcons={toolbarIcons}
       onBackClick={onBackClick}
     >
-      {/** Save theme Dialog */}
-      <Dialog open={isSaveDialogOpen} onClose={handleSaveDialogCancel}>
-        <DialogTitle>Cохранение</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Остались несохранённые изменения, сохранить?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSaveDialogCancel} color="primary">
-            Отмена
-          </Button>
-          <Button
-            color="primary"
-            variant="contained"
-            disableElevation
-            onClick={handleSaveDialogSubmit}
-          >
-            Сохранить
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Alert severity="info" className={classes.infoAlert}>
-        Чтобы поменять цвет в теме, нажмите на его поле, а затем выберите нужный
-        цвет.
-      </Alert>
-      <PreviewBox currentTheme={currentTheme} />
-      <div className={classes.section}>
-        <div className={classes.padding}>
-          <Typography className={classes.sectionHeader}>Палитра</Typography>
-          <div>
-            <Typography gutterBottom>Тип темы</Typography>
-            <RadioGroup
-              value={currentTheme.palette.type}
-              onChange={handleThemeTypeChange}
+      <div className={classes.root}>
+        {/** Save theme Dialog */}
+        <Dialog open={isSaveDialogOpen} onClose={handleSaveDialogCancel}>
+          <DialogTitle>Cохранение</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Остались несохранённые изменения, сохранить?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleSaveDialogCancel} color="primary">
+              Отмена
+            </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              disableElevation
+              onClick={handleSaveDialogSubmit}
             >
-              <FormControlLabel
-                value="light"
-                control={<Radio color="primary" />}
-                label={'Светлая'}
-              />
-              <FormControlLabel
-                value="dark"
-                control={<Radio color="primary" />}
-                label={'Тёмная'}
-              />
-            </RadioGroup>
-            {paletteItems.map((e, i) => (
-              <PaletteGridItem
-                key={i}
-                items={e.items}
-                title={e.title}
-                setColorPickerState={setColorPickerState}
-              />
-            ))}
+              Сохранить
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Alert severity="info" className={classes.infoAlert}>
+          Чтобы поменять цвет в теме, нажмите на его поле, а затем выберите
+          нужный цвет.
+        </Alert>
+        <PreviewBox currentTheme={currentTheme} />
+        <div className={classes.section}>
+          <div className={classes.padding}>
+            <Typography className={classes.sectionHeader}>Палитра</Typography>
+            <div>
+              <Typography gutterBottom>Тип темы</Typography>
+              <RadioGroup
+                value={currentTheme.palette.type}
+                onChange={handleThemeTypeChange}
+              >
+                <FormControlLabel
+                  value="light"
+                  control={<Radio color="primary" />}
+                  label={'Светлая'}
+                />
+                <FormControlLabel
+                  value="dark"
+                  control={<Radio color="primary" />}
+                  label={'Тёмная'}
+                />
+              </RadioGroup>
+              {paletteItems.map((e, i) => (
+                <PaletteGridItem
+                  key={i}
+                  items={e.items}
+                  title={e.title}
+                  setColorPickerState={setColorPickerState}
+                />
+              ))}
+            </div>
           </div>
         </div>
+        <ColorPicker
+          setCurrentTheme={setCurrentTheme}
+          state={colorPickerState}
+          setState={setColorPickerState}
+        />
       </div>
-      <ColorPicker
-        setCurrentTheme={setCurrentTheme}
-        state={colorPickerState}
-        setState={setColorPickerState}
-      />
     </OutsidePage>
   )
 }

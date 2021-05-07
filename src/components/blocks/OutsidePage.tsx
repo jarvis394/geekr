@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
   children: {
     maxWidth: MIN_WIDTH,
     display: 'flex',
-    flexDirection: 'column',
     marginRight: 'auto',
     marginLeft: 'auto',
   },

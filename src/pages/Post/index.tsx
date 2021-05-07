@@ -41,6 +41,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: MIN_WIDTH,
     backgroundColor: getContrastPaperColor(theme),
     paddingBottom: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'column',
     [theme.breakpoints.up(MIN_WIDTH)]: {
       borderRadius: 8,
       backgroundColor: theme.palette.background.paper + ' !important',

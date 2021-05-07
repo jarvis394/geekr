@@ -31,4 +31,7 @@ export default interface UserSettings {
   autoChangeTheme: boolean
   preferredLightTheme: PaletteType | string
   preferredDarkTheme: PaletteType | string
+  cookiesPreferences: {
+    disableCookies: boolean
+  }
 }

@@ -98,7 +98,7 @@ const useCardLinkStyles = makeStyles((theme) => ({
   a: {
     padding: theme.spacing(1, 1.5),
     textDecoration: 'none',
-    color: 'initail',
+    color: 'initial',
     '-webkit-tap-highlight-color': 'transparent',
   },
   text: {

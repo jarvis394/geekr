@@ -15,7 +15,9 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import 'react-photoswipe/dist/photoswipe.css'
 import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
 import { MATOMO_SERVER_URL, MATOMO_SITE_ID } from 'src/config/constants'
+import * as userSettingsUtils from 'src/utils/userSettings'
 
+const userSettings = userSettingsUtils.get()
 const instance = createInstance({
   urlBase: MATOMO_SERVER_URL,
   siteId: MATOMO_SITE_ID,
@@ -23,8 +25,10 @@ const instance = createInstance({
   configurations: {
     setRequestMethod: 'POST',
     setRequestContentType: 'application/json',
-    setDoNotTrack: false
-  }
+    setDoNotTrack: false,
+    setSecureCookie: true,
+    disableCookies: userSettings.cookiesPreferences.disableCookies,
+  },
 })
 
 dayjs.locale('ru')
