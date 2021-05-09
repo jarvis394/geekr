@@ -1,8 +1,10 @@
+import { useTheme } from '@material-ui/core'
 import React from 'react'
 import Props from '../../interfaces/SVGProps'
 
 const NotFound = ({ svgProps, ...props }: Props) => {
   const isLight = props.theme === 'light'
+  const theme = useTheme()
 
   return (
     <div {...props}>
@@ -61,7 +63,7 @@ const NotFound = ({ svgProps, ...props }: Props) => {
             fill="url(#aba94383-0ea8-4a3d-bf3d-6bf7d0bb624b)"
           />
         </g>
-        <ellipse cx="432" cy="132.31" rx="143.21" ry="110.94" fill="#2979ff" />
+        <ellipse cx="432" cy="132.31" rx="143.21" ry="110.94" fill={theme.palette.primary.main} />
         <path
           d="M491.94,231.21c0-61.27,64.11-110.94,143.2-110.94A175.54,175.54,0,0,1,706.5,135c-25.17-17-58.1-27.33-94.14-27.33-79.09,0-143.21,49.67-143.21,110.94,0,41.14,28.91,77.05,71.86,96.21C510.94,294.48,491.94,264.57,491.94,231.21Z"
           transform="translate(-180 -86.57)"
@@ -70,7 +72,7 @@ const NotFound = ({ svgProps, ...props }: Props) => {
         />
         <polygon
           points="432 176.9 590.76 451.88 749.52 726.85 432 726.85 114.48 726.85 273.24 451.88 432 176.9"
-          fill="#2979ff"
+          fill={theme.palette.primary.main}
           opacity="0.2"
         />
         <g opacity="0.3">

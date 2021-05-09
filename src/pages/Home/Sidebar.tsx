@@ -13,8 +13,31 @@ import getPostLink from 'src/utils/getPostLink'
 import parse from 'html-react-parser'
 import formatNumber from 'src/utils/formatNumber'
 import purple from '@material-ui/core/colors/purple'
+import { Button } from '@material-ui/core'
+import { Link } from 'react-router-dom'
+import { Skeleton } from '@material-ui/lab'
 
 const ld = { lighten, darken }
+const useSkeletonStyles = makeStyles((theme) => ({
+  skeleton: {
+    backgroundColor: theme.palette.action.hover,
+    borderRadius: 8,
+  },
+}))
+
+const useStyles = makeStyles((theme) => ({
+  companiesChildrenContainerProps: {
+    marginBottom: 12,
+    display: 'flex',
+    flexDirection: 'column',
+    padding: theme.spacing(0, 2),
+  },
+  button: {
+    marginTop: 12,
+    width: '100%',
+  },
+}))
+
 const usePostItemStyles = makeStyles((theme) => ({
   root: {
     background: 'transparent',
@@ -147,8 +170,117 @@ const PostItem: React.FC<{ data: Post }> = ({ data }) => {
   )
 }
 
+const MostReadingSideBlockSkeleton = () => {
+  const classes = useSkeletonStyles()
+  const postItemClasses = usePostItemStyles()
+  return (
+    <>
+      {[...Array(5)].map((_, i) => (
+        <div key={i} className={postItemClasses.root}>
+          <Skeleton
+            variant="rect"
+            width={'85%'}
+            height={13}
+            className={[classes.skeleton, postItemClasses.title].join(' ')}
+          />
+          <Skeleton
+            variant="rect"
+            width={'70%'}
+            height={13}
+            style={{ marginTop: 4 }}
+            className={[classes.skeleton, postItemClasses.title].join(' ')}
+          />
+          <Skeleton
+            variant="rect"
+            width={'75%'}
+            height={13}
+            style={{ marginTop: 4 }}
+            className={[classes.skeleton, postItemClasses.title].join(' ')}
+          />
+          <div className={postItemClasses.bottomRow} style={{ marginTop: 4 }}>
+            <div className={postItemClasses.bottomRowItem}>
+              <Skeleton
+                width={14}
+                variant="rect"
+                height={14}
+                className={[
+                  classes.skeleton,
+                  postItemClasses.bottomRowItemIcon,
+                ].join(' ')}
+              />
+              <Skeleton
+                width={44}
+                variant="rect"
+                height={14}
+                className={[
+                  classes.skeleton,
+                  postItemClasses.bottomRowItemText,
+                ].join(' ')}
+              />
+            </div>
+            <div
+              className={
+                postItemClasses.bottomRowItem + ' ' + postItemClasses.marginLeft
+              }
+            >
+              <Skeleton
+                width={14}
+                variant="rect"
+                height={14}
+                className={[
+                  classes.skeleton,
+                  postItemClasses.bottomRowItemIcon,
+                ].join(' ')}
+              />
+              <Skeleton
+                width={32}
+                variant="rect"
+                height={14}
+                className={[
+                  classes.skeleton,
+                  postItemClasses.bottomRowItemText,
+                ].join(' ')}
+              />
+            </div>
+          </div>
+        </div>
+      ))}
+    </>
+  )
+}
+
+const CompaniesSideBlockSkeleton = () => {
+  const classes = useSkeletonStyles()
+  const companyItemClasses = useCompanyItemStyles()
+  return (
+    <>
+      {[...Array(10)].map((_, i) => (
+        <div key={i} className={companyItemClasses.root}>
+          <Skeleton
+            variant="rect"
+            className={[classes.skeleton, companyItemClasses.avatar].join(' ')}
+          />
+          <Skeleton
+            variant="rect"
+            width={84}
+            height={14}
+            className={[classes.skeleton, companyItemClasses.title].join(' ')}
+          />
+          <Skeleton
+            variant="rect"
+            width={44}
+            height={14}
+            className={[classes.skeleton, companyItemClasses.rating].join(' ')}
+          />
+        </div>
+      ))}
+    </>
+  )
+}
+
 const HomeSidebar = () => {
   const dispatch = useDispatch()
+  const classes = useStyles()
   const mostReadingState = useSelector(
     (store) => store.home.sidebar.mostReading.state
   )
@@ -188,18 +320,45 @@ const HomeSidebar = () => {
 
   return (
     <Sidebar>
-      <SideBlock title={'Лучшие компании'}>
-        {topCompaniesState === FetchingState.Fetched &&
-          topCompanies.companyIds.map((e) => (
-            <CompanyItem data={topCompanies.companyRefs[e]} key={e} />
-          ))}
-      </SideBlock>
-      <SideBlock title={'Читают сейчас'}>
-        {mostReadingState === FetchingState.Fetched &&
-          mostReading.articleIds
-            .slice(0, 5)
-            .map((e) => <PostItem data={mostReading.articleRefs[e]} key={e} />)}
-      </SideBlock>
+      {topCompaniesState !== FetchingState.Error && (
+        <SideBlock
+          childrenContainerProps={{
+            className: classes.companiesChildrenContainerProps,
+          }}
+          title={'Лучшие компании'}
+        >
+          {topCompaniesState !== FetchingState.Fetched && (
+            <CompaniesSideBlockSkeleton />
+          )}
+          {topCompaniesState === FetchingState.Fetched &&
+            topCompanies.companyIds.map((e) => (
+              <CompanyItem data={topCompanies.companyRefs[e]} key={e} />
+            ))}
+          <Link
+            to={'/companies/p/1'}
+            style={{
+              textDecoration: 'none',
+            }}
+          >
+            <Button className={classes.button} size="small" color="primary">
+              Все компании
+            </Button>
+          </Link>
+        </SideBlock>
+      )}
+      {mostReadingState !== FetchingState.Error && (
+        <SideBlock title={'Читают сейчас'}>
+          {mostReadingState !== FetchingState.Fetched && (
+            <MostReadingSideBlockSkeleton />
+          )}
+          {mostReadingState === FetchingState.Fetched &&
+            mostReading.articleIds
+              .slice(0, 5)
+              .map((e) => (
+                <PostItem data={mostReading.articleRefs[e]} key={e} />
+              ))}
+        </SideBlock>
+      )}
     </Sidebar>
   )
 }

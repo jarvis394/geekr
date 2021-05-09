@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     minHeight: 600,
+    width: '100%',
     background: theme.palette.background.default,
   },
 }))
@@ -79,6 +80,7 @@ const useNoResultsStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     flexDirection: 'column',
     height: '100%',
+    margin: theme.spacing(2),
   },
   title: {
     fontFamily: 'Google Sans',
@@ -183,7 +185,7 @@ const SearchResultsScreen = ({ q }) => {
     // eslint-disable-next-line
   }, [q, currentPage])
 
-  if (fetchError) return <NoResults />
+  if (fetchError || data?.articleIds?.length === 0) return <NoResults />
 
   return (
     <div>

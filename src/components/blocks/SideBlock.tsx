@@ -30,15 +30,23 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: theme.spacing(0, 2),
-    marginBottom: theme.spacing(2)
-  }
+    marginBottom: theme.spacing(2),
+  },
 }))
 
 interface Props {
   title: string
+  childrenContainerProps?: React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLDivElement>,
+    HTMLDivElement
+  >
 }
 
-const SideBlock: React.FC<Props> = ({ children, title }) => {
+const SideBlock: React.FC<Props> = ({
+  children,
+  title,
+  childrenContainerProps,
+}) => {
   const classes = useStyles()
 
   return (
@@ -46,7 +54,12 @@ const SideBlock: React.FC<Props> = ({ children, title }) => {
       <div className={classes.titleContainer}>
         <Typography className={classes.title}>{title}</Typography>
       </div>
-      <div className={classes.children}>{children}</div>
+      <div
+        {...childrenContainerProps}
+        className={childrenContainerProps?.className || classes.children}
+      >
+        {children}
+      </div>
     </section>
   )
 }
