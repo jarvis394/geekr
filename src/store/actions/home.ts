@@ -63,7 +63,7 @@ export const getMostReading = () => async (dispatch) => {
 
     dispatch({
       type: type + '_FULFILLED',
-      payload: data,
+      payload: data?.articles,
     })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: { error } })
