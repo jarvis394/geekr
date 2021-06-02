@@ -14,9 +14,9 @@ import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import { useHistory } from 'react-router-dom'
 import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
-import { useScrollTrigger, Slide } from '@material-ui/core'
+import { useScrollTrigger, Slide, fade } from '@material-ui/core'
 import { useSelector } from 'src/hooks'
-import { FetchingState, UserExtended } from 'src/interfaces'
+import { FetchingState } from 'src/interfaces'
 import { useDispatch } from 'react-redux'
 import { getMe } from 'src/store/actions/user'
 
@@ -24,9 +24,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
     color: theme.palette.text.primary,
-    position: 'fixed',
+    position: 'sticky',
     height: 48,
     flexGrow: 1,
+    top: 0,
     borderBottom: '1px solid ' + theme.palette.divider,
   },
   container: { maxWidth, padding: 0 },
@@ -55,6 +56,31 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(3),
     borderRadius: theme.shape.borderRadius,
   },
+  updateNotification: {
+    backgroundColor: theme.palette.primary.dark,
+    color: theme.palette.text.primary,
+    position: 'relative',
+    height: 48,
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  updateNotificationText: {
+    color: theme.palette.getContrastText(theme.palette.primary.dark),
+    fontWeight: 500,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  updateNotificationLink: {
+    textDecoration: 'none !important',
+    '-webkit-tap-highlight-color': fade(theme.palette.divider, 0.12) + ' !important'
+  },
+  updateNotificationIcon: {
+    marginLeft: theme.spacing(1),
+    marginTop: -1
+  }
 }))
 
 interface HideOnScrollProps {
@@ -71,6 +97,8 @@ const HideOnScroll = (props: HideOnScrollProps) => {
     </Slide>
   )
 }
+
+import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded'
 
 const Component = () => {
   const classes = useStyles()
@@ -89,48 +117,61 @@ const Component = () => {
   }, [shouldFetchUser, dispatch, token])
 
   return (
-    <HideOnScroll>
-      <AppBar className={classes.root} elevation={0}>
-        <Container className={classes.container}>
-          <Toolbar style={{ minHeight: 'unset', height: 48 }}>
-            <Typography variant="h6" className={classes.linkTypography}>
-              <Link
-                to={mode ? `${mode.to}/p/1` : '/'}
-                onClick={() => window.scrollTo(0, 0)}
-                className={classes.link}
-              >
-                habra.
-                <Offline
-                  polling={{
-                    url: 'https://ipv4.icanhazip.com',
-                  }}
+    <>
+      <a
+        className={classes.updateNotificationLink}
+        href={'https://habra.vercel.app/top/daily/p/1'}
+      >
+        <AppBar className={classes.updateNotification} elevation={0}>
+          <Typography className={classes.updateNotificationText}>
+            Перейти на новую версию приложения
+            <ArrowForwardRoundedIcon className={classes.updateNotificationIcon} />
+          </Typography>
+        </AppBar>
+      </a>
+      <HideOnScroll>
+        <AppBar className={classes.root} elevation={0}>
+          <Container className={classes.container}>
+            <Toolbar style={{ minHeight: 'unset', height: 48 }}>
+              <Typography variant="h6" className={classes.linkTypography}>
+                <Link
+                  to={mode ? `${mode.to}/p/1` : '/'}
+                  onClick={() => window.scrollTo(0, 0)}
+                  className={classes.link}
                 >
-                  <WifiOffRoundedIcon className={classes.offline} />
-                </Offline>
-              </Link>
-            </Typography>
-            <IconButton onClick={() => history.push('/search')}>
-              <SearchRoundedIcon />
-            </IconButton>
-            <IconButton onClick={() => history.push('/settings')}>
-              <SettingsOutlinedIcon />
-            </IconButton>
-            {!shouldShowUser && (
-              <IconButton onClick={() => history.push('/auth')}>
-                <PermIdentityRoundedIcon />
+                  habra.
+                  <Offline
+                    polling={{
+                      url: 'https://ipv4.icanhazip.com',
+                    }}
+                  >
+                    <WifiOffRoundedIcon className={classes.offline} />
+                  </Offline>
+                </Link>
+              </Typography>
+              <IconButton onClick={() => history.push('/search')}>
+                <SearchRoundedIcon />
               </IconButton>
-            )}
-            {shouldShowUser && (
-              <IconButton
-                onClick={() => history.push('/user/' + userData.login)}
-              >
-                <Avatar className={classes.avatar} src={userData.avatar} />
+              <IconButton onClick={() => history.push('/settings')}>
+                <SettingsOutlinedIcon />
               </IconButton>
-            )}
-          </Toolbar>
-        </Container>
-      </AppBar>
-    </HideOnScroll>
+              {!shouldShowUser && (
+                <IconButton onClick={() => history.push('/auth')}>
+                  <PermIdentityRoundedIcon />
+                </IconButton>
+              )}
+              {shouldShowUser && (
+                <IconButton
+                  onClick={() => history.push('/user/' + userData.login)}
+                >
+                  <Avatar className={classes.avatar} src={userData.avatar} />
+                </IconButton>
+              )}
+            </Toolbar>
+          </Container>
+        </AppBar>
+      </HideOnScroll>
+    </>
   )
 }
 

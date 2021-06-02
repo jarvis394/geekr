@@ -14,6 +14,7 @@ import Tabs from './blocks/Tabs/RouterTabs'
 import ScrollRestoration from 'react-scroll-restoration'
 import RouterTitleChange from './RouterTitleChange'
 import { SnackbarProvider } from 'notistack'
+import StartupDialog from './StartupDialog'
 
 const chromeAddressBarHeight = 56
 const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
@@ -26,7 +27,7 @@ const useStyles = makeStyles(() => ({
     borderRadius: 0,
     flexDirection: 'column',
     maxWidth: minWidth,
-    margin: '48px auto 0 auto',
+    margin: '0px auto 0 auto',
   },
   root: {
     /** Disable blue highlight for links. Can be bad for accessibility. */
@@ -91,6 +92,8 @@ const App = (): React.ReactElement => {
 
           {/** Change document title on routing */}
           <RouterTitleChange />
+
+          {/* <StartupDialog /> */}
 
           <AppBar />
           <div className={classes.app}>

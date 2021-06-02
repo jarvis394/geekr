@@ -21,7 +21,10 @@ import {
 } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    padding: theme.spacing(2),
+    borderRadius: 8
+  },
   title: {
     textAlign: 'center',
     fontFamily: 'Google Sans',
@@ -42,55 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const LanguagePage = () => {
-  const classes = useStyles()
-  const [value, setValue] = useState<'russian' | 'english'>()
-  const handleChange = (event) => setValue(event.target.value)
-
-  return (
-    <div className={classes.centered}>
-      <Typography className={classes.title}>Привет!</Typography>
-
-      <Typography>
-        Привет! Ты можешь выбрать язык, на котором будет приложение.
-      </Typography>
-
-      {/* <FormControl component="fieldset">
-          <RadioGroup name="language" value={value} onChange={handleChange}>
-            <FormControlLabel
-              value="russian"
-              control={<Radio color="primary" />}
-              label="Русский"
-            />
-            <FormControlLabel
-              value="english"
-              control={<Radio color="primary" />}
-              label="English"
-            />
-          </RadioGroup>
-        </FormControl> */}
-    </div>
-  )
-}
-
-const getSteps = () => {
-  return [<LanguagePage key={0} />, <LanguagePage key={1} />]
-}
-
-const getLabels = () => {
-  return ['Язык', 'Тема']
-}
-
 const StartupDialog = () => {
-  const [activeStep, setActiveStep] = useState(0)
-  const steps = getSteps()
-  const labels = getLabels()
-  const handleStepChoose = (event) =>
-    setActiveStep((prevActiveStep) => {
-      console.log(event.target.value)
-      return prevActiveStep + 1
-    })
-
   const [open, setOpen] = useState(true)
   const classes = useStyles()
   const theme = useTheme()
@@ -100,12 +55,13 @@ const StartupDialog = () => {
 
   return (
     <Dialog
-      className={classes.root}
       fullScreen={fullScreen}
       open={open}
       onClose={handleClose}
+      classes={{
+        paper: classes.root
+      }}
     >
-      {steps[activeStep]}
     </Dialog>
   )
 }
