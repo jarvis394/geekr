@@ -2,7 +2,10 @@ import * as React from 'react'
 import Skeleton from '@material-ui/lab/Skeleton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { GridListTile } from '@material-ui/core'
-import { ADVERTS_BLOCK_HEIGHT } from 'src/config/constants'
+import {
+  ADVERTS_BLOCK_HEIGHT,
+  ADVERTS_BLOCK_MAX_WIDTH,
+} from 'src/config/constants'
 
 const useStyles = makeStyles((theme) => ({
   skeleton: {
@@ -19,7 +22,11 @@ const AdvertsBlockSkeleton = () => {
       {[...Array(3)].map((_, i) => (
         <GridListTile
           key={i}
-          style={{ padding: '2px 2px 2px 16px', width: '90.9091%' }}
+          style={{
+            padding: '2px 2px 2px 16px',
+            width: '83.3333%',
+            maxWidth: ADVERTS_BLOCK_MAX_WIDTH,
+          }}
         >
           <Skeleton
             variant="rect"

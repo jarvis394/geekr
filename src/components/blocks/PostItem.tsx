@@ -41,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     backgroundColor: theme.palette.background.paper,
     marginBottom: 12,
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      border: '1px solid ' + fade(theme.palette.divider, 0.05),
+      borderRadius: 8
+    }
   },
   postLink: {
     color: theme.palette.text.primary,

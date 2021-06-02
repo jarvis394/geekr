@@ -297,14 +297,8 @@ const NavBarUnmemoized = ({
               {toolbarIcons}
             </ToolbarIconsWrapper>
           </div>
-          <div className={classes.dividerHolder}>
-            <Divider className={classes.divider} />
-          </div>
         </div>
       </Toolbar>
-      <div className={classes.dividerHolderFullWidth}>
-        <Divider className={classes.dividerFullWidth} />
-      </div>
     </AppBar>
   )
 }

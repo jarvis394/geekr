@@ -1,22 +1,48 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import Container from '@material-ui/core/Container'
 import { MIN_WIDTH, RATING_MODES as modes } from '../../config/constants'
 import {
   Button,
   ButtonBase,
-  ButtonGroup,
-  IconButton,
-  SwipeableDrawer,
+  createStyles,
+  fade,
+  Tab,
+  Tabs,
+  Theme,
+  withStyles,
 } from '@material-ui/core'
 import { ModeObject } from 'src/interfaces'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import SwitcherButtons from './SwitcherButtons'
-import { Icon24Cancel } from '@vkontakte/icons'
-import BottomDrawer from 'src/components/blocks/BottomDrawer'
+import BottomDrawerMargin from 'src/components/blocks/BottomDrawerMargin'
+import isDarkTheme from 'src/utils/isDarkTheme'
+
+interface StyledTabProps {
+  label: string
+}
 
 const useStyles = makeStyles((theme) => ({
+  switcherDesktop: {
+    display: 'none',
+    flexDirection: 'column',
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      display: 'flex',
+    },
+  },
+  inline: {
+    flexDirection: 'row',
+    display: 'flex',
+  },
+  currentFlow: {
+    marginBottom: theme.spacing(2),
+    fontFamily: 'Google Sans',
+    fontWeight: 700,
+    fontSize: 28,
+    marginLeft: theme.spacing(0.5),
+  },
   button: {
     background: theme.palette.background.default,
     textAlign: 'left',
@@ -24,6 +50,9 @@ const useStyles = makeStyles((theme) => ({
     height: 48,
     marginTop: theme.spacing(1),
     width: '100%',
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      display: 'none',
+    },
   },
   buttonContainer: {
     display: 'flex',
@@ -47,42 +76,11 @@ const useStyles = makeStyles((theme) => ({
   expandIcon: {
     fontSize: 28,
   },
-  backdrop: {
-    color: '#fff',
-  },
-  drawerRoot: {
-    WebkitBorderTopLeftRadius: '14px',
-    WebkitBorderTopRightRadius: '14px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    maxWidth: MIN_WIDTH,
-  },
-  drawer: {
-    margin: theme.spacing(0, 0, 2, 0),
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    height: 56,
-  },
-  drawerHeaderIcon: {
-    marginRight: 4,
-    marginLeft: -12,
-  },
-  drawerHeaderText: {
-    fontFamily: 'Google Sans',
-    fontSize: 20,
-    fontWeight: 500,
-    width: '100%',
-    textAlign: 'center',
-    position: 'absolute',
-    left: 0,
-    zIndex: -1,
-  },
   drawerTitleText: {
     fontFamily: 'Google Sans',
     fontSize: 16,
     fontWeight: 500,
+    lineHeight: '14px',
     marginBottom: theme.spacing(1.5),
     color: theme.palette.text.secondary,
   },
@@ -90,6 +88,10 @@ const useStyles = makeStyles((theme) => ({
     height: 40,
     marginTop: theme.spacing(2),
     borderRadius: 8,
+    textTransform: 'none',
+    fontFamily: 'Google Sans',
+    fontSize: 15,
+    fontWeight: 500,
   },
   margin: {
     marginRight: theme.spacing(2),
@@ -97,15 +99,99 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const IOSTabs = withStyles((theme: Theme) => ({
+  root: {
+    background: fade(theme.palette.divider, isDarkTheme(theme) ? 0.1 : 0.03),
+    borderRadius: 12,
+    display: 'flex',
+    minHeight: 'unset',
+    maxWidth: 'unset',
+  },
+  scroller: {
+    padding: 4,
+  },
+  indicator: {
+    background: fade(theme.palette.divider, 0.1),
+    height: 'calc(100% - 8px)',
+    marginBottom: 4,
+    borderRadius: 8,
+    boxShadow:
+      '0 3px 6px ' +
+      fade(theme.palette.background.default, 0.1) +
+      ' !important',
+  },
+}))(Tabs)
+
+interface TabGroupProps {
+  handleShowModeChange: (newShowMode: ShowMode) => void
+  showMode: ShowMode
+  desktop?: boolean
+}
+
+const TabGroupUnmemoized: React.FC<TabGroupProps> = ({
+  handleShowModeChange,
+  showMode,
+  desktop = false,
+}) => {
+  const handleChange = (
+    _event: React.ChangeEvent<Record<string, unknown>>,
+    newValue: number
+  ) => {
+    handleShowModeChange(showModes[newValue].mode)
+  }
+
+  /**
+   * `Tab` component needs to be here so it can change its styles
+   * according to the `desktop` boolean. `Tabs` are moved outside so it
+   * will not rerender every time `showMode` changes
+   * */
+  const IOSTab = withStyles((theme: Theme) =>
+    createStyles({
+      root: {
+        textTransform: 'none',
+        minWidth: desktop ? 122 : 72,
+        minHeight: desktop ? 40 : 36,
+        flexGrow: 1,
+        fontSize: 16,
+        padding: 0,
+        maxWidth: 'unset',
+        fontFamily: 'Google Sans',
+        fontWeight: theme.typography.fontWeightMedium,
+        transition: 'opacity 0.1s ease',
+        '&:hover': {
+          opacity: 1,
+        },
+        '&$selected': {
+          color: theme.palette.text.primary,
+          fontWeight: theme.typography.fontWeightMedium,
+        },
+      },
+      selected: {},
+    })
+  )((props: StyledTabProps) => <Tab disableRipple {...props} />)
+
+  return (
+    <IOSTabs
+      value={showModes.findIndex((e) => e.mode === showMode)}
+      onChange={handleChange}
+    >
+      {showModes.map((e, i) => (
+        <IOSTab label={e.text} key={i} />
+      ))}
+    </IOSTabs>
+  )
+}
+const TabGroup = React.memo(TabGroupUnmemoized)
+
 type ShowMode = 'top' | 'new'
 const showModes: { text: string; mode: ShowMode }[] = [
   {
-    text: 'Новые',
-    mode: 'new',
-  },
-  {
     text: 'Лучшие',
     mode: 'top',
+  },
+  {
+    text: 'Новые',
+    mode: 'new',
   },
 ]
 const switcherButtonsDataNew = modes.filter(
@@ -126,8 +212,23 @@ const Switcher = ({ handleClick, mode, setMode }) => {
   const onButtonClick = () => {
     setOpen((prev) => !prev)
   }
-  const handleShowModeChange = (newShowMode: ShowMode) => {
-    newShowMode !== showMode && setShowMode(newShowMode)
+  const handleShowModeChange = (newShowMode: ShowMode, updateMode = false) => {
+    if (newShowMode !== showMode) {
+      setShowMode(newShowMode)
+      if (newShowMode === 'new') {
+        setDrawerMode(switcherButtonsDataNew[0])
+        if (updateMode) {
+          setMode(switcherButtonsDataNew[0].mode)
+          handleClick(switcherButtonsDataNew[0])
+        }
+      } else {
+        setDrawerMode(switcherButtonsDataTop[0])
+        if (updateMode) {
+          setMode(switcherButtonsDataTop[0].mode)
+          handleClick(switcherButtonsDataTop[0])
+        }
+      }
+    }
   }
   const handleApplyClick = () => {
     setMode(drawerMode.mode)
@@ -135,6 +236,11 @@ const Switcher = ({ handleClick, mode, setMode }) => {
     setOpen(false)
   }
   const onChange = React.useCallback((e: ModeObject) => setDrawerMode(e), [])
+  const onDesktopSwitcherChange = React.useCallback((e: ModeObject) => {
+    setDrawerMode(e)
+    setMode(e.mode)
+    handleClick(e)
+  }, [])
 
   return (
     <>
@@ -149,21 +255,35 @@ const Switcher = ({ handleClick, mode, setMode }) => {
         </div>
       </ButtonBase>
 
-      <BottomDrawer headerText={'Период'} isOpen={isOpen} setOpen={setOpen}>
+      <div className={classes.switcherDesktop}>
+        <Typography className={classes.currentFlow}>Все потоки</Typography>
+        <div className={classes.inline}>
+          <TabGroup
+            handleShowModeChange={(m) => handleShowModeChange(m, true)}
+            showMode={showMode}
+            desktop
+          />
+          <SwitcherButtons
+            data={
+              showMode === 'new'
+                ? switcherButtonsDataNew
+                : switcherButtonsDataTop
+            }
+            onChange={onDesktopSwitcherChange}
+            currentValue={drawerMode.mode}
+            inline
+          />
+        </div>
+      </div>
+
+      <BottomDrawerMargin isOpen={isOpen} setOpen={setOpen}>
         <Typography className={classes.drawerTitleText}>
           Сначала показывать
         </Typography>
-        <ButtonGroup disableElevation color="primary">
-          {showModes.map((e, i) => (
-            <Button
-              onClick={() => handleShowModeChange(e.mode)}
-              variant={e.mode === showMode ? 'contained' : 'outlined'}
-              key={i}
-            >
-              {e.text}
-            </Button>
-          ))}
-        </ButtonGroup>
+        <TabGroup
+          handleShowModeChange={handleShowModeChange}
+          showMode={showMode}
+        />
 
         {/** Block for 'new' showMode */}
         {showMode === 'new' && (
@@ -208,7 +328,7 @@ const Switcher = ({ handleClick, mode, setMode }) => {
         >
           Применить
         </Button>
-      </BottomDrawer>
+      </BottomDrawerMargin>
     </>
   )
 }

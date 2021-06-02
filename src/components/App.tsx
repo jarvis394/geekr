@@ -8,7 +8,8 @@ import {
   APP_BAR_HEIGHT,
   BOTTOM_BAR_HEIGHT,
   chromeAddressBarHeight,
-  MIN_WIDTH as minWidth,
+  MAX_WIDTH as maxWidth,
+  MIN_WIDTH
 } from '../config/constants'
 import { lighten, darken } from '@material-ui/core/styles'
 import isMobile from 'is-mobile'
@@ -53,17 +54,20 @@ const useStyles = makeStyles({
       animation: 'exit 255ms ease',
     },
   },
-  app: ({ shouldShowAppBar }: StyleProps) => ({
+  app: ({ shouldShowAppBar, theme }: StyleProps) => ({
     display: 'flex',
     minHeight: `calc(100vh - ${APP_BAR_HEIGHT}px - ${
       isMobile() ? chromeAddressBarHeight : 0
     }px - ${shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0}px)`,
     borderRadius: 0,
     flexDirection: 'row',
-    maxWidth: minWidth,
+    maxWidth: maxWidth,
     margin: `${APP_BAR_HEIGHT}px auto ${
       shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0
-    }px auto`
+    }px auto`,
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      padding: theme.spacing(0, 2),
+    },
   }),
   /** Body class */
   root: ({ theme }: StyleProps) => ({

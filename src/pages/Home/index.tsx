@@ -8,7 +8,7 @@ import PostItem from 'src/components/blocks/PostItem'
 import Pagination from 'src/components/blocks/Pagination'
 import ErrorComponent from 'src/components/blocks/Error'
 import NewsBlock from 'src/pages/Home/NewsBlock'
-import { Mode, RATING_MODES as modes } from 'src/config/constants'
+import { APP_BAR_HEIGHT, MIN_WIDTH, Mode, RATING_MODES as modes } from 'src/config/constants'
 import Switcher from './Switcher'
 import { useDispatch } from 'react-redux'
 import { getPosts } from 'src/store/actions/home'
@@ -18,9 +18,24 @@ import AdvertsBlock from './AdvertsBlock'
 import MainBlock from 'src/components/blocks/MainBlock'
 import Sidebar from 'src/pages/Home/Sidebar'
 import UpdateNotification from 'src/components/blocks/UpdateNotification'
+import FlowsBar from './FlowsBar'
+import useLastMode from 'src/utils/useLastMode'
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '100%',
+    width: '100%',
+    marginTop: APP_BAR_HEIGHT + 1,
+  },
+  flexContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    width: '100%',
+  },
+  list: {
     background: theme.palette.background.default,
     padding: 0,
     paddingTop: theme.spacing(1),
@@ -35,7 +50,8 @@ const isServerUpdateError = (message: string) => message === 'Network Error'
 const Home = () => {
   const params = useParams() as HomePathParams
   const lastSelectedMode = getCachedMode()
-  const [mode, setMode] = useState<Mode>(lastSelectedMode.mode)
+  const paramsMode = useLastMode()
+  const [mode, setMode] = useState<Mode>(paramsMode || lastSelectedMode.mode)
   const currentPage = Number(params.page)
   const history = useHistory()
   const classes = useStyles()
@@ -88,27 +104,36 @@ const Home = () => {
 
   return (
     <>
-      <MainBlock>
+      <FlowsBar />
+      <div className={classes.root}>
         <UpdateNotification />
         {currentPage === 1 && <AdvertsBlock />}
         <Switcher setMode={setMode} mode={mode} handleClick={handleSwitcher} />
-        <List className={classes.root}>
-          {isFetching &&
-            [...new Array(4)].map((_, i) => <PostSkeleton key={i} />)}
-          {isFetched && !fetchError && posts && (
-            <>
-              {postsComponents[0]}
-              {currentPage === 1 && <NewsBlock />}
-              {postsComponents.slice(1)}
-            </>
-          )}
-          {fetchError && (
-            <ErrorComponent code={fetchErrorCode} message={fetchErrorMessage} />
-          )}
-          <PaginationComponent />
-        </List>
-      </MainBlock>
-      <Sidebar />
+
+        <div className={classes.flexContainer}>
+          <MainBlock>
+            <List className={classes.list}>
+              {isFetching &&
+                [...new Array(4)].map((_, i) => <PostSkeleton key={i} />)}
+              {isFetched && !fetchError && posts && (
+                <>
+                  {postsComponents[0]}
+                  {currentPage === 1 && <NewsBlock />}
+                  {postsComponents.slice(1)}
+                </>
+              )}
+              {fetchError && (
+                <ErrorComponent
+                  code={fetchErrorCode}
+                  message={fetchErrorMessage}
+                />
+              )}
+              <PaginationComponent />
+            </List>
+          </MainBlock>
+          <Sidebar />
+        </div>
+      </div>
     </>
   )
 }

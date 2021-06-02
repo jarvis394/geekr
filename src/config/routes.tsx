@@ -271,7 +271,8 @@ export const routes: Route[] = [
     ],
     component: <Home />,
     shouldShowAppBar: true,
-    shouldAppBarChangeColors: true,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.paper,
     alias: 'feed'
   },
   {

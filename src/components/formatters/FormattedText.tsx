@@ -1,5 +1,11 @@
 import * as React from 'react'
-import { makeStyles, fade, useTheme, darken, lighten } from '@material-ui/core/styles'
+import {
+  makeStyles,
+  fade,
+  useTheme,
+  darken,
+  lighten,
+} from '@material-ui/core/styles'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import Spoiler from '../blocks/Spoiler'
@@ -10,6 +16,8 @@ import Iframe from 'react-iframe'
 import { Node as MathJaxNode } from '@nteract/mathjax'
 import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 import isDarkTheme from 'src/utils/isDarkTheme'
+import ReactDOMServer from 'react-dom/server'
+import { APP_BAR_HEIGHT } from 'src/config/constants'
 
 type FloatType = 'left' | 'right'
 interface IframeResizeData {
@@ -36,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: 'underline',
     },
     '& h1+p, h2+p, h3+p, h4+p': {
-      marginTop: (d) => (d ? 0 : theme.spacing(1.5))
+      marginTop: (d) => (d ? 0 : theme.spacing(1.5)),
     },
     '& p': { margin: 0, marginTop: (d) => (d ? 0 : theme.spacing(3)) },
     '& em': { color: fade(theme.palette.text.primary, 0.75) },
@@ -49,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     '& div.table, div.scrollable-table': {
       overflow: 'auto',
       marginTop: theme.spacing(2),
-      wordBreak: 'normal'
+      wordBreak: 'normal',
     },
     '& table': {
       width: '100%',
@@ -80,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
     '& h1, h2, h3, h4, h5, h6': {
       margin: `${theme.spacing(4)}px 0 0 0`,
       fontFamily: 'Google Sans',
-      fontWeight: 800
+      fontWeight: 800,
     },
     '& blockquote': {
       margin: '12px 0',
@@ -93,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
     '& hr': {
       border: 'none',
       borderBottom: '1px solid ' + theme.palette.divider,
-      margin: theme.spacing(1, 2)
+      margin: theme.spacing(1, 2),
     },
     '& figure': {
       margin: 0,
@@ -109,10 +117,10 @@ const useStyles = makeStyles((theme) => ({
     '& figure.float': {
       float: 'left',
       maxWidth: '50%',
-      marginRight: theme.spacing(4)
+      marginRight: theme.spacing(4),
     },
     '& figure+p': {
-      marginTop: theme.spacing(4)
+      marginTop: theme.spacing(4),
     },
     '& figure.float+p:after': {
       content: '""',
@@ -123,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.text.secondary,
       marginTop: theme.spacing(1),
       fontSize: 14,
-      display: 'block'
+      display: 'block',
     },
     // MathJaxNode overflow fix
     '& span.mjx-chtml': {
@@ -142,7 +150,7 @@ const useStyles = makeStyles((theme) => ({
     background: getInvertedContrastPaperColor(theme) + ' !important',
     color: theme.palette.text.primary + ' !important',
     '&::-webkit-scrollbar': {
-      height: 18
+      height: 18,
     },
     '&::-webkit-scrollbar-thumb': {
       background: isDarkTheme(theme)
@@ -170,7 +178,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const FormattedText = ({
+const FormattedText: React.FC<{
+  children: string
+  disableParagraphMargin?: boolean
+  className?: string
+}> = ({
   children,
   className = '',
   disableParagraphMargin = false,
@@ -184,6 +196,9 @@ const FormattedText = ({
   const options: HTMLReactParserOptions = {
     trim: true,
     replace: ({ name, children, attribs }): void | React.ReactElement => {
+      if (name === '&nbsp;') {
+        return <> </>
+      }
       if (name === 'pre') {
         const firstChild = children[0]
         const language = firstChild.attribs?.class || null
@@ -271,6 +286,25 @@ const FormattedText = ({
         ).children
 
         return <Details title={title}>{domToReact(data)}</Details>
+      }
+      if (name === 'a' && attribs?.href?.startsWith('#')) {
+        const handleLinkClick: React.MouseEventHandler<HTMLAnchorElement> = (
+          e
+        ) => {
+          e.preventDefault()
+          const el =
+            document.getElementById(attribs.href.slice(1)) ||
+            document.getElementsByName(attribs.href.slice(1))[0]
+          const yOffset = -APP_BAR_HEIGHT
+          const y =
+            el.getBoundingClientRect().top + window.pageYOffset + yOffset
+          window.scrollTo({ top: y, behavior: 'smooth' })
+        }
+        return (
+          <a onClick={handleLinkClick} {...attribs}>
+            {domToReact(children)}
+          </a>
+        )
       }
     },
   }

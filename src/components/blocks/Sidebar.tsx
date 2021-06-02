@@ -8,7 +8,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     width: 300,
     flexDirection: 'column',
-    height: '100%',
     [theme.breakpoints.down(MIN_WIDTH)]: {
       display: 'none'
     }

@@ -16,6 +16,7 @@ import isMobile from 'is-mobile'
 import {
   ADVERTS_BLOCK_HEIGHT,
   ADVERTS_BLOCK_MAX_WIDTH,
+  MIN_WIDTH,
 } from 'src/config/constants'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import { Link } from 'react-router-dom'
@@ -24,24 +25,29 @@ import { Icon24ChevronCompactRight } from '@vkontakte/icons'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: theme.spacing(1),
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     overflow: 'hidden',
     flexDirection: 'column',
+    backgroundColor: theme.palette.background.paper,
+    marginTop: theme.spacing(1.5),
+    padding: theme.spacing(1.5, 0),
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      display: 'none'
+    }
   },
   header: {
-    padding: theme.spacing(0, 2),
+    fontSize: 13,
+    color: theme.palette.text.hint,
+    textTransform: 'uppercase',
+    fontWeight: 500,
+    lineHeight: 'normal',
     fontFamily: 'Google Sans',
-    fontSize: 24,
-    fontWeight: 800,
-    height: 48,
-    display: 'flex',
-    alignItems: 'center',
+    marginBottom: theme.spacing(1),
+    padding: theme.spacing(0, 2),
   },
   buttonsHolder: {
-    marginTop: '4px !important',
     display: 'flex',
     flexWrap: 'nowrap',
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
@@ -132,7 +138,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     width: '100%',
     height: '100%',
-    background: theme.palette.background.paper + ' !important',
+    background: theme.palette.background.default + ' !important',
     boxShadow:
       '0px 1px 5px -1px rgb(0 0 0 / 5%), 0px 5px 8px 0px rgb(0 0 0 / 2%)',
     flexDirection: 'column',

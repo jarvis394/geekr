@@ -1,4 +1,4 @@
-import { ModeObject } from '../interfaces'
+import { ModeObject, FlowObject } from '../interfaces'
 import { UserSettings } from '../interfaces'
 import { darken, fade, lighten, PaletteType as MUIPaletteType } from '@material-ui/core'
 import { blue } from '@material-ui/core/colors'
@@ -10,12 +10,8 @@ export const API_TOKEN_URL = 'https://jarvis394-backend.ml/habra/'
 export const MATOMO_SERVER_URL = 'https://matomo.jarvis394-backend.ml/'
 export const MATOMO_SITE_ID = 2
 
-export const GA_ID_STRING = 'UA-188053191-1'
-
-/**
- * Minimal application width to stay with the sidebar
- */
-export const MIN_WIDTH = 1096
+export const MIN_WIDTH = 960
+export const MAX_WIDTH = 1164
 
 /**
  * Negative threshold for VisibilitySensor in PostItem component
@@ -24,13 +20,48 @@ export const POST_ITEM_VISIBILITY_THRESHOLD = -250
 
 export const POST_IMAGE_HEIGHT = 212
 export const ADVERTS_BLOCK_HEIGHT = 128
-export const ADVERTS_BLOCK_MAX_WIDTH = 496
+export const ADVERTS_BLOCK_MAX_WIDTH = 364
 export const BOTTOM_BAR_HEIGHT = 52
 export const APP_BAR_HEIGHT = 48
 
 /** Local Storage keys */
 export const USER_SETTINGS_KEY = 'habra_USER_SETTINGS'
 export const COOKIES_SNACKBAR_WAS_SHOWN_KEY = 'habra_COOKIES_SNACKBAR_WAS_SHOWN'
+
+export const FLOWS: FlowObject[] = [
+  {
+    title: 'Моя лента',
+    link: '/feed/'
+  },
+  {
+    title: 'Все потоки',
+    link: '/all/p/1/'
+  },
+  {
+    title: 'Разработка',
+    link: '/flows/develop/'
+  },
+  {
+    title: 'Администрирование',
+    link: '/flows/admin/'
+  },
+  {
+    title: 'Дизайн',
+    link: '/flows/design/'
+  },
+  {
+    title: 'Менеджмент',
+    link: '/flows/management/'
+  },
+  {
+    title: 'Маркетинг',
+    link: '/flows/marketing/'
+  },
+  {
+    title: 'Научпоп',
+    link: '/flows/popsci/'
+  },
+]
 
 export const RATING_MODES: ModeObject[] = [
   {
@@ -41,39 +72,39 @@ export const RATING_MODES: ModeObject[] = [
     switcherText: 'Все',
   },
   {
-    text: 'Новые с рейтингом ≥0',
+    text: 'Новые с рейтингом +0',
     to: '/top0',
     mode: 'top0',
     isNewMode: true,
-    switcherText: '≥0',
+    switcherText: '+0',
   },
   {
-    text: 'Новые с рейтингом ≥10',
+    text: 'Новые с рейтингом +10',
     to: '/top10',
     mode: 'top10',
     isNewMode: true,
-    switcherText: '≥10',
+    switcherText: '+10',
   },
   {
-    text: 'Новые с рейтингом ≥25',
+    text: 'Новые с рейтингом +25',
     to: '/top25',
     mode: 'top25',
     isNewMode: true,
-    switcherText: '≥25',
+    switcherText: '+25',
   },
   {
-    text: 'Новые с рейтингом ≥50',
+    text: 'Новые с рейтингом +50',
     to: '/top50',
     mode: 'top50',
     isNewMode: true,
-    switcherText: '≥50',
+    switcherText: '+50',
   },
   {
-    text: 'Новые с рейтингом ≥100',
+    text: 'Новые с рейтингом +100',
     to: '/top100',
     mode: 'top100',
     isNewMode: true,
-    switcherText: '≥100',
+    switcherText: '+100',
   },
   {
     text: 'Лучшее за день',
