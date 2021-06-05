@@ -29,6 +29,11 @@ import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 import isDarkTheme from 'src/utils/isDarkTheme'
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
   topBlock: {
     background: fadedLinearGradient(theme),
     display: 'flex',
@@ -347,7 +352,7 @@ const Profile = () => {
   }, [mode, currentPage, alias])
 
   return (
-    <>
+    <div className={classes.root}>
       <div className={classes.topBlock}>
         <Information />
         <Description />
@@ -357,7 +362,7 @@ const Profile = () => {
         <Switcher mode={mode} setMode={setMode} handleClick={handleSwitcher} />
         <Posts mode={mode} />
       </div>
-    </>
+    </div>
   )
 }
 
