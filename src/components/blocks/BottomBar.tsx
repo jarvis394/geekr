@@ -4,24 +4,12 @@ import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import { Paper } from '@material-ui/core'
 import { useLocation, useHistory } from 'react-router-dom'
-import getCachedMode from 'src/utils/getCachedMode'
-import { BOTTOM_BAR_HEIGHT } from 'src/config/constants'
+import { BOTTOM_BAR_HEIGHT, makeNavigationTabs, MIN_WIDTH } from 'src/config/constants'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
-
-import { Icon28Newsfeed } from '@vkontakte/icons'
-import { Icon20HomeOutline } from '@vkontakte/icons'
-import { Icon28ServicesOutline } from '@vkontakte/icons'
-import { Icon24Search } from '@vkontakte/icons'
-import { Icon28Profile } from '@vkontakte/icons'
 import { useRoute } from 'src/hooks'
+import TabObject from 'src/interfaces/NavigationTabObject'
 
-interface TabObject {
-  label: string
-  icon: unknown
-  to: () => string
-  match: RegExp
-  tab: string
-}
+const NAVIGATION_TABS = makeNavigationTabs()
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.appBar,
     width: '100%',
     willChange: 'transform',
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      display: 'none',
+    },
   },
   container: {
     background: getContrastPaperColor(theme),
@@ -46,45 +37,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const tabs: TabObject[] = [
-  {
-    label: 'Статьи',
-    icon: <Icon20HomeOutline width={24} height={24} />,
-    to: () => `${getCachedMode().to}/p/1`,
-    match: /\/(all|top(0|10|25|50|100)|top\/daily|top\/weekly|top\/monthly|top\/yearly|top\/alltime)\/p\/([0-9]+)\/?$/,
-    tab: 'home',
-  },
-  {
-    label: 'Новости',
-    icon: <Icon28Newsfeed width={24} height={24} />,
-    to: () => '/news/p/1',
-    tab: 'news',
-    match: /\/news\/p\/([0-9]+)\/?$/,
-  },
-  {
-    label: 'Хабы',
-    icon: <Icon28ServicesOutline width={24} height={24} />,
-    to: () => '/services',
-    match: /\/services\/?$/,
-    tab: 'services',
-  },
-  {
-    label: 'Поиск',
-    icon: <Icon24Search width={24} height={24} />,
-    to: () => '/search',
-    match: /\/search(\/p\/([0-9]+)\/?)?$/,
-    tab: 'search',
-  },
-  {
-    label: 'Профиль',
-    icon: <Icon28Profile width={24} height={24} />,
-    to: () => '/me',
-    match: /\/me\/?$/,
-    tab: 'me',
-  },
-]
+
 const findPathValue = (path: string): number => {
-  const res = tabs.findIndex((e) => path.match(e.match))
+  const res = NAVIGATION_TABS.findIndex((e) => path.match(e.match))
   return res
 }
 
@@ -125,7 +80,7 @@ const BottomBar = () => {
         showLabels
         className={classes.container}
       >
-        {tabs.map((e, i) => (
+        {NAVIGATION_TABS.map((e, i) => (
           <BottomNavigationAction
             key={i}
             classes={{ label: classes.item, selected: classes.selected }}

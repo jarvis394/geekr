@@ -21,6 +21,7 @@ import useTitleChange from 'src/hooks/useTitleChange'
 import useAnalytics from 'src/hooks/useAnalytics'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import useAutoChangeTheme from 'src/hooks/useAutoChangeTheme'
+import SideNavigationDrawer from './blocks/SideNavigationDrawer'
 
 interface StyleProps {
   theme: Theme
@@ -60,6 +61,7 @@ const useStyles = makeStyles({
       isMobile() ? chromeAddressBarHeight : 0
     }px - ${shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0}px)`,
     borderRadius: 0,
+    alignItems: 'flex-start',
     flexDirection: 'row',
     maxWidth: maxWidth,
     margin: `${APP_BAR_HEIGHT}px auto ${
@@ -70,7 +72,7 @@ const useStyles = makeStyles({
     },
   }),
   /** Body class */
-  root: ({ theme }: StyleProps) => ({
+  body: ({ theme }: StyleProps) => ({
     /** Disable blue highlight for links. Can be bad for accessibility. */
     '& a': {
       '-webkit-tap-highlight-color': fade(theme.palette.background.paper, 0.3),
@@ -125,7 +127,7 @@ const App = () => {
   useAnalytics()
 
   // Set root classes
-  document.body.className = classes.root
+  document.body.className = classes.body
 
   return (
     <div className={classes.app}>
@@ -133,6 +135,7 @@ const App = () => {
         <SnackbarProvider>
           <ScrollRestoration />
           <AppBar />
+          <SideNavigationDrawer />
           <BottomBar />
           <AppRouter />
         </SnackbarProvider>

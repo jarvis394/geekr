@@ -9,8 +9,8 @@ import {
   Typography,
 } from '@material-ui/core'
 import BackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
-import { useHistory, useLocation } from 'react-router'
-import { APP_BAR_HEIGHT, MIN_WIDTH } from 'src/config/constants'
+import { useHistory } from 'react-router'
+import { APP_BAR_HEIGHT, MAX_WIDTH, MIN_WIDTH } from 'src/config/constants'
 import isMobile from 'is-mobile'
 import { chromeAddressBarHeight } from 'src/config/constants'
 import { useScrollTrigger } from 'src/hooks'
@@ -34,10 +34,11 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   children: {
-    maxWidth: MIN_WIDTH,
+    maxWidth: MAX_WIDTH,
     display: 'flex',
     marginRight: 'auto',
     marginLeft: 'auto',
+    alignItems: 'flex-start',
   },
 }))
 
@@ -82,7 +83,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     margin: 'auto',
     minHeight: 'unset',
     padding: 0,
-    maxWidth: MIN_WIDTH,
+    maxWidth: MAX_WIDTH,
     width: '100%',
   },
   headerTitle: {
@@ -112,21 +113,8 @@ const useAppBarStyles = makeStyles((theme) => ({
     width: '100%',
     alignItems: 'center',
     transform: 'translateZ(0)',
-    height: APP_BAR_HEIGHT + 1,
+    height: APP_BAR_HEIGHT,
     flexGrow: 1,
-  },
-  dividerHolder: {
-    display: 'flex',
-    justifyContent: 'center',
-    zIndex: 1,
-    [theme.breakpoints.up(MIN_WIDTH)]: {
-      display: 'none',
-    },
-  },
-  divider: {
-    width: ({ isShrinked }: StyleProps) =>
-      isShrinked ? '100%' : 'calc(100% - 32px)',
-    transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1)',
   },
   dividerHolderFullWidth: {
     display: 'none',
@@ -299,6 +287,9 @@ const NavBarUnmemoized = ({
           </div>
         </div>
       </Toolbar>
+      <div className={classes.dividerHolderFullWidth}>
+        <Divider className={classes.dividerFullWidth} />
+      </div>
     </AppBar>
   )
 }

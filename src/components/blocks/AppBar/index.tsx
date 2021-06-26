@@ -52,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
     height: APP_BAR_HEIGHT + 1,
     flexGrow: 1,
     willChange: 'transform',
-    transition: 'all 0.1s ' + theme.transitions.easing['easeOut'],
   },
   toolbar: {
     margin: 'auto',

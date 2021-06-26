@@ -92,6 +92,21 @@ const useStyles = makeStyles((theme) => ({
   previewContainer: {
     position: 'relative',
     background: fadedLinearGradient(theme),
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      border: '1px solid ' + fade(theme.palette.divider, 0.05),
+      borderRadius: 8,
+      marginTop: theme.spacing(1.5)
+    },
+  },
+  leftItem: {
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      borderBottomLeftRadius: 8,
+    },
+  },
+  rightItem: {
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      borderBottomRightRadius: 8,
+    },
   },
   themeCardsContainer: {
     whiteSpace: 'nowrap',
@@ -358,12 +373,14 @@ const PaletteGridItem = ({
   text,
   withSymbol,
   height = 1,
+  className = ''
 }: {
   width: number
   color: string
   text: string
   withSymbol?: boolean
   height?: number
+  className?: string
 }) => {
   const theme = useTheme()
   const classes = usePaletteGridItemStyles(height)
@@ -373,7 +390,7 @@ const PaletteGridItem = ({
       item
       component={ButtonBase}
       xs={width as boolean | GridSize}
-      className={classes.gridItem}
+      className={classes.gridItem + ' ' + className}
       style={{
         background: color,
         color: theme.palette.getContrastText(color),
@@ -482,6 +499,7 @@ export const SingleRowGrid = ({ component: Item = PaletteGridItem }) => {
         height={1}
         color={theme.palette.primary.light}
         text="light"
+        className={classes.leftItem}
       />
       <Item
         width={2}
@@ -513,6 +531,7 @@ export const SingleRowGrid = ({ component: Item = PaletteGridItem }) => {
         height={1}
         color={theme.palette.text.primary}
         text="text"
+        className={classes.rightItem}
       />
     </Grid>
   )

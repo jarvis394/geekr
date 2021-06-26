@@ -34,11 +34,13 @@ import MetaTags from 'react-meta-tags'
 import getPostLink from 'src/utils/getPostLink'
 import getPostSocialImage from 'src/utils/getPostSocialImage'
 import formatLdJsonSchema from 'src/utils/formatLdJsonSchema'
+import MainBlock from 'src/components/blocks/MainBlock'
+import Sidebar from 'src/components/blocks/Sidebar'
+import SideBlock from 'src/components/blocks/SideBlock'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: '100%',
-    maxWidth: MIN_WIDTH,
     backgroundColor: getContrastPaperColor(theme),
     paddingBottom: theme.spacing(2),
     display: 'flex',
@@ -331,18 +333,26 @@ const Post = () => {
         <meta property="aiturec:datetime" content={post?.timePublished} />
         <script type="application/ld+json">{formatLdJsonSchema(post)}</script>
       </MetaTags>
-      <div className={classes.root}>
-        {contents}
 
-        {/* Bottom bar with some article info */}
-        {post && <BottomBar post={post} />}
+      <MainBlock>
+        <div className={classes.root}>
+          {contents}
 
-        {/* Similar */}
-        <SimilarPosts id={id} />
+          {/* Bottom bar with some article info */}
+          {post && <BottomBar post={post} />}
 
-        {/* Top day */}
-        <TopDayPosts />
-      </div>
+          {/* Similar */}
+          <SimilarPosts id={id} />
+
+          {/* Top day */}
+          <TopDayPosts />
+        </div>
+      </MainBlock>
+      <Sidebar>
+        <SideBlock title={'asd'}>
+
+        </SideBlock>
+      </Sidebar>
     </OutsidePage>
   )
 }
