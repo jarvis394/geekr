@@ -1,27 +1,37 @@
 import React from 'react'
-import { darken, Toolbar, AppBar, Divider } from '@material-ui/core'
+import { darken, Toolbar, AppBar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { MIN_WIDTH, MAX_WIDTH, APP_BAR_HEIGHT, FLOWS as flows } from 'src/config/constants'
+import {
+  MIN_WIDTH,
+  MAX_WIDTH,
+  APP_BAR_HEIGHT,
+  FLOWS as flows,
+  DRAWER_WIDTH,
+  MIDDLE_WIDTH,
+} from 'src/config/constants'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import { Link } from 'react-router-dom'
+import getSecondaryAppBarColor from 'src/utils/getSecondaryAppBarColor'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: darken(
-      theme.palette.background.paper,
-      isDarkTheme(theme) ? 0.25 : 0.003
-    ),
+    backgroundColor: getSecondaryAppBarColor(theme),
     color: theme.palette.text.primary,
     position: 'absolute',
-    height: APP_BAR_HEIGHT + 1,
-    top: APP_BAR_HEIGHT + 1,
+    height: APP_BAR_HEIGHT,
+    top: APP_BAR_HEIGHT,
     flexGrow: 1,
-    zIndex: 0,
+    zIndex: theme.zIndex.appBar,
     willChange: 'transform',
-    transition: 'all 0.1s ' + theme.transitions.easing['easeOut'],
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      position: 'fixed',
+      top: 0
+    },
+    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
+      paddingLeft: DRAWER_WIDTH,
+    },
   },
   toolbar: {
-    margin: 'auto',
     minHeight: 'unset',
     height: APP_BAR_HEIGHT,
     padding: 0,
@@ -34,24 +44,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    overflow: 'auto'
-  },
-  dividerWrapperFullWidth: {
-    width: '100%',
-    display: 'none',
-    [theme.breakpoints.up(MIN_WIDTH)]: {
-      display: 'flex',
-    },
-  },
-  divider: {
-    width: '100%',
+    overflow: 'auto',
   },
   link: {
     '&:first-child': {
-      marginLeft: theme.spacing(1)
+      marginLeft: theme.spacing(1),
     },
     '&:last-child': {
-      paddingRight: theme.spacing(2)
+      paddingRight: theme.spacing(2),
     },
     flexShrink: 0,
     textDecoration: 'none',
@@ -67,13 +67,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     '&:hover': {
-      color: theme.palette.primary.main
-    }
-  }
+      color: theme.palette.primary.main,
+    },
+  },
 }))
 
 const FlowsBar = () => {
   const classes = useStyles()
+
   return (
     <AppBar className={classes.root} elevation={0}>
       <Toolbar className={classes.toolbar}>
@@ -85,9 +86,6 @@ const FlowsBar = () => {
           ))}
         </div>
       </Toolbar>
-      <div className={classes.dividerWrapperFullWidth}>
-        <Divider className={classes.divider} />
-      </div>
     </AppBar>
   )
 }

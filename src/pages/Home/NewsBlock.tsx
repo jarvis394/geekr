@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 0,
     [theme.breakpoints.up(MIN_WIDTH)]: {
       borderRadius: 8,
-      border: '1px solid ' + fade(theme.palette.divider, 0.05)
     }
   },
   header: {

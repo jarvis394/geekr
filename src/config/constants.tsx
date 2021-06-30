@@ -8,7 +8,7 @@ import {
   PaletteType as MUIPaletteType,
 } from '@material-ui/core'
 import { blue } from '@material-ui/core/colors'
-import { Icon28Newsfeed } from '@vkontakte/icons'
+import { Icon28Newsfeed, Icon28SettingsOutline } from '@vkontakte/icons'
 import { Icon20HomeOutline } from '@vkontakte/icons'
 import { Icon28ServicesOutline } from '@vkontakte/icons'
 import { Icon24Search } from '@vkontakte/icons'
@@ -24,6 +24,7 @@ export const MATOMO_SERVER_URL = 'https://matomo.jarvis394-backend.ml/'
 export const MATOMO_SITE_ID = 2
 
 export const MIN_WIDTH = 960
+export const MIDDLE_WIDTH = 1175
 export const MAX_WIDTH = 1280
 
 /**
@@ -36,7 +37,7 @@ export const ADVERTS_BLOCK_HEIGHT = 128
 export const ADVERTS_BLOCK_MAX_WIDTH = 364
 export const BOTTOM_BAR_HEIGHT = 52
 export const APP_BAR_HEIGHT = 48
-export const DRAWER_WIDTH = 186
+export const DRAWER_WIDTH = 296
 
 /** Local Storage keys */
 export const USER_SETTINGS_KEY = 'habra_USER_SETTINGS'
@@ -170,43 +171,63 @@ export const POST_LABELS: Record<
   },
 }
 
-export const makeNavigationTabs = (w = 24, h = 24): TabObject[] => [
-  {
-    label: 'Статьи',
-    icon: <Icon20HomeOutline width={w} height={h} />,
-    to: () => `${getCachedMode().to}/p/1`,
-    match: /\/(all|top(0|10|25|50|100)|top\/daily|top\/weekly|top\/monthly|top\/yearly|top\/alltime)\/p\/([0-9]+)\/?$/,
-    tab: 'home',
-  },
-  {
-    label: 'Новости',
-    icon: <Icon28Newsfeed width={w} height={h} />,
-    to: () => '/news/p/1',
-    tab: 'news',
-    match: /\/news\/p\/([0-9]+)\/?$/,
-  },
-  {
-    label: 'Хабы',
-    icon: <Icon28ServicesOutline width={w} height={h} />,
-    to: () => '/services',
-    match: /\/services\/?$/,
-    tab: 'services',
-  },
-  {
-    label: 'Поиск',
-    icon: <Icon24Search width={w} height={h} />,
-    to: () => '/search',
-    match: /\/search(\/p\/([0-9]+)\/?)?$/,
-    tab: 'search',
-  },
-  {
-    label: 'Профиль',
-    icon: <Icon28Profile width={w} height={h} />,
-    to: () => '/me',
-    match: /\/me\/?$/,
-    tab: 'me',
-  },
-]
+export const makeNavigationTabs = (
+  w = 24,
+  h = 24,
+  replaceProfile = false
+): TabObject[] => {
+  const tabs = [
+    {
+      label: 'Статьи',
+      icon: <Icon20HomeOutline width={w} height={h} />,
+      to: () => `${getCachedMode().to}/p/1`,
+      match: /\/(all|top(0|10|25|50|100)|top\/daily|top\/weekly|top\/monthly|top\/yearly|top\/alltime)\/p\/([0-9]+)\/?$/,
+      tab: 'home',
+    },
+    {
+      label: 'Новости',
+      icon: <Icon28Newsfeed width={w} height={h} />,
+      to: () => '/news/p/1',
+      tab: 'news',
+      match: /\/news\/p\/([0-9]+)\/?$/,
+    },
+    {
+      label: 'Хабы',
+      icon: <Icon28ServicesOutline width={w} height={h} />,
+      to: () => '/services',
+      match: /\/services\/?$/,
+      tab: 'services',
+    },
+    {
+      label: 'Поиск',
+      icon: <Icon24Search width={w} height={h} />,
+      to: () => '/search',
+      match: /\/search(\/p\/([0-9]+)\/?)?$/,
+      tab: 'search',
+    },
+    {
+      label: 'Профиль',
+      icon: <Icon28Profile width={w} height={h} />,
+      to: () => '/me',
+      match: /\/me\/?$/,
+      tab: 'me',
+    },
+  ]
+  if (replaceProfile) {
+    tabs.splice(
+      tabs.findIndex((e) => e.tab == 'me'),
+      1,
+      {
+        label: 'Настройки',
+        icon: <Icon28SettingsOutline width={w} height={h} />,
+        to: () => '/settings',
+        match: /\/settings\/?$/,
+        tab: 'settings',
+      }
+    )
+  }
+  return tabs
+}
 
 export const HOUR = 1000 * 60 * 60
 export const DEFAULT_UPDATE_INTERVAL = HOUR / 4
@@ -235,7 +256,7 @@ export const THEMES: PaletteType[] = [
 
 /** Colors for app background */
 export const BACKGROUND_COLORS_DEFAULT = {
-  light: '#fafafa',
+  light: '#f5f5f5',
   dark: '#0e0e0e',
   oled: '#000000',
   sepia: '#f5e2a8',

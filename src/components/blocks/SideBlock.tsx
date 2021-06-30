@@ -7,7 +7,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     background: theme.palette.background.paper,
-    border: '1px solid ' + fade(theme.palette.divider, 0.05),
     borderRadius: 8,
     marginTop: theme.spacing(1.5),
   },

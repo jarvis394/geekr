@@ -7,18 +7,20 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import Avatar from '@material-ui/core/Avatar'
 import { useHistory, useLocation } from 'react-router-dom'
-import { APP_BAR_HEIGHT, MAX_WIDTH, MIN_WIDTH, RATING_MODES } from 'src/config/constants'
+import {
+  APP_BAR_HEIGHT,
+  MAX_WIDTH,
+  MIN_WIDTH,
+  RATING_MODES,
+} from 'src/config/constants'
 import { Icon28SettingsOutline } from '@vkontakte/icons'
 import { Icon24UserOutline } from '@vkontakte/icons'
 import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
 import { useRoute, useSelector } from 'src/hooks'
 import { FetchingState } from 'src/interfaces'
-import { useDispatch } from 'react-redux'
-import { getMe } from 'src/store/actions/user'
-import { Divider, fade, Theme } from '@material-ui/core'
+import { CircularProgress, Divider, fade, Theme } from '@material-ui/core'
 import useAppBarScrollTrigger from 'src/hooks/useAppBarScrollTrigger'
-import isDarkTheme from 'src/utils/isDarkTheme'
 
 interface StyleProps {
   isTransformed: boolean
@@ -34,23 +36,21 @@ const makeAppBarBackgroundColor = ({
 }) => {
   if (shouldChangeColors)
     return theme.palette.background[isTransformed ? 'paper' : 'default']
-  else
-    return appBarColor ? appBarColor(theme) : theme.palette.background.paper
+  else return appBarColor ? appBarColor(theme) : theme.palette.background.paper
 }
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: (props: StyleProps) =>
       makeAppBarBackgroundColor({ ...props, theme }),
-    boxShadow: isDarkTheme(theme) ? '0 4px 12px 0 rgba(0, 0, 0, 0.06)' : '0 0 12px 0 rgba(0, 0, 0, 0.03)',
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      backgroundColor: theme.palette.background.paper + ' !important',
-      boxShadow: 'none !important',
+      display: 'none',
     },
     color: theme.palette.text.primary,
     position: 'fixed',
     height: APP_BAR_HEIGHT + 1,
     flexGrow: 1,
+    zIndex: theme.zIndex.appBar + 1,
     willChange: 'transform',
   },
   toolbar: {
@@ -118,13 +118,11 @@ const AppBarComponent = () => {
     appBarColor,
     shouldChangeColors,
   })
-  const dispatch = useDispatch()
   const modeName = useSelector((state) => state.home.mode)
   const userState = useSelector((state) => state.user.profile.state)
   const userData = useSelector((state) => state.user.profile.data)
   const token = useSelector((state) => state.user.token)
   const mode = RATING_MODES.find((e) => e.mode === modeName)
-  const shouldFetchUser = !!token
   const shouldShowUser = userState === FetchingState.Fetched
 
   const goHome = () => {
@@ -135,16 +133,8 @@ const AppBarComponent = () => {
   }
 
   useEffect(() => {
-    if (shouldFetchUser && !shouldShowUser) dispatch(getMe(token))
-  }, [
-    dispatch,
-    token,
-    shouldChangeColors,
-    shouldFetchUser,
-    shouldShowUser,
-    isHidden,
-    route,
-  ])
+    // noop
+  }, [shouldChangeColors, isHidden, route])
 
   // Do not render the AppBar if it is hidden by the route
   if (isHidden) return null
@@ -180,20 +170,34 @@ const AppBarComponent = () => {
             >
               <Icon28SettingsOutline width={24} height={24} />
             </IconButton>
-            {!shouldShowUser && (
-              <IconButton onClick={() => (token ? '' : history.push('/auth', {
-                from: location.pathname + location.search,
-                scroll: window.pageYOffset,
-              }))}>
+            {!shouldShowUser && token && (
+              <IconButton style={{ width: 48, height: 48 }}>
+                <CircularProgress
+                  style={{ width: 16, height: 16 }}
+                  color="primary"
+                />
+              </IconButton>
+            )}
+            {!shouldShowUser && !token && (
+              <IconButton
+                onClick={() =>
+                  history.push('/auth', {
+                    from: location.pathname + location.search,
+                    scroll: window.pageYOffset,
+                  })
+                }
+              >
                 <Icon24UserOutline width={24} height={24} />
               </IconButton>
             )}
             {shouldShowUser && (
               <IconButton
-                onClick={() => history.push('/user/' + userData.login, {
-                  from: location.pathname + location.search,
-                  scroll: window.pageYOffset,
-                })}
+                onClick={() =>
+                  history.push('/user/' + userData.login, {
+                    from: location.pathname + location.search,
+                    scroll: window.pageYOffset,
+                  })
+                }
               >
                 <Avatar className={classes.avatar} src={userData.avatar} />
               </IconButton>

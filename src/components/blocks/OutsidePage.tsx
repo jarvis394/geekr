@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   AppBar,
-  Divider,
+  darken,
   Fade,
   IconButton,
   Toolbar,
@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 import BackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
 import { useHistory } from 'react-router'
-import { APP_BAR_HEIGHT, MAX_WIDTH, MIN_WIDTH } from 'src/config/constants'
+import { APP_BAR_HEIGHT, DRAWER_WIDTH, MAX_WIDTH, MIDDLE_WIDTH, MIN_WIDTH } from 'src/config/constants'
 import isMobile from 'is-mobile'
 import { chromeAddressBarHeight } from 'src/config/constants'
 import { useScrollTrigger } from 'src/hooks'
@@ -18,6 +18,8 @@ import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 import useMediaExtendedQuery from 'src/hooks/useMediaExtendedQuery'
 import getCachedMode from 'src/utils/getCachedMode'
+import isDarkTheme from 'src/utils/isDarkTheme'
+import getSecondaryAppBarColor from 'src/utils/getSecondaryAppBarColor'
 
 interface StyleProps {
   isShrinked?: boolean
@@ -39,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 'auto',
     marginLeft: 'auto',
     alignItems: 'flex-start',
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      marginTop: APP_BAR_HEIGHT
+    },
   },
 }))
 
@@ -75,15 +80,17 @@ const useAppBarStyles = makeStyles((theme) => ({
       content: '""',
       transform: 'translateZ(0)',
     },
+    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
+      paddingLeft: DRAWER_WIDTH,
+    },
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      backgroundColor: theme.palette.background.paper + ' !important',
+      backgroundColor: getSecondaryAppBarColor(theme) + ' !important',
     },
   },
   toolbar: {
-    margin: 'auto',
     minHeight: 'unset',
     padding: 0,
-    maxWidth: MAX_WIDTH,
+    maxWidth: '100%',
     width: '100%',
   },
   headerTitle: {
@@ -115,17 +122,6 @@ const useAppBarStyles = makeStyles((theme) => ({
     transform: 'translateZ(0)',
     height: APP_BAR_HEIGHT,
     flexGrow: 1,
-  },
-  dividerHolderFullWidth: {
-    display: 'none',
-    justifyContent: 'center',
-    zIndex: 1,
-    [theme.breakpoints.up(MIN_WIDTH)]: {
-      display: 'flex',
-    },
-  },
-  dividerFullWidth: {
-    width: '100%',
   },
   shrinkedHeaderTitle: {
     fontFamily: 'Google Sans',
@@ -287,9 +283,6 @@ const NavBarUnmemoized = ({
           </div>
         </div>
       </Toolbar>
-      <div className={classes.dividerHolderFullWidth}>
-        <Divider className={classes.dividerFullWidth} />
-      </div>
     </AppBar>
   )
 }

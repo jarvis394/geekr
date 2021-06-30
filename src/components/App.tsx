@@ -9,7 +9,7 @@ import {
   BOTTOM_BAR_HEIGHT,
   chromeAddressBarHeight,
   MAX_WIDTH as maxWidth,
-  MIN_WIDTH
+  MIN_WIDTH,
 } from '../config/constants'
 import { lighten, darken } from '@material-ui/core/styles'
 import isMobile from 'is-mobile'
@@ -22,6 +22,8 @@ import useAnalytics from 'src/hooks/useAnalytics'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import useAutoChangeTheme from 'src/hooks/useAutoChangeTheme'
 import SideNavigationDrawer from './blocks/SideNavigationDrawer'
+import FlowsBar from './blocks/FlowsBar'
+import useUserDataFetch from 'src/hooks/useUserDataFetch'
 
 interface StyleProps {
   theme: Theme
@@ -63,12 +65,14 @@ const useStyles = makeStyles({
     borderRadius: 0,
     alignItems: 'flex-start',
     flexDirection: 'row',
+    width: '100%',
     maxWidth: maxWidth,
     margin: `${APP_BAR_HEIGHT}px auto ${
       shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0
     }px auto`,
     [theme.breakpoints.up(MIN_WIDTH)]: {
       padding: theme.spacing(0, 2),
+      marginTop: 0
     },
   }),
   /** Body class */
@@ -108,7 +112,10 @@ const useStyles = makeStyles({
       },
     },
     '& *::selection': {
-      background: (isDarkTheme(theme) ? darken : lighten)(theme.palette.primary.main, 0.5)
+      background: (isDarkTheme(theme) ? darken : lighten)(
+        theme.palette.primary.main,
+        0.5
+      ),
     },
   }),
 })
@@ -125,22 +132,27 @@ const App = () => {
   useTitleChange()
   useAutoChangeTheme()
   useAnalytics()
+  useUserDataFetch()
 
   // Set root classes
   document.body.className = classes.body
 
   return (
-    <div className={classes.app}>
+    <>
       <ThemeProvider theme={theme}>
         <SnackbarProvider>
-          <ScrollRestoration />
-          <AppBar />
-          <SideNavigationDrawer />
-          <BottomBar />
-          <AppRouter />
+          <div style={{ display: 'flex' }}>
+            <SideNavigationDrawer />
+            <div className={classes.app}>
+              <ScrollRestoration />
+              <AppBar />
+              <BottomBar />
+              <AppRouter />
+            </div>
+          </div>
         </SnackbarProvider>
       </ThemeProvider>
-    </div>
+    </>
   )
 }
 

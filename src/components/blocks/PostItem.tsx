@@ -42,9 +42,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     marginBottom: 12,
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      border: '1px solid ' + fade(theme.palette.divider, 0.05),
-      borderRadius: 8
-    }
+      borderRadius: 8,
+    },
   },
   postLink: {
     color: theme.palette.text.primary,
@@ -67,9 +66,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     marginBottom: theme.spacing(1.5),
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      border: '1px solid ' + fade(theme.palette.divider, 0.05),
-      borderRadius: 8
-    }
+      borderRadius: 8,
+    },
   },
   padding: {
     padding: theme.spacing(2),
@@ -158,6 +156,10 @@ const useStyles = makeStyles((theme) => ({
   labelsContainer: {
     padding: theme.spacing(0, 2),
   },
+  postTypeVoice: {
+    color: theme.palette.error.light,
+    marginBottom: theme.spacing(1)
+  },
 }))
 
 interface BottomRowItemType {
@@ -178,11 +180,32 @@ export const PostItem = ({
   style?: Record<string, unknown>
   hideImage?: boolean
 }) => {
+  const { titleHtml: unparsedTitle, statistics, postFirstImage } = post || {}
+  const classes = useStyles(!!postFirstImage && !hideImage)
+
+  /**
+   * Post with postType 'voice' needs just a title to be shown.
+   * Example: https://habr.com/ru/search/?q=%D1%81%D0%B8%D1%81#h
+   * */
+  if (post.postType === 'voice') {
+    return (
+      <Paper elevation={0} className={classes.paper} style={style}>
+        <Typography
+          className={[
+            classes.postLink,
+            classes.noDeco,
+            classes.postTypeVoice,
+          ].join(' ')}
+        >
+          {post.leadData.textHtml}
+        </Typography>
+      </Paper>
+    )
+  }
+
   const hiddenAuthors = useSelector((state) => state.settings.hiddenAuthors)
   const hiddenCompanies = useSelector((state) => state.settings.hiddenCompanies)
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
-  const { titleHtml: unparsedTitle, statistics, postFirstImage } = post || {}
-  const classes = useStyles(!!postFirstImage && !hideImage)
   const [isRendered, setIsRendered] = React.useState(false)
   const history = useHistory<OutsidePageLocationState>()
   const location = useLocation()
@@ -230,7 +253,7 @@ export const PostItem = ({
       action: () => {
         history.push(postLink + '/comments', {
           from: currentLocation,
-          scroll: window.pageYOffset
+          scroll: window.pageYOffset,
         })
       },
     },
@@ -342,14 +365,14 @@ export const PostItem = ({
                     className={classes.image}
                     style={{
                       width: '100%',
-                      height: '100%'
+                      height: '100%',
                     }}
                   />
                 </LinkToOutsidePage>
               )}
 
               <LinkToOutsidePage
-                className={classes.postLink + ' ' + classes.noDeco}
+                className={[classes.postLink, classes.noDeco].join(' ')}
                 to={postLink}
               >
                 {title}

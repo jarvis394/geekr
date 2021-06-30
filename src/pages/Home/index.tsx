@@ -8,7 +8,12 @@ import PostItem from 'src/components/blocks/PostItem'
 import Pagination from 'src/components/blocks/Pagination'
 import ErrorComponent from 'src/components/blocks/Error'
 import NewsBlock from 'src/pages/Home/NewsBlock'
-import { APP_BAR_HEIGHT, MIN_WIDTH, Mode, RATING_MODES as modes } from 'src/config/constants'
+import {
+  APP_BAR_HEIGHT,
+  MIN_WIDTH,
+  Mode,
+  RATING_MODES as modes,
+} from 'src/config/constants'
 import Switcher from './Switcher'
 import { useDispatch } from 'react-redux'
 import { getPosts } from 'src/store/actions/home'
@@ -18,8 +23,8 @@ import AdvertsBlock from './AdvertsBlock'
 import MainBlock from 'src/components/blocks/MainBlock'
 import Sidebar from 'src/pages/Home/Sidebar'
 import UpdateNotification from 'src/components/blocks/UpdateNotification'
-import FlowsBar from './FlowsBar'
 import useLastMode from 'src/utils/useLastMode'
+import FlowsBar from 'src/components/blocks/FlowsBar'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,38 +108,36 @@ const Home = () => {
   }, [currentPage, mode, dispatch])
 
   return (
-    <>
+    <div className={classes.root}>
       <FlowsBar />
-      <div className={classes.root}>
-        <UpdateNotification />
-        {currentPage === 1 && <AdvertsBlock />}
-        <Switcher setMode={setMode} mode={mode} handleClick={handleSwitcher} />
+      <UpdateNotification />
+      {currentPage === 1 && <AdvertsBlock />}
+      <Switcher setMode={setMode} mode={mode} handleClick={handleSwitcher} />
 
-        <div className={classes.flexContainer}>
-          <MainBlock>
-            <List className={classes.list}>
-              {isFetching &&
-                [...new Array(4)].map((_, i) => <PostSkeleton key={i} />)}
-              {isFetched && !fetchError && posts && (
-                <>
-                  {postsComponents[0]}
-                  {currentPage === 1 && <NewsBlock />}
-                  {postsComponents.slice(1)}
-                </>
-              )}
-              {fetchError && (
-                <ErrorComponent
-                  code={fetchErrorCode}
-                  message={fetchErrorMessage}
-                />
-              )}
-              <PaginationComponent />
-            </List>
-          </MainBlock>
-          <Sidebar />
-        </div>
+      <div className={classes.flexContainer}>
+        <MainBlock>
+          <List className={classes.list}>
+            {isFetching &&
+              [...new Array(4)].map((_, i) => <PostSkeleton key={i} />)}
+            {isFetched && !fetchError && posts && (
+              <>
+                {postsComponents[0]}
+                {currentPage === 1 && <NewsBlock />}
+                {postsComponents.slice(1)}
+              </>
+            )}
+            {fetchError && (
+              <ErrorComponent
+                code={fetchErrorCode}
+                message={fetchErrorMessage}
+              />
+            )}
+            <PaginationComponent />
+          </List>
+        </MainBlock>
+        <Sidebar />
       </div>
-    </>
+    </div>
   )
 }
 
