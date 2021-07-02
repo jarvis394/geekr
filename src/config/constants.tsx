@@ -45,36 +45,32 @@ export const COOKIES_SNACKBAR_WAS_SHOWN_KEY = 'habra_COOKIES_SNACKBAR_WAS_SHOWN'
 
 export const FLOWS: FlowObject[] = [
   {
-    title: 'Моя лента',
-    link: '/feed/',
-  },
-  {
     title: 'Все потоки',
-    link: '/all/p/1/',
+    alias: 'all',
   },
   {
     title: 'Разработка',
-    link: '/flows/develop/',
+    alias: 'develop',
   },
   {
     title: 'Администрирование',
-    link: '/flows/admin/',
+    alias: 'admin',
   },
   {
     title: 'Дизайн',
-    link: '/flows/design/',
+    alias: 'design',
   },
   {
     title: 'Менеджмент',
-    link: '/flows/management/',
+    alias: 'management',
   },
   {
     title: 'Маркетинг',
-    link: '/flows/marketing/',
+    alias: 'marketing',
   },
   {
     title: 'Научпоп',
-    link: '/flows/popsci/',
+    alias: 'popsci',
   },
 ]
 

@@ -4,7 +4,7 @@ import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import { Paper } from '@material-ui/core'
 import { useLocation, useHistory } from 'react-router-dom'
-import { BOTTOM_BAR_HEIGHT, makeNavigationTabs, MIN_WIDTH } from 'src/config/constants'
+import { BOTTOM_BAR_HEIGHT, makeNavigationTabs, MIDDLE_WIDTH } from 'src/config/constants'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import { useRoute } from 'src/hooks'
 import TabObject from 'src/interfaces/NavigationTabObject'
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.appBar,
     width: '100%',
     willChange: 'transform',
-    [theme.breakpoints.up(MIN_WIDTH)]: {
+    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
       display: 'none',
     },
   },

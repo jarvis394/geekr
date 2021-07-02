@@ -48,7 +48,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.up(MIN_WIDTH)]: {
       borderRadius: 8,
       backgroundColor: theme.palette.background.paper + ' !important',
-      border: '1px solid ' + fade(theme.palette.divider, 0.05),
       marginTop: theme.spacing(1.5),
       marginBottom: theme.spacing(1.5)
     },

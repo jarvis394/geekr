@@ -275,6 +275,54 @@ export const routes: Route[] = [
     appBarColor: (theme) => theme.palette.background.paper,
     alias: 'feed'
   },
+  // {
+  //   path: '/flows/develop',
+  //   component: <Home flow={'develop'} />,
+  //   shouldShowAppBar: true,
+  //   shouldAppBarChangeColors: false,
+  //   appBarColor: (theme) => theme.palette.background.paper,
+  //   alias: 'flowsDevelop'
+  // },
+  // {
+  //   path: '/flows/design',
+  //   component: <Home flow={'design'} />,
+  //   shouldShowAppBar: true,
+  //   shouldAppBarChangeColors: false,
+  //   appBarColor: (theme) => theme.palette.background.paper,
+  //   alias: 'flowsDesign'
+  // },
+  // {
+  //   path: '/flows/admin',
+  //   component: <Home flow={'admin'} />,
+  //   shouldShowAppBar: true,
+  //   shouldAppBarChangeColors: false,
+  //   appBarColor: (theme) => theme.palette.background.paper,
+  //   alias: 'flowsAdmin'
+  // },
+  // {
+  //   path: '/flows/management',
+  //   component: <Home flow={'management'} />,
+  //   shouldShowAppBar: true,
+  //   shouldAppBarChangeColors: false,
+  //   appBarColor: (theme) => theme.palette.background.paper,
+  //   alias: 'flowsManagement'
+  // },
+  // {
+  //   path: '/flows/marketing',
+  //   component: <Home flow={'marketing'} />,
+  //   shouldShowAppBar: true,
+  //   shouldAppBarChangeColors: false,
+  //   appBarColor: (theme) => theme.palette.background.paper,
+  //   alias: 'flowsMarketing'
+  // },
+  // {
+  //   path: '/flows/popsci',
+  //   component: <Home flow={'popsci'} />,
+  //   shouldShowAppBar: true,
+  //   shouldAppBarChangeColors: false,
+  //   appBarColor: (theme) => theme.palette.background.paper,
+  //   alias: 'flowsPopsci'
+  // },
   {
     path: '/me',
     component: <Me />,

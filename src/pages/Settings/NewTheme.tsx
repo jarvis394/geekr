@@ -59,6 +59,7 @@ import {
   deepOrange,
 } from '@material-ui/core/colors'
 import { Redirect, useHistory, useParams } from 'react-router'
+import { History } from 'history'
 
 interface PaletteGridItem {
   text: string
@@ -814,7 +815,9 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
     </>
   )
 
-  const onBackClick = (backLinkFunction: () => void) => {
+  const onBackClick = (
+    backLinkFunction: (history: History<unknown>) => void
+  ) => {
     // We need to update current theme if it was edited, so colors will be updated
     if (hasBeenEdited && isEditMode) {
       dispatch(
@@ -829,7 +832,7 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
       setSaveDialogOpen(true)
     } else {
       // Otherwise, exit the page.
-      backLinkFunction()
+      backLinkFunction(history)
     }
   }
 
@@ -839,7 +842,9 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
       disableShrinking
       headerText={currentTheme.name}
       toolbarIcons={toolbarIcons}
-      onBackClick={onBackClick}
+      onBackClick={(backLinkFunction) =>
+        onBackClick(backLinkFunction.bind(history))
+      }
     >
       <div className={classes.root}>
         {/** Save theme Dialog */}

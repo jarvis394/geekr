@@ -1,5 +1,14 @@
 import { NEWS_PREFIX } from './types'
 import getPostFirstImage from 'src/utils/getPostFirstImage'
+import { FLOWS } from 'src/config/constants'
+
+const flowsData = {}
+FLOWS.forEach((e) => {
+  flowsData[e.alias] = {
+    pages: {},
+    pagesCount: null,
+  }
+})
 
 const initialState = {
   fetching: false,
@@ -12,6 +21,7 @@ const initialState = {
     error: null,
     lastUpdated: null,
   },
+  flows: flowsData,
   data: {
     pages: {},
     pagesCount: null,
@@ -25,20 +35,31 @@ export default (state = initialState, { type, payload }) => {
     }
 
     case NEWS_PREFIX + 'FETCH_FULFILLED': {
-      const { page, pagesCount, data } = payload
+      const { page, pagesCount, data, flow } = payload
+      const ids = flow === 'all' ? data.articleIds : data.newsIds
+      const refs = flow === 'all' ? data.articleRefs : data.newsRefs
 
-      for (const id in data.articleRefs) {
-        data.articleRefs[id].postFirstImage = getPostFirstImage(
-          data.articleRefs[id]
+      for (const id in refs) {
+        refs[id].postFirstImage = getPostFirstImage(
+          refs[id]
         )
       }
 
-      state.data.pages[page] = {
-        articleIds: data.articleIds,
-        articleRefs: data.articleRefs,
-        lastUpdated: Date.now(),
+      if (flow === 'all') {
+        state.data.pages[page] = {
+          articleIds: ids,
+          articleRefs: refs,
+          lastUpdated: Date.now(),
+        }
+        state.data.pagesCount = pagesCount
+      } else {
+        state.flows[flow].pages[page] = {
+          articleIds: ids,
+          articleRefs: refs,
+          lastUpdated: Date.now(),
+        }
+        state.flows[flow].pagesCount = pagesCount
       }
-      state.data.pagesCount = pagesCount
 
       return { ...state, fetching: false, fetched: true, error: null }
     }

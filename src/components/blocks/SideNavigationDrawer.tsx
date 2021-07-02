@@ -74,12 +74,12 @@ const useStyles = makeStyles<Theme, { match: boolean }>((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     marginTop: theme.spacing(2),
-    flexGrow: 1
+    flexGrow: 1,
   },
   bottomBlock: {
     padding: theme.spacing(0, 2),
     margin: theme.spacing(1, 0),
-  }
+  },
 }))
 
 const useNavButtonStyles = makeStyles((theme) => ({
@@ -131,7 +131,6 @@ const useProfileButtonStyles = makeStyles((theme) => ({
   avatar: {
     width: avatarWidth,
     height: avatarHeight,
-    color: theme.palette.primary.main,
   },
   textHolder: {
     marginLeft: theme.spacing(1.5),
@@ -221,7 +220,9 @@ const ProfileButton: React.FC = () => {
   if (token && !userData) {
     return (
       <div className={classes.root}>
-        <Avatar className={classes.avatar} />
+        <div>
+          <Skeleton variant="circle" className={classes.avatar} />
+        </div>
         <div className={classes.textHolder}>
           <Skeleton width="75%"></Skeleton>
         </div>

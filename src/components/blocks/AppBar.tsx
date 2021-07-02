@@ -11,6 +11,7 @@ import {
   APP_BAR_HEIGHT,
   MAX_WIDTH,
   MIN_WIDTH,
+  MIDDLE_WIDTH,
   RATING_MODES,
 } from 'src/config/constants'
 import { Icon28SettingsOutline } from '@vkontakte/icons'
@@ -19,7 +20,7 @@ import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
 import { useRoute, useSelector } from 'src/hooks'
 import { FetchingState } from 'src/interfaces'
-import { CircularProgress, Divider, fade, Theme } from '@material-ui/core'
+import { CircularProgress, fade, Theme } from '@material-ui/core'
 import useAppBarScrollTrigger from 'src/hooks/useAppBarScrollTrigger'
 
 interface StyleProps {
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: (props: StyleProps) =>
       makeAppBarBackgroundColor({ ...props, theme }),
-    [theme.breakpoints.up(MIN_WIDTH)]: {
+    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
       display: 'none',
     },
     color: theme.palette.text.primary,
@@ -94,16 +95,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: `calc(100% - ${theme.spacing(2) * 2}px)`,
   },
-  dividerWrapperFullWidth: {
-    width: '100%',
-    display: 'none',
-    [theme.breakpoints.up(MIN_WIDTH)]: {
-      display: 'flex',
-    },
-  },
 }))
-
-const dividerStyle = { width: '100%' }
 
 const AppBarComponent = () => {
   const trigger = useAppBarScrollTrigger()
@@ -204,9 +196,6 @@ const AppBarComponent = () => {
             )}
           </div>
         </Toolbar>
-        <div className={classes.dividerWrapperFullWidth}>
-          <Divider style={dividerStyle} />
-        </div>
       </AppBar>
     </>
   )

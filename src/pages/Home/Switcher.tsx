@@ -1,7 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import { MIN_WIDTH, RATING_MODES as modes } from '../../config/constants'
+import {
+  FLOWS,
+  MIN_WIDTH,
+  Mode,
+  RATING_MODES as modes,
+} from '../../config/constants'
 import {
   Button,
   ButtonBase,
@@ -17,6 +22,7 @@ import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import SwitcherButtons from './SwitcherButtons'
 import BottomDrawerMargin from 'src/components/blocks/BottomDrawerMargin'
 import isDarkTheme from 'src/utils/isDarkTheme'
+import FlowAlias from 'src/interfaces/FlowAlias'
 
 interface StyledTabProps {
   label: string
@@ -139,6 +145,7 @@ const TabGroupUnmemoized: React.FC<TabGroupProps> = ({
   ) => {
     handleShowModeChange(showModes[newValue].mode)
   }
+  const currentValue = showModes.findIndex((e) => e.mode === showMode)
 
   /**
    * `Tab` component needs to be here so it can change its styles
@@ -171,10 +178,7 @@ const TabGroupUnmemoized: React.FC<TabGroupProps> = ({
   )((props: StyledTabProps) => <Tab disableRipple {...props} />)
 
   return (
-    <IOSTabs
-      value={showModes.findIndex((e) => e.mode === showMode)}
-      onChange={handleChange}
-    >
+    <IOSTabs value={currentValue} onChange={handleChange}>
       {showModes.map((e, i) => (
         <IOSTab label={e.text} key={i} />
       ))}
@@ -200,13 +204,19 @@ const switcherButtonsDataNew = modes.filter(
 const switcherButtonsDataTop = modes.filter(
   (e) => e.switcherText && !e.isNewMode
 )
-const Switcher = ({ handleClick, mode, setMode }) => {
+const Switcher: React.FC<{
+  flow?: FlowAlias
+  mode: Mode
+  setMode: React.Dispatch<React.SetStateAction<Mode>>
+  handleClick: ({ mode: newMode, to }: { mode: Mode; to: string }) => void
+}> = ({ flow, handleClick, mode, setMode }) => {
   const [isOpen, setOpen] = useState(false)
   const current = modes.find((e) => e.mode === mode)
   const [showMode, setShowMode] = useState<ShowMode>(
     current.isNewMode ? 'new' : 'top'
   )
   const [drawerMode, setDrawerMode] = useState<ModeObject>(current)
+  const currentFlow = flow ? FLOWS.find((e) => e.alias === flow) : null
   const classes = useStyles()
 
   const onButtonClick = () => {
@@ -235,12 +245,18 @@ const Switcher = ({ handleClick, mode, setMode }) => {
     handleClick(drawerMode)
     setOpen(false)
   }
-  const onChange = React.useCallback((e: ModeObject) => setDrawerMode(e), [])
-  const onDesktopSwitcherChange = React.useCallback((e: ModeObject) => {
+  const onChange = (e: ModeObject) => setDrawerMode(e)
+  const onDesktopSwitcherChange = (e: ModeObject) => {
     setDrawerMode(e)
     setMode(e.mode)
     handleClick(e)
-  }, [])
+  }
+
+  useEffect(() => {
+    const newCurrentMode = modes.find((e) => e.mode === mode)
+    setShowMode(newCurrentMode.isNewMode ? 'new' : 'top')
+    setDrawerMode(newCurrentMode)
+  }, [mode, handleClick])
 
   return (
     <>
@@ -256,7 +272,11 @@ const Switcher = ({ handleClick, mode, setMode }) => {
       </ButtonBase>
 
       <div className={classes.switcherDesktop}>
-        <Typography className={classes.currentFlow}>Все потоки</Typography>
+        {currentFlow && (
+          <Typography className={classes.currentFlow}>
+            {currentFlow.title}
+          </Typography>
+        )}
         <div className={classes.inline}>
           <TabGroup
             handleShowModeChange={(m) => handleShowModeChange(m, true)}

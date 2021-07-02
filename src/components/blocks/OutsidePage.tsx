@@ -2,15 +2,23 @@ import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   AppBar,
+  ButtonBase,
   darken,
   Fade,
   IconButton,
+  lighten,
   Toolbar,
   Typography,
 } from '@material-ui/core'
 import BackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
 import { useHistory } from 'react-router'
-import { APP_BAR_HEIGHT, DRAWER_WIDTH, MAX_WIDTH, MIDDLE_WIDTH, MIN_WIDTH } from 'src/config/constants'
+import {
+  APP_BAR_HEIGHT,
+  DRAWER_WIDTH,
+  MAX_WIDTH,
+  MIDDLE_WIDTH,
+  MIN_WIDTH,
+} from 'src/config/constants'
 import isMobile from 'is-mobile'
 import { chromeAddressBarHeight } from 'src/config/constants'
 import { useScrollTrigger } from 'src/hooks'
@@ -18,8 +26,9 @@ import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 import useMediaExtendedQuery from 'src/hooks/useMediaExtendedQuery'
 import getCachedMode from 'src/utils/getCachedMode'
-import isDarkTheme from 'src/utils/isDarkTheme'
 import getSecondaryAppBarColor from 'src/utils/getSecondaryAppBarColor'
+import { History } from 'history'
+import isDarkTheme from 'src/utils/isDarkTheme'
 
 interface StyleProps {
   isShrinked?: boolean
@@ -42,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     alignItems: 'flex-start',
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      marginTop: APP_BAR_HEIGHT
+      marginTop: APP_BAR_HEIGHT,
     },
   },
 }))
@@ -104,10 +113,16 @@ const useAppBarStyles = makeStyles((theme) => ({
     zIndex: 1000,
     textOverflow: 'ellipsis',
     marginRight: theme.spacing(2),
+    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
+      marginLeft: theme.spacing(2),
+    },
   },
   headerIcon: {
     marginLeft: 4,
     color: theme.palette.text.primary,
+    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
+      display: 'none',
+    },
   },
   marginContainer: {
     display: 'flex',
@@ -137,6 +152,39 @@ const useAppBarStyles = makeStyles((theme) => ({
     position: 'absolute',
     textOverflow: 'ellipsis',
   },
+  backButtonDesktop: {
+    width: DRAWER_WIDTH,
+    height: APP_BAR_HEIGHT,
+    display: 'none',
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    zIndex: theme.zIndex.drawer + 1,
+    background: theme.palette.background.paper,
+    cursor: 'pointer',
+    '&:hover': {
+      background: isDarkTheme(theme)
+        ? lighten(theme.palette.background.paper, 0.05)
+        : darken(theme.palette.background.paper, 0.05),
+    },
+    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
+      display: 'flex',
+    },
+  },
+  backButtonDesktopWrapper: {
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    display: 'flex',
+    flexDirection: 'row',
+    padding: theme.spacing(0, 2),
+    width: '100%'
+  },
+  backButtonDesktopText: {
+    marginLeft: theme.spacing(2),
+    fontFamily: 'Google Sans',
+    fontSize: 20,
+    fontWeight: 500,
+  },
 }))
 
 interface Props {
@@ -148,7 +196,9 @@ interface Props {
   disableShrinking: boolean
   backgroundColor: string
   toolbarIcons: JSX.Element
-  onBackClick: (backLinkFunction: () => void) => unknown
+  onBackClick: (
+    backLinkFunction: (history: History<unknown>) => void
+  ) => unknown
 }
 
 const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
@@ -162,6 +212,13 @@ const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
   )
 }
 
+const backLinkFunction = (history: History<unknown>) => {
+  const goHome = () => history.push(getCachedMode().to + '/p/1')
+  if (history.length > 1) {
+    history.goBack()
+  } else goHome()
+}
+
 const UnshrinkedContent = ({
   headerText,
   onBackClick,
@@ -173,16 +230,10 @@ const UnshrinkedContent = ({
   const text = (
     <Typography className={classes.headerTitle}>{headerText}</Typography>
   )
-  const goHome = () => history.push(getCachedMode().to + '/p/1')
-  const backLinkFunction = () => {
-    if (history.length > 1) {
-      history.goBack()
-    } else goHome()
-  } 
 
   const onClick = () => {
     if (onBackClick) onBackClick(backLinkFunction)
-    else backLinkFunction()
+    else backLinkFunction(history)
   }
 
   return (
@@ -227,6 +278,7 @@ const NavBarUnmemoized = ({
   const [headerTextUpdated, setHeaderTextUpdated] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
   const isExtended = useMediaExtendedQuery()
+  const history = useHistory()
   const isShrinked = disableShrinking || isExtended ? false : isShrinkedTrigger
   const classes = useAppBarStyles({
     isShrinked,
@@ -262,28 +314,44 @@ const NavBarUnmemoized = ({
     !headerTextUpdated && setHeaderTextUpdated(!headerText)
   }, [headerText])
 
+  const onBackButtonClick = () => {
+    if (onBackClick) onBackClick(backLinkFunction)
+    else backLinkFunction(history)
+  }
+
   return (
-    <AppBar className={classes.header} elevation={0}>
-      <Toolbar className={classes.toolbar}>
-        <div className={classes.marginContainer}>
-          <div className={classes.content}>
-            <UnshrinkedContent
-              isShrinked={isShrinked}
-              headerText={headerText}
-              onBackClick={onBackClick}
-              headerTextUpdated={headerTextUpdated}
-            />
-            <ShrinkedContent
-              isShrinked={isShrinked}
-              shrinkedHeaderText={shrinkedHeaderText || headerText}
-            />
-            <ToolbarIconsWrapper isShrinked={isShrinked}>
-              {toolbarIcons}
-            </ToolbarIconsWrapper>
-          </div>
+    <>
+      <div
+        onClick={() => onBackButtonClick()}
+        className={classes.backButtonDesktop}
+      >
+        <div className={classes.backButtonDesktopWrapper}>
+          <BackRoundedIcon />
+          <Typography className={classes.backButtonDesktopText}>Назад</Typography>
         </div>
-      </Toolbar>
-    </AppBar>
+      </div>
+      <AppBar className={classes.header} elevation={0}>
+        <Toolbar className={classes.toolbar}>
+          <div className={classes.marginContainer}>
+            <div className={classes.content}>
+              <UnshrinkedContent
+                isShrinked={isShrinked}
+                headerText={headerText}
+                onBackClick={onBackClick}
+                headerTextUpdated={headerTextUpdated}
+              />
+              <ShrinkedContent
+                isShrinked={isShrinked}
+                shrinkedHeaderText={shrinkedHeaderText || headerText}
+              />
+              <ToolbarIconsWrapper isShrinked={isShrinked}>
+                {toolbarIcons}
+              </ToolbarIconsWrapper>
+            </div>
+          </div>
+        </Toolbar>
+      </AppBar>
+    </>
   )
 }
 const NavBar = React.memo(NavBarUnmemoized)

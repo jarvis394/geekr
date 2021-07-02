@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: getContrastPaperColor(theme),
     [theme.breakpoints.up(MIN_WIDTH)]: {
       marginTop: theme.spacing(1.5),
-      border: '1px solid ' + fade(theme.palette.divider, 0.05),
+      padding: theme.spacing(1, 0),
       borderRadius: 8,
       backgroundColor: theme.palette.background.paper,
     },

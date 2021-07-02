@@ -1,17 +1,15 @@
 import React from 'react'
-import { darken, Toolbar, AppBar } from '@material-ui/core'
+import { Toolbar, AppBar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import {
-  MIN_WIDTH,
   MAX_WIDTH,
   APP_BAR_HEIGHT,
-  FLOWS as flows,
+  FLOWS,
   DRAWER_WIDTH,
   MIDDLE_WIDTH,
 } from 'src/config/constants'
-import isDarkTheme from 'src/utils/isDarkTheme'
-import { Link } from 'react-router-dom'
 import getSecondaryAppBarColor from 'src/utils/getSecondaryAppBarColor'
+import { FlowAlias, FlowObject } from 'src/interfaces'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,12 +21,10 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     zIndex: theme.zIndex.appBar,
     willChange: 'transform',
-    [theme.breakpoints.up(MIN_WIDTH)]: {
-      position: 'fixed',
-      top: 0
-    },
     [theme.breakpoints.up(MIDDLE_WIDTH)]: {
       paddingLeft: DRAWER_WIDTH,
+      position: 'fixed',
+      top: 0,
     },
   },
   toolbar: {
@@ -66,23 +62,40 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     display: 'flex',
     alignItems: 'center',
+    cursor: 'pointer',
+    userSelect: 'none',
     '&:hover': {
       color: theme.palette.primary.main,
     },
   },
+  selected: {
+    color: theme.palette.text.primary,
+    '&:hover': {
+      color: theme.palette.text.primary,
+    }
+  }
 }))
 
-const FlowsBar = () => {
+const FlowsBar: React.FC<{
+  flow: FlowAlias
+  onClick: (e: FlowObject) => void
+}> = ({ flow, onClick }) => {
   const classes = useStyles()
 
   return (
     <AppBar className={classes.root} elevation={0}>
       <Toolbar className={classes.toolbar}>
         <div className={classes.content}>
-          {flows.map((e, i) => (
-            <Link className={classes.link} key={i} to={e.link}>
+          {FLOWS.map((e, i) => (
+            <a
+              className={[classes.link]
+                .concat(flow == e.alias ? [classes.selected] : [])
+                .join(' ')}
+              key={i}
+              onClick={() => onClick(e)}
+            >
               {e.title}
-            </Link>
+            </a>
           ))}
         </div>
       </Toolbar>

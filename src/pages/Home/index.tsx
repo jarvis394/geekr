@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState, useEffect } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { List } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import PostSkeleton from 'src/components/skeletons/PostItem'
@@ -10,9 +10,11 @@ import ErrorComponent from 'src/components/blocks/Error'
 import NewsBlock from 'src/pages/Home/NewsBlock'
 import {
   APP_BAR_HEIGHT,
+  FLOWS,
   MIN_WIDTH,
   Mode,
   RATING_MODES as modes,
+  RATING_MODES,
 } from 'src/config/constants'
 import Switcher from './Switcher'
 import { useDispatch } from 'react-redux'
@@ -25,6 +27,10 @@ import Sidebar from 'src/pages/Home/Sidebar'
 import UpdateNotification from 'src/components/blocks/UpdateNotification'
 import useLastMode from 'src/utils/useLastMode'
 import FlowsBar from 'src/components/blocks/FlowsBar'
+import useQuery from 'src/hooks/useQuery'
+import NotFound from '../NotFound'
+import FlowAlias from 'src/interfaces/FlowAlias'
+import { FlowObject } from 'src/interfaces'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,19 +59,44 @@ type HomePathParams = { page: string }
 const isServerUpdateError = (message: string) => message === 'Network Error'
 
 const Home = () => {
-  const params = useParams() as HomePathParams
+  const params = useParams<HomePathParams>()
+  const query = useQuery()
+  const flow = (query.get('flow') || 'all') as FlowAlias
+
+  /** Show 404 page when 'flow' value is outside of flows aliases */
+  if (!FLOWS.some((e) => e.alias === flow)) {
+    return <NotFound />
+  }
+
   const lastSelectedMode = getCachedMode()
   const paramsMode = useLastMode()
   const [mode, setMode] = useState<Mode>(paramsMode || lastSelectedMode.mode)
   const currentPage = Number(params.page)
   const history = useHistory()
+  const location = useLocation()
   const classes = useStyles()
   const dispatch = useDispatch()
-  const isFetched = useSelector((state) => state.home.fetched)
-  const isFetching = useSelector((state) => state.home.fetching)
-  const fetchError = useSelector((state) => state.home.error)
-  const posts = useSelector((state) => state.home.data[mode].pages[currentPage])
-  const pagesCount = useSelector((state) => state.home.data[mode].pagesCount)
+  const lastAllFlowsModeName = useSelector((state) => state.home.mode)
+  const lastAllFlowsMode = RATING_MODES.find((e) => e.mode === lastAllFlowsModeName)
+  const isFetched = useSelector((state) =>
+    flow === 'all' ? state.home.fetched : state.home.flows.fetched
+  )
+  const isFetching = useSelector((state) =>
+    flow === 'all' ? state.home.fetching : state.home.flows.fetching
+  )
+  const fetchError = useSelector((state) =>
+    flow === 'all' ? state.home.error : state.home.flows.error
+  )
+  const posts = useSelector((state) =>
+    flow === 'all'
+      ? state.home.data[mode].pages[currentPage]
+      : state.home.flows.data[flow][mode].pages[currentPage]
+  )
+  const pagesCount = useSelector((state) =>
+    flow === 'all'
+      ? state.home.data[mode].pagesCount
+      : state.home.flows.data[flow][mode].pagesCount
+  )
   const fetchErrorMessage = isServerUpdateError(fetchError?.error?.message)
     ? 'Идут технические работы'
     : fetchError?.error?.message
@@ -86,33 +117,49 @@ const Home = () => {
   const postsComponents =
     posts &&
     posts.articleIds.map((id, i) => (
-      <PostItem key={id} post={posts.articleRefs[id]} />
+      <PostItem key={i} post={posts.articleRefs[id]} />
     ))
 
   const handlePagination = (_, i) => {
     if (i === currentPage) return
-    history.push(modes.find((e) => e.mode === mode).to + '/p/' + i)
+    history.push(
+      modes.find((e) => e.mode === mode).to + '/p/' + i + '?' + query.toString()
+    )
   }
 
   const handleSwitcher = React.useCallback(
     ({ mode: newMode, to }) => {
       localStorage.setItem('mode', newMode)
       setMode(newMode)
-      history.push(to + '/p/1')
+      history.push(to + '/p/1?' + query.toString())
     },
-    [history]
+    [flow, location.pathname, location.search]
   )
 
+  const onFlowsBarLinkClick = (e: FlowObject) => {
+    if (e.alias === 'all') {
+      history.push(lastAllFlowsMode.to + '/p/1')
+    } else {
+      history.push('/all/p/1?flow=' + e.alias)
+    }
+  }
+
   useEffect(() => {
-    dispatch(getPosts(mode, currentPage))
-  }, [currentPage, mode, dispatch])
+    if (paramsMode !== mode) setMode(paramsMode)
+    dispatch(getPosts({ mode, page: currentPage, flow }))
+  }, [paramsMode, mode, flow, currentPage, location.pathname, location.search])
 
   return (
     <div className={classes.root}>
-      <FlowsBar />
+      <FlowsBar onClick={onFlowsBarLinkClick} flow={flow} />
       <UpdateNotification />
       {currentPage === 1 && <AdvertsBlock />}
-      <Switcher setMode={setMode} mode={mode} handleClick={handleSwitcher} />
+      <Switcher
+        flow={flow}
+        setMode={setMode}
+        mode={mode}
+        handleClick={handleSwitcher}
+      />
 
       <div className={classes.flexContainer}>
         <MainBlock>
