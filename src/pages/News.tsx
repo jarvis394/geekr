@@ -16,6 +16,8 @@ import FlowAlias from 'src/interfaces/FlowAlias'
 import { FlowObject } from 'src/interfaces'
 import useQuery from 'src/hooks/useQuery'
 import NotFound from './NotFound'
+import MainBlock from 'src/components/blocks/MainBlock'
+import Sidebar from 'src/pages/Home/Sidebar'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -88,21 +90,24 @@ const News = () => {
 
   return (
     <>
-      <FlowsBar onClick={onFlowsBarLinkClick} flow={flow} />
-      <List className={classes.root}>
-        {isFetching &&
-          [...new Array(7)].map((_, i) => <PostSkeleton key={i} />)}
-        {isFetched &&
-          !fetchError &&
-          posts &&
-          posts.articleIds.map((i: number) => (
-            <PostItem post={posts.articleRefs[i]} key={i} />
-          ))}
-        {fetchError && (
-          <ErrorComponent message={fetchError.error.message} to="/news/p/1" />
-        )}
-        <PaginationComponent />
-      </List>
+      <MainBlock>
+        <FlowsBar onClick={onFlowsBarLinkClick} flow={flow} />
+        <List className={classes.root}>
+          {isFetching &&
+            [...new Array(7)].map((_, i) => <PostSkeleton key={i} />)}
+          {isFetched &&
+            !fetchError &&
+            posts &&
+            posts.articleIds.map((i: number) => (
+              <PostItem post={posts.articleRefs[i]} key={i} />
+            ))}
+          {fetchError && (
+            <ErrorComponent message={fetchError.error.message} to="/news/p/1" />
+          )}
+          <PaginationComponent />
+        </List>
+      </MainBlock>
+      <Sidebar />
     </>
   )
 }

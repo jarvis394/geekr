@@ -13,19 +13,14 @@ import dayjs from 'dayjs'
 import FormattedText from 'src/components/formatters/FormattedText'
 import { Theme } from '@material-ui/core/styles'
 import UserAvatar from 'src/components/blocks/UserAvatar'
-import BottomBar from './BottomBar'
+import Statistics from './Statistics'
 import SimilarPosts from './SimilarPosts'
 import TopDayPosts from './TopDayPosts'
 import { Chip, Link as MUILink } from '@material-ui/core'
-import {
-  chromeAddressBarHeight,
-  MIN_WIDTH,
-  POST_LABELS as postLabels,
-} from 'src/config/constants'
+import { MIN_WIDTH, POST_LABELS as postLabels } from 'src/config/constants'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
-import isMobile from 'is-mobile'
 import PostLocationState from 'src/interfaces/PostLocationState'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
@@ -45,12 +40,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingBottom: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
-    [theme.breakpoints.up(MIN_WIDTH)]: {
-      borderRadius: 8,
-      backgroundColor: theme.palette.background.paper + ' !important',
-      marginTop: theme.spacing(1.5),
-      marginBottom: theme.spacing(1.5)
-    },
   },
   hubs: {
     wordBreak: 'break-word',
@@ -154,6 +143,14 @@ const useStyles = makeStyles((theme: Theme) => ({
       opacity: 0.9,
     },
   },
+  content: {
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      paddingBottom: theme.spacing(1),
+      borderRadius: 8,
+      backgroundColor: theme.palette.background.paper + ' !important',
+      marginTop: theme.spacing(1.5),
+    },
+  },
 }))
 
 interface Params {
@@ -197,7 +194,10 @@ const Post = () => {
       {/** Company header */}
       {company && company?.settings?.branding?.imageUrl && (
         <div className={classes.companyHeaderLink}>
-          <a style={{ display: 'flex' }} href={company.settings.branding.linkUrl}>
+          <a
+            style={{ display: 'flex' }}
+            href={company.settings.branding.linkUrl}
+          >
             <img
               alt={company.alias}
               className={classes.companyHeader}
@@ -335,10 +335,10 @@ const Post = () => {
 
       <MainBlock>
         <div className={classes.root}>
-          {contents}
+          <div className={classes.content}>{contents}</div>
 
           {/* Bottom bar with some article info */}
-          {post && <BottomBar post={post} />}
+          {post && <Statistics post={post} />}
 
           {/* Similar */}
           <SimilarPosts id={id} />
@@ -348,9 +348,7 @@ const Post = () => {
         </div>
       </MainBlock>
       <Sidebar>
-        <SideBlock title={'asd'}>
-
-        </SideBlock>
+        <SideBlock title={'asd'}></SideBlock>
       </Sidebar>
     </OutsidePage>
   )

@@ -16,7 +16,6 @@ import Iframe from 'react-iframe'
 import { Node as MathJaxNode } from '@nteract/mathjax'
 import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 import isDarkTheme from 'src/utils/isDarkTheme'
-import ReactDOMServer from 'react-dom/server'
 import { APP_BAR_HEIGHT } from 'src/config/constants'
 
 type FloatType = 'left' | 'right'
@@ -145,19 +144,20 @@ const useStyles = makeStyles((theme) => ({
     tabSize: 4,
     overflow: 'auto',
     border: '1px solid ' + theme.palette.divider,
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: 4,
     padding: theme.spacing(2) + 'px !important',
     background: getInvertedContrastPaperColor(theme) + ' !important',
     color: theme.palette.text.primary + ' !important',
     '&::-webkit-scrollbar': {
-      height: 18,
+      height: 12,
+      background: theme.palette.background.default,
+      borderRadius: 2,
     },
     '&::-webkit-scrollbar-thumb': {
-      background: isDarkTheme(theme)
+      background: (isDarkTheme(theme)
         ? lighten(theme.palette.background.paper, 0.08)
-        : darken(theme.palette.background.paper, 0.08),
-      border: '4px solid ' + getInvertedContrastPaperColor(theme),
-      borderRadius: theme.shape.borderRadius,
+        : darken(theme.palette.background.paper, 0.08)),
+      borderRadius: 2,
       transition: '0.1s',
       '&:hover': {
         background: isDarkTheme(theme)

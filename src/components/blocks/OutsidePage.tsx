@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 'auto',
     marginLeft: 'auto',
     alignItems: 'flex-start',
-    [theme.breakpoints.up(MIN_WIDTH)]: {
+    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
       marginTop: APP_BAR_HEIGHT,
     },
   },
@@ -78,6 +78,19 @@ const useAppBarStyles = makeStyles((theme) => ({
       `translateZ(0) translateY(${isShrinked ? -16 : 0}px)`,
     transition: ({ disableShrinking }: StyleProps) =>
       disableShrinking ? 'none' : 'all .3s cubic-bezier(0.4, 0, 0.2, 1)',
+    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
+      paddingLeft: DRAWER_WIDTH,
+      backgroundColor: getSecondaryAppBarColor(theme) + ' !important',
+    },
+    [theme.breakpoints.between(MIN_WIDTH, MIDDLE_WIDTH)]: {
+      backgroundColor: theme.palette.background.paper + ' !important',
+    },
+  },
+  toolbar: {
+    minHeight: 'unset',
+    padding: 0,
+    maxWidth: '100%',
+    width: '100%',
     '&::before': {
       position: 'absolute',
       width: ({ scrollProgress }: StyleProps) => scrollProgress * 100 + '%',
@@ -89,18 +102,6 @@ const useAppBarStyles = makeStyles((theme) => ({
       content: '""',
       transform: 'translateZ(0)',
     },
-    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
-      paddingLeft: DRAWER_WIDTH,
-    },
-    [theme.breakpoints.up(MIN_WIDTH)]: {
-      backgroundColor: getSecondaryAppBarColor(theme) + ' !important',
-    },
-  },
-  toolbar: {
-    minHeight: 'unset',
-    padding: 0,
-    maxWidth: '100%',
-    width: '100%',
   },
   headerTitle: {
     fontFamily: 'Google Sans',

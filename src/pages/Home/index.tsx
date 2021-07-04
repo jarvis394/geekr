@@ -11,7 +11,6 @@ import NewsBlock from 'src/pages/Home/NewsBlock'
 import {
   APP_BAR_HEIGHT,
   FLOWS,
-  MIN_WIDTH,
   Mode,
   RATING_MODES as modes,
   RATING_MODES,
