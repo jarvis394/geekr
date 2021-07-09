@@ -49,7 +49,8 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
     ref
   ) {
     const [hasError, setHasError] = React.useState(false)
-    // If image is not loaded, the useStyles `isLoading` prop should be false
+    // If image loaded with error, the useStyles `isLoading` prop should be false,
+    // so the image won't be blurred
     const classes = useStyles({
       isLoading: hasError ? false : loading,
     })
@@ -79,7 +80,7 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
       )
 
     return (
-      <Fade in timeout={250}>
+      <Fade in timeout={250} mountOnEnter>
         <img
           ref={ref}
           onClick={() => !loading && !hasError && setOpen(true)}

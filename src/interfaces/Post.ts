@@ -1,7 +1,7 @@
 import Flow from './Flow'
 import { HubPost } from './Hub'
 import PostLabel from './PostLabel'
-import { User } from './User'
+import { UserExtended } from './User'
 
 export interface SchemaJsonLd {
   '@context': string
@@ -30,7 +30,7 @@ export interface SchemaJsonLd {
 
 export default interface Post {
   id: string | number
-  author: User
+  author: UserExtended
   commentsEnabled: boolean
   editorVersion: string
   flows: Flow[]

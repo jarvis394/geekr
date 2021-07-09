@@ -30,8 +30,10 @@ import getPostLink from 'src/utils/getPostLink'
 import getPostSocialImage from 'src/utils/getPostSocialImage'
 import formatLdJsonSchema from 'src/utils/formatLdJsonSchema'
 import MainBlock from 'src/components/blocks/MainBlock'
-import Sidebar from 'src/components/blocks/Sidebar'
-import SideBlock from 'src/components/blocks/SideBlock'
+import PostSidebar from './Sidebar'
+import { HubsItem } from '../User/Hubs'
+import { Hub } from 'src/interfaces'
+import AuthorCard from './AuthorCard'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -102,7 +104,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   text: {
     marginTop: theme.spacing(3),
-    paddingBottom: theme.spacing(2),
+    paddingBottom: theme.spacing(1),
     lineHeight: '1.56',
     wordBreak: 'break-word',
     hyphens: 'auto',
@@ -144,13 +146,49 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   content: {
+    paddingBottom: theme.spacing(1.5),
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      paddingBottom: theme.spacing(1),
       borderRadius: 8,
       backgroundColor: theme.palette.background.paper + ' !important',
       marginTop: theme.spacing(1.5),
     },
   },
+  sectionTitle: {
+    fontFamily: 'Google Sans',
+    textTransform: 'uppercase',
+    fontWeight: 500,
+    fontSize: 13,
+    letterSpacing: '1px',
+    color: theme.palette.text.hint,
+    lineHeight: 'normal',
+    padding: theme.spacing(0.5, 0),
+  },
+  section: {
+    padding: theme.spacing(1.8 / 2, 0),
+  },
+  sectionLinkWrapper: {
+    '&::after': {
+      content: '",\u2004"',
+    },
+    '&:last-child::after': {
+      content: '""',
+    },
+    color: theme.palette.primary.main,
+  },
+  sectionLink: {
+    color: theme.palette.primary.main,
+    fontFamily: 'Roboto',
+    fontWeight: 400,
+    fontSize: 13,
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+    ...theme.typography.body2,
+  },
+  hubsContainer: {
+    marginTop: theme.spacing(0.5),
+  }
 }))
 
 interface Params {
@@ -247,7 +285,7 @@ const Post = () => {
         <div className={classes.hubs}>
           {post.hubs.map((hub, i) => (
             <span key={i} className={classes.hubWrapper}>
-              <Link className={classes.hubLink} to={'/hub/' + hub.alias}>
+              <Link className={classes.hubLink} to={'/hub/' + hub.alias + '/p/1'}>
                 {hub.title}
               </Link>
             </span>
@@ -270,6 +308,28 @@ const Post = () => {
         >
           {post.textHtml}
         </FormattedText>
+
+        <div className={classes.section}>
+          <Typography className={classes.sectionTitle}>Теги</Typography>
+          {post.tags.map((e, i) => (
+            <span key={i} className={classes.sectionLinkWrapper}>
+              <Link
+                to={`/search/p/1?q=[${e.titleHtml}]`}
+                className={classes.sectionLink}
+              >
+                {e.titleHtml}
+              </Link>
+            </span>
+          ))}
+        </div>
+        <div className={classes.section}>
+          <Typography className={classes.sectionTitle}>Хабы</Typography>
+          <Grid spacing={1} container className={classes.hubsContainer}>
+            {post.hubs.map((e, i) => (
+              <HubsItem data={(e as unknown) as Hub} key={i} />
+            ))}
+          </Grid>
+        </div>
       </Container>
     </>
   ) : (
@@ -340,6 +400,8 @@ const Post = () => {
           {/* Bottom bar with some article info */}
           {post && <Statistics post={post} />}
 
+          <AuthorCard post={post} />
+
           {/* Similar */}
           <SimilarPosts id={id} />
 
@@ -347,9 +409,7 @@ const Post = () => {
           <TopDayPosts />
         </div>
       </MainBlock>
-      <Sidebar>
-        <SideBlock title={'asd'}></SideBlock>
-      </Sidebar>
+      <PostSidebar />
     </OutsidePage>
   )
 }

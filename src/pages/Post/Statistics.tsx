@@ -354,6 +354,7 @@ const BottomBar = ({ post }: { post: Post }) => {
 
   return (
     <>
+      {/** Desktop Statistics */}
       <div className={classesDesktop.root}>
         <div className={classesDesktop.card}>
           <div className={classesDesktop.section}>
@@ -403,6 +404,8 @@ const BottomBar = ({ post }: { post: Post }) => {
           </ButtonBase>
         </Link>
       </div>
+
+      {/** Mobile Statistics */}
       <div className={classes.root}>
         <Typography className={classes.title}>Статистика</Typography>
         <Grid container direction="row" spacing={2}>

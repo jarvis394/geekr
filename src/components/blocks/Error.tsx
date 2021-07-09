@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+    width: '100%',
     '@media (min-width: 768px)': {
       flexDirection: 'row',
     },

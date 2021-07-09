@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const HubsItem = ({ data }: { data: Hub }) => {
+export const HubsItem = ({ data }: { data: Hub }) => {
   const classes = useStyles()
   return (
     <Grid
@@ -104,7 +104,7 @@ const Hubs = ({ classes: additionalClasses }: ComponentWithUserParams) => {
         Не удалось загрузить список хабов
       </Typography>
     )
-  if (isFetching) return <Typography>загрузка...</Typography>
+  if (isFetching) return null
 
   return isFetched && hubs && hubs.hubIds.length !== 0 ? (
     <div className={additionalClasses}>

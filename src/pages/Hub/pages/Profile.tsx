@@ -9,6 +9,7 @@ import {
   lighten,
   List,
   Typography,
+  useTheme,
 } from '@material-ui/core'
 import Switcher from 'src/pages/Home/Switcher'
 import { Mode, RATING_MODES as modes } from 'src/config/constants'
@@ -27,6 +28,7 @@ import { Icon28Users3Outline } from '@vkontakte/icons'
 import { Icon24WorkOutline } from '@vkontakte/icons'
 import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 import isDarkTheme from 'src/utils/isDarkTheme'
+import SubscribeButton from 'src/components/blocks/SubscribeButton'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,57 +78,6 @@ const useInformationStyles = makeStyles((theme) => ({
   avatarAndRating: {
     flexGrow: 1,
     display: 'flex',
-  },
-  subscribeButtonWrapper: {
-    height: 32,
-    width: 112,
-    position: 'relative',
-    justifyContent: 'initial',
-  },
-  subscribeButton: {
-    color: (isSubscribed) =>
-      isSubscribed ? 'white' : theme.palette.success.main,
-    fontSize: 12,
-    height: 32,
-    padding: 0,
-    textAlign: 'center',
-    lineHeight: '16px',
-    position: 'absolute',
-    width: (isSubscribed) => (isSubscribed ? 'calc(100% - 26px)' : '100%'),
-    borderRadius: 4,
-    boxSizing: 'border-box',
-    border: (isSubscribed) =>
-      isSubscribed ? 'none' : '1px solid ' + theme.palette.success.main,
-    background: (isSubscribed) =>
-      isSubscribed
-        ? theme.palette.success.main
-        : theme.palette.background[isDarkTheme(theme) ? 'default' : 'paper'],
-    backgroundSize: '500%',
-    transition: 'width .2s ease, background-color .2s ease',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    '&:hover': {
-      color: 'white',
-      background: (isSubscribed) =>
-        (isSubscribed ? lighten : darken)(theme.palette.success.main, 0.1),
-    },
-  },
-  subscribeButtonSpan: {
-    transition: 'width .2s ease,background-color .2s ease',
-    borderRadius: 4,
-    border: '1px solid ' + theme.palette.success.main,
-    boxSizing: 'border-box',
-    color: theme.palette.text.secondary,
-    fontSize: 15,
-    height: 32,
-    left: 0,
-    lineHeight: '29px',
-    padding: '0 9px',
-    position: 'absolute',
-    textAlign: 'right',
-    top: 0,
-    width: '100%',
   },
 }))
 
@@ -201,7 +152,8 @@ const Information = () => {
   const [isSubscribed, setSubscribed] = useState(
     profile?.relatedData?.isSubscribed || false
   )
-  const classes = useInformationStyles(isSubscribed)
+  const classes = useInformationStyles()
+  const theme = useTheme()
 
   return (
     <div className={classes.root}>
@@ -218,16 +170,13 @@ const Information = () => {
           <Typography className={classes.caption}>Рейтинг</Typography>
         </div>
       </div>
-      <ButtonBase
-        className={classes.subscribeButtonWrapper}
-        onClick={() => setSubscribed((prev) => !prev)}
-        disableRipple
-      >
-        <span className={classes.subscribeButtonSpan}>×</span>
-        <div className={classes.subscribeButton}>
-          {isSubscribed ? 'Подписан' : 'Подписаться'}
-        </div>
-      </ButtonBase>
+      <SubscribeButton
+        isSubscribed={isSubscribed}
+        setSubscribed={setSubscribed}
+        backgroundColor={
+          theme.palette.background[isDarkTheme(theme) ? 'default' : 'paper']
+        }
+      />
     </div>
   )
 }

@@ -167,6 +167,17 @@ export const POST_LABELS: Record<
   },
 }
 
+export const DONATION_LINKS_MAP = {
+  paymentYandexMoney: 'https://money.yandex.ru/to/',
+  paymentPayPalMe: 'https://www.paypal.me/',
+  paymentWebmoney: 'https://pay.web.money/'
+}
+export const DONATION_TITLES_MAP = {
+  paymentYandexMoney: 'YooMoney',
+  paymentPayPalMe: 'PayPal.Me',
+  paymentWebmoney: 'Webmoney'
+}
+
 export const makeNavigationTabs = (
   w = 24,
   h = 24,

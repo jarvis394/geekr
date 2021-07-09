@@ -95,6 +95,16 @@ export interface UserExtended {
   }
   rating: number
   ratingPos: number
+  paymentDetails: {
+    paymentPayPalMe: string | number
+    paymentWebmoney: string | number
+    paymentYandexMoney: string | number
+  }
+  contacts: {
+    title: string
+    url: string
+    value: string
+  }[]
   registerDateTime: string
   relatedData: Record<string, never>
   scoreStats: {
