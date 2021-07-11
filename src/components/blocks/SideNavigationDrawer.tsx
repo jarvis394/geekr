@@ -6,6 +6,7 @@ import {
   Drawer,
   Theme,
   Typography,
+  useTheme,
 } from '@material-ui/core'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import {
@@ -22,6 +23,7 @@ import { Link } from 'react-router-dom'
 import { Skeleton } from '@material-ui/lab'
 import { Icon24DoorArrowLeftOutline } from '@vkontakte/icons'
 import { Icon24InfoCircleOutline } from '@vkontakte/icons'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 const NAVIGATION_TABS = makeNavigationTabs(28, 28, true)
 const avatarWidth = 32
@@ -30,11 +32,8 @@ const avatarHeight = 32
 const useStyles = makeStyles<Theme, { match: boolean }>((theme) => ({
   drawer: {
     flexShrink: 0,
-    display: 'none',
+    display: 'flex',
     width: DRAWER_WIDTH,
-    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
-      display: 'flex',
-    },
   },
   drawerPaper: {
     width: DRAWER_WIDTH,
@@ -275,6 +274,7 @@ const AboutButton = () => {
 }
 
 const SideNavigationDrawer = () => {
+  const theme = useTheme()
   const route = useRoute()
   const location = useLocation()
   const match = route.alias === 'feed'
@@ -282,6 +282,15 @@ const SideNavigationDrawer = () => {
   const modeName = useSelector((state) => state.home.mode)
   const mode = RATING_MODES.find((e) => e.mode === modeName)
   const history = useHistory()
+  // future: https://material-ui.com/components/use-media-query/#server-side-rendering
+  // when ssr is implemented, change `noSsr` to false.
+  const shouldShowDrawer = useMediaQuery(theme.breakpoints.up(MIDDLE_WIDTH), {
+    noSsr: true,
+  })
+
+  // Do not render drawer on mobile and tablet
+  if (!shouldShowDrawer) return null
+
   const goHome = () => {
     window.scrollTo(0, 0)
     if (location.pathname !== `${mode?.to}/p/1`) {

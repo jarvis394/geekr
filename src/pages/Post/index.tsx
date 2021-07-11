@@ -3,8 +3,8 @@ import { useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import { fade, makeStyles } from '@material-ui/core/styles'
-import { useLocation, useParams } from 'react-router'
+import { fade, makeStyles, darken, lighten } from '@material-ui/core/styles'
+import { useParams } from 'react-router'
 import { getPost, getCompany } from 'src/store/actions/post'
 import { Link } from 'react-router-dom'
 import PostViewSkeleton from 'src/components/skeletons/PostView'
@@ -16,12 +16,15 @@ import UserAvatar from 'src/components/blocks/UserAvatar'
 import Statistics from './Statistics'
 import SimilarPosts from './SimilarPosts'
 import TopDayPosts from './TopDayPosts'
-import { Chip, Link as MUILink } from '@material-ui/core'
+import {
+  Chip,
+  Fade,
+  Link as MUILink,
+} from '@material-ui/core'
 import { MIN_WIDTH, POST_LABELS as postLabels } from 'src/config/constants'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
-import PostLocationState from 'src/interfaces/PostLocationState'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
@@ -34,6 +37,34 @@ import PostSidebar from './Sidebar'
 import { HubsItem } from '../User/Hubs'
 import { Hub } from 'src/interfaces'
 import AuthorCard from './AuthorCard'
+import CompanyCard from './CompanyCard'
+import CompanyCardWithLinks from './CompanyCardWithLinks'
+
+const makeGradient = (theme: Theme) => {
+  const t =
+    theme.palette.type === 'light'
+      ? lighten(theme.palette.background.default, 0.2)
+      : darken(theme.palette.background.paper, 0.2)
+  const colors = [
+    t,
+    fade(t, 0.98),
+    fade(t, 0.94),
+    fade(t, 0.88),
+    fade(t, 0.8),
+    fade(t, 0.71),
+    fade(t, 0.61),
+    fade(t, 0.5),
+    fade(t, 0.39),
+    fade(t, 0.29),
+    fade(t, 0.2),
+    fade(t, 0.12),
+    fade(t, 0.06),
+    fade(t, 0.02),
+    fade(t, 0),
+  ]
+
+  return `linear-gradient(to bottom, ${colors.join(',')})`
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -123,14 +154,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   commentsButton: {
     marginTop: theme.spacing(2),
   },
-  companyHeaderLink: {
-    display: 'flex',
-    background: getContrastPaperColor(theme),
-    flexDirection: 'column',
-  },
-  companyHeader: {
-    width: '100%',
-  },
   translatedBox: {
     backgroundColor: fade(theme.palette.primary.dark, 0.1),
     padding: theme.spacing(1, 2),
@@ -188,7 +211,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   hubsContainer: {
     marginTop: theme.spacing(0.5),
-  }
+  },
+  postHeader: {
+    background: makeGradient(theme),
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      background: 'transparent',
+    },
+  },
 }))
 
 interface Params {
@@ -209,8 +238,7 @@ const Post = () => {
   const classes = useStyles()
   const isTranslated = post && !!post.translationData
   const shouldShowContents = post && (companyAlias ? post && company : post)
-  const location = useLocation<PostLocationState>()
-  const offset = location.state ? location.state.offset : 0
+  const shouldShowCompanyInfo = !!company
   const labels =
     shouldShowContents &&
     post.postLabels.map((e, i) => {
@@ -229,108 +257,103 @@ const Post = () => {
     })
   const contents = shouldShowContents ? (
     <>
-      {/** Company header */}
-      {company && company?.settings?.branding?.imageUrl && (
-        <div className={classes.companyHeaderLink}>
-          <a
-            style={{ display: 'flex' }}
-            href={company.settings.branding.linkUrl}
-          >
-            <img
-              alt={company.alias}
-              className={classes.companyHeader}
-              src={company.settings.branding.imageUrl}
-            />
-          </a>
-        </div>
-      )}
-
-      <Container>
-        {/** Post header */}
-        <Grid
-          className={classes.authorBar}
-          container
-          direction="row"
-          alignItems="center"
-        >
-          <UserAvatar
-            alias={post.author.alias}
-            src={post.author.avatarUrl}
-            className={classes.avatar}
-          />
-          <Typography
-            component={Link}
-            to={'/user/' + post.author.alias}
-            className={classes.author}
-          >
-            {post.author.alias}
-          </Typography>
-          <Typography className={classes.ts}>
-            {dayjs(post.timePublished).fromNow()}
-          </Typography>
-          <GreenRedNumber
-            number={post.statistics.score}
-            wrapperProps={{ className: classes.scoreWrapper }}
-          >
-            <>
-              <ThumbsUpDownIcon className={classes.scoreIcon} />
-              <Typography className={classes.score}>
-                {post.statistics.score > 0 ? '+' : ''}
-                {post.statistics.score}
-              </Typography>
-            </>
-          </GreenRedNumber>
-        </Grid>
-        <Typography className={classes.title}>{post.titleHtml}</Typography>
-        <div className={classes.hubs}>
-          {post.hubs.map((hub, i) => (
-            <span key={i} className={classes.hubWrapper}>
-              <Link className={classes.hubLink} to={'/hub/' + hub.alias + '/p/1'}>
-                {hub.title}
-              </Link>
-            </span>
-          ))}
-        </div>
-        {labels}
-        {isTranslated && (
-          <MUILink
-            href={post.translationData.originalUrl}
-            className={classes.translatedBox}
-          >
-            Автор оригинала: {post.translationData.originalAuthorName}
-          </MUILink>
-        )}
-
-        {/* Article text */}
-        <FormattedText
-          className={classes.text}
-          disableParagraphMargin={post.editorVersion === '1.0'}
-        >
-          {post.textHtml}
-        </FormattedText>
-
-        <div className={classes.section}>
-          <Typography className={classes.sectionTitle}>Теги</Typography>
-          {post.tags.map((e, i) => (
-            <span key={i} className={classes.sectionLinkWrapper}>
-              <Link
-                to={`/search/p/1?q=[${e.titleHtml}]`}
-                className={classes.sectionLink}
+      {/** Post header */}
+      <Fade in>
+        <div className={classes.postHeader}>
+          <Container>
+            <Grid
+              className={classes.authorBar}
+              container
+              direction="row"
+              alignItems="center"
+            >
+              <UserAvatar
+                alias={post.author.alias}
+                src={post.author.avatarUrl}
+                className={classes.avatar}
+              />
+              <Typography
+                component={Link}
+                to={'/user/' + post.author.alias}
+                className={classes.author}
               >
-                {e.titleHtml}
-              </Link>
-            </span>
-          ))}
+                {post.author.alias}
+              </Typography>
+              <Typography className={classes.ts}>
+                {dayjs(post.timePublished).fromNow()}
+              </Typography>
+              <GreenRedNumber
+                number={post.statistics.score}
+                wrapperProps={{ className: classes.scoreWrapper }}
+              >
+                <>
+                  <ThumbsUpDownIcon className={classes.scoreIcon} />
+                  <Typography className={classes.score}>
+                    {post.statistics.score > 0 ? '+' : ''}
+                    {post.statistics.score}
+                  </Typography>
+                </>
+              </GreenRedNumber>
+            </Grid>
+            <Typography className={classes.title}>{post.titleHtml}</Typography>
+            <div className={classes.hubs}>
+              {post.hubs.map((hub, i) => (
+                <span key={i} className={classes.hubWrapper}>
+                  <Link
+                    className={classes.hubLink}
+                    to={'/hub/' + hub.alias + '/p/1'}
+                  >
+                    {hub.title}
+                  </Link>
+                </span>
+              ))}
+            </div>
+            {labels}
+            {isTranslated && (
+              <MUILink
+                href={post.translationData.originalUrl}
+                className={classes.translatedBox}
+              >
+                Автор оригинала: {post.translationData.originalAuthorName}
+              </MUILink>
+            )}
+          </Container>
         </div>
-        <div className={classes.section}>
-          <Typography className={classes.sectionTitle}>Хабы</Typography>
-          <Grid spacing={1} container className={classes.hubsContainer}>
-            {post.hubs.map((e, i) => (
-              <HubsItem data={(e as unknown) as Hub} key={i} />
+      </Fade>
+
+      {/* Article text */}
+      <Fade in style={{ transitionDuration: '.1s' }}>
+        <Container>
+          <FormattedText
+            className={classes.text}
+            disableParagraphMargin={post.editorVersion === '1.0'}
+          >
+            {post.textHtml}
+          </FormattedText>
+
+          <div className={classes.section}>
+            <Typography className={classes.sectionTitle}>Теги</Typography>
+            {post.tags.map((e, i) => (
+              <span key={i} className={classes.sectionLinkWrapper}>
+                <Link
+                  to={`/search/p/1?q=[${e.titleHtml}]`}
+                  className={classes.sectionLink}
+                >
+                  {e.titleHtml}
+                </Link>
+              </span>
             ))}
-          </Grid>
-        </div>
-      </Container>
+          </div>
+          <div className={classes.section}>
+            <Typography className={classes.sectionTitle}>Хабы</Typography>
+            <Grid spacing={1} container className={classes.hubsContainer}>
+              {post.hubs.map((e, i) => (
+                <HubsItem data={(e as unknown) as Hub} key={i} />
+              ))}
+            </Grid>
+          </div>
+        </Container>
+      </Fade>
     </>
   ) : (
     <PostViewSkeleton />
@@ -340,16 +363,7 @@ const Post = () => {
   useEffect(() => {
     dispatch(getPost(id))
     companyAlias && dispatch(getCompany(companyAlias))
-
-    if (offset !== 0 && post) {
-      setImmediate(() =>
-        window.scrollTo({
-          top: offset,
-          behavior: 'smooth',
-        })
-      )
-    }
-  }, [dispatch, id, companyAlias, offset])
+  }, [dispatch, id, companyAlias])
 
   if (fetchError) return <ErrorComponent message={fetchError} />
   if (companyFetchError)
@@ -395,10 +409,15 @@ const Post = () => {
 
       <MainBlock>
         <div className={classes.root}>
+          {/** Company header */}
+          <CompanyCard post={post} companyAlias={companyAlias} />
+
           <div className={classes.content}>{contents}</div>
 
           {/* Bottom bar with some article info */}
           {post && <Statistics post={post} />}
+
+          {shouldShowCompanyInfo && <CompanyCardWithLinks post={post} />}
 
           <AuthorCard post={post} />
 

@@ -148,15 +148,25 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2) + 'px !important',
     background: getInvertedContrastPaperColor(theme) + ' !important',
     color: theme.palette.text.primary + ' !important',
+    boxSizing: 'border-box',
+    '-moz-tab-size': 4,
+    whiteSpace: 'normal',
+    wordBreak: 'normal',
+    wordSpacing: 'normal',
+    wordWrap: 'normal',
+    '& code': {
+      whiteSpace: 'normal !important',
+      fontSize: 14,
+    },
     '&::-webkit-scrollbar': {
       height: 12,
       background: theme.palette.background.default,
       borderRadius: 2,
     },
     '&::-webkit-scrollbar-thumb': {
-      background: (isDarkTheme(theme)
+      background: isDarkTheme(theme)
         ? lighten(theme.palette.background.paper, 0.08)
-        : darken(theme.palette.background.paper, 0.08)),
+        : darken(theme.palette.background.paper, 0.08),
       borderRadius: 2,
       transition: '0.1s',
       '&:hover': {

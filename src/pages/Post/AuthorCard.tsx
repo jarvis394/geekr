@@ -135,7 +135,7 @@ const useStyles = makeStyles((theme) => ({
   aliasBig: {
     fontFamily: 'Roboto',
     color: theme.palette.primary.main,
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 800,
   }
 }))

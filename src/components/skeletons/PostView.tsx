@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
     [theme.breakpoints.up(MIN_WIDTH)]: {
       background: theme.palette.background.paper,
+      borderRadius: 8,
     },
   },
   hubs: {
