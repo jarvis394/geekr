@@ -203,7 +203,6 @@ const useStyles = makeStyles<
   },
   hubs: {
     wordBreak: 'break-word',
-    width: '100%',
     marginBottom: theme.spacing(0.5),
     padding: theme.spacing(0, 2),
   },
