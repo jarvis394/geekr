@@ -170,25 +170,27 @@ export const POST_LABELS: Record<
 export const DONATION_LINKS_MAP = {
   paymentYandexMoney: 'https://money.yandex.ru/to/',
   paymentPayPalMe: 'https://www.paypal.me/',
-  paymentWebmoney: 'https://pay.web.money/'
+  paymentWebmoney: 'https://pay.web.money/',
 }
 export const DONATION_TITLES_MAP = {
   paymentYandexMoney: 'YooMoney',
   paymentPayPalMe: 'PayPal.Me',
-  paymentWebmoney: 'Webmoney'
+  paymentWebmoney: 'Webmoney',
 }
+
+export const READER_FONT_FAMILIES = ['Roboto', 'Segoe UI', 'Arial']
 
 export const makeNavigationTabs = (
   w = 24,
   h = 24,
   replaceProfile = false
 ): TabObject[] => {
-  const tabs = [
+  const tabs: TabObject[] = [
     {
       label: 'Статьи',
       icon: <Icon20HomeOutline width={w} height={h} />,
       to: () => `${getCachedMode().to}/p/1`,
-      match: /\/(all|top(0|10|25|50|100)|top\/daily|top\/weekly|top\/monthly|top\/yearly|top\/alltime)\/p\/([0-9]+)\/?$/,
+      match: 'feed',
       tab: 'home',
     },
     {
@@ -196,27 +198,27 @@ export const makeNavigationTabs = (
       icon: <Icon28Newsfeed width={w} height={h} />,
       to: () => '/news/p/1',
       tab: 'news',
-      match: /\/news\/p\/([0-9]+)\/?$/,
+      match: 'news',
     },
     {
       label: 'Хабы',
       icon: <Icon28ServicesOutline width={w} height={h} />,
       to: () => '/services',
-      match: /\/services\/?$/,
+      match: 'services',
       tab: 'services',
     },
     {
       label: 'Поиск',
       icon: <Icon24Search width={w} height={h} />,
       to: () => '/search',
-      match: /\/search(\/p\/([0-9]+)\/?)?$/,
+      match: 'search',
       tab: 'search',
     },
     {
       label: 'Профиль',
       icon: <Icon28Profile width={w} height={h} />,
       to: () => '/me',
-      match: /\/me\/?$/,
+      match: 'me',
       tab: 'me',
     },
   ]
@@ -228,7 +230,17 @@ export const makeNavigationTabs = (
         label: 'Настройки',
         icon: <Icon28SettingsOutline width={w} height={h} />,
         to: () => '/settings',
-        match: /\/settings\/?$/,
+        match: [
+          'settings',
+          'settingsAppearance',
+          'settingsInterface',
+          'settingsPrivacy',
+          'settingsNewTheme',
+          'settingsEditTheme',
+          'settingsBlacklist',
+          'settingsReader',
+          'settingsLanguage',
+        ],
         tab: 'settings',
       }
     )
@@ -250,6 +262,15 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   autoChangeTheme: false,
   cookiesPreferences: {
     disableCookies: false,
+  },
+  readerSettings: {
+    fontFamily: 'Roboto',
+    fontSize: 16,
+  },
+  interfaceFeed: {
+    isCompact: true,
+    hideMegaposts: false,
+    hideNewsBlock: false,
   },
 }
 

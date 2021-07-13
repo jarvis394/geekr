@@ -30,7 +30,6 @@ import {
   Switch,
   fade,
   Divider,
-  IconButton,
   Button,
   Dialog,
   DialogActions,
@@ -40,7 +39,6 @@ import {
   FormControlLabel,
   RadioGroup,
 } from '@material-ui/core'
-import fadedLinearGradient from 'src/utils/fadedLinearGradient'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
 import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 import isMobile from 'is-mobile'
@@ -60,7 +58,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 12,
     paddingBottom: theme.spacing(1.5),
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      border: '1px solid ' + fade(theme.palette.divider, 0.05),
       borderRadius: 8,
     },
   },
@@ -91,11 +88,14 @@ const useStyles = makeStyles((theme) => ({
   },
   previewContainer: {
     position: 'relative',
-    background: fadedLinearGradient(theme),
+    background: lighten(
+      theme.palette.background.default,
+      isDarkTheme(theme) ? 0.01 : 0.3
+    ),
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      border: '1px solid ' + fade(theme.palette.divider, 0.05),
+      border: '1px solid ' + fade(theme.palette.divider, 0.03),
       borderRadius: 8,
-      marginTop: theme.spacing(1.5)
+      marginTop: theme.spacing(1.5),
     },
   },
   leftItem: {
@@ -373,7 +373,7 @@ const PaletteGridItem = ({
   text,
   withSymbol,
   height = 1,
-  className = ''
+  className = '',
 }: {
   width: number
   color: string
@@ -674,6 +674,7 @@ const ThemeSelectDialog = (props: ThemeSelectDialogProps) => {
 const Appearance = () => {
   const classes = useStyles()
   const history = useHistory()
+  const theme = useTheme()
   const dispatch = useDispatch()
   const customThemes = useSelector((store) => store.settings.customThemes)
   const autoChangeTheme = useSelector((store) => store.settings.autoChangeTheme)
@@ -704,23 +705,29 @@ const Appearance = () => {
 
   const handlePreferredLightThemeDialogClose = (value?: string) => {
     setPreferredLightThemeDialogOpen(false)
-    value && dispatch(
-      setSettings({
-        preferredLightTheme: value,
-      })
-    )
+    value &&
+      dispatch(
+        setSettings({
+          preferredLightTheme: value,
+        })
+      )
   }
   const handlePreferredDarkThemeDialogClose = (value?: string) => {
     setPreferredDarkThemeDialogOpen(false)
-    value && dispatch(
-      setSettings({
-        preferredDarkTheme: value,
-      })
-    )
+    value &&
+      dispatch(
+        setSettings({
+          preferredDarkTheme: value,
+        })
+      )
   }
 
   return (
-    <OutsidePage headerText={'Внешний вид'} disableShrinking>
+    <OutsidePage
+      headerText={'Внешний вид'}
+      disableShrinking
+      backgroundColor={theme.palette.background.paper}
+    >
       <div className={classes.root}>
         <Grid container className={classes.previewContainer} direction="row">
           <Typography className={classes.sectionHeader}>Палитра</Typography>

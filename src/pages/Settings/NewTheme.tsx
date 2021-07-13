@@ -106,7 +106,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     marginTop: theme.spacing(1.5),
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      border: '1px solid ' + fade(theme.palette.divider, 0.05),
       borderRadius: 8,
     },
   },
@@ -841,6 +840,7 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
       hidePositionBar
       disableShrinking
       headerText={currentTheme.name}
+      backgroundColor={theme.palette.background.paper}
       toolbarIcons={toolbarIcons}
       onBackClick={(backLinkFunction) =>
         onBackClick(backLinkFunction.bind(history))

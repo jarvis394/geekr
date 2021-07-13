@@ -24,12 +24,13 @@ import { Skeleton } from '@material-ui/lab'
 import { Icon24DoorArrowLeftOutline } from '@vkontakte/icons'
 import { Icon24InfoCircleOutline } from '@vkontakte/icons'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { Route } from 'src/config/routes'
 
 const NAVIGATION_TABS = makeNavigationTabs(28, 28, true)
 const avatarWidth = 32
 const avatarHeight = 32
 
-const useStyles = makeStyles<Theme, { match: boolean }>((theme) => ({
+const useStyles = makeStyles((theme) => ({
   drawer: {
     flexShrink: 0,
     display: 'flex',
@@ -180,8 +181,12 @@ const useAboutButtonStyles = makeStyles((theme) => ({
   },
 }))
 
-const isCurrent = (obj: TabObject, pathname: string): boolean => {
-  return !!pathname.match(obj.match)
+const isCurrent = (obj: TabObject, route: Route): boolean => {
+  if (Array.isArray(obj.match)) {
+    return obj.match.some((k) => k === route.alias)
+  } else {
+    return obj.match === route.alias
+  }
 }
 
 interface NavButtonProps extends TabObject {
@@ -277,8 +282,7 @@ const SideNavigationDrawer = () => {
   const theme = useTheme()
   const route = useRoute()
   const location = useLocation()
-  const match = route.alias === 'feed'
-  const classes = useStyles({ match })
+  const classes = useStyles()
   const modeName = useSelector((state) => state.home.mode)
   const mode = RATING_MODES.find((e) => e.mode === modeName)
   const history = useHistory()
@@ -322,7 +326,7 @@ const SideNavigationDrawer = () => {
         <div className={classes.tabsHolder}>
           {NAVIGATION_TABS.map((e, i) => (
             <NavButton
-              current={isCurrent(e, location.pathname)}
+              current={isCurrent(e, route)}
               key={i}
               {...e}
             />

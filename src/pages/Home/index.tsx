@@ -44,11 +44,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'flex-start',
     width: '100%',
+    marginTop: theme.spacing(1),
   },
   list: {
     background: theme.palette.background.default,
     padding: 0,
-    paddingTop: theme.spacing(1),
     width: '100%',
   },
 }))
@@ -76,7 +76,9 @@ const Home = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const lastAllFlowsModeName = useSelector((state) => state.home.mode)
-  const lastAllFlowsMode = RATING_MODES.find((e) => e.mode === lastAllFlowsModeName)
+  const lastAllFlowsMode = RATING_MODES.find(
+    (e) => e.mode === lastAllFlowsModeName
+  )
   const isFetched = useSelector((state) =>
     flow === 'all' ? state.home.fetched : state.home.flows.fetched
   )

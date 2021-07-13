@@ -21,16 +21,25 @@ import {
 import LazyLoadImage from './LazyLoadImage'
 import { useSelector } from 'src/hooks'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
-import { Chip, fade } from '@material-ui/core'
+import { Button, Chip, fade, Theme } from '@material-ui/core'
 import { POST_LABELS as postLabels } from 'src/config/constants'
 import getPostLink from 'src/utils/getPostLink'
 import VisibilitySensor from 'react-visibility-sensor'
 import { useLocation, useHistory } from 'react-router-dom'
 import OutsidePageLocationState from 'src/interfaces/OutsidePageLocationState'
 import LinkToOutsidePage from './LinkToOutsidePage'
+import isDarkTheme from 'src/utils/isDarkTheme'
+import FormattedText from '../formatters/FormattedText'
+import getImagesFromText from 'src/utils/getImagesFromText'
 
-const ld = { lighten, darken }
-const useStyles = makeStyles((theme) => ({
+const ld = (theme: Theme) => (isDarkTheme(theme) ? darken : lighten)
+const useStyles = makeStyles<
+  Theme,
+  {
+    hasImage: boolean
+    isExtended: boolean
+  }
+>((theme) => ({
   noDeco: {
     textDecoration: 'none !important',
   },
@@ -45,10 +54,15 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: 8,
     },
   },
+  leadText: {
+    padding: theme.spacing(0, 2),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+  },
   postLink: {
     color: theme.palette.text.primary,
-    '&:visited > p': {
-      color: ld[theme.palette.type + 'en'](theme.palette.text.primary, 0.4),
+    '&:visited': {
+      color: ld(theme)(theme.palette.text.primary, 0.4),
     },
     padding: theme.spacing(0, 2),
     fontWeight: 800,
@@ -76,8 +90,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     width: '100%',
     display: 'flex',
-    height: (hasImage) => (hasImage ? POST_IMAGE_HEIGHT : '100%'),
-    marginBottom: (hasImage) => (hasImage ? theme.spacing(2) : 0),
+    height: ({ hasImage }) => (hasImage ? POST_IMAGE_HEIGHT : '100%'),
+    marginBottom: ({ hasImage }) => (hasImage ? theme.spacing(2) : 0),
     background: theme.palette.action.hover,
   },
   image: {
@@ -86,11 +100,27 @@ const useStyles = makeStyles((theme) => ({
     objectFit: 'cover',
     width: '100vw',
   },
-  previewHTML: {
-    marginTop: theme.spacing(1),
-    '& .searched-item': {
-      color: theme.palette.primary.light,
-    },
+  leadImageWrapper: {
+    marginBottom: theme.spacing(2),
+    maxHeight: 500,
+    objectFit: 'cover',
+    paddingBottom: '56.4103%',
+    position: 'relative',
+    width: '100%',
+  },
+  leadImage: {
+    maxWidth: '100%',
+    height: '100%',
+    borderRadius: 4,
+    position: 'absolute',
+    objectFit: 'cover',
+    width: '100%',
+    objectPosition: '0% 0%',
+  },
+  leadButton: {
+    textTransform: 'none',
+    borderRadius: 6,
+    marginTop: theme.spacing(2),
   },
   postAuthor: {
     color: theme.palette.primary.light,
@@ -113,6 +143,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+    [theme.breakpoints.up(765)]: {
+      maxWidth: 400,
+    },
   },
   postBottomRowItem: {
     color: theme.palette.text.hint,
@@ -137,7 +170,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     textDecoration: 'none !important',
-    paddingBottom: (hasImage) => (hasImage ? theme.spacing(2) : 0),
+    paddingBottom: ({ hasImage, isExtended }) => {
+      if (isExtended) return theme.spacing(1)
+      else if (hasImage) return theme.spacing(2)
+      else return 0
+    },
   },
   trollText: {
     color: theme.palette.text.hint,
@@ -158,7 +195,38 @@ const useStyles = makeStyles((theme) => ({
   },
   postTypeVoice: {
     color: theme.palette.error.light,
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
+  },
+  link: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+  },
+  hubs: {
+    wordBreak: 'break-word',
+    width: '100%',
+    marginBottom: theme.spacing(0.5),
+    padding: theme.spacing(0, 2),
+  },
+  hubLink: {
+    color: theme.palette.text.hint,
+    fontFamily: 'Roboto',
+    fontWeight: 400,
+    fontSize: 13,
+    transitionDuration: '100ms',
+    textDecoration: 'none',
+    '&:hover': {
+      color: theme.palette.primary.light,
+    },
+    ...theme.typography.body2,
+  },
+  hubWrapper: {
+    color: theme.palette.text.hint,
+    '&::after': {
+      content: '",\u2004"',
+    },
+    '&:last-child::after': {
+      content: '""',
+    },
   },
 }))
 
@@ -180,8 +248,16 @@ export const PostItem = ({
   style?: Record<string, unknown>
   hideImage?: boolean
 }) => {
-  const { titleHtml: unparsedTitle, statistics, postFirstImage } = post || {}
-  const classes = useStyles(!!postFirstImage && !hideImage)
+  const isExtended = useSelector(
+    (store) => !store.settings.interfaceFeed.isCompact
+  )
+  const { titleHtml: unparsedTitle, statistics, postFirstImage, leadData } =
+    post || {}
+  const hasImagesInLeadText = !!getImagesFromText(leadData.textHtml)
+  const classes = useStyles({
+    hasImage: !!postFirstImage && !hideImage,
+    isExtended,
+  })
 
   /**
    * Post with postType 'voice' needs just a title to be shown.
@@ -197,7 +273,7 @@ export const PostItem = ({
             classes.postTypeVoice,
           ].join(' ')}
         >
-          {post.leadData.textHtml}
+          {leadData.textHtml}
         </Typography>
       </Paper>
     )
@@ -228,6 +304,7 @@ export const PostItem = ({
     ? post.hubs.find((e) => e.type === 'corporative').alias
     : null
   const postLink = getPostLink(post)
+  const shouldShowPostImage = postFirstImage && !hideImage && !isExtended
   const bottomRow: BottomRowItemType[] = [
     {
       icon: ThumbsUpDownIcon,
@@ -354,7 +431,7 @@ export const PostItem = ({
                   {ts}
                 </Typography>
               </LinkToOutsidePage>
-              {postFirstImage && !hideImage && (
+              {shouldShowPostImage && (
                 <LinkToOutsidePage
                   className={classes.imageHolder}
                   to={postLink}
@@ -378,6 +455,22 @@ export const PostItem = ({
                 {title}
               </LinkToOutsidePage>
 
+              {/** Post hubs */}
+              {isExtended && (
+                <div className={classes.hubs}>
+                  {post.hubs.map((hub, i) => (
+                    <span key={i} className={classes.hubWrapper}>
+                      <LinkToOutsidePage
+                        className={classes.hubLink}
+                        to={'/hub/' + hub.alias + '/p/1'}
+                      >
+                        {hub.title}
+                      </LinkToOutsidePage>
+                    </span>
+                  ))}
+                </div>
+              )}
+
               {/** Post labels */}
               <div className={classes.labelsContainer}>
                 {post.postLabels.map((e, i) => (
@@ -391,6 +484,30 @@ export const PostItem = ({
                   />
                 ))}
               </div>
+
+              {isExtended && (
+                <div className={classes.leadText}>
+                  {!hasImagesInLeadText && postFirstImage && (
+                    <div className={classes.leadImageWrapper}>
+                      <img
+                        src={postFirstImage}
+                        alt={'Post header image'}
+                        className={classes.leadImage}
+                      />
+                    </div>
+                  )}
+                  <FormattedText>{leadData.textHtml}</FormattedText>
+                  <LinkToOutsidePage to={postLink} className={classes.link}>
+                    <Button
+                      color="primary"
+                      className={classes.leadButton}
+                      variant={'outlined'}
+                    >
+                      {parse(leadData.buttonTextHtml)}
+                    </Button>
+                  </LinkToOutsidePage>
+                </div>
+              )}
 
               <div className={classes.postBottomRow}>
                 {bottomRow.map((e, i) => (

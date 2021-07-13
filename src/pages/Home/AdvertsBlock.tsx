@@ -34,8 +34,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1.5),
     padding: theme.spacing(1.5, 0),
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      display: 'none'
-    }
+      display: 'none',
+    },
   },
   header: {
     fontSize: 13,
@@ -156,14 +156,17 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 2,
   },
   tileTileMegaprojects: {
-    overflow: 'visible'
-  }
+    overflow: 'visible',
+  },
 }))
 
 const AdvertsBlock = () => {
   const classes = useStyles()
   const theme = useTheme()
   const dispatch = useDispatch()
+  const isHidden = useSelector(
+    (store) => store.settings.interfaceFeed.hideMegaposts
+  )
   const data = useSelector((store) => store.home.adverts.data)
   const fetched = useSelector((store) => store.home.adverts.fetched)
   const error = useSelector((store) => store.home.adverts.error)
@@ -173,6 +176,8 @@ const AdvertsBlock = () => {
       0.7
     )}, ${fade(theme.palette.common.black, 0.5)}), url(${imageUrl})`,
   })
+
+  if (isHidden) return null
 
   useEffect(() => {
     !data && dispatch(getAdverts())
@@ -213,7 +218,7 @@ const AdvertsBlock = () => {
           className={classes.tileMegaprojects}
           component={Link}
           classes={{
-            tile: classes.tileTileMegaprojects
+            tile: classes.tileTileMegaprojects,
           }}
         >
           <ButtonBase className={classes.buttonMegaprojects}>

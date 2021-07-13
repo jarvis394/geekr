@@ -34,4 +34,13 @@ export default interface UserSettings {
   cookiesPreferences: {
     disableCookies: boolean
   }
+  readerSettings: {
+    fontSize: number
+    fontFamily: string
+  }
+  interfaceFeed: {
+    isCompact: boolean
+    hideMegaposts: boolean
+    hideNewsBlock: boolean
+  }
 }

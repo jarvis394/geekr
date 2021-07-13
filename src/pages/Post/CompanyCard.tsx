@@ -184,7 +184,7 @@ const CompanyCard: React.FC<{
 }> = ({ post, companyAlias }) => {
   const company = useSelector((store) => store.post.company.data)
   const classes = useStyles()
-  
+
   if (!companyAlias) return null
   if (!post || !company) return <CompanyCardSkeleton />
 
@@ -230,9 +230,11 @@ const CompanyCard: React.FC<{
           <Typography className={classes.companyName}>
             {company.titleHtml}
           </Typography>
-          <FormattedText className={classes.description}>
-            {company.descriptionHtml}
-          </FormattedText>
+          {company.descriptionHtml && (
+            <FormattedText className={classes.description}>
+              {company.descriptionHtml}
+            </FormattedText>
+          )}
         </Link>
       </div>
     </div>

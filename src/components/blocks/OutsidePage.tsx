@@ -68,8 +68,8 @@ const useAppBarStyles = makeStyles((theme) => ({
       shrinkedBackgroundColor,
     }: StyleProps) =>
       isShrinked
-        ? backgroundColor || getInvertedContrastPaperColor(theme)
-        : shrinkedBackgroundColor || getContrastPaperColor(theme),
+        ? shrinkedBackgroundColor || getInvertedContrastPaperColor(theme)
+        : backgroundColor || getContrastPaperColor(theme),
     color: theme.palette.text.primary,
     position: 'fixed',
     willChange: 'transform',

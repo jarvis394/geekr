@@ -1,6 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import ProgressiveImage from 'react-lazy-progressive-image'
-import { CircularProgress, Fade, makeStyles, Portal, Theme } from '@material-ui/core'
+import {
+  CircularProgress,
+  Fade,
+  makeStyles,
+  Portal,
+  Theme,
+} from '@material-ui/core'
 import { PhotoSwipe } from 'react-photoswipe'
 import { POST_ITEM_VISIBILITY_THRESHOLD } from 'src/config/constants'
 
@@ -41,11 +47,12 @@ interface ImageProps {
   alt: string
   className: string
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  disableZoom?: boolean
 }
 
 const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
   function ImageComponent(
-    { src, loading, style, alt, className, setOpen },
+    { src, loading, style, alt, className, setOpen, disableZoom },
     ref
   ) {
     const [hasError, setHasError] = React.useState(false)
@@ -83,7 +90,7 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
       <Fade in timeout={250} mountOnEnter>
         <img
           ref={ref}
-          onClick={() => !loading && !hasError && setOpen(true)}
+          onClick={() => !loading && !hasError && !disableZoom && setOpen(true)}
           className={classes.image + ' ' + className}
           width={style?.width || 'auto'}
           height={style?.height || 'auto'}
@@ -101,7 +108,7 @@ const Image = React.memo(ImageUnmemoized)
 const LazyLoadImage = (props) => {
   const [isOpen, setOpen] = useState(false)
   const imageRef = useRef<HTMLImageElement>(null)
-  const { style, alt, className } = props
+  const { style, alt, className, disableZoom } = props
   // Set image dimensions after it is done loading
   // PhotoSwipe requires image dimensions to be set before it is opened,
   // so we set them as soon as the image (in FormattedText, probably) is loaded.
@@ -153,6 +160,7 @@ const LazyLoadImage = (props) => {
             style={style}
             alt={alt}
             className={className}
+            disableZoom={disableZoom}
           />
         )}
       </ProgressiveImage>

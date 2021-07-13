@@ -16,6 +16,7 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
+  useTheme,
 } from '@material-ui/core'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
@@ -30,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     marginTop: theme.spacing(1.5),
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      border: '1px solid ' + fade(theme.palette.divider, 0.05),
       borderRadius: 8,
     },
     position: 'relative',
@@ -168,6 +168,7 @@ const AddDialog: React.FC<AddDialogProps> = ({
 
 const Blacklist = () => {
   const classes = useStyles()
+  const theme = useTheme()
   const [isAddAuthorDialogOpen, setAddAuthorDialogOpen] = useState(false)
   const [isAddCompanyDialogOpen, setAddCompanyDialogOpen] = useState(false)
   const hiddenAuthors = useSelector((store) => store.settings.hiddenAuthors)
@@ -210,7 +211,7 @@ const Blacklist = () => {
   )
 
   return (
-    <OutsidePage headerText={'Чёрный список'} disableShrinking>
+    <OutsidePage headerText={'Чёрный список'} disableShrinking backgroundColor={theme.palette.background.paper}>
       <MainBlock>
         <div className={classes.section}>
           <Typography className={classes.sectionHeader}>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { fade, Typography } from '@material-ui/core'
+import { fade, Typography, useTheme } from '@material-ui/core'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import isDarkTheme from 'src/utils/isDarkTheme'
@@ -33,7 +33,7 @@ const items = [
   },
   {
     icon: Icon28ArticleOutline,
-    to: '/article',
+    to: '/reader',
     text: 'Параметры чтения',
   },
   {
@@ -44,7 +44,7 @@ const items = [
   {
     icon: Icon28GlobeOutline,
     to: '/language',
-    text: 'Язык приложения',
+    text: 'Настройки языка',
   },
 ]
 
@@ -53,12 +53,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     width: '100%',
     flexDirection: 'column',
-    backgroundColor: getContrastPaperColor(theme),
+    backgroundColor: theme.palette.background.paper,
+    marginTop: theme.spacing(1.5),
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      marginTop: theme.spacing(1.5),
       padding: theme.spacing(1, 0),
       borderRadius: 8,
-      backgroundColor: theme.palette.background.paper,
     },
   },
   link: {
@@ -96,9 +95,14 @@ const useStyles = makeStyles((theme) => ({
 
 const Settings = () => {
   const classes = useStyles()
-
+  const theme = useTheme()
+  
   return (
-    <OutsidePage headerText={'Настройки'} disableShrinking>
+    <OutsidePage
+      headerText={'Настройки'}
+      disableShrinking
+      backgroundColor={theme.palette.background.paper}
+    >
       <div className={classes.root}>
         {items.map((e, i) => (
           <LinkToOutsidePage

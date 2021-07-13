@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 0,
     [theme.breakpoints.up(MIN_WIDTH)]: {
       borderRadius: 8,
-    }
+    },
   },
   header: {
     fontFamily: 'Google Sans',
@@ -123,10 +123,15 @@ const NewsItem = React.memo(
 const NewsBlock = ({ hubAlias }: { hubAlias?: string }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const isHidden = useSelector(
+    (store) => store.settings.interfaceFeed.hideNewsBlock
+  )
   const isFetched = useSelector((state) => state.news.block.fetched)
   const isFetching = useSelector((state) => state.news.block.fetching)
   const fetchError = useSelector((state) => state.news.block.error)
   const news = useSelector((state) => state.news.block.data)
+
+  if (isHidden) return null
 
   useEffect(() => {
     dispatch(getNewsPromo(hubAlias))

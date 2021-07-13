@@ -4,7 +4,7 @@ import { fade, makeStyles } from '@material-ui/core/styles'
 import { MIN_WIDTH } from 'src/config/constants'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
-import { ListItem, ListItemText, Switch, Typography } from '@material-ui/core'
+import { ListItem, ListItemText, Switch, Typography, useTheme } from '@material-ui/core'
 import { setSettings } from 'src/store/actions/settings'
 
 const useStyles = makeStyles((theme) => ({
@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     marginTop: theme.spacing(1.5),
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      border: '1px solid ' + fade(theme.palette.divider, 0.05),
       borderRadius: 8,
     },
     position: 'relative',
@@ -46,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Privacy = () => {
+  const theme = useTheme()
   const classes = useStyles()
   const cookiesPreferences = useSelector(
     (store) => store.settings.cookiesPreferences
@@ -63,7 +63,7 @@ const Privacy = () => {
   }
 
   return (
-    <OutsidePage headerText={'Приватность'} disableShrinking>
+    <OutsidePage headerText={'Приватность'} disableShrinking backgroundColor={theme.palette.background.paper}>
       <div className={classes.root}>
         <div className={classes.section}>
           <Typography className={classes.sectionHeader}>Аналитика</Typography>

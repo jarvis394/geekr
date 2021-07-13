@@ -5,6 +5,7 @@ import {
   useTheme,
   darken,
   lighten,
+  Theme,
 } from '@material-ui/core/styles'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
@@ -17,6 +18,8 @@ import { Node as MathJaxNode } from '@nteract/mathjax'
 import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import { APP_BAR_HEIGHT } from 'src/config/constants'
+import { useSelector } from 'src/hooks'
+import { UserSettings } from 'src/interfaces'
 
 type FloatType = 'left' | 'right'
 interface IframeResizeData {
@@ -25,7 +28,10 @@ interface IframeResizeData {
   height: number
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles<Theme, {
+  disableParagraphMargin: boolean
+  readerSettings: UserSettings['readerSettings']
+}>((theme) => ({
   img: {
     maxWidth: '100%',
     verticalAlign: 'middle',
@@ -43,9 +49,14 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: 'underline',
     },
     '& h1+p, h2+p, h3+p, h4+p': {
-      marginTop: (d) => (d ? 0 : theme.spacing(1.5)),
+      marginTop: ({ disableParagraphMargin: d }) => (d ? 0 : theme.spacing(1.5)),
     },
-    '& p': { margin: 0, marginTop: (d) => (d ? 0 : theme.spacing(3)) },
+    '& p': {
+      margin: 0,
+      fontSize: ({ readerSettings }) => readerSettings.fontSize,
+      fontFamily: ({ readerSettings }) => readerSettings.fontFamily,
+    },
+    '& p+p': { marginTop: ({ disableParagraphMargin: d }) => (d ? 0 : theme.spacing(3)) },
     '& em': { color: fade(theme.palette.text.primary, 0.75) },
     '& code': {
       background: getInvertedContrastPaperColor(theme),
@@ -198,7 +209,8 @@ const FormattedText: React.FC<{
   disableParagraphMargin = false,
   ...props
 }) => {
-  const classes = useStyles(disableParagraphMargin)
+  const readerSettings = useSelector(store => store.settings.readerSettings)
+  const classes = useStyles({ disableParagraphMargin, readerSettings })
   const [iframeHeights, setIframeHeights] = React.useState<
     Record<string, number>
   >({})

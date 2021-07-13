@@ -43,8 +43,8 @@ import CompanyCardWithLinks from './CompanyCardWithLinks'
 const makeGradient = (theme: Theme) => {
   const t =
     theme.palette.type === 'light'
-      ? lighten(theme.palette.background.default, 0.2)
-      : darken(theme.palette.background.paper, 0.2)
+      ? lighten(theme.palette.background.default, 0.1)
+      : darken(theme.palette.background.paper, 0.1)
   const colors = [
     t,
     fade(t, 0.98),
@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       content: '""',
     },
   },
-  authorBar: { paddingTop: theme.spacing(2.5) },
+  authorBar: { paddingTop: theme.spacing(2) },
   avatar: {
     width: theme.spacing(2.5),
     height: theme.spacing(2.5),
@@ -322,7 +322,7 @@ const Post = () => {
       </Fade>
 
       {/* Article text */}
-      <Fade in style={{ transitionDuration: '.1s' }}>
+      <Fade in>
         <Container>
           <FormattedText
             className={classes.text}

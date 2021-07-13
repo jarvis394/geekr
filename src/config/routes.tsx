@@ -1,10 +1,18 @@
+/**
+ * If you add a Settings subpage, add its alias to constants.tsx
+ * in `makeNavigationTabs`, so SideNavigationDrawer will match a new page
+ */
+
 import React, { MemoExoticComponent } from 'react'
 import Post from 'src/pages/Post'
 import Settings from 'src/pages/Settings/index'
 import SettingsAppearance from 'src/pages/Settings/Appearance'
 import SettingsBlacklist from 'src/pages/Settings/Blacklist'
 import SettingsNewTheme from 'src/pages/Settings/NewTheme'
+import SettingsInterface from 'src/pages/Settings/Interface'
+import SettingsReader from 'src/pages/Settings/Reader'
 import SettingsPrivacy from 'src/pages/Settings/Privacy'
+import SettingsLanguage from 'src/pages/Settings/Language'
 import Search from 'src/pages/Search'
 import News from 'src/pages/News'
 import NotFound from 'src/pages/NotFound'
@@ -90,13 +98,40 @@ export const routes: Route[] = [
     alias: 'post'
   },
   {
+    path: '/settings/reader',
+    component: <SettingsReader />,
+    title: 'Параметры чтения',
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => getContrastPaperColor(theme),
+    alias: 'settingsReader'
+  },
+  {
+    path: '/settings/interface',
+    component: <SettingsInterface />,
+    title: 'Настройки интерфейса',
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => getContrastPaperColor(theme),
+    alias: 'settingsInterface'
+  },
+  {
     path: '/settings/privacy',
     component: <SettingsPrivacy />,
     title: 'Приватность',
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
-    alias: 'settings-privacy'
+    alias: 'settingsPrivacy'
+  },
+  {
+    path: '/settings/language',
+    component: <SettingsLanguage />,
+    title: 'Настройки языка',
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => getContrastPaperColor(theme),
+    alias: 'settingsLanguage'
   },
   {
     path: '/settings/appearance/new-theme',
@@ -105,7 +140,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
-    alias: 'settings-new-theme'
+    alias: 'settingsNewTheme'
   },
   {
     path: '/settings/appearance/edit-theme/:themeType',
@@ -114,7 +149,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
-    alias: 'settings-edit-theme'
+    alias: 'settingsEditTheme'
   },
   {
     path: '/settings/appearance',
@@ -123,7 +158,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
-    alias: 'settings-appearance'
+    alias: 'settingsAppearance'
   },
   {
     path: '/settings/blacklist',
@@ -132,7 +167,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => getContrastPaperColor(theme),
-    alias: 'settings-blacklist'
+    alias: 'settingsBlacklist'
   },
   {
     path: '/settings',
@@ -150,7 +185,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: true,
     appBarColor: (theme) => theme.palette.background.default,
-    alias: 'habra-about'
+    alias: 'habraAbout'
   },
   {
     path: ['/search', '/search/p/:page'],
@@ -275,54 +310,6 @@ export const routes: Route[] = [
     appBarColor: (theme) => theme.palette.background.paper,
     alias: 'feed'
   },
-  // {
-  //   path: '/flows/develop',
-  //   component: <Home flow={'develop'} />,
-  //   shouldShowAppBar: true,
-  //   shouldAppBarChangeColors: false,
-  //   appBarColor: (theme) => theme.palette.background.paper,
-  //   alias: 'flowsDevelop'
-  // },
-  // {
-  //   path: '/flows/design',
-  //   component: <Home flow={'design'} />,
-  //   shouldShowAppBar: true,
-  //   shouldAppBarChangeColors: false,
-  //   appBarColor: (theme) => theme.palette.background.paper,
-  //   alias: 'flowsDesign'
-  // },
-  // {
-  //   path: '/flows/admin',
-  //   component: <Home flow={'admin'} />,
-  //   shouldShowAppBar: true,
-  //   shouldAppBarChangeColors: false,
-  //   appBarColor: (theme) => theme.palette.background.paper,
-  //   alias: 'flowsAdmin'
-  // },
-  // {
-  //   path: '/flows/management',
-  //   component: <Home flow={'management'} />,
-  //   shouldShowAppBar: true,
-  //   shouldAppBarChangeColors: false,
-  //   appBarColor: (theme) => theme.palette.background.paper,
-  //   alias: 'flowsManagement'
-  // },
-  // {
-  //   path: '/flows/marketing',
-  //   component: <Home flow={'marketing'} />,
-  //   shouldShowAppBar: true,
-  //   shouldAppBarChangeColors: false,
-  //   appBarColor: (theme) => theme.palette.background.paper,
-  //   alias: 'flowsMarketing'
-  // },
-  // {
-  //   path: '/flows/popsci',
-  //   component: <Home flow={'popsci'} />,
-  //   shouldShowAppBar: true,
-  //   shouldAppBarChangeColors: false,
-  //   appBarColor: (theme) => theme.palette.background.paper,
-  //   alias: 'flowsPopsci'
-  // },
   {
     path: '/me',
     component: <Me />,

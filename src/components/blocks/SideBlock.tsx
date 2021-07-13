@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.background.paper,
     borderRadius: 8,
     marginTop: theme.spacing(1.5),
+    '&:first-child': {
+      marginTop: 0
+    }
   },
   titleContainer: {
     display: 'flex',

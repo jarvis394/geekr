@@ -29,6 +29,12 @@ const useStyles = makeStyles((theme) => ({
       paddingTop: theme.spacing(1.5),
     },
   },
+  sidebar: {
+    marginTop: APP_BAR_HEIGHT + theme.spacing(1.5),
+    display: 'flex',
+    alignItems: 'flex-start',
+    height: '100%',
+  },
 }))
 
 type NewsPathParams = { page: string }
@@ -107,7 +113,7 @@ const News = () => {
           <PaginationComponent />
         </List>
       </MainBlock>
-      <Sidebar />
+      <div className={classes.sidebar}><Sidebar /></div>
     </>
   )
 }
