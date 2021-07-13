@@ -39,6 +39,8 @@ const useStyles = makeStyles<Theme, {
     borderRadius: 4,
   },
   text: {
+    fontSize: ({ readerSettings }) => readerSettings.fontSize,
+    fontFamily: ({ readerSettings }) => readerSettings.fontFamily,
     '& a': {
       color: theme.palette.primary.main,
       textDecoration: 'none',
