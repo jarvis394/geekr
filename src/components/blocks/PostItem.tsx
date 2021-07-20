@@ -68,7 +68,7 @@ const useStyles = makeStyles<
     fontWeight: 800,
     fontFamily: '"Google Sans"',
     fontSize: 20,
-    marginTop: (hasImage) => (hasImage ? 0 : theme.spacing(1)),
+    marginTop: ({ hasImage }) => (hasImage ? 0 : theme.spacing(1)),
     '& .searched-item': {
       color: theme.palette.primary.light, // Highlight the search query in post's title
     },
@@ -150,7 +150,7 @@ const useStyles = makeStyles<
   postBottomRowItem: {
     color: theme.palette.text.hint,
     textDecoration: 'none',
-    padding: (hasImage) => theme.spacing(hasImage ? 2 : 1.5, 0, 2, 0),
+    padding: ({ hasImage }) => theme.spacing(hasImage ? 2 : 1.5, 0, 2, 0),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -241,7 +241,7 @@ interface BottomRowItemType {
 export const PostItem = ({
   post,
   style,
-  hideImage,
+  hideImage = false,
 }: {
   post?: Post
   style?: Record<string, unknown>
@@ -254,7 +254,7 @@ export const PostItem = ({
     post || {}
   const hasImagesInLeadText = !!getImagesFromText(leadData.textHtml)
   const classes = useStyles({
-    hasImage: !!postFirstImage && !hideImage,
+    hasImage: (!!postFirstImage || hasImagesInLeadText) && !hideImage,
     isExtended,
   })
 

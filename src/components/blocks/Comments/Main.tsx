@@ -113,6 +113,10 @@ const Comments = ({ post }: { post: Post }) => {
         const parsedComments = parseComments(commentsData)
         const flat = flatten(parsedComments)
 
+        console.log(commentsData)
+        console.log(parsedComments)
+        console.log(flat)
+
         setCommentsLength(Object.keys(commentsData).length)
         setComments(flat.map((x: IComment) => delete x.children && x))
       } catch (e) {
@@ -123,7 +127,7 @@ const Comments = ({ post }: { post: Post }) => {
     post && get()
 
     return () => window.removeEventListener('scroll', onScroll)
-  }, [post, onScroll, flatten])
+  }, [post])
 
   if (fetchError)
     return <Typography className={classes.errorText}>{fetchError}</Typography>

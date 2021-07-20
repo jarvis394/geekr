@@ -1,4 +1,4 @@
-import { Comments, Company, FetchingState, Post } from 'src/interfaces'
+import { Comment, Comments, Company, FetchingState, Post } from 'src/interfaces'
 
 export const PREFIX = 'POST_'
 export const POST_FETCH = PREFIX + 'FETCH'
@@ -13,7 +13,8 @@ export const COMPANY_FETCH_REJECTED = COMPANY_FETCH + '_REJECTED'
 
 export interface State {
   comments: {
-    data: Comments
+    fetchedData: Comments
+    comments: Comment[]
     state: FetchingState
     fetchError: string
   }

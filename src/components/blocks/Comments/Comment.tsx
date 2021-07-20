@@ -69,11 +69,12 @@ const useStyles = makeStyles((theme) => ({
   text: {
     marginTop: theme.spacing(1.5),
     lineHeight: '22px',
-    fontSize: 15,
+    fontSize: '15px !important',
     wordBreak: 'break-word',
     hyphens: 'auto',
     '& p': {
       margin: 0,
+      fontSize: '15px !important',
     },
   },
   ufo: {
@@ -107,6 +108,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 16,
     backgroundColor: fade(theme.palette.primary.light, 0.1),
     padding: theme.spacing(0.5, 1.5),
+    
     '&:hover': {
       backgroundColor: fade(theme.palette.primary.light, 0.1) + ' !important',
     },

@@ -89,6 +89,20 @@ const previewText = `
   </p>
 `
 
+const SwitchButton: React.FC<{
+  primary: React.ReactNode
+  secondary?: React.ReactNode
+  checked: boolean
+  onChange: () => void
+}> = ({ primary, secondary, checked, onChange }) => {
+  return (
+    <ListItem button onClick={() => onChange()}>
+      <ListItemText primary={primary} secondary={secondary} />
+      <Switch disableRipple checked={checked} color="primary" />
+    </ListItem>
+  )
+}
+
 const Reader = () => {
   const theme = useTheme()
   const readerSettings = useSelector((store) => store.settings.readerSettings)
@@ -211,7 +225,7 @@ const Reader = () => {
             </DialogActions>
           </Dialog>
 
-          <Typography className={classes.sectionHeader}>Параметры</Typography>
+          <Typography className={classes.sectionHeader}>Текст</Typography>
           <ListItem button onClick={() => setFontSizeDialogOpen(true)}>
             <ListItemText
               primary={'Размер шрифта'}
@@ -224,6 +238,27 @@ const Reader = () => {
               secondary={readerSettings.fontFamily}
             />
           </ListItem>
+        </div>
+        <div className={classes.section}>
+          <Typography className={classes.sectionHeader}>Параметры</Typography>
+          <SwitchButton
+            primary={
+              <>
+                Заменять ссылки с{' '}
+                <Typography component="span" color="primary">
+                  habr.com
+                </Typography>{' '}
+                на{' '}
+                <Typography component="span" color="primary">
+                  habra.vercel.app
+                </Typography>
+              </>
+            }
+            checked={readerSettings.changeLinks}
+            onChange={() => {
+              setReaderSettings('changeLinks', !readerSettings.changeLinks)
+            }}
+          />
         </div>
       </div>
     </OutsidePage>

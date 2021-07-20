@@ -1,6 +1,7 @@
 import * as api from 'src/api'
 import apiGetCompany from 'src/api/getCompany'
-import { FetchingState } from 'src/interfaces'
+import { THREAD_LEVEL } from 'src/config/constants'
+import { FetchingState, Comment as IComment } from 'src/interfaces'
 import { RootState } from '..'
 import {
   COMMENTS_FETCH,
@@ -14,18 +15,59 @@ import {
   COMPANY_FETCH_REJECTED,
 } from '../reducers/post/types'
 
+const parseComments = (nodes: Map<number, IComment>) => {
+  const root = []
+  for (const id in nodes) {
+    const comment = nodes[id]
+    comment.children = []
+
+    const parent = comment.parentId !== 0 ? nodes[comment.parentId] : null
+
+    if (!parent) {
+      root.push(comment)
+    } else {
+      parent.children.push(comment)
+    }
+  }
+
+  return root
+}
+
+const flatten = (nodes, a = []) => {
+  nodes.forEach((e) => {
+    a.push(e)
+    flatten(e.children, a)
+  })
+  return a
+}
+
+const setLevelInfo = (nodes: IComment[]) => {
+  nodes.forEach((_, i) => {
+    const nextNode = nodes[Math.min(i + 1, nodes.length - 1)]
+    const prevNode = nodes[Math.max(i - 1, 0)]
+    const currentNode = nodes[i]
+    const threadLevel = Math.trunc(currentNode.level / THREAD_LEVEL)
+    const nextThreadLevel = Math.trunc(nextNode.level / THREAD_LEVEL)
+    nodes[i].threadLevel = threadLevel
+    nodes[i].isThreadStart = nextThreadLevel > threadLevel
+    nodes[i].isLastInThread = nextNode.level === 0 && !!nextNode.author
+    nodes[i].isNewLevel = prevNode.level < currentNode.level
+  })
+  return nodes
+}
+
 /**
  * Gets post data and dispatches it to the `post` store
  * @param id Post ID
  */
-export const getPost = (id: number) => async (
+export const getPost = (id: number | string) => async (
   dispatch,
   getState: () => RootState
 ) => {
   const storeData = getState().post.post
   if (
     storeData.state === FetchingState.Fetched &&
-    Number(storeData.data.id) === id
+    storeData.data.id.toString() === id.toString()
   ) {
     return Promise.resolve()
   }
@@ -47,14 +89,14 @@ export const getPost = (id: number) => async (
  * Gets post comments and dispatches the data to the `post` store
  * @param id Post ID
  */
-export const getPostComments = (id: number) => async (
+export const getPostComments = (id: number | string) => async (
   dispatch,
   getState: () => RootState
 ) => {
   const storeData = getState().post
   if (
     storeData.comments.state === FetchingState.Fetched &&
-    Number(storeData.post.data.id) === id
+    storeData.post.data.id.toString() === id.toString()
   ) {
     return Promise.resolve()
   }
@@ -63,9 +105,13 @@ export const getPostComments = (id: number) => async (
 
   try {
     const data = await api.getComments(id)
+    const parsedComments = parseComments(data.comments)
+    const flattenComments = flatten(parsedComments)
+    const commentsWithLevelInfo = setLevelInfo(flattenComments)
+
     dispatch({
       type: COMMENTS_FETCH_FULFILLED,
-      payload: data,
+      payload: { comments: commentsWithLevelInfo, fetchedData: data },
     })
   } catch (error) {
     dispatch({ type: COMMENTS_FETCH_REJECTED, payload: error })
@@ -91,7 +137,7 @@ export const getCompany = (alias: string) => async (
   dispatch({ type: COMPANY_FETCH })
 
   try {
-    const data = (await apiGetCompany(alias))
+    const data = await apiGetCompany(alias)
     dispatch({
       type: COMPANY_FETCH_FULFILLED,
       payload: data,

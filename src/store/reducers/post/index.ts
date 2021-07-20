@@ -17,10 +17,16 @@ const initialData = {
   state: FetchingState.Idle,
   fetchError: null,
 }
+const initialCommentsData = {
+  fetchedData: null,
+  comments: null,
+  state: FetchingState.Idle,
+  fetchError: null,
+}
 
 const initialState: State = {
   post: initialData,
-  comments: initialData,
+  comments: initialCommentsData,
   company: initialData,
 }
 
@@ -36,7 +42,7 @@ export default (storeState = initialState, { type, payload }): State => {
           data: null,
         },
         company: initialData,
-        comments: initialData,
+        comments: initialCommentsData,
       }
 
     case POST_FETCH_FULFILLED:
@@ -61,7 +67,7 @@ export default (storeState = initialState, { type, payload }): State => {
           fetchError: payload,
           data: null,
         },
-        comments: initialData,
+        comments: initialCommentsData,
       }
 
     /** Do not reset post data on comments fetch */
@@ -70,8 +76,7 @@ export default (storeState = initialState, { type, payload }): State => {
         ...storeState,
         comments: {
           state: FetchingState.Fetching,
-          fetchError: null,
-          data: null,
+          ...initialCommentsData,
         },
       }
 
@@ -81,7 +86,8 @@ export default (storeState = initialState, { type, payload }): State => {
         comments: {
           state: FetchingState.Fetched,
           fetchError: null,
-          data: payload,
+          fetchedData: payload.fetchedData,
+          comments: payload.comments,
         },
       }
 
@@ -95,7 +101,8 @@ export default (storeState = initialState, { type, payload }): State => {
         comments: {
           state: FetchingState.Error,
           fetchError: payload,
-          data: null,
+          fetchedData: null,
+          comments: null,
         },
       }
 

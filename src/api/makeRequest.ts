@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import { API_TOKEN_URL, API_URL } from '../config/constants'
+import * as userSettings from 'src/utils/userSettings'
 
 const CancelToken = axios.CancelToken
 const source = CancelToken.source()
@@ -25,7 +26,7 @@ interface Arguments {
 }
 
 export default async <T = never>({
-  language = 'ru',
+  language: paramsLanguage,
   path,
   params,
   requestOptions,
@@ -33,6 +34,8 @@ export default async <T = never>({
   token,
 }: Arguments): Promise<T> => {
   const tokenRequestParams = new URLSearchParams(params)
+  const settingsLanguage = userSettings.get().language.feed
+  const language = paramsLanguage || settingsLanguage
   tokenRequestParams.append('fl', language)
   tokenRequestParams.append('hl', language)
 

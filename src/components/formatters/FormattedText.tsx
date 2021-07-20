@@ -20,6 +20,7 @@ import isDarkTheme from 'src/utils/isDarkTheme'
 import { APP_BAR_HEIGHT } from 'src/config/constants'
 import { useSelector } from 'src/hooks'
 import { UserSettings } from 'src/interfaces'
+import formatLink from 'src/utils/formatLink'
 
 type FloatType = 'left' | 'right'
 interface IframeResizeData {
@@ -28,10 +29,13 @@ interface IframeResizeData {
   height: number
 }
 
-const useStyles = makeStyles<Theme, {
-  disableParagraphMargin: boolean
-  readerSettings: UserSettings['readerSettings']
-}>((theme) => ({
+const useStyles = makeStyles<
+  Theme,
+  {
+    disableParagraphMargin: boolean
+    readerSettings: UserSettings['readerSettings']
+  }
+>((theme) => ({
   img: {
     maxWidth: '100%',
     verticalAlign: 'middle',
@@ -51,14 +55,17 @@ const useStyles = makeStyles<Theme, {
       textDecoration: 'underline',
     },
     '& h1+p, h2+p, h3+p, h4+p': {
-      marginTop: ({ disableParagraphMargin: d }) => (d ? 0 : theme.spacing(1.5)),
+      marginTop: ({ disableParagraphMargin: d }) =>
+        d ? 0 : theme.spacing(1.5),
     },
     '& p': {
       margin: 0,
       fontSize: ({ readerSettings }) => readerSettings.fontSize,
       fontFamily: ({ readerSettings }) => readerSettings.fontFamily,
     },
-    '& p+p': { marginTop: ({ disableParagraphMargin: d }) => (d ? 0 : theme.spacing(3)) },
+    '& p+p': {
+      marginTop: ({ disableParagraphMargin: d }) => (d ? 0 : theme.spacing(3)),
+    },
     '& em': { color: fade(theme.palette.text.primary, 0.75) },
     '& code': {
       background: getInvertedContrastPaperColor(theme),
@@ -168,7 +175,7 @@ const useStyles = makeStyles<Theme, {
     wordSpacing: 'normal',
     wordWrap: 'normal',
     '& code': {
-      whiteSpace: 'normal !important',
+      whiteSpace: 'pre-wrap !important',
       fontSize: 14,
     },
     '&::-webkit-scrollbar': {
@@ -206,17 +213,19 @@ const FormattedText: React.FC<{
   disableParagraphMargin?: boolean
   className?: string
 }> = ({
-  children,
+  children: componentChildren,
   className = '',
   disableParagraphMargin = false,
   ...props
 }) => {
-  const readerSettings = useSelector(store => store.settings.readerSettings)
+  const readerSettings = useSelector((store) => store.settings.readerSettings)
   const classes = useStyles({ disableParagraphMargin, readerSettings })
   const [iframeHeights, setIframeHeights] = React.useState<
     Record<string, number>
   >({})
-  const theme = useTheme()
+  const shouldChangeLinks = useSelector(
+    (store) => store.settings.readerSettings.changeLinks
+  )
   const options: HTMLReactParserOptions = {
     trim: true,
     replace: ({ name, children, attribs }): void | React.ReactElement => {
@@ -259,13 +268,8 @@ const FormattedText: React.FC<{
         }
 
         const imgStyles = {
-          float: (attribs.align || 'none') as FloatType,
-          marginRight: attribs.align === 'left' ? theme.spacing(2) : 0,
-          marginLeft: attribs.align === 'right' ? theme.spacing(2) : 0,
-          marginBottom: attribs.align ? theme.spacing(1) : 0,
-          maxWidth: attribs.align ? '40%' : '100%',
-          width: attribs['data-width'] || attribs.width || 'auto',
-          height: attribs['data-height'] || attribs.height || 'auto',
+          width: attribs['data-width'] || attribs.width,
+          height: attribs['data-height'] || attribs.height,
         }
 
         return (
@@ -275,6 +279,7 @@ const FormattedText: React.FC<{
             // If not found, then use default 'src' attribute
             src={attribs['data-src'] || attribs.src}
             alt={attribs.alt || 'Изображение не загружено'}
+            align={attribs.align}
             style={imgStyles}
             className={classes.img}
           />
@@ -300,7 +305,7 @@ const FormattedText: React.FC<{
           (e) => e.attribs && e.attribs.class === 'spoiler_text'
         ).children
 
-        return <Spoiler title={title}>{domToReact(data)}</Spoiler>
+        return <Spoiler title={title}>{domToReact(data, options)}</Spoiler>
       }
       if (name === 'details' && attribs.class === 'spoiler') {
         const title: string = children.find((e) => e.name === 'summary')
@@ -309,7 +314,7 @@ const FormattedText: React.FC<{
           (e) => e.attribs && e.attribs.class === 'spoiler__content'
         ).children
 
-        return <Details title={title}>{domToReact(data)}</Details>
+        return <Details title={title}>{domToReact(data, options)}</Details>
       }
       if (name === 'a' && attribs?.href?.startsWith('#')) {
         const handleLinkClick: React.MouseEventHandler<HTMLAnchorElement> = (
@@ -326,7 +331,14 @@ const FormattedText: React.FC<{
         }
         return (
           <a onClick={handleLinkClick} {...attribs}>
-            {domToReact(children)}
+            {domToReact(children, options)}
+          </a>
+        )
+      }
+      if (name === 'a') {
+        return (
+          <a href={shouldChangeLinks ? formatLink(attribs.href) : attribs.href}>
+            {domToReact(children, options)}
           </a>
         )
       }
@@ -350,7 +362,7 @@ const FormattedText: React.FC<{
 
   return (
     <div {...props} className={classes.text + ' ' + className}>
-      {parse(children, options)}
+      {parse(componentChildren, options)}
     </div>
   )
 }

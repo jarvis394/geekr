@@ -1,11 +1,26 @@
 import React from 'react'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import { makeStyles } from '@material-ui/core/styles'
-import { MIN_WIDTH } from 'src/config/constants'
 import {
+  LANGUAGES_FEED,
+  LANGUAGES_INTERFACE,
+  MIN_WIDTH,
+} from 'src/config/constants'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
   Typography,
   useTheme,
 } from '@material-ui/core'
+import { useSelector } from 'src/hooks'
+import { useDispatch } from 'react-redux'
+import { setSettings } from 'src/store/actions/settings'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     },
     position: 'relative',
     overflow: 'hidden',
+    padding: theme.spacing(1.8, 2),
   },
   sectionHeader: {
     fontSize: 13,
@@ -29,14 +45,38 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     lineHeight: 'normal',
     fontFamily: 'Google Sans',
-    paddingBottom: 0,
-    padding: theme.spacing(1.8, 2),
+    paddingBottom: theme.spacing(1),
   },
 }))
 
 const Language = () => {
   const theme = useTheme()
   const classes = useStyles()
+  const languageSettings = useSelector((store) => store.settings.language)
+  const dispatch = useDispatch()
+  const setLanguageSettings = (field: string, value: unknown) => {
+    dispatch(
+      setSettings({
+        language: {
+          ...languageSettings,
+          [field]: value,
+        },
+      })
+    )
+  }
+
+  const handleInterfaceLanguageChange = (
+    _event: React.ChangeEvent<HTMLInputElement>,
+    value: string
+  ) => {
+    setLanguageSettings('interface', value)
+  }
+  const handleFeedLanguageChange = (
+    _event: React.ChangeEvent<HTMLInputElement>,
+    value: string
+  ) => {
+    setLanguageSettings('feed', value)
+  }
 
   return (
     <OutsidePage
@@ -47,9 +87,40 @@ const Language = () => {
       <div className={classes.root}>
         <div className={classes.section}>
           <Typography className={classes.sectionHeader}>Интерфейс</Typography>
+          <RadioGroup
+            aria-label="language-interface"
+            name="language-interface"
+            value={languageSettings.interface}
+            onChange={handleInterfaceLanguageChange}
+          >
+            {LANGUAGES_INTERFACE.map(({ name, type }) => (
+              <FormControlLabel
+                value={type}
+                key={type}
+                control={<Radio color="primary" disabled />}
+                label={name}
+              />
+            ))}
+          </RadioGroup>
+          <Typography variant="body2" color="textSecondary">В разработке :)</Typography>
         </div>
         <div className={classes.section}>
           <Typography className={classes.sectionHeader}>Публикации</Typography>
+          <RadioGroup
+            aria-label="language-feed"
+            name="language-feed"
+            value={languageSettings.feed}
+            onChange={handleFeedLanguageChange}
+          >
+            {LANGUAGES_FEED.map(({ name, type }) => (
+              <FormControlLabel
+                value={type}
+                key={type}
+                control={<Radio color="primary" />}
+                label={name}
+              />
+            ))}
+          </RadioGroup>
         </div>
       </div>
     </OutsidePage>

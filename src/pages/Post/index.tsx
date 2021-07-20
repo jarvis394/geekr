@@ -363,7 +363,7 @@ const Post = () => {
   useEffect(() => {
     dispatch(getPost(id))
     companyAlias && dispatch(getCompany(companyAlias))
-  }, [dispatch, id, companyAlias])
+  }, [id, companyAlias])
 
   if (fetchError) return <ErrorComponent message={fetchError} />
   if (companyFetchError)

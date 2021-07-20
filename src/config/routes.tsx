@@ -16,6 +16,7 @@ import SettingsLanguage from 'src/pages/Settings/Language'
 import Search from 'src/pages/Search'
 import News from 'src/pages/News'
 import NotFound from 'src/pages/NotFound'
+import Thread from 'src/pages/Comments/Thread'
 import CommentsPage from 'src/pages/Comments'
 import getCachedMode from 'src/utils/getCachedMode'
 import AboutPage from 'src/pages/AboutPage'
@@ -64,6 +65,14 @@ export const routes: Route[] = [
     shouldAppBarChangeColors: false,
     appBarColor: (theme) => theme.palette.background.default,
     alias: 'auth'
+  },
+  {
+    path: '/post/:id/comments/thread/:threadId',
+    component: <Thread />,
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => theme.palette.background.default,
+    alias: 'commentsThread'
   },
   {
     path: '/post/:id/comments',

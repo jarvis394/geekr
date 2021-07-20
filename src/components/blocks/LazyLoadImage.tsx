@@ -34,8 +34,20 @@ const useStyles = makeStyles<Theme, StylesProps>((theme) => ({
     display: 'inline-block',
   },
   blurred: {
-    filter: 'blur(5px)',
+    filter: 'blur(16px)',
     clipPath: 'inset(0)',
+  },
+  'imgAlign-left': {
+    float: 'left',
+    marginRight: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    maxWidth: '40% !important',
+  },
+  'imgAlign-right': {
+    float: 'right',
+    marginLeft: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    maxWidth: '40% !important',
   },
 }))
 
@@ -48,11 +60,12 @@ interface ImageProps {
   className: string
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   disableZoom?: boolean
+  align?: 'left' | 'right' | null
 }
 
 const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
   function ImageComponent(
-    { src, loading, style, alt, className, setOpen, disableZoom },
+    { src, loading, style, alt, className, setOpen, disableZoom, align },
     ref
   ) {
     const [hasError, setHasError] = React.useState(false)
@@ -61,6 +74,7 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
     const classes = useStyles({
       isLoading: hasError ? false : loading,
     })
+    const imgClasses = [classes.image, className]
 
     if (loading && (!src || src === '/img/image-loader.svg'))
       return (
@@ -85,15 +99,17 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
           </Fade>
         </span>
       )
+    
+    if (align) imgClasses.push(classes['imgAlign-' + align])
 
     return (
       <Fade in timeout={250} mountOnEnter>
         <img
           ref={ref}
           onClick={() => !loading && !hasError && !disableZoom && setOpen(true)}
-          className={classes.image + ' ' + className}
-          width={style?.width || 'auto'}
-          height={style?.height || 'auto'}
+          className={imgClasses.join(' ')}
+          width={style?.width}
+          height={style?.height}
           style={style}
           src={src}
           alt={alt || 'Изображение не загружено'}
@@ -108,11 +124,11 @@ const Image = React.memo(ImageUnmemoized)
 const LazyLoadImage = (props) => {
   const [isOpen, setOpen] = useState(false)
   const imageRef = useRef<HTMLImageElement>(null)
-  const { style, alt, className, disableZoom } = props
+  const { style, alt, className, disableZoom, align } = props
   // Set image dimensions after it is done loading
   // PhotoSwipe requires image dimensions to be set before it is opened,
   // so we set them as soon as the image (in FormattedText, probably) is loaded.
-  // User cannot open PhotoSwipe before image loads.
+  // User cannot open PhotoSwipe before image was loaded.
   const items: PhotoSwipe.Item[] = React.useMemo(
     () => [
       {
@@ -159,6 +175,7 @@ const LazyLoadImage = (props) => {
             isVisible={isVisible}
             style={style}
             alt={alt}
+            align={align}
             className={className}
             disableZoom={disableZoom}
           />

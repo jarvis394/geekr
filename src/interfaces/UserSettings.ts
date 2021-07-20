@@ -37,10 +37,15 @@ export default interface UserSettings {
   readerSettings: {
     fontSize: number
     fontFamily: string
+    changeLinks: boolean
   }
   interfaceFeed: {
     isCompact: boolean
     hideMegaposts: boolean
     hideNewsBlock: boolean
+  }
+  language: {
+    feed: 'ru' | 'en'
+    interface: 'ru' | 'en'
   }
 }

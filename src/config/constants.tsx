@@ -38,6 +38,7 @@ export const ADVERTS_BLOCK_MAX_WIDTH = 364
 export const BOTTOM_BAR_HEIGHT = 52
 export const APP_BAR_HEIGHT = 48
 export const DRAWER_WIDTH = 296
+export const THREAD_LEVEL = 7
 
 /** Local Storage keys */
 export const USER_SETTINGS_KEY = 'habra_USER_SETTINGS'
@@ -178,6 +179,18 @@ export const DONATION_TITLES_MAP = {
   paymentWebmoney: 'Webmoney',
 }
 
+export const HABR_BASE_REGEXP = /\/(habr|m\.habr)\.com\/(ru|en)\/(.+)/
+export const HABR_LINKS_REPLACE_MAP = [
+  {
+    regexp: /company\/?(.+)\/blog\/([0-9]+)[/]?/,
+    to: '/company/[0]/blog/[1]',
+  },
+  {
+    regexp: /post\/?(.+)[/]?/,
+    to: '/post/[0]',
+  },
+]
+
 export const READER_FONT_FAMILIES = ['Roboto', 'Segoe UI', 'Arial']
 
 export const makeNavigationTabs = (
@@ -266,13 +279,39 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   readerSettings: {
     fontFamily: 'Roboto',
     fontSize: 16,
+    changeLinks: false,
   },
   interfaceFeed: {
     isCompact: true,
     hideMegaposts: false,
     hideNewsBlock: false,
   },
+  language: {
+    feed: 'ru',
+    interface: 'ru'
+  }
 }
+
+export const LANGUAGES_INTERFACE = [
+  {
+    type: 'ru',
+    name: 'Русский'
+  },
+  {
+    type: 'en',
+    name: 'English'
+  },
+]
+export const LANGUAGES_FEED = [
+  {
+    type: 'ru',
+    name: 'Русский'
+  },
+  {
+    type: 'en',
+    name: 'English'
+  },
+]
 
 export const THEMES: PaletteType[] = [
   'light',
