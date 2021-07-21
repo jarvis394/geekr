@@ -11,6 +11,7 @@ import calendarPlugin from 'dayjs/plugin/calendar'
 import updateLocalePlugin from 'dayjs/plugin/updateLocale'
 import 'react-lazy-load-image-component/src/effects/opacity.css'
 import 'dayjs/locale/ru'
+import 'src/config/i18n'
 import { BrowserRouter as Router } from 'react-router-dom'
 import 'react-photoswipe/dist/photoswipe.css'
 import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
@@ -31,7 +32,7 @@ const instance = createInstance({
   },
 })
 
-dayjs.locale('ru')
+dayjs.locale(userSettings.language.interface || 'ru')
 dayjs.extend(relativeTimePlugin)
 dayjs.extend(calendarPlugin)
 dayjs.extend(updateLocalePlugin)
@@ -41,6 +42,14 @@ dayjs.updateLocale('ru', {
     lastWeek: 'D MMMM, в hh:mm',
     sameDay: 'Сегодня, в hh:mm',
     lastDay: 'Вчера, в hh:mm',
+    sameElse: 'DD.MM.YYYY',
+  },
+})
+dayjs.updateLocale('en', {
+  calendar: {
+    lastWeek: 'D MMMM, at hh:mm',
+    sameDay: 'Today, at hh:mm',
+    lastDay: 'Yesterday, at hh:mm',
     sameElse: 'DD.MM.YYYY',
   },
 })

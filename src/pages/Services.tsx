@@ -1,14 +1,14 @@
-import React, { CSSProperties } from 'react'
+import React from 'react'
 import {
   Button as MUIButton,
-  Divider,
   Grid,
   Typography,
   ButtonBase,
 } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { blue, orange, deepOrange, lightGreen } from '@material-ui/core/colors'
+import { blue, orange, red, green } from '@material-ui/core/colors'
 
+import { Icon24Fire } from '@vkontakte/icons'
 import { Icon36Newsfeed } from '@vkontakte/icons'
 import { Icon36Users3Outline } from '@vkontakte/icons'
 import { Icon28CompassOutline } from '@vkontakte/icons'
@@ -16,12 +16,12 @@ import { Icon28WorkOutline } from '@vkontakte/icons'
 import { Icon24CubeBoxOutline } from '@vkontakte/icons'
 import { Icon24ChevronCompactRight } from '@vkontakte/icons'
 import { Icon28Users3Outline } from '@vkontakte/icons'
-import { Icon24EducationOutline } from '@vkontakte/icons'
-import { Icon28FireOutline } from '@vkontakte/icons'
 import { Icon28LogoVkOutline } from '@vkontakte/icons'
 import { useHistory, useLocation } from 'react-router'
 import { Icon24InfoCircleOutline } from '@vkontakte/icons'
 import GitHubIcon from '@material-ui/icons/GitHub'
+import useMediaExtendedQuery from 'src/hooks/useMediaExtendedQuery'
+import { MIDDLE_WIDTH, MIN_WIDTH } from 'src/config/constants'
 
 const makeCardTextColor = (theme: Theme, hasSubtext: boolean) => {
   if (theme.palette.type === 'dark') {
@@ -32,12 +32,26 @@ const makeCardTextColor = (theme: Theme, hasSubtext: boolean) => {
 }
 
 const useStyles = makeStyles((theme) => ({
+  rootWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    width: '100%',
+  },
   root: {
     paddingTop: theme.spacing(1),
-    padding: theme.spacing(1),
+    padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
-    width: '100%'
+    width: '100%',
+    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
+      marginTop: theme.spacing(1),
+    },
+    maxWidth: MIN_WIDTH,
+  },
+  buttonContainer: {
+    display: 'flex',
+    gap: theme.spacing(2),
+    flexWrap: 'wrap',
   },
   title: {
     fontFamily: 'Google Sans',
@@ -48,11 +62,10 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   divider: {
-    margin: theme.spacing(0, 1),
     marginTop: theme.spacing(0.5),
   },
   wrapper: {
-    margin: theme.spacing(0, 1),
+    marginTop: theme.spacing(1),
   },
   buttonLabel: {
     textTransform: 'none',
@@ -65,10 +78,21 @@ const useStyles = makeStyles((theme) => ({
 
 const useButtonStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(1.5, 0),
+    padding: theme.spacing(1.5, 2),
     borderRadius: 8,
     display: 'flex',
-    width: '100%',
+    width: `calc(50% - ${theme.spacing(1)}px)`,
+    background: theme.palette.background.paper,
+    position: 'relative',
+    '&:hover': {
+      background: theme.palette.background.paper,
+    },
+    alignItems: 'flex-start',
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      borderRadius: 12,
+      width: '100%',
+      maxWidth: 164,
+    },
   },
   rootLabel: {
     flexDirection: 'column',
@@ -76,11 +100,18 @@ const useButtonStyles = makeStyles((theme) => ({
     textTransform: 'none',
   },
   text: {
-    fontSize: 13,
+    fontSize: 18,
     fontWeight: 500,
     marginTop: theme.spacing(0.5),
     fontFamily: 'Google Sans',
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.primary,
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      fontSize: 20,
+      marginTop: theme.spacing(1),
+    },
+  },
+  icon: {
+    marginTop: theme.spacing(0.5),
   },
 }))
 
@@ -179,6 +210,7 @@ interface CardProps {
 const Button = ({ text, icon: Icon, color, to }: ButtonProps) => {
   const classes = useButtonStyles()
   const history = useHistory()
+  const match = useMediaExtendedQuery()
 
   return (
     <MUIButton
@@ -189,7 +221,12 @@ const Button = ({ text, icon: Icon, color, to }: ButtonProps) => {
       }
       classes={{ root: classes.root, label: classes.rootLabel }}
     >
-      <Icon width={32} height={32} fill={color} />
+      <Icon
+        width={match ? 48 : 36}
+        height={match ? 48 : 36}
+        fill={color}
+        className={classes.icon}
+      />
       <Typography className={classes.text}>{text}</Typography>
     </MUIButton>
   )
@@ -246,84 +283,75 @@ const Services = () => {
   const classes = useStyles()
 
   return (
-    <div className={classes.root}>
-      <Grid container>
-        <Grid item xs={6}>
+    <div className={classes.rootWrapper}>
+      <div className={classes.root}>
+        <div className={classes.buttonContainer}>
           <Button
-            to="/news/p/1"
-            icon={Icon36Newsfeed}
-            text="Новости"
-            color={blue.A200}
+            to="/megaprojects/p/1"
+            icon={Icon24Fire}
+            text="Мегапроекты"
+            color={red[600]}
           />
-        </Grid>
-        <Grid item xs={6}>
           <Button
             to="/hubs/p/1"
             icon={Icon28CompassOutline}
             text="Хабы"
             color={orange.A200}
           />
-        </Grid>
-        <Grid item xs={6}>
           <Button
             icon={Icon36Users3Outline}
             text="Авторы"
             to="/authors/p/1"
-            color={deepOrange.A200}
+            color={blue[400]}
           />
-        </Grid>
-        <Grid item xs={6}>
           <Button
             icon={Icon28WorkOutline}
             text="Компании"
             to="/companies/p/1"
-            color={lightGreen[500]}
+            color={green[400]}
           />
-        </Grid>
-      </Grid>
-      <Divider className={classes.divider} />
-      <div className={classes.wrapper}>
-        <Card
-          to="/megaprojects/p/1"
-          text="Мегапроекты"
-          icon={Icon28FireOutline}
-          subtext="Проекты, созданные контент-студией Хабра"
-        />
-        <Card
-          to="/sandbox/p/1"
-          text="Песочница"
-          icon={Icon24CubeBoxOutline}
-          subtext="Статьи, ожидающие одобрения от сообщества"
-        />
-        <Card
-          to="/how-to-become-an-author"
-          text="Как стать автором"
-          icon={Icon28Users3Outline}
-          subtext="Справка о том, как написать первую статью"
-        />
-        <Card to="/habra-about" text="О сайте" icon={Icon24InfoCircleOutline} />
-      </div>
-      <Divider className={classes.divider} style={{ marginTop: 8 }} />
-      <div className={classes.wrapper} style={{ marginTop: 6 }}>
-        <Typography variant="caption" className={classes.dividerTitle}>
-          Социальные сети
-        </Typography>
-        <Grid container spacing={1}>
-          <Grid item xs={6}>
-            <CardLink
-              to="https://vk.com/tarnatovski"
-              text="ВКонтакте"
-              icon={Icon28LogoVkOutline}
-            />
+        </div>
+        <div className={classes.wrapper}>
+          <Card
+            to="/sandbox/p/1"
+            text="Песочница"
+            icon={Icon24CubeBoxOutline}
+            subtext="Статьи, ожидающие одобрения от сообщества"
+          />
+          <Card
+            to="/how-to-become-an-author"
+            text="Как стать автором"
+            icon={Icon28Users3Outline}
+            subtext="Справка о том, как написать первую статью"
+          />
+          <Card
+            to="/habra-about"
+            paper
+            text="О сайте"
+            icon={Icon24InfoCircleOutline}
+          />
+        </div>
+        <div className={classes.wrapper} style={{ marginTop: 6 }}>
+          <Typography variant="caption" className={classes.dividerTitle}>
+            Социальные сети
+          </Typography>
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <CardLink
+                to="https://vk.com/tarnatovski"
+                text="ВКонтакте"
+                icon={Icon28LogoVkOutline}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <CardLink
+                to="https://github.com/jarvis394/habra"
+                text="GitHub"
+                icon={GitHubIcon}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <CardLink
-              to="https://github.com/jarvis394/habra"
-              text="GitHub"
-              icon={GitHubIcon}
-            />
-          </Grid>
-        </Grid>
+        </div>
       </div>
     </div>
   )

@@ -140,3 +140,16 @@ registerRoute(
     ],
   })
 )
+
+// Cache local fonts
+registerRoute(
+  /.*\/fonts\/.*/,
+  new CacheFirst({
+    cacheName: 'habra-fonts',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+    ],
+  })
+)

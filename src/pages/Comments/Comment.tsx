@@ -188,7 +188,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     color: theme.palette.text.hint,
-    margin: theme.spacing(0, 1)
+    margin: theme.spacing(0, 1),
   },
   score: {
     position: 'relative',
@@ -310,7 +310,7 @@ const Comment: React.FC<{
                     data.isNewLevel && data.level === i + 1
                       ? theme.spacing(0.75)
                       : 0,
-                  bottom: isLastInThread ? theme.spacing(2) : 0,
+                  bottom: isLastInThread ? theme.spacing(1) : 0,
                 }}
               />
             )
@@ -352,7 +352,7 @@ const Comment: React.FC<{
         }}
       >
         {[...Array(data.level)].map((_, i) => {
-          let bottom = isLastInThread ? theme.spacing(2.2) : 0
+          let bottom = isLastInThread ? theme.spacing(1.2) : 0
           if (shouldAddBottomPadding) bottom += theme.spacing(2)
           return (
             <div

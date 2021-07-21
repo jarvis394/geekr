@@ -1,0 +1,38 @@
+{
+  "pages": {
+    "Search": {
+      "searchInputPlaceholder": "Поиск",
+      "searchInputButtonText": "Найти",
+      "noResultsText": "К сожалению, здесь пока нет ни одной публикации",
+      "svgScreenText": "Попробуй что-нибудь поискать!"
+    },
+    "NotFound": {
+      "title": "Страница не найдена.",
+      "text": "Может, <0>вернёмся домой</0>?"
+    },
+    "SettingsLanguage": {
+      "pageTitle": "Настройки языка",
+      "interface": "Интерфейс",
+      "publications": "Публикации"
+    },
+    "SettingsBlacklist": {
+      "pageTitle": "Черный список",
+      "ListDialogTitle": "Подтверждение",
+      "ListDialogContentText": "Точно хочешь удалить из списка",
+      "emptyText": "В чёрном списке пока нет элементов.",
+      "hiddenAuthors": "Скрытые авторы",
+      "hiddenCompanies": "Скрытые компании",
+      "addAuthor": "Добавить автора",
+      "addCompany": "Добавить компанию",
+      "authorDialogPlaceholder": "Например, vasiliy_pupkin",
+      "companyDialogPlaceholder": "Например, yagoogl",
+      "sidebarTitle": "Информация",
+      "sidebarText": "Здесь находятся те авторы и компании, которых ты не любишь. Они пропадут из новостной ленты, а вместо них появится табличка о том, что там был тролль."
+    }
+  },
+  "common": {
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "add": "Добавить"
+  }
+}

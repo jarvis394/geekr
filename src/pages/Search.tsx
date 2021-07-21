@@ -15,6 +15,7 @@ import SearchSVG from '../components/svg/Search'
 import { Posts } from '../interfaces'
 import useQuery from '../hooks/useQuery'
 import getPostFirstImage from 'src/utils/getPostFirstImage'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,6 +100,7 @@ const useNoResultsStyles = makeStyles((theme) => ({
 const SearchInput = ({ q }) => {
   const classes = useSearchStyles()
   const history = useHistory()
+  const { t } = useTranslation()
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -112,7 +114,7 @@ const SearchInput = ({ q }) => {
           autoFocus
           name="q"
           defaultValue={q}
-          placeholder={'Поиск'}
+          placeholder={t`pages.Search.searchInputPlaceholder`}
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,
@@ -126,7 +128,7 @@ const SearchInput = ({ q }) => {
           variant="contained"
           className={classes.searchButton}
         >
-          Найти
+          {t`pages.Search.searchInputButtonText`}
         </Button>
       </Paper>
     </form>
@@ -135,10 +137,12 @@ const SearchInput = ({ q }) => {
 
 const NoResults = () => {
   const classes = useNoResultsStyles()
+  const { t } = useTranslation()
+
   return (
     <div className={classes.root}>
       <Typography className={classes.title}>
-        К сожалению, здесь пока нет ни одной публикации
+        {t`pages.Search.noResultsText`}
       </Typography>
       <EmptySVG className={classes.svg} />
     </div>
@@ -182,7 +186,6 @@ const SearchResultsScreen = ({ q }) => {
       }
     }
     get()
-    // eslint-disable-next-line
   }, [q, currentPage])
 
   if (fetchError || data?.articleIds?.length === 0) return <NoResults />
@@ -207,11 +210,12 @@ const SearchResultsScreen = ({ q }) => {
 const SvgScreen = () => {
   const classes = useSvgStyles()
   const theme = useTheme()
+  const { t } = useTranslation()
 
   return (
     <div className={classes.svgHolder}>
       <Typography className={classes.svgTitle}>
-        Попробуй что-нибудь поискать!
+        {t`pages.Search.svgScreenText`}
       </Typography>
       <SearchSVG theme={theme.palette.type} className={classes.svg} />
     </div>

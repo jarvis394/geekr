@@ -1,0 +1,38 @@
+{
+  "pages": {
+    "Search": {
+      "searchInputPlaceholder": "Type in your query",
+      "searchInputButtonText": "Search",
+      "noResultsText": "Unfortunately, there are no publications here yet",
+      "svgScreenText": "Try to look for something!"
+    },
+    "NotFound": {
+      "title": "Page not found.",
+      "text": "Maybe we should <0>go home</0>?"
+    },
+    "SettingsLanguage": {
+      "pageTitle": "Language settings",
+      "interface": "Interface",
+      "publications": "Articles"
+    },
+    "SettingsBlacklist": {
+      "pageTitle": "Blacklist",
+      "ListDialogTitle": "Confirmation",
+      "ListDialogContentText": "Are you sure you want to remove",
+      "emptyText": "There are no items in the blacklist yet.",
+      "hiddenAuthors": "Hidden authors",
+      "hiddenCompanies": "Hidden companies",
+      "addAuthor": "Add author",
+      "addCompany": "Add company",
+      "authorDialogPlaceholder": "For example, vasiliy_pupkin",
+      "companyDialogPlaceholder": "For example, yagoogl",
+      "sidebarTitle": "Information",
+      "sidebarText": "Here are those authors and companies that you don't like. They will disappear from the news feed, and a sign will appear instead that there was a troll there."
+    }
+  },
+  "common": {
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "add": "Add"
+  }
+}
