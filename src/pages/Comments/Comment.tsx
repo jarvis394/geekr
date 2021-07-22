@@ -355,7 +355,7 @@ const Comment: React.FC<{
       >
         {[...Array(data.level)].map((_, i) => {
           let bottom = isLastInThread ? theme.spacing(1.2) : 0
-          if (shouldAddBottomPadding) bottom += theme.spacing(2)
+          if (shouldAddBottomPadding) bottom += theme.spacing(1)
           return (
             <div
               key={i}
