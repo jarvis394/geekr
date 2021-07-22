@@ -44,6 +44,9 @@ export default interface UserSettings {
     hideMegaposts: boolean
     hideNewsBlock: boolean
   }
+  interfaceComments: {
+    showThreads: boolean
+  }
   language: {
     feed: 'ru' | 'en'
     interface: 'ru' | 'en'

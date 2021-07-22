@@ -5,7 +5,9 @@ import { setSettings } from 'src/store/actions/settings'
 import useSelector from './useSelector'
 
 const useAutoChangeTheme = () => {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)', {
+    noSsr: true,
+  })
   const isAutoThemeChange = useSelector(
     (state) => state.settings.autoChangeTheme
   )

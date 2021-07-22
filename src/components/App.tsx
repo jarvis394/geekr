@@ -24,6 +24,7 @@ import isDarkTheme from 'src/utils/isDarkTheme'
 import useAutoChangeTheme from 'src/hooks/useAutoChangeTheme'
 import SideNavigationDrawer from './blocks/SideNavigationDrawer'
 import useUserDataFetch from 'src/hooks/useUserDataFetch'
+import UpdateNotification from 'src/components/blocks/UpdateNotification'
 
 interface StyleProps {
   theme: Theme
@@ -147,6 +148,7 @@ const App = () => {
             <SideNavigationDrawer />
             <div className={classes.app}>
               <ScrollRestoration />
+              <UpdateNotification />
               <AppBar />
               <BottomBar />
               <AppRouter />

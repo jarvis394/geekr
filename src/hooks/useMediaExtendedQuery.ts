@@ -3,7 +3,9 @@ import { MIN_WIDTH } from 'src/config/constants'
 
 const useMediaExtendedQuery = () => {
   const theme = useTheme()
-  const query = useMediaQuery(theme.breakpoints.up(MIN_WIDTH))
+  const query = useMediaQuery(theme.breakpoints.up(MIN_WIDTH), {
+    noSsr: true,
+  })
   return query
 }
 

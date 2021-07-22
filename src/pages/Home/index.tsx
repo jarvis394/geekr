@@ -23,7 +23,6 @@ import getCachedMode from 'src/utils/getCachedMode'
 import AdvertsBlock from './AdvertsBlock'
 import MainBlock from 'src/components/blocks/MainBlock'
 import Sidebar from 'src/pages/Home/Sidebar'
-import UpdateNotification from 'src/components/blocks/UpdateNotification'
 import useLastMode from 'src/utils/useLastMode'
 import FlowsBar from 'src/components/blocks/FlowsBar'
 import useQuery from 'src/hooks/useQuery'
@@ -153,7 +152,6 @@ const Home = () => {
   return (
     <div className={classes.root}>
       <FlowsBar onClick={onFlowsBarLinkClick} flow={flow} />
-      <UpdateNotification />
       {currentPage === 1 && <AdvertsBlock />}
       <Switcher
         flow={flow}

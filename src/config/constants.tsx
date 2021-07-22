@@ -42,7 +42,7 @@ export const THREAD_LEVEL = 7
 
 /** Local Storage keys */
 export const USER_SETTINGS_KEY = 'habra_USER_SETTINGS'
-export const COOKIES_SNACKBAR_WAS_SHOWN_KEY = 'habra_COOKIES_SNACKBAR_WAS_SHOWN'
+export const NEEDS_UPDATE_KEY = 'habra_NEEDS_UPDATE_KEY'
 
 export const FLOWS: FlowObject[] = [
   {
@@ -227,36 +227,25 @@ export const makeNavigationTabs = (
       match: 'search',
       tab: 'search',
     },
-    {
-      label: 'Профиль',
-      icon: <Icon28Profile width={w} height={h} />,
-      to: () => '/me',
-      match: 'me',
-      tab: 'me',
-    },
   ]
   if (replaceProfile) {
-    tabs.splice(
-      tabs.findIndex((e) => e.tab == 'me'),
-      1,
-      {
-        label: 'Настройки',
-        icon: <Icon28SettingsOutline width={w} height={h} />,
-        to: () => '/settings',
-        match: [
-          'settings',
-          'settingsAppearance',
-          'settingsInterface',
-          'settingsPrivacy',
-          'settingsNewTheme',
-          'settingsEditTheme',
-          'settingsBlacklist',
-          'settingsReader',
-          'settingsLanguage',
-        ],
-        tab: 'settings',
-      }
-    )
+    tabs.push({
+      label: 'Настройки',
+      icon: <Icon28SettingsOutline width={w} height={h} />,
+      to: () => '/settings',
+      match: [
+        'settings',
+        'settingsAppearance',
+        'settingsInterface',
+        'settingsPrivacy',
+        'settingsNewTheme',
+        'settingsEditTheme',
+        'settingsBlacklist',
+        'settingsReader',
+        'settingsLanguage',
+      ],
+      tab: 'settings',
+    })
   }
   return tabs
 }
@@ -286,30 +275,33 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
     hideMegaposts: false,
     hideNewsBlock: false,
   },
+  interfaceComments: {
+    showThreads: true,
+  },
   language: {
     feed: 'ru',
-    interface: 'ru'
-  }
+    interface: 'ru',
+  },
 }
 
 export const LANGUAGES_INTERFACE = [
   {
     type: 'ru',
-    name: 'Русский'
+    name: 'Русский',
   },
   {
     type: 'en',
-    name: 'English'
+    name: 'English',
   },
 ]
 export const LANGUAGES_FEED = [
   {
     type: 'ru',
-    name: 'Русский'
+    name: 'Русский',
   },
   {
     type: 'en',
-    name: 'English'
+    name: 'English',
   },
 ]
 

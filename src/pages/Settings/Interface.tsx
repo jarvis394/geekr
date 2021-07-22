@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import { fade, makeStyles } from '@material-ui/core/styles'
-import { MIN_WIDTH } from 'src/config/constants'
+import { MIN_WIDTH, THREAD_LEVEL } from 'src/config/constants'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import {
@@ -57,16 +57,18 @@ const SwitchButton: React.FC<{
 const Interface = () => {
   const classes = useStyles()
   const theme = useTheme()
-  const interfaceFeedSettings = useSelector(
-    (store) => store.settings.interfaceFeed
-  )
+  const userSettings = useSelector((store) => store.settings)
   const dispatch = useDispatch()
-  const setInterfaceFeedSettings = (field: string, value: unknown) => {
+  const setInterfaceSettings = (
+    field: 'interfaceFeed' | 'interfaceComments',
+    type: string,
+    value: unknown
+  ) => {
     dispatch(
       setSettings({
-        interfaceFeed: {
-          ...interfaceFeedSettings,
-          [field]: value,
+        [field]: {
+          ...userSettings[field],
+          [type]: value,
         },
       })
     )
@@ -84,11 +86,12 @@ const Interface = () => {
           <SwitchButton
             primary={'Компактный вид ленты'}
             secondary={'В блоках не будет показан текст до ката'}
-            checked={interfaceFeedSettings.isCompact}
+            checked={userSettings.interfaceFeed.isCompact}
             onChange={() =>
-              setInterfaceFeedSettings(
+              setInterfaceSettings(
+                'interfaceFeed',
                 'isCompact',
-                !interfaceFeedSettings.isCompact
+                !userSettings.interfaceFeed.isCompact
               )
             }
           />
@@ -97,11 +100,12 @@ const Interface = () => {
             secondary={
               'На главной странице не будет отображаться блок с мегапостами'
             }
-            checked={interfaceFeedSettings.hideMegaposts}
+            checked={userSettings.interfaceFeed.hideMegaposts}
             onChange={() =>
-              setInterfaceFeedSettings(
+              setInterfaceSettings(
+                'interfaceFeed',
                 'hideMegaposts',
-                !interfaceFeedSettings.hideMegaposts
+                !userSettings.interfaceFeed.hideMegaposts
               )
             }
           />
@@ -110,11 +114,27 @@ const Interface = () => {
             secondary={
               'На главной странице не будет отображаться блок с новостями'
             }
-            checked={interfaceFeedSettings.hideNewsBlock}
+            checked={userSettings.interfaceFeed.hideNewsBlock}
             onChange={() =>
-              setInterfaceFeedSettings(
+              setInterfaceSettings(
+                'interfaceFeed',
                 'hideNewsBlock',
-                !interfaceFeedSettings.hideNewsBlock
+                !userSettings.interfaceFeed.hideNewsBlock
+              )
+            }
+          />
+        </div>
+        <div className={classes.section}>
+          <Typography className={classes.sectionHeader}>Комментарии</Typography>
+          <SwitchButton
+            primary={'Включить ветки'}
+            secondary={`Комментарии, чья степень вложенности больше ${THREAD_LEVEL}, будут спрятаны в ветку`}
+            checked={userSettings.interfaceComments.showThreads}
+            onChange={() =>
+              setInterfaceSettings(
+                'interfaceComments',
+                'showThreads',
+                !userSettings.interfaceComments.showThreads
               )
             }
           />

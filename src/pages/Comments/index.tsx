@@ -37,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const MAX_LEVEL = 10
+
 const CommentsPage: React.FC<{ scrollPosition: ScrollPosition }> = ({
   scrollPosition,
 }) => {
@@ -56,8 +58,16 @@ const CommentsPage: React.FC<{ scrollPosition: ScrollPosition }> = ({
   const classes = useStyles()
   const [commentsLength, setCommentsLength] = useState<number>()
   const shouldShowComments = commentsFetchingState === FetchingState.Fetched
+  const shouldShowThreads = useSelector(store => store.settings.interfaceComments.showThreads)
   const filteredComments = useMemo(
-    () => comments?.filter((e) => e.threadLevel === 0) || [],
+    () => {
+      if (!comments) return []
+      if (shouldShowThreads) return comments.filter((e) => e.threadLevel === 0) || []
+      else return comments.map(e => ({
+        ...e,
+        level: Math.min(e.level, MAX_LEVEL)
+      }))
+    },
     [comments]
   )
 

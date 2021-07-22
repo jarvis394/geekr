@@ -1,3 +1,4 @@
+import { NEEDS_UPDATE_KEY } from './config/constants'
 import { Config } from './serviceWorker'
 
 const config: Config = {
@@ -11,6 +12,7 @@ const config: Config = {
       .unregister()
       .then(() => {
         window.postMessage('showUpdateNotification', process.env.PUBLIC_URL)
+        localStorage.setItem(NEEDS_UPDATE_KEY, 'true')
         console.log(
           '%c[info] %cSent showUpdateNotification message from SW',
           'color: #2979ff;',
@@ -27,6 +29,7 @@ const config: Config = {
       )
   },
   onSuccess: () => {
+    window.postMessage('showUpdateSuccessNotification', process.env.PUBLIC_URL)
     console.log(
       '%c[success] %cService worker succeed in registration.',
       'color: #00e676;',

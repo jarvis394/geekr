@@ -255,7 +255,9 @@ const Comment: React.FC<{
   const ts = dayjs(data.timePublished).format('DD.MM.YYYY [в] H:mm')
   const rootClasses = [classes.root]
   const authorBarClasses = [classes.authorBar]
-  const isTablet = useMediaQuery(theme.breakpoints.up(MIN_WIDTH))
+  const isTablet = useMediaQuery(theme.breakpoints.up(MIN_WIDTH), {
+    noSsr: true,
+  })
   const MARGIN_LEVEL = isTablet ? 24 : 16
   const commentPadding = data.level * MARGIN_LEVEL
   const commentOpacity = data.score < 0 ? getOpacity(data.score) : 1
