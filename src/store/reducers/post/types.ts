@@ -7,16 +7,17 @@ export const POST_FETCH_REJECTED = POST_FETCH + '_REJECTED'
 export const COMMENTS_FETCH = PREFIX + 'COMMENTS_FETCH'
 export const COMMENTS_FETCH_FULFILLED = COMMENTS_FETCH + '_FULFILLED'
 export const COMMENTS_FETCH_REJECTED = COMMENTS_FETCH + '_REJECTED'
+export const SET_POST_COMMENT_SIZE = 'SET_POST_COMMENT_SIZE'
 export const COMPANY_FETCH = PREFIX + 'COMPANY_FETCH'
 export const COMPANY_FETCH_FULFILLED = COMPANY_FETCH + '_FULFILLED'
 export const COMPANY_FETCH_REJECTED = COMPANY_FETCH + '_REJECTED'
-
 export interface State {
   comments: {
     fetchedData: Comments
     comments: Comment[]
     state: FetchingState
     fetchError: string
+    sizesMap: Record<string, number>
   }
   post: {
     data: Post

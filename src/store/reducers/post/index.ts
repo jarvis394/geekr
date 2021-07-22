@@ -8,6 +8,7 @@ import {
   POST_FETCH,
   POST_FETCH_FULFILLED,
   POST_FETCH_REJECTED,
+  SET_POST_COMMENT_SIZE,
   State,
 } from './types'
 import { FetchingState } from 'src/interfaces'
@@ -22,6 +23,7 @@ const initialCommentsData = {
   comments: null,
   state: FetchingState.Idle,
   fetchError: null,
+  sizesMap: {},
 }
 
 const initialState: State = {
@@ -69,6 +71,11 @@ export default (storeState = initialState, { type, payload }): State => {
         },
         comments: initialCommentsData,
       }
+    
+    case SET_POST_COMMENT_SIZE: {
+      storeState.comments.sizesMap[payload.id] = payload.size
+      return storeState
+    }
 
     /** Do not reset post data on comments fetch */
     case COMMENTS_FETCH:
@@ -88,6 +95,7 @@ export default (storeState = initialState, { type, payload }): State => {
           fetchError: null,
           fetchedData: payload.fetchedData,
           comments: payload.comments,
+          sizesMap: {},
         },
       }
 
@@ -103,6 +111,7 @@ export default (storeState = initialState, { type, payload }): State => {
           fetchError: payload,
           fetchedData: null,
           comments: null,
+          sizesMap: {},
         },
       }
 

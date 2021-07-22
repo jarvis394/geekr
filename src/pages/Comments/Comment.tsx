@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Comment as CommentData } from 'src/interfaces'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import FormattedText from 'src/components/formatters/FormattedText'
@@ -25,6 +25,8 @@ import {
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded'
 import { Icon16Up, Icon16Down } from '@vkontakte/icons'
 import { useSelector } from 'src/hooks'
+import { useDispatch } from 'react-redux'
+import { setPostCommentSize } from 'src/store/actions/post'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -216,7 +218,6 @@ const useStyles = makeStyles((theme) => ({
     color: fade(theme.palette.primary.main, 0.2),
   },
   placeholder: {
-    height: 128,
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -243,17 +244,30 @@ const getOpacity = (value: number) => {
   return 1 - r
 }
 
+const DEFAULT_PLACEHOLDER_SIZE = 128
+
 const Comment: React.FC<{
   data: CommentData
   isLastInFilteredRootThread: boolean
   scrollPosition: ScrollPosition
   postId: string
-}> = ({ data, isLastInFilteredRootThread, scrollPosition, postId }) => {
+  placeholderSize?: number
+}> = ({
+  data,
+  isLastInFilteredRootThread,
+  scrollPosition,
+  postId,
+  placeholderSize,
+}) => {
   const isRootComment = data.level === 0
   const { id, isLastInThread, isPostAuthor, isThreadStart } = data
   const theme = useTheme()
   const classes = useStyles()
-  const shouldShowThreadButtonSetting = useSelector(store => store.settings.interfaceComments.showThreads)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const shouldShowThreadButtonSetting = useSelector(
+    (store) => store.settings.interfaceComments.showThreads
+  )
+  const commentsSizesMap = useSelector((store) => store.post.comments.sizesMap)
   const ts = dayjs(data.timePublished).format('DD.MM.YYYY [в] H:mm')
   const rootClasses = [classes.root]
   const authorBarClasses = [classes.authorBar]
@@ -265,45 +279,66 @@ const Comment: React.FC<{
   const commentPadding = data.level * MARGIN_LEVEL
   const commentOpacity = data.score < 0 ? getOpacity(data.score) : 1
   const shouldAddBottomPadding = isLastInFilteredRootThread
+  const dispatch = useDispatch()
 
   isRootComment && rootClasses.push(classes.firstInThread)
   isLastInThread && rootClasses.push(classes.lastInThread)
   shouldAddBottomPadding && rootClasses.push(classes.bottomPadding)
   isPostAuthor && authorBarClasses.push(classes.authorBarOP)
 
-  const GoToThreadButton = () => shouldShowThreadButton ? (
-    <div className={classes.goToThreadWrapper}>
-      <div
-        className={classes.depthLine}
-        style={{
-          top: 0,
-          bottom: 0,
-        }}
-      />
-      <LinkToOutsidePage
-        className={classes.goToThreadLink}
-        to={'/post/' + postId + '/comments/thread/' + id}
-      >
-        <Button
-          color="primary"
-          className={classes.goToThreadButton}
-          endIcon={<ChevronRightRoundedIcon />}
+  const setCommentSize = () => {
+    // We don't need to set placeholder height without threads
+    // because there is no page changing in one modal
+    if (shouldShowThreadButtonSetting && rootRef.current) {
+      dispatch(
+        setPostCommentSize(
+          data.id,
+          rootRef.current.getBoundingClientRect().height
+        )
+      )
+    }
+  }
+  const getCommentSize = () => {
+    return commentsSizesMap[data.id] || DEFAULT_PLACEHOLDER_SIZE
+  }
+
+  const GoToThreadButton = () =>
+    shouldShowThreadButton ? (
+      <div className={classes.goToThreadWrapper}>
+        <div
+          className={classes.depthLine}
+          style={{
+            top: 0,
+            bottom: 0,
+          }}
+        />
+        <LinkToOutsidePage
+          className={classes.goToThreadLink}
+          to={'/post/' + postId + '/comments/thread/' + id}
         >
-          Показать ветку
-        </Button>
-      </LinkToOutsidePage>
-    </div>
-  ) : null
+          <Button
+            color="primary"
+            className={classes.goToThreadButton}
+            endIcon={<ChevronRightRoundedIcon />}
+          >
+            Показать ветку
+          </Button>
+        </LinkToOutsidePage>
+      </div>
+    ) : null
 
   if (!data.author) {
     return (
       <LazyLoadComponent
         scrollPosition={scrollPosition}
         placeholder={
-          <div style={{ height: 64 }} className={classes.placeholder} />
+          <div
+            style={{ height: getCommentSize() }}
+            className={classes.placeholder}
+          />
         }
       >
-        <div className={rootClasses.join(' ')}>
+        <div className={rootClasses.join(' ')} ref={rootRef}>
           {[...Array(data.level)].map((_, i) => {
             return (
               <div
@@ -341,14 +376,19 @@ const Comment: React.FC<{
   return (
     <LazyLoadComponent
       scrollPosition={scrollPosition}
+      afterLoad={setCommentSize}
       placeholder={
         <div
-          style={{ marginTop: isRootComment ? theme.spacing(1.5) : 0 }}
+          style={{
+            height: getCommentSize(),
+            marginTop: isRootComment ? theme.spacing(1.5) : 0,
+          }}
           className={classes.placeholder}
         />
       }
     >
       <div
+        ref={rootRef}
         className={rootClasses.join(' ')}
         style={{
           paddingLeft: theme.spacing(MARGIN_LEVEL / theme.spacing(1)),

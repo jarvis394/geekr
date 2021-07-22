@@ -13,6 +13,7 @@ import {
   COMPANY_FETCH,
   COMPANY_FETCH_FULFILLED,
   COMPANY_FETCH_REJECTED,
+  SET_POST_COMMENT_SIZE,
 } from '../reducers/post/types'
 
 const parseComments = (nodes: Map<number, IComment>) => {
@@ -116,6 +117,12 @@ export const getPostComments = (id: number | string) => async (
   } catch (error) {
     dispatch({ type: COMMENTS_FETCH_REJECTED, payload: error })
   }
+}
+
+export const setPostCommentSize = (id: number | string, size: number) => (
+  dispatch
+) => {
+  dispatch({ type: SET_POST_COMMENT_SIZE, payload: { id, size } })
 }
 
 /**
