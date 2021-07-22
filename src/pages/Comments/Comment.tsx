@@ -24,6 +24,7 @@ import {
 } from 'react-lazy-load-image-component'
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded'
 import { Icon16Up, Icon16Down } from '@vkontakte/icons'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -252,12 +253,14 @@ const Comment: React.FC<{
   const { id, isLastInThread, isPostAuthor, isThreadStart } = data
   const theme = useTheme()
   const classes = useStyles()
+  const shouldShowThreadButtonSetting = useSelector(store => store.settings.interfaceComments.showThreads)
   const ts = dayjs(data.timePublished).format('DD.MM.YYYY [в] H:mm')
   const rootClasses = [classes.root]
   const authorBarClasses = [classes.authorBar]
   const isTablet = useMediaQuery(theme.breakpoints.up(MIN_WIDTH), {
     noSsr: true,
   })
+  const shouldShowThreadButton = shouldShowThreadButtonSetting && isThreadStart
   const MARGIN_LEVEL = isTablet ? 24 : 16
   const commentPadding = data.level * MARGIN_LEVEL
   const commentOpacity = data.score < 0 ? getOpacity(data.score) : 1
@@ -268,7 +271,7 @@ const Comment: React.FC<{
   shouldAddBottomPadding && rootClasses.push(classes.bottomPadding)
   isPostAuthor && authorBarClasses.push(classes.authorBarOP)
 
-  const GoToThreadButton = () => (
+  const GoToThreadButton = () => shouldShowThreadButton ? (
     <div className={classes.goToThreadWrapper}>
       <div
         className={classes.depthLine}
@@ -290,7 +293,7 @@ const Comment: React.FC<{
         </Button>
       </LinkToOutsidePage>
     </div>
-  )
+  ) : null
 
   if (!data.author) {
     return (
@@ -327,7 +330,7 @@ const Comment: React.FC<{
               >
                 {data.message}
               </FormattedText>
-              {isThreadStart && <GoToThreadButton />}
+              <GoToThreadButton />
             </div>
           </Fade>
         </div>
@@ -434,7 +437,7 @@ const Comment: React.FC<{
                   <BookmarkIcon className={classes.favoriteIcon} />
                 </Button>
               </div>
-              {isThreadStart && <GoToThreadButton />}
+              <GoToThreadButton />
             </div>
           </div>
         </Fade>
