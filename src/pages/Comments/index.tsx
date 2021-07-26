@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    width: '100%'
+    width: '100%',
   },
   header: {
     fontFamily: 'Google Sans',
@@ -58,18 +58,19 @@ const CommentsPage: React.FC<{ scrollPosition: ScrollPosition }> = ({
   const classes = useStyles()
   const [commentsLength, setCommentsLength] = useState<number>()
   const shouldShowComments = commentsFetchingState === FetchingState.Fetched
-  const shouldShowThreads = useSelector(store => store.settings.interfaceComments.showThreads)
-  const filteredComments = useMemo(
-    () => {
-      if (!comments) return []
-      if (shouldShowThreads) return comments.filter((e) => e.threadLevel === 0) || []
-      else return comments.map(e => ({
-        ...e,
-        level: Math.min(e.level, MAX_LEVEL)
-      }))
-    },
-    [comments]
+  const shouldShowThreads = useSelector(
+    (store) => store.settings.interfaceComments.showThreads
   )
+  const filteredComments = useMemo(() => {
+    if (!comments) return []
+    if (shouldShowThreads)
+      return comments.filter((e) => e.threadLevel === 0) || []
+    else
+      return comments.map((e) => ({
+        ...e,
+        level: Math.min(e.level, MAX_LEVEL),
+      }))
+  }, [comments])
 
   useEffect(() => {
     if (!post || post?.id !== id) dispatch(getPost(id))

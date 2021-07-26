@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
     width: '100%',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
 }))
 
@@ -48,12 +48,12 @@ const useItemStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(0.5),
   },
   investIcon: {
-    color: theme.palette.type === 'dark' ? purple.A100 : purple.A400
+    color: theme.palette.type === 'dark' ? purple.A100 : purple.A400,
   },
   invest: {
     marginLeft: theme.spacing(1),
     marginTop: 1,
-    color: theme.palette.type === 'dark' ? purple[200] : purple.A700
+    color: theme.palette.type === 'dark' ? purple[200] : purple.A700,
   },
 }))
 
@@ -114,12 +114,12 @@ const Authors = () => {
   const handlePagination = (_, i) => {
     if (i === currentPage) return
     history.replace('/hub/' + alias + '/authors/p/' + i, {
-      from: location.pathname
+      from: location.pathname,
     })
   }
 
   useEffect(() => {
-    dispatch(getHubAuthors(alias, currentPage))
+    dispatch(getHubAuthors({ alias, page: currentPage }))
   }, [alias, currentPage])
 
   return (

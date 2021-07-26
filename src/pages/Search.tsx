@@ -16,6 +16,7 @@ import { Posts } from '../interfaces'
 import useQuery from '../hooks/useQuery'
 import getPostFirstImage from 'src/utils/getPostFirstImage'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -157,6 +158,8 @@ const SearchResultsScreen = ({ q }) => {
   const [fetchError, setError] = useState()
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page))
   const [pagesCount, setPagesCount] = useState<number>()
+  const authData = useSelector(store => store.auth.authData.data)
+  const csrfToken = useSelector(store => store.auth.csrfToken.data)
 
   const handleChange = (_, i) => {
     if (i === currentPage) return
@@ -173,7 +176,15 @@ const SearchResultsScreen = ({ q }) => {
 
     const get = async () => {
       try {
-        const d = await getSearchResults(q, currentPage, 'relevance')
+        const d = await getSearchResults({
+          query: q,
+          page: currentPage,
+          order: 'relevance',
+          authData: csrfToken ? {
+            connectSID: authData.connectSID,
+            csrfToken
+          } : null
+        })
         for (const id in d.articleRefs) {
           d.articleRefs[id].postFirstImage = getPostFirstImage(
             d.articleRefs[id]

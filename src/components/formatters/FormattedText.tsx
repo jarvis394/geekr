@@ -21,8 +21,8 @@ import { APP_BAR_HEIGHT } from 'src/config/constants'
 import { useSelector } from 'src/hooks'
 import { UserSettings } from 'src/interfaces'
 import formatLink from 'src/utils/formatLink'
+import { Link } from 'react-router-dom'
 
-type FloatType = 'left' | 'right'
 interface IframeResizeData {
   type: string
   id: number
@@ -335,11 +335,11 @@ const FormattedText: React.FC<{
           </a>
         )
       }
-      if (name === 'a') {
+      if (name === 'a' && shouldChangeLinks) {
         return (
-          <a href={shouldChangeLinks ? formatLink(attribs.href) : attribs.href}>
+          <Link to={formatLink(attribs.href)}>
             {domToReact(children, options)}
-          </a>
+          </Link>
         )
       }
     },

@@ -1,5 +1,5 @@
 import makeRequest from './makeRequest'
-import { Posts } from '../interfaces'
+import { AuthorizedRequestParams, Posts } from '../interfaces'
 import { Mode } from 'src/config/constants'
 
 export const modeParams = {
@@ -20,19 +20,17 @@ interface Params {
   mode: Mode
   page: number
   alias: string
+  authData?: AuthorizedRequestParams
 }
 
-export default async ({
-  mode,
-  page,
-  alias,
-}: Params) =>
+export default async ({ mode, page, alias, authData }: Params) =>
   await makeRequest<Posts>({
     path: 'articles',
     version: 2,
     params: {
       ...modeParams[mode],
       page: page.toString(),
-      hub: alias
+      hub: alias,
     },
+    authData,
   })

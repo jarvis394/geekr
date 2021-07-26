@@ -111,11 +111,16 @@ const AppBarComponent = () => {
     shouldChangeColors,
   })
   const modeName = useSelector((state) => state.home.mode)
-  const userState = useSelector((state) => state.user.profile.state)
-  const userData = useSelector((state) => state.user.profile.data)
-  const token = useSelector((state) => state.user.token)
+  const userState = useSelector((state) => state.auth.me.state)
+  const userData = useSelector((state) => state.auth.me.data)
+  const csrfTokenState = useSelector((state) => state.auth.csrfToken.state)
   const mode = RATING_MODES.find((e) => e.mode === modeName)
-  const shouldShowUser = userState === FetchingState.Fetched
+  const shouldShowUser =
+    userState === FetchingState.Fetched &&
+    csrfTokenState === FetchingState.Fetched
+  const shouldShowLoadingSpinner =
+    csrfTokenState === FetchingState.Fetched &&
+    userState !== FetchingState.Fetched
 
   const goHome = () => {
     window.scrollTo(0, 0)
@@ -162,7 +167,7 @@ const AppBarComponent = () => {
             >
               <Icon28SettingsOutline width={24} height={24} />
             </IconButton>
-            {!shouldShowUser && token && (
+            {shouldShowLoadingSpinner && (
               <IconButton style={{ width: 48, height: 48 }}>
                 <CircularProgress
                   style={{ width: 16, height: 16 }}
@@ -170,7 +175,7 @@ const AppBarComponent = () => {
                 />
               </IconButton>
             )}
-            {!shouldShowUser && !token && (
+            {!shouldShowUser && !shouldShowLoadingSpinner && (
               <IconButton
                 onClick={() =>
                   history.push('/auth', {
@@ -185,13 +190,13 @@ const AppBarComponent = () => {
             {shouldShowUser && (
               <IconButton
                 onClick={() =>
-                  history.push('/user/' + userData.login, {
+                  history.push('/user/' + userData.alias, {
                     from: location.pathname + location.search,
                     scroll: window.pageYOffset,
                   })
                 }
               >
-                <Avatar className={classes.avatar} src={userData.avatar} />
+                <Avatar className={classes.avatar} src={userData.avatarUrl} />
               </IconButton>
             )}
           </div>

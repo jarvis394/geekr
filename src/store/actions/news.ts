@@ -4,10 +4,11 @@ import { shouldUpdate } from 'src/utils/cache'
 import { RootState } from '..'
 import { NEWS_PREFIX } from '../reducers/news/types'
 
-export const getNews = (page: number, flow: FlowAlias = 'all', forceUpdate = false) => async (
-  dispatch,
-  getState: () => RootState
-) => {
+export const getNews = (
+  page: number,
+  flow: FlowAlias = 'all',
+  forceUpdate = false
+) => async (dispatch, getState: () => RootState) => {
   const type = NEWS_PREFIX + 'FETCH'
 
   // Get data from root store to find out if we're going to fetch a data or not
@@ -23,7 +24,7 @@ export const getNews = (page: number, flow: FlowAlias = 'all', forceUpdate = fal
   dispatch({ type, payload: { page, flow } })
 
   try {
-    const data = await api.getNews(page, flow)
+    const data = await api.getNews({ page, flow })
     const pagesCount = data?.pagesCount
 
     dispatch({
@@ -49,7 +50,7 @@ export const getNewsPromo = (hubAlias?: string) => async (
   dispatch({ type })
 
   try {
-    const data = await api.getNewsPromo(hubAlias)
+    const data = await api.getNewsPromo({ hubAlias })
     dispatch({ type: type + '_FULFILLED', payload: { data } })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', error })

@@ -1,8 +1,9 @@
 import makeRequest from './makeRequest'
-import { HubExtended } from '../interfaces'
+import { AuthorizedRequestParams, HubExtended } from '../interfaces'
 
-export default async (alias: string) =>
+export default async (alias: string, authData?: AuthorizedRequestParams) =>
   await makeRequest<HubExtended>({
     path: 'hubs/' + alias + '/profile',
     version: 2,
+    authData
   })

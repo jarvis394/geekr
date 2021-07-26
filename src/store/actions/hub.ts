@@ -1,4 +1,10 @@
-import { GET_AUTHORS, GET_COMPANIES, GET_NEWS, GET_POSTS, GET_PROFILE } from '../reducers/hub/types'
+import {
+  GET_AUTHORS,
+  GET_COMPANIES,
+  GET_NEWS,
+  GET_POSTS,
+  GET_PROFILE,
+} from '../reducers/hub/types'
 import getHubProfile from 'src/api/getHub'
 import getHubAuthorsRequest from 'src/api/getHubAuthors'
 import getHubCompaniesRequest from 'src/api/getHubCompanies'
@@ -37,7 +43,7 @@ export const getHubNews = (alias: string) => async (dispatch) => {
   dispatch({ type })
 
   try {
-    const data = await getNewsPromo(alias)
+    const data = await getNewsPromo({ hubAlias: alias })
 
     dispatch({
       type: type + '_FULFILLED',
@@ -54,7 +60,9 @@ export const getHubNews = (alias: string) => async (dispatch) => {
  * @param page Page number
  * @param alias Hub alias
  */
-export const getHubPosts = (mode: Mode, page: number, alias: string) => async (dispatch) => {
+export const getHubPosts = (mode: Mode, page: number, alias: string) => async (
+  dispatch
+) => {
   const type = GET_POSTS + '_FETCH'
 
   dispatch({ type })
@@ -73,16 +81,20 @@ export const getHubPosts = (mode: Mode, page: number, alias: string) => async (d
 
 /**
  * Gets hub's authors
- * @param alias Hub alias
- * @param page Page number
  */
-export const getHubAuthors = (alias: string, page: number) => async (dispatch) => {
+export const getHubAuthors = ({
+  alias,
+  page,
+}: {
+  alias: string
+  page: number
+}) => async (dispatch) => {
   const type = GET_AUTHORS + '_FETCH'
 
   dispatch({ type })
 
   try {
-    const data = await getHubAuthorsRequest(alias, page)
+    const data = await getHubAuthorsRequest({ alias, page })
 
     dispatch({
       type: type + '_FULFILLED',
@@ -98,13 +110,15 @@ export const getHubAuthors = (alias: string, page: number) => async (dispatch) =
  * @param alias Hub alias
  * @param page Page number
  */
-export const getHubCompanies = (alias: string, page: number) => async (dispatch) => {
+export const getHubCompanies = (alias: string, page: number) => async (
+  dispatch
+) => {
   const type = GET_COMPANIES + '_FETCH'
 
   dispatch({ type })
 
   try {
-    const data = await getHubCompaniesRequest(alias, page)
+    const data = await getHubCompaniesRequest({ alias, page })
 
     dispatch({
       type: type + '_FULFILLED',

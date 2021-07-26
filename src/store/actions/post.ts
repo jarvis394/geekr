@@ -66,6 +66,7 @@ export const getPost = (id: number | string) => async (
   getState: () => RootState
 ) => {
   const storeData = getState().post.post
+  const authorizedRequestData = getState().auth.authorizedRequestData
   if (
     storeData.state === FetchingState.Fetched &&
     storeData.data.id.toString() === id.toString()
@@ -76,7 +77,7 @@ export const getPost = (id: number | string) => async (
   dispatch({ type: POST_FETCH })
 
   try {
-    const data = await api.getPost(id)
+    const data = await api.getPost(id, authorizedRequestData)
     dispatch({
       type: POST_FETCH_FULFILLED,
       payload: data,

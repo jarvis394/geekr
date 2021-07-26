@@ -6,6 +6,7 @@ import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
+import { CircularProgress } from '@material-ui/core'
 import { makeStyles, darken, lighten } from '@material-ui/core/styles'
 import formatNumber from 'src/utils/formatNumber'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
@@ -31,6 +32,8 @@ import LinkToOutsidePage from './LinkToOutsidePage'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import FormattedText from '../formatters/FormattedText'
 import getImagesFromText from 'src/utils/getImagesFromText'
+import { useSnackbar } from 'notistack'
+import setArticleBookmark from 'src/api/setArticleBookmark'
 
 const ld = (theme: Theme) => (isDarkTheme(theme) ? darken : lighten)
 const useStyles = makeStyles<
@@ -230,7 +233,7 @@ const useStyles = makeStyles<
 }))
 
 interface BottomRowItemType {
-  icon: typeof ThumbsUpDownIcon
+  icon: JSX.Element
   text: string | number
   coloredText?: boolean
   number?: number
@@ -250,6 +253,7 @@ export const PostItem = ({
   const isExtended = useSelector(
     (store) => !store.settings.interfaceFeed.isCompact
   )
+  const { enqueueSnackbar } = useSnackbar()
   const { titleHtml: unparsedTitle, statistics, postFirstImage, leadData } =
     post || {}
   const hasImagesInLeadText = !!getImagesFromText(leadData.textHtml)
@@ -280,7 +284,14 @@ export const PostItem = ({
 
   const hiddenAuthors = useSelector((state) => state.settings.hiddenAuthors)
   const hiddenCompanies = useSelector((state) => state.settings.hiddenCompanies)
-  const [isBookmarked, setBookmarkState] = React.useState<boolean>()
+  const postBookmarked = post?.relatedData?.bookmarked
+  const [isBookmarked, setBookmarkState] = React.useState<boolean>(
+    postBookmarked
+  )
+  const [
+    isFetchingBookmarkResponse,
+    setIsFetchingBookmarkResponse,
+  ] = React.useState(false)
   const [isRendered, setIsRendered] = React.useState(false)
   const history = useHistory<OutsidePageLocationState>()
   const location = useLocation()
@@ -296,35 +307,72 @@ export const PostItem = ({
   const score = formatNumber(unformattedScore)
   const title = parse(unparsedTitle)
   const reads = formatNumber(readingCount)
-  const favorites = formatNumber(favoritesCount + (isBookmarked ? 1 : 0))
+  let favoritesCountAddAmount = 0
+  if (postBookmarked) {
+    favoritesCountAddAmount = isBookmarked ? 0 : -1
+  } else {
+    favoritesCountAddAmount = isBookmarked ? 1 : 0
+  }
+  const favorites = formatNumber(favoritesCount + favoritesCountAddAmount)
   const comments = formatNumber(Number(commentsCount))
   const isCorporative = post.isCorporative
   const companyAlias = isCorporative
     ? post.hubs.find((e) => e.type === 'corporative').alias
     : null
+  const authData = useSelector((store) => store.auth.authData.data)
+  const authorizedRequestData = useSelector(
+    (store) => store.auth.authorizedRequestData
+  )
   const postLink = getPostLink(post)
   const shouldShowPostImage = postFirstImage && !hideImage && !isExtended
   const bottomRow: BottomRowItemType[] = [
     {
-      icon: ThumbsUpDownIcon,
+      icon: <ThumbsUpDownIcon className={classes.postBottomRowItemIcon} />,
       text: score,
       coloredText: true,
       number: unformattedScore,
     },
     {
-      icon: VisibilityIcon,
+      icon: <VisibilityIcon className={classes.postBottomRowItemIcon} />,
       text: reads,
     },
     {
-      icon: BookmarkIcon,
+      icon: isFetchingBookmarkResponse ? (
+        <CircularProgress
+          className={classes.postBottomRowItemIcon}
+          style={{ width: 16, height: 16 }}
+          thickness={5}
+        />
+      ) : (
+        <BookmarkIcon
+          className={classes.postBottomRowItemIcon}
+          color={isBookmarked ? 'primary' : 'inherit'}
+        />
+      ),
       text: favorites,
       isActive: isBookmarked,
-      action: () => {
-        setBookmarkState((prev) => !prev)
+      action: async () => {
+        if (authData) {
+          setIsFetchingBookmarkResponse(true)
+          const response = await setArticleBookmark({
+            mode: isBookmarked ? 'remove' : 'add',
+            authData: authorizedRequestData,
+            id: post.id,
+          })
+          if (response.ok) {
+            setBookmarkState((prev) => !prev)
+            setIsFetchingBookmarkResponse(false)
+          }
+        } else {
+          enqueueSnackbar('Нужна авторизация', {
+            variant: 'error',
+            autoHideDuration: 4000,
+          })
+        }
       },
     },
     {
-      icon: ChatBubbleIcon,
+      icon: <ChatBubbleIcon className={classes.postBottomRowItemIcon} />,
       text: comments,
       action: () => {
         history.push(postLink + '/comments', {
@@ -356,19 +404,13 @@ export const PostItem = ({
       </Paper>
     )
 
-  const BottomRowItem = ({ item }: { item: BottomRowItemType }) => {
-    const itemIcon = (
-      <item.icon
-        className={classes.postBottomRowItemIcon}
-        color={item.isActive ? 'primary' : 'inherit'}
-      />
-    )
+  const BottomRowItemUnmemoized = ({ item }: { item: BottomRowItemType }) => {
+    const itemIcon = item.icon
     return (
       <Grid
         xs={3}
         item
         onClick={item.action}
-        color={item.isActive ? 'primary' : 'default'}
         style={{
           cursor: item.action ? 'pointer' : 'inherit',
         }}
@@ -390,7 +432,10 @@ export const PostItem = ({
         ) : (
           <>
             {itemIcon}
-            <Typography className={classes.postBottomRowItemText}>
+            <Typography
+              className={classes.postBottomRowItemText}
+              color={item.isActive ? 'primary' : 'initial'}
+            >
               {item.text}
             </Typography>
           </>
@@ -398,6 +443,7 @@ export const PostItem = ({
       </Grid>
     )
   }
+  const BottomRowItem = React.memo(BottomRowItemUnmemoized)
 
   return (
     <VisibilitySensor

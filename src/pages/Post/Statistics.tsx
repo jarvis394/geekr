@@ -5,7 +5,7 @@ import { MIDDLE_WIDTH, MIN_WIDTH } from 'src/config/constants'
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import VisibilityIcon from '@material-ui/icons/Visibility'
-import CommentsIocn from '@material-ui/icons/CommentRounded'
+import CommentsIcon from '@material-ui/icons/CommentRounded'
 import ThumbDownAltRoundedIcon from '@material-ui/icons/ThumbDownAltRounded'
 import ThumbUpAltRoundedIcon from '@material-ui/icons/ThumbUpAltRounded'
 import { Icon28ShareOutline as ShareIcon } from '@vkontakte/icons'
@@ -18,6 +18,7 @@ import {
   IconButton,
   Theme,
   Typography,
+  useTheme,
 } from '@material-ui/core'
 import { useHistory, useLocation } from 'react-router'
 import { useSnackbar } from 'notistack'
@@ -28,6 +29,9 @@ import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
 import { Icon16Up, Icon16Down } from '@vkontakte/icons'
 import { Link } from 'react-router-dom'
 import getPostLink from 'src/utils/getPostLink'
+import getFavoritesCount from 'src/utils/getFavoritesCount'
+import { useSelector } from 'src/hooks'
+import setArticleBookmark from 'src/api/setArticleBookmark'
 
 const getScoreColor = (score: number, theme: Theme) => {
   if (score === 0) return theme.palette.background.paper
@@ -44,10 +48,10 @@ const useDesktopStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     gap: theme.spacing(2),
     [theme.breakpoints.between(MIN_WIDTH, SEPARATE_COMMENTS_BUTTON_WIDTH)]: {
-      flexDirection: 'column'
+      flexDirection: 'column',
     },
     [theme.breakpoints.between(MIN_COMMENTS_BUTTON_WIDTH, MIDDLE_WIDTH)]: {
-      flexDirection: 'row'
+      flexDirection: 'row',
     },
     [theme.breakpoints.up(MIN_WIDTH)]: {
       display: 'flex',
@@ -69,7 +73,7 @@ const useDesktopStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     textTransform: 'none',
     fontSize: 16,
-    fontFamily: 'Google Sans'
+    fontFamily: 'Google Sans',
   },
   card: {
     flexGrow: 1,
@@ -78,7 +82,7 @@ const useDesktopStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 2),
     display: 'flex',
     gap: theme.spacing(1),
-    height: 48
+    height: 48,
   },
   section: {
     alignItems: 'center',
@@ -103,20 +107,20 @@ const useDesktopStyles = makeStyles((theme) => ({
   commentsCardLink: {
     display: 'flex',
     color: theme.palette.text.primary,
-    textDecoration: 'none'
+    textDecoration: 'none',
   },
   commentsAmount: {
     marginLeft: theme.spacing(1),
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
   },
   score: {
     fontSize: 16,
     fontWeight: 600,
-    fontFamily: 'Google Sans'
+    fontFamily: 'Google Sans',
   },
 }))
 
-const useStyles = makeStyles<Theme, { score: number }, string>((theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     color: theme.palette.text.primary,
     position: 'relative',
@@ -146,39 +150,6 @@ const useStyles = makeStyles<Theme, { score: number }, string>((theme) => ({
     height: 48,
     marginTop: theme.spacing(1),
     color: theme.palette.text.secondary,
-  },
-  card: {
-    display: 'flex',
-    justifyContent: 'center',
-    padding: theme.spacing(2),
-    flexDirection: 'column',
-    borderRadius: 8,
-    width: '100%',
-    alignItems: 'baseline',
-    overflow: 'hidden',
-  },
-  cardAmount: {
-    fontFamily: 'Google Sans',
-    fontSize: 32,
-    fontWeight: 800,
-    color: theme.palette.text.primary,
-    lineHeight: '32px',
-    marginBottom: 2,
-  },
-  cardIcon: {
-    position: 'absolute',
-    top: -36,
-    right: 0,
-    opacity: 0.1,
-    borderRadius: 8,
-    '& svg': { fontSize: '6.5rem' },
-  },
-  cardText: {
-    fontFamily: 'Google Sans',
-    fontSize: 16,
-    lineHeight: '16px',
-    fontWeight: 500,
-    color: fade(theme.palette.text.primary, 0.5),
   },
   scoreDrawerText: {
     fontFamily: 'Google Sans',
@@ -212,12 +183,21 @@ const useStyles = makeStyles<Theme, { score: number }, string>((theme) => ({
   viewsCard: {
     background: theme.palette.action.hover + ' !important',
   },
-  scoreCard: {
-    background: ({ score }: { score: number }) =>
-      fade(getScoreColor(score, theme), 0.7),
-  },
   favoritesCard: {
+    background: fade(theme.palette.primary.main, 0.5),
+    transitionDuration: theme.transitions.duration.complex.toString() + 'ms',
+    '&:disabled': {
+      pointerEvents: 'none',
+      opacity: 0.8,
+    },
+  },
+  favoritesCardActive: {
     background: fade(theme.palette.primary.main, 0.7),
+    transitionDuration: theme.transitions.duration.complex.toString() + 'ms',
+    '&:disabled': {
+      pointerEvents: 'none',
+      opacity: 0.8,
+    },
   },
   commentsCard: {
     background: fade(theme.palette.background.paper, 0.7),
@@ -225,20 +205,229 @@ const useStyles = makeStyles<Theme, { score: number }, string>((theme) => ({
   },
 }))
 
+const useCardStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    justifyContent: 'center',
+    padding: theme.spacing(2),
+    flexDirection: 'column',
+    borderRadius: 8,
+    width: '100%',
+    alignItems: 'baseline',
+    overflow: 'hidden',
+  },
+  amount: {
+    fontFamily: 'Google Sans',
+    fontSize: 32,
+    fontWeight: 800,
+    color: theme.palette.text.primary,
+    lineHeight: '32px',
+    marginBottom: 2,
+  },
+  icon: {
+    position: 'absolute',
+    top: -36,
+    right: 0,
+    opacity: 0.1,
+    borderRadius: 8,
+    '& svg': { fontSize: '6.5rem' },
+  },
+  text: {
+    fontFamily: 'Google Sans',
+    fontSize: 16,
+    lineHeight: '16px',
+    fontWeight: 500,
+    color: fade(theme.palette.text.primary, 0.5),
+  },
+}))
+
+interface CardProps {
+  className?: string
+  amount: number | string
+  text: string
+  icon: JSX.Element
+  disabled?: boolean
+  [key: string]: unknown
+}
+
+const Card: React.FC<CardProps> = ({
+  className,
+  amount,
+  text,
+  icon,
+  disabled,
+  ...props
+}) => {
+  const classes = useCardStyles()
+
+  return (
+    <Grid xs={6} lg={3} item>
+      <ButtonBase
+        className={classes.root + ' ' + className}
+        disabled={disabled}
+        {...props}
+      >
+        <div className={classes.icon}>{icon}</div>
+        <Typography className={classes.amount}>{amount}</Typography>
+        <Typography className={classes.text}>{text}</Typography>
+      </ButtonBase>
+    </Grid>
+  )
+}
+
+const ViewsCard: React.FC<{
+  post: Post
+}> = ({ post }) => {
+  const classes = useStyles()
+  const reads = formatNumber(Number(post.statistics.readingCount))
+
+  return (
+    <Card
+      icon={<VisibilityIcon />}
+      className={classes.viewsCard}
+      amount={reads}
+      text={'просмотров'}
+    />
+  )
+}
+const ScoreCard: React.FC<{
+  post: Post
+}> = ({ post }) => {
+  const [isScoreCardDrawerOpen, setScoreCardDrawerOpen] = useState(false)
+  const total = post.statistics.votesCount
+  const score = Number(post.statistics.score)
+  const positive = (total + score) / 2
+  const negative = (total - score) / 2
+  const theme = useTheme()
+  const classes = useStyles()
+
+  return (
+    <>
+      <Card
+        icon={<ThumbsUpDownIcon />}
+        style={{ background: fade(getScoreColor(score, theme), 0.7) }}
+        amount={score > 0 ? '+' + formatNumber(score) : formatNumber(score)}
+        text={'голосов'}
+        onClick={() => setScoreCardDrawerOpen((prev) => !prev)}
+      />
+      <BottomDrawer
+        isOpen={isScoreCardDrawerOpen}
+        setOpen={setScoreCardDrawerOpen}
+        headerText={'Голоса'}
+      >
+        <Typography className={classes.scoreDrawerText}>
+          Всего голосов: {total}
+        </Typography>
+        <Grid container direction="row">
+          <Grid
+            item
+            component={ButtonBase}
+            className={classes.scoreDrawerButton}
+            onClick={() => setScoreCardDrawerOpen(false)}
+          >
+            <span className={classes.scoreDrawerScore}>{positive}</span>
+            <ThumbUpAltRoundedIcon />
+          </Grid>
+          <Grid
+            item
+            component={ButtonBase}
+            className={classes.scoreDrawerButton}
+            onClick={() => setScoreCardDrawerOpen(false)}
+          >
+            <span className={classes.scoreDrawerScore}>{negative}</span>
+            <ThumbDownAltRoundedIcon />
+          </Grid>
+        </Grid>
+      </BottomDrawer>
+    </>
+  )
+}
+const FavoritesCard: React.FC<{
+  post: Post
+}> = ({ post }) => {
+  const [isBookmarked, setBookmarkState] = React.useState(
+    post?.relatedData?.bookmarked
+  )
+  const [
+    isFetchingBookmarkResponse,
+    setIsFetchingBookmarkResponse,
+  ] = React.useState(false)
+  const favorites = getFavoritesCount({ post, isBookmarked })
+  const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
+  const authData = useSelector((store) => store.auth.authData.data)
+  const authorizedRequestData = useSelector(
+    (store) => store.auth.authorizedRequestData
+  )
+
+  const handleClick = async () => {
+    if (isFetchingBookmarkResponse) return
+    if (authData) {
+      setIsFetchingBookmarkResponse(true)
+      const response = await setArticleBookmark({
+        mode: isBookmarked ? 'remove' : 'add',
+        authData: authorizedRequestData,
+        id: post.id,
+      })
+      if (response.ok) {
+        setBookmarkState((prev) => !prev)
+        setIsFetchingBookmarkResponse(false)
+      }
+    } else {
+      enqueueSnackbar('Нужна авторизация', {
+        variant: 'error',
+        autoHideDuration: 4000,
+      })
+    }
+  }
+
+  return (
+    <Card
+      icon={<BookmarkIcon />}
+      className={
+        classes[isBookmarked ? 'favoritesCardActive' : 'favoritesCard']
+      }
+      amount={favorites}
+      disabled={isFetchingBookmarkResponse}
+      text={'в закладках'}
+      onClick={handleClick}
+    />
+  )
+}
+const CommentsCard: React.FC<{
+  post: Post
+}> = ({ post }) => {
+  const classes = useStyles()
+  const comments = formatNumber(Number(post.statistics.commentsCount))
+  const postLink = getPostLink(post)
+  const history = useHistory()
+
+  return (
+    <Card
+      icon={<CommentsIcon />}
+      className={classes.commentsCard}
+      amount={comments}
+      text={'комментариев'}
+      onClick={() =>
+        history.push(postLink + '/comments', {
+          from: location.pathname,
+          scroll: window.pageYOffset,
+        })
+      }
+    />
+  )
+}
+
 const BottomBar = ({ post }: { post: Post }) => {
   const { enqueueSnackbar } = useSnackbar()
   const { id, titleHtml: title, statistics } = post
-  const { score: sc, favoritesCount, commentsCount, readingCount } = statistics
-
-  const classes = useStyles({ score: sc })
+  const { score: sc, commentsCount, readingCount } = statistics
+  const classes = useStyles()
   const classesDesktop = useDesktopStyles()
-  const location = useLocation()
   const score = Number(sc)
-  const comments = formatNumber(Number(commentsCount))
-  const favorites = Number(favoritesCount)
   const reads = formatNumber(Number(readingCount))
+  const comments = formatNumber(Number(commentsCount))
   const postLink = getPostLink(post)
-  const history = useHistory()
   const share = () => {
     const shareData = {
       title,
@@ -254,103 +443,6 @@ const BottomBar = ({ post }: { post: Post }) => {
       })
     }
   }
-
-  const Card = ({ className, amount, text, icon, ...props }) => {
-    return (
-      <Grid xs={6} lg={3} item {...props}>
-        <ButtonBase className={classes.card + ' ' + className}>
-          <div className={classes.cardIcon}>{icon}</div>
-          <Typography className={classes.cardAmount}>{amount}</Typography>
-          <Typography className={classes.cardText}>{text}</Typography>
-        </ButtonBase>
-      </Grid>
-    )
-  }
-  const ViewsCard = React.memo(function ViewsCardUnmemozed() {
-    return (
-      <Card
-        icon={<VisibilityIcon />}
-        className={classes.viewsCard}
-        amount={reads}
-        text={'просмотров'}
-      />
-    )
-  })
-  const ScoreCard = React.memo(function ScoreCardUnmemoized() {
-    const [isScoreCardDrawerOpen, setScoreCardDrawerOpen] = useState(false)
-    const total = statistics.votesCount
-    const positive = (total + score) / 2
-    const negative = (total - score) / 2
-
-    return (
-      <>
-        <Card
-          icon={<ThumbsUpDownIcon />}
-          className={classes.scoreCard}
-          amount={score > 0 ? '+' + formatNumber(score) : formatNumber(score)}
-          text={'голосов'}
-          onClick={() => setScoreCardDrawerOpen((prev) => !prev)}
-        />
-        <BottomDrawer
-          isOpen={isScoreCardDrawerOpen}
-          setOpen={setScoreCardDrawerOpen}
-          headerText={'Голоса'}
-        >
-          <Typography className={classes.scoreDrawerText}>
-            Всего голосов: {total}
-          </Typography>
-          <Grid container direction="row">
-            <Grid
-              item
-              component={ButtonBase}
-              className={classes.scoreDrawerButton}
-              onClick={() => setScoreCardDrawerOpen(false)}
-            >
-              <span className={classes.scoreDrawerScore}>{positive}</span>
-              <ThumbUpAltRoundedIcon />
-            </Grid>
-            <Grid
-              item
-              component={ButtonBase}
-              className={classes.scoreDrawerButton}
-              onClick={() => setScoreCardDrawerOpen(false)}
-            >
-              <span className={classes.scoreDrawerScore}>{negative}</span>
-              <ThumbDownAltRoundedIcon />
-            </Grid>
-          </Grid>
-        </BottomDrawer>
-      </>
-    )
-  })
-  const FavoritesCard = React.memo(function FavoritesCardUnmemoized() {
-    const [isBookmarked, setBookmarkState] = React.useState<boolean>(false)
-    return (
-      <Card
-        icon={<BookmarkIcon />}
-        className={classes.favoritesCard}
-        amount={formatNumber(favorites + (isBookmarked ? 1 : 0))}
-        text={'в закладках'}
-        onClick={() => setBookmarkState((prev) => !prev)}
-      />
-    )
-  })
-  const CommentsCard = React.memo(function CommentsCardUnmemoized() {
-    return (
-      <Card
-        icon={<CommentsIocn />}
-        className={classes.commentsCard}
-        amount={comments}
-        text={'комментариев'}
-        onClick={() =>
-          history.push(postLink + '/comments', {
-            from: location.pathname,
-            scroll: window.pageYOffset,
-          })
-        }
-      />
-    )
-  })
 
   return (
     <>
@@ -395,9 +487,13 @@ const BottomBar = ({ post }: { post: Post }) => {
             </Button>
           </div>
         </div>
-        <Link to={postLink + '/comments'} className={classesDesktop.commentsCardLink}>
+        <Link
+          to={postLink + '/comments'}
+          className={classesDesktop.commentsCardLink}
+        >
           <ButtonBase className={classesDesktop.commentsCard}>
-            Комментарии<span className={classesDesktop.commentsAmount}>{comments}</span>
+            Комментарии
+            <span className={classesDesktop.commentsAmount}>{comments}</span>
             <Icon24ChevronCompactRight
               className={classesDesktop.commentsChevronRightIcon}
             />
@@ -409,10 +505,10 @@ const BottomBar = ({ post }: { post: Post }) => {
       <div className={classes.root}>
         <Typography className={classes.title}>Статистика</Typography>
         <Grid container direction="row" spacing={2}>
-          <ViewsCard />
-          <ScoreCard />
-          <FavoritesCard />
-          <CommentsCard />
+          <ViewsCard post={post} />
+          <ScoreCard post={post} />
+          <FavoritesCard post={post} />
+          <CommentsCard post={post} />
         </Grid>
         <Button
           className={classes.shareButton}

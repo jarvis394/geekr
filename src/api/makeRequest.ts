@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import { API_TOKEN_URL, API_URL } from '../config/constants'
 import * as userSettings from 'src/utils/userSettings'
+import { AuthorizedRequestParams } from 'src/interfaces'
 
 const CancelToken = axios.CancelToken
 const source = CancelToken.source()
@@ -21,8 +22,8 @@ interface Arguments {
   /** API version */
   version?: 1 | 2
 
-  /** Token for a closed API request */
-  token?: string
+  /** Auth data for an authorized request */
+  authData?: AuthorizedRequestParams
 }
 
 export default async <T = never>({
@@ -31,7 +32,7 @@ export default async <T = never>({
   params,
   requestOptions,
   version = 2,
-  token,
+  authData,
 }: Arguments): Promise<T> => {
   const tokenRequestParams = new URLSearchParams(params)
   const settingsLanguage = userSettings.get().language.feed
@@ -39,18 +40,23 @@ export default async <T = never>({
   tokenRequestParams.append('fl', language)
   tokenRequestParams.append('hl', language)
 
-  if (token) {
+  if (authData) {
     return (
       await axios({
         method: 'post',
-        url: API_TOKEN_URL,
+        url: API_TOKEN_URL + 'makeRequest',
         data: {
-          token,
+          ...authData,
           method: path,
-          request: JSON.stringify({
-            params: tokenRequestParams,
+          version,
+          requestParams: {
+            params: {
+              fl: language,
+              hl: language,
+              ...params,
+            },
             ...requestOptions,
-          }),
+          },
         },
       })
     ).data

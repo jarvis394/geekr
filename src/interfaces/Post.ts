@@ -71,6 +71,19 @@ export default interface Post {
     originalAuthorName: string
     originalUrl: string
   }
+  relatedData?: {
+    bookmarked: boolean
+    canComment: boolean
+    canEdit: boolean
+    canViewVotes: boolean
+    canVote: boolean
+    unreadCommentsCount: number
+    vote: {
+      value: number | null
+      voteTimeExpired: string
+    }
+  }
+
   /** Contains an URL of the first image in text preview */
   postFirstImage?: string
   votesEnabled: boolean

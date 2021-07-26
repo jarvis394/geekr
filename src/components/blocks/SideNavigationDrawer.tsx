@@ -25,6 +25,7 @@ import { Icon24DoorArrowLeftOutline } from '@vkontakte/icons'
 import { Icon24InfoCircleOutline } from '@vkontakte/icons'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { Route } from 'src/config/routes'
+import { FetchingState } from 'src/interfaces'
 
 const NAVIGATION_TABS = makeNavigationTabs(28, 28, true)
 const avatarWidth = 32
@@ -131,6 +132,7 @@ const useProfileButtonStyles = makeStyles((theme) => ({
   avatar: {
     width: avatarWidth,
     height: avatarHeight,
+    color: theme.palette.primary.main
   },
   textHolder: {
     marginLeft: theme.spacing(1.5),
@@ -218,10 +220,17 @@ const NavButton: React.FC<NavButtonProps> = ({ label, icon, to, current }) => {
 
 const ProfileButton: React.FC = () => {
   const classes = useProfileButtonStyles()
-  const userData = useSelector((state) => state.user.profile.data)
-  const token = useSelector((state) => state.user.token)
+  const userState = useSelector((state) => state.auth.me.state)
+  const userData = useSelector((state) => state.auth.me.data)
+  const csrfTokenState = useSelector((state) => state.auth.csrfToken.state)
+  const shouldShowUser =
+    userState === FetchingState.Fetched &&
+    csrfTokenState === FetchingState.Fetched
+  const shouldShowLoadingSpinner =
+    csrfTokenState === FetchingState.Fetched &&
+    userState !== FetchingState.Fetched
 
-  if (token && !userData) {
+  if (shouldShowLoadingSpinner) {
     return (
       <div className={classes.root}>
         <div>
@@ -234,9 +243,9 @@ const ProfileButton: React.FC = () => {
     )
   }
 
-  return userData ? (
-    <Link className={classes.root} to={'/user/' + userData.login}>
-      <Avatar className={classes.avatar} src={userData.avatar} />
+  return shouldShowUser ? (
+    <Link className={classes.root} to={'/user/' + userData.alias}>
+      <Avatar className={classes.avatar} src={userData.avatarUrl} />
       <div className={classes.textHolder}>
         <Typography className={classes.fullname}>
           {userData.fullname}

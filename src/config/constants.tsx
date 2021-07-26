@@ -12,7 +12,6 @@ import { Icon28Newsfeed, Icon28SettingsOutline } from '@vkontakte/icons'
 import { Icon20HomeOutline } from '@vkontakte/icons'
 import { Icon28ServicesOutline } from '@vkontakte/icons'
 import { Icon24Search } from '@vkontakte/icons'
-import { Icon28Profile } from '@vkontakte/icons'
 import TabObject from 'src/interfaces/NavigationTabObject'
 import getCachedMode from 'src/utils/getCachedMode'
 
@@ -42,7 +41,9 @@ export const THREAD_LEVEL = 7
 
 /** Local Storage keys */
 export const USER_SETTINGS_KEY = 'habra_USER_SETTINGS'
-export const NEEDS_UPDATE_KEY = 'habra_NEEDS_UPDATE_KEY'
+export const NEEDS_UPDATE_KEY = 'habra_NEEDS_UPDATE'
+export const AUTH_DATA_KEY = 'habra_AUTH_DATA'
+export const CSRF_TOKEN_KEY = 'habra_CSRF_TOKEN'
 
 export const FLOWS: FlowObject[] = [
   {

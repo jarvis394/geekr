@@ -1,8 +1,9 @@
 import makeRequest from './makeRequest'
-import { Comments } from '../interfaces'
+import { AuthorizedRequestParams, Comments } from '../interfaces'
 
-export default async (id: string | number) =>
+export default async (id: string | number, authData?: AuthorizedRequestParams) =>
   await makeRequest<Comments>({
     path: `articles/${id}/comments`,
     version: 2,
+    authData,
   })

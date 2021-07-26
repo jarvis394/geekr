@@ -1,5 +1,5 @@
 import makeRequest from './makeRequest'
-import { UserCompanies } from '../interfaces'
+import { AuthorizedRequestParams, UserCompanies } from '../interfaces'
 
 export default async ({
   page = 1,
@@ -7,11 +7,13 @@ export default async ({
   sort = 'rating',
   orderDirection = 'desc',
   sector = '',
+  authData
 }: Partial<{
   page: number
   perPage: number
   sort: 'rating' | 'title'
   orderDirection: 'asc' | 'desc'
+  authData?: AuthorizedRequestParams
   sector:
     | ''
     | 'webdev'
@@ -45,4 +47,5 @@ export default async ({
       orderDirection,
     },
     version: 2,
+    authData
   })

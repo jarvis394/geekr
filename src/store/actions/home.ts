@@ -30,7 +30,7 @@ export const getPosts = ({
     flow === 'all'
       ? storeState.home.data[mode].pages[page]
       : storeState.home.flows.data[flow][mode].pages[page]
-  const token = storeState.user.token
+
   if (!shouldUpdate(storeData) && !forceUpdate) {
     return Promise.resolve()
   }
@@ -38,12 +38,12 @@ export const getPosts = ({
   dispatch({ type, payload: { mode, flow } })
 
   try {
-    const data = await api.getPosts({ mode, page, token, flow })
+    const data = await api.getPosts({ mode, page, flow })
     const pagesCount = data?.pagesCount
 
     dispatch({
       type: type + '_FULFILLED',
-      payload: { data: data, mode, page, pagesCount, token, flow },
+      payload: { data: data, mode, page, pagesCount, flow },
     })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: { error, mode, page, flow } })
