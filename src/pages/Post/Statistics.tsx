@@ -167,11 +167,19 @@ const useStyles = makeStyles((theme) => ({
     '&:nth-child(1)': {
       backgroundColor: fade(theme.palette.success.light, 0.7),
       marginRight: theme.spacing(1),
+      '&:disabled': {
+        backgroundColor: fade(theme.palette.success.light, 0.4),
+        color: theme.palette.text.disabled
+      }
     },
     // Thumbs Down
     '&:nth-child(2)': {
       backgroundColor: fade(theme.palette.error.light, 0.7),
       marginLeft: theme.spacing(1),
+      '&:disabled': {
+        backgroundColor: fade(theme.palette.error.light, 0.4),
+        color: theme.palette.text.disabled
+      }
     },
   },
   scoreDrawerScore: {
@@ -189,6 +197,7 @@ const useStyles = makeStyles((theme) => ({
     '&:disabled': {
       pointerEvents: 'none',
       opacity: 0.8,
+      background: theme.palette.action.hover,
     },
   },
   favoritesCardActive: {
@@ -197,6 +206,7 @@ const useStyles = makeStyles((theme) => ({
     '&:disabled': {
       pointerEvents: 'none',
       opacity: 0.8,
+      background: theme.palette.action.hover,
     },
   },
   commentsCard: {
@@ -250,7 +260,7 @@ interface CardProps {
   [key: string]: unknown
 }
 
-const Card: React.FC<CardProps> = ({
+const CardNaked: React.FC<CardProps> = ({
   className,
   amount,
   text,
@@ -274,6 +284,7 @@ const Card: React.FC<CardProps> = ({
     </Grid>
   )
 }
+const Card = React.memo(CardNaked)
 
 const ViewsCard: React.FC<{
   post: Post
@@ -300,6 +311,12 @@ const ScoreCard: React.FC<{
   const negative = (total - score) / 2
   const theme = useTheme()
   const classes = useStyles()
+  const authorizedRequestData = useSelector((store) => store.auth.authorizedRequestData)
+  const shouldDisableButtons = !authorizedRequestData
+
+  // const handleScoreButtonClick = async () => {
+    
+  // }
 
   return (
     <>
@@ -323,7 +340,8 @@ const ScoreCard: React.FC<{
             item
             component={ButtonBase}
             className={classes.scoreDrawerButton}
-            onClick={() => setScoreCardDrawerOpen(false)}
+            // onClick={handleScoreButtonClick.bind(null, )}
+            disabled={shouldDisableButtons}
           >
             <span className={classes.scoreDrawerScore}>{positive}</span>
             <ThumbUpAltRoundedIcon />
@@ -333,6 +351,7 @@ const ScoreCard: React.FC<{
             component={ButtonBase}
             className={classes.scoreDrawerButton}
             onClick={() => setScoreCardDrawerOpen(false)}
+            disabled={shouldDisableButtons}
           >
             <span className={classes.scoreDrawerScore}>{negative}</span>
             <ThumbDownAltRoundedIcon />
@@ -345,13 +364,13 @@ const ScoreCard: React.FC<{
 const FavoritesCard: React.FC<{
   post: Post
 }> = ({ post }) => {
-  const [isBookmarked, setBookmarkState] = React.useState(
+  const [isBookmarked, setBookmarkState] = useState(
     post?.relatedData?.bookmarked
   )
   const [
     isFetchingBookmarkResponse,
     setIsFetchingBookmarkResponse,
-  ] = React.useState(false)
+  ] = useState(false)
   const favorites = getFavoritesCount({ post, isBookmarked })
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
