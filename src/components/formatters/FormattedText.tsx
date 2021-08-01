@@ -326,7 +326,7 @@ const FormattedText: React.FC<{
             document.getElementsByName(attribs.href.slice(1))[0]
           const yOffset = -APP_BAR_HEIGHT
           const y =
-            el.getBoundingClientRect().top + window.pageYOffset + yOffset
+            (el?.getBoundingClientRect()?.top || 0) + window.pageYOffset + yOffset
           window.scrollTo({ top: y, behavior: 'smooth' })
         }
         return (
