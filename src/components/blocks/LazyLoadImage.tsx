@@ -135,7 +135,8 @@ const Image = React.memo(ImageUnmemoized)
 const LazyLoadImage = (props) => {
   const [isOpen, setOpen] = useState(false)
   const imageRef = useRef<HTMLImageElement>(null)
-  const { style, alt, className, disableZoom, align } = props
+  const { style, alt, className, disableZoom, align, placeholderSrc } = props
+  const showByDefault = !!placeholderSrc
   // Set image dimensions after it is done loading
   // PhotoSwipe requires image dimensions to be set before it is opened,
   // so we set them as soon as the image (in FormattedText, probably) is loaded.
@@ -179,18 +180,13 @@ const LazyLoadImage = (props) => {
   return (
     <>
       <ProgressiveImage
-        placeholder={props.placeholderSrc}
+        placeholder={placeholderSrc}
         src={props.src}
         visibilitySensorProps={{
           partialVisibility: true,
-          active: !!props.placeholderSrc,
           offset: {
-            top: props.placeholderSrc
-              ? -Infinity
-              : POST_ITEM_VISIBILITY_THRESHOLD,
-            bottom: props.placeholderSrc
-              ? -Infinity
-              : POST_ITEM_VISIBILITY_THRESHOLD,
+            top: showByDefault ? -Infinity : POST_ITEM_VISIBILITY_THRESHOLD,
+            bottom: showByDefault ? -Infinity : POST_ITEM_VISIBILITY_THRESHOLD,
           },
         }}
       >
