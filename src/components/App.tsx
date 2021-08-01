@@ -71,6 +71,7 @@ const useStyles = makeStyles({
     margin: `${APP_BAR_HEIGHT}px auto ${
       shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0
     }px auto`,
+    boxSizing: 'border-box',
     [theme.breakpoints.up(MIDDLE_WIDTH)]: {
       marginTop: 0,
     },
