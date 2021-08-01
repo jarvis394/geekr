@@ -336,8 +336,9 @@ const FormattedText: React.FC<{
         )
       }
       if (name === 'a' && shouldChangeLinks) {
-        return (
-          <Link to={formatLink(attribs.href)}>
+        const formattedLink = formatLink(attribs.href)
+        if (formattedLink) return (
+          <Link to={formattedLink as string}>
             {domToReact(children, options)}
           </Link>
         )

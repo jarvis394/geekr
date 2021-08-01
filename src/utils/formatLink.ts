@@ -1,6 +1,6 @@
 import { HABR_BASE_REGEXP, HABR_LINKS_REPLACE_MAP } from 'src/config/constants'
 
-const formatLink = (s: string): string => {
+const formatLink = (s: string): string | false => {
   const baseMatch = HABR_BASE_REGEXP.exec(s)
   if (baseMatch) {
     const replaceObject = HABR_LINKS_REPLACE_MAP.find((e) => !!e.regexp.exec(s))
@@ -12,8 +12,7 @@ const formatLink = (s: string): string => {
       newHref = newHref.replace(`[${i}]`, e)
     })
     return newHref
-  }
-  return s
+  } else return false
 }
 
 export default formatLink

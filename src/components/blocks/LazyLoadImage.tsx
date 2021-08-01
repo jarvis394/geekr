@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, MutableRefObject } from 'react'
 import ProgressiveImage from 'react-lazy-progressive-image'
 import {
   CircularProgress,
@@ -61,11 +61,22 @@ interface ImageProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   disableZoom?: boolean
   align?: 'left' | 'right' | null
+  onClick: () => void
 }
 
 const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
   function ImageComponent(
-    { src, loading, style, alt, className, setOpen, disableZoom, align },
+    {
+      src,
+      loading,
+      style,
+      alt,
+      className,
+      setOpen,
+      disableZoom,
+      align,
+      onClick,
+    },
     ref
   ) {
     const [hasError, setHasError] = React.useState(false)
@@ -99,14 +110,14 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
           </Fade>
         </span>
       )
-    
+
     if (align) imgClasses.push(classes['imgAlign-' + align])
 
     return (
       <Fade in timeout={250} mountOnEnter>
         <img
           ref={ref}
-          onClick={() => !loading && !hasError && !disableZoom && setOpen(true)}
+          onClick={() => !loading && !hasError && onClick()}
           className={imgClasses.join(' ')}
           width={style?.width}
           height={style?.height}
@@ -129,18 +140,15 @@ const LazyLoadImage = (props) => {
   // PhotoSwipe requires image dimensions to be set before it is opened,
   // so we set them as soon as the image (in FormattedText, probably) is loaded.
   // User cannot open PhotoSwipe before image was loaded.
-  const items: PhotoSwipe.Item[] = React.useMemo(
-    () => [
-      {
-        src: props.src,
-        w: imageRef?.current?.naturalWidth,
-        h: imageRef?.current?.naturalHeight,
-      },
-    ],
-    [imageRef?.current]
-  )
+  const items: MutableRefObject<PhotoSwipe.Item[]> = React.useRef([
+    {
+      src: props.src,
+      w: 1080,
+      h: 1920,
+    },
+  ])
   const pswpOptions: PhotoSwipe.UIFramework = {
-    showHideOpacity: true,
+    showHideOpacity: false,
     bgOpacity: 0.8,
     fullscreenEl: false,
     zoomEl: false,
@@ -151,6 +159,21 @@ const LazyLoadImage = (props) => {
     tapToClose: true,
     pinchToClose: false,
     maxSpreadZoom: 4,
+    history: false,
+  }
+
+  const onClick = () => {
+    if (disableZoom || !imageRef?.current) return
+    const windowWidth = window.innerWidth - 32
+    const n = windowWidth / imageRef?.current?.clientWidth
+    items.current = [
+      {
+        src: props.src,
+        w: windowWidth,
+        h: imageRef?.current?.clientHeight * n,
+      },
+    ]
+    setOpen(true)
   }
 
   return (
@@ -160,9 +183,14 @@ const LazyLoadImage = (props) => {
         src={props.src}
         visibilitySensorProps={{
           partialVisibility: true,
+          active: !!props.placeholderSrc,
           offset: {
-            top: POST_ITEM_VISIBILITY_THRESHOLD,
-            bottom: POST_ITEM_VISIBILITY_THRESHOLD,
+            top: props.placeholderSrc
+              ? -Infinity
+              : POST_ITEM_VISIBILITY_THRESHOLD,
+            bottom: props.placeholderSrc
+              ? -Infinity
+              : POST_ITEM_VISIBILITY_THRESHOLD,
           },
         }}
       >
@@ -171,6 +199,7 @@ const LazyLoadImage = (props) => {
             ref={imageRef}
             src={src}
             setOpen={setOpen}
+            onClick={onClick}
             loading={loading}
             isVisible={isVisible}
             style={style}
@@ -186,7 +215,7 @@ const LazyLoadImage = (props) => {
           <PhotoSwipe
             options={pswpOptions}
             isOpen={isOpen}
-            items={items}
+            items={items.current}
             onClose={() => setOpen(false)}
           />
         </Portal>
