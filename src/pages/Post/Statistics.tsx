@@ -14,9 +14,12 @@ import { Post } from 'src/interfaces'
 import {
   Button,
   ButtonBase,
+  CircularProgress,
+  Fade,
   fade,
   IconButton,
   Theme,
+  Tooltip,
   Typography,
   useTheme,
 } from '@material-ui/core'
@@ -32,6 +35,9 @@ import getPostLink from 'src/utils/getPostLink'
 import getFavoritesCount from 'src/utils/getFavoritesCount'
 import { useSelector } from 'src/hooks'
 import setArticleBookmark from 'src/api/setArticleBookmark'
+import setArticleVote from 'src/api/setArticleVote'
+import APIError from 'src/interfaces/APIError'
+import getScoreTotal from 'src/utils/getScoreTotal'
 
 const getScoreColor = (score: number, theme: Theme) => {
   if (score === 0) return theme.palette.background.paper
@@ -64,6 +70,10 @@ const useDesktopStyles = makeStyles((theme) => ({
   },
   grayIcon: {
     color: theme.palette.text.secondary,
+    padding: 12,
+  },
+  scoreActiveIcon: {
+    color: theme.palette.success.main + ' !important',
     padding: 12,
   },
   shareButton: {
@@ -118,6 +128,10 @@ const useDesktopStyles = makeStyles((theme) => ({
     fontWeight: 600,
     fontFamily: 'Google Sans',
   },
+  spinner: {
+    width: '24px !important',
+    height: '24px !important',
+  },
 }))
 
 const useStyles = makeStyles((theme) => ({
@@ -169,8 +183,8 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(1),
       '&:disabled': {
         backgroundColor: fade(theme.palette.success.light, 0.4),
-        color: theme.palette.text.disabled
-      }
+        color: theme.palette.text.disabled,
+      },
     },
     // Thumbs Down
     '&:nth-child(2)': {
@@ -178,8 +192,8 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(1),
       '&:disabled': {
         backgroundColor: fade(theme.palette.error.light, 0.4),
-        color: theme.palette.text.disabled
-      }
+        color: theme.palette.text.disabled,
+      },
     },
   },
   scoreDrawerScore: {
@@ -249,6 +263,18 @@ const useCardStyles = makeStyles((theme) => ({
     fontWeight: 500,
     color: fade(theme.palette.text.primary, 0.5),
   },
+  spinner: {
+    width: '32px !important',
+    height: '32px !important',
+  },
+  spinnerHolder: {
+    position: 'absolute',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: `calc(100% - ${theme.spacing(2)}px)`,
+    heigth: '100%',
+  },
 }))
 
 interface CardProps {
@@ -257,15 +283,17 @@ interface CardProps {
   text: string
   icon: JSX.Element
   disabled?: boolean
+  showSpinner?: boolean
   [key: string]: unknown
 }
 
-const CardNaked: React.FC<CardProps> = ({
+const CardUnmemoized: React.FC<CardProps> = ({
   className,
   amount,
   text,
   icon,
-  disabled,
+  disabled = false,
+  showSpinner = false,
   ...props
 }) => {
   const classes = useCardStyles()
@@ -277,6 +305,11 @@ const CardNaked: React.FC<CardProps> = ({
         disabled={disabled}
         {...props}
       >
+        <Fade in={showSpinner} unmountOnExit mountOnEnter>
+          <div className={classes.spinnerHolder}>
+            <CircularProgress thickness={4} className={classes.spinner} />
+          </div>
+        </Fade>
         <div className={classes.icon}>{icon}</div>
         <Typography className={classes.amount}>{amount}</Typography>
         <Typography className={classes.text}>{text}</Typography>
@@ -284,7 +317,7 @@ const CardNaked: React.FC<CardProps> = ({
     </Grid>
   )
 }
-const Card = React.memo(CardNaked)
+const Card = React.memo(CardUnmemoized)
 
 const ViewsCard: React.FC<{
   post: Post
@@ -303,20 +336,34 @@ const ViewsCard: React.FC<{
 }
 const ScoreCard: React.FC<{
   post: Post
-}> = ({ post }) => {
+  onClick: (d: 'down' | 'up') => void
+  isFetchingScoreResponse: boolean
+  voteState: {
+    canVote: Post['relatedData']['canVote']
+    vote: Post['relatedData']['vote']
+    voteByDefault: boolean
+  }
+}> = ({ post, onClick, isFetchingScoreResponse, voteState }) => {
   const [isScoreCardDrawerOpen, setScoreCardDrawerOpen] = useState(false)
-  const total = post.statistics.votesCount
-  const score = Number(post.statistics.score)
-  const positive = (total + score) / 2
-  const negative = (total - score) / 2
+  const { total, negative, positive, score } = getScoreTotal({
+    post,
+    voteState,
+  })
   const theme = useTheme()
   const classes = useStyles()
-  const authorizedRequestData = useSelector((store) => store.auth.authorizedRequestData)
-  const shouldDisableButtons = !authorizedRequestData
+  const authorizedRequestData = useSelector(
+    (store) => store.auth.authorizedRequestData
+  )
+  const shouldDisableButtons = !authorizedRequestData || isFetchingScoreResponse
+  const disableUpButton = voteState.vote.value === -1
+  const disableDownButton = voteState.vote.value === 1
 
-  // const handleScoreButtonClick = async () => {
-    
-  // }
+  const handleScoreButtonUpClick = () => {
+    voteState.canVote && onClick('up')
+  }
+  const handleScoreButtonDownClick = () => {
+    voteState.canVote && onClick('down')
+  }
 
   return (
     <>
@@ -325,7 +372,7 @@ const ScoreCard: React.FC<{
         style={{ background: fade(getScoreColor(score, theme), 0.7) }}
         amount={score > 0 ? '+' + formatNumber(score) : formatNumber(score)}
         text={'голосов'}
-        onClick={() => setScoreCardDrawerOpen((prev) => !prev)}
+        onClick={() => setScoreCardDrawerOpen(true)}
       />
       <BottomDrawer
         isOpen={isScoreCardDrawerOpen}
@@ -340,8 +387,9 @@ const ScoreCard: React.FC<{
             item
             component={ButtonBase}
             className={classes.scoreDrawerButton}
-            // onClick={handleScoreButtonClick.bind(null, )}
-            disabled={shouldDisableButtons}
+            onClick={handleScoreButtonUpClick}
+            disableRipple={!voteState.canVote}
+            disabled={shouldDisableButtons || disableUpButton}
           >
             <span className={classes.scoreDrawerScore}>{positive}</span>
             <ThumbUpAltRoundedIcon />
@@ -350,8 +398,9 @@ const ScoreCard: React.FC<{
             item
             component={ButtonBase}
             className={classes.scoreDrawerButton}
-            onClick={() => setScoreCardDrawerOpen(false)}
-            disabled={shouldDisableButtons}
+            onClick={handleScoreButtonDownClick}
+            disableRipple={!voteState.canVote}
+            disabled={shouldDisableButtons || disableDownButton}
           >
             <span className={classes.scoreDrawerScore}>{negative}</span>
             <ThumbDownAltRoundedIcon />
@@ -363,42 +412,12 @@ const ScoreCard: React.FC<{
 }
 const FavoritesCard: React.FC<{
   post: Post
-}> = ({ post }) => {
-  const [isBookmarked, setBookmarkState] = useState(
-    post?.relatedData?.bookmarked
-  )
-  const [
-    isFetchingBookmarkResponse,
-    setIsFetchingBookmarkResponse,
-  ] = useState(false)
+  isBookmarked: boolean
+  isFetchingBookmarkResponse: boolean
+  onClick: () => void
+}> = ({ post, isBookmarked, onClick, isFetchingBookmarkResponse }) => {
   const favorites = getFavoritesCount({ post, isBookmarked })
   const classes = useStyles()
-  const { enqueueSnackbar } = useSnackbar()
-  const authData = useSelector((store) => store.auth.authData.data)
-  const authorizedRequestData = useSelector(
-    (store) => store.auth.authorizedRequestData
-  )
-
-  const handleClick = async () => {
-    if (isFetchingBookmarkResponse) return
-    if (authData) {
-      setIsFetchingBookmarkResponse(true)
-      const response = await setArticleBookmark({
-        mode: isBookmarked ? 'remove' : 'add',
-        authData: authorizedRequestData,
-        id: post.id,
-      })
-      if (response.ok) {
-        setBookmarkState((prev) => !prev)
-        setIsFetchingBookmarkResponse(false)
-      }
-    } else {
-      enqueueSnackbar('Нужна авторизация', {
-        variant: 'error',
-        autoHideDuration: 4000,
-      })
-    }
-  }
 
   return (
     <Card
@@ -407,9 +426,10 @@ const FavoritesCard: React.FC<{
         classes[isBookmarked ? 'favoritesCardActive' : 'favoritesCard']
       }
       amount={favorites}
+      showSpinner={isFetchingBookmarkResponse}
       disabled={isFetchingBookmarkResponse}
       text={'в закладках'}
-      onClick={handleClick}
+      onClick={onClick}
     />
   )
 }
@@ -437,16 +457,43 @@ const CommentsCard: React.FC<{
   )
 }
 
-const BottomBar = ({ post }: { post: Post }) => {
+const Statistics = ({ post }: { post: Post }) => {
   const { enqueueSnackbar } = useSnackbar()
   const { id, titleHtml: title, statistics } = post
-  const { score: sc, commentsCount, readingCount } = statistics
+  const { commentsCount, readingCount } = statistics
+  const authData = useSelector((store) => store.auth.authData.data)
+  const authorizedRequestData = useSelector(
+    (store) => store.auth.authorizedRequestData
+  )
+  const [isBookmarked, setBookmarkState] = useState(
+    post?.relatedData?.bookmarked
+  )
+  const [isFetchingBookmarkResponse, setIsFetchingBookmarkResponse] = useState(
+    false
+  )
+  const [voteState, setVoteState] = useState({
+    canVote: post?.relatedData?.canVote || false,
+    vote: post?.relatedData?.vote || {
+      value: 0,
+      voteTimeExpired: null,
+    },
+    voteByDefault: !!post?.relatedData?.vote,
+  })
+  const [isFetchingScoreResponse, setIsFetchingScoreResponse] = useState(false)
   const classes = useStyles()
   const classesDesktop = useDesktopStyles()
-  const score = Number(sc)
+  const { total: totalScore, negative, positive, score } = getScoreTotal({
+    post,
+    voteState,
+  })
   const reads = formatNumber(Number(readingCount))
   const comments = formatNumber(Number(commentsCount))
+  const favorites = getFavoritesCount({ post, isBookmarked })
   const postLink = getPostLink(post)
+  const shouldDisableScoreButtons =
+    !authorizedRequestData || isFetchingScoreResponse || !voteState.canVote
+  const isScoreUpButtonDisabled = voteState.vote.value === -1
+  const isScoreDownButtonDisabled = voteState.vote.value === 1
   const share = () => {
     const shareData = {
       title,
@@ -463,33 +510,135 @@ const BottomBar = ({ post }: { post: Post }) => {
     }
   }
 
+  const handleFavoriteClick = async () => {
+    if (isFetchingBookmarkResponse) return
+    if (authData) {
+      setIsFetchingBookmarkResponse(true)
+      const response = await setArticleBookmark({
+        mode: isBookmarked ? 'remove' : 'add',
+        authData: authorizedRequestData,
+        id: post.id,
+      })
+      if (response.ok) {
+        setBookmarkState((prev) => !prev)
+        setIsFetchingBookmarkResponse(false)
+      } else {
+        enqueueSnackbar('Произошла ошибка', {
+          variant: 'error',
+          autoHideDuration: 4000,
+        })
+        console.error('Error in handleFavoriteClick:', response)
+      }
+    } else {
+      enqueueSnackbar('Нужна авторизация', {
+        variant: 'error',
+        autoHideDuration: 4000,
+      })
+    }
+  }
+
+  const handleScoreClick = async (mode: 'up' | 'down') => {
+    if (isFetchingScoreResponse) return
+    if (authData) {
+      setIsFetchingScoreResponse(true)
+      const response = await setArticleVote({
+        mode,
+        authData: authorizedRequestData,
+        id: post.id,
+      })
+      if (response?.score) {
+        setVoteState({
+          vote: response.vote,
+          canVote: response.canVote,
+          voteByDefault: false,
+        })
+        setIsFetchingScoreResponse(false)
+      } else if (
+        ((response as unknown) as APIError)?.additional[0] ===
+        'POST_VOTE_DUPLICATE'
+      ) {
+        enqueueSnackbar('Повторное голосование запрещено', {
+          variant: 'error',
+          autoHideDuration: 4000,
+        })
+      } else {
+        enqueueSnackbar('Произошла ошибка', {
+          variant: 'error',
+          autoHideDuration: 4000,
+        })
+        console.error('Error in handleScoreClick:', response)
+      }
+    } else {
+      enqueueSnackbar('Нужна авторизация', {
+        variant: 'error',
+        autoHideDuration: 4000,
+      })
+    }
+  }
+
   return (
     <>
       {/** Desktop Statistics */}
       <div className={classesDesktop.root}>
         <div className={classesDesktop.card}>
           <div className={classesDesktop.section}>
-            <IconButton className={classesDesktop.grayIcon}>
+            <IconButton
+              className={
+                classesDesktop[
+                  isScoreDownButtonDisabled ? 'scoreActiveIcon' : 'grayIcon'
+                ]
+              }
+              onClick={() => handleScoreClick('up')}
+              disabled={shouldDisableScoreButtons || isScoreUpButtonDisabled}
+            >
               <Icon16Up width={24} height={24} />
             </IconButton>
             <GreenRedNumber
               number={post.statistics.score}
               wrapperProps={{ className: classesDesktop.scoreWrapper }}
             >
-              <Typography className={classesDesktop.score}>
-                {score > 0 ? '+' : ''}
-                {score}
-              </Typography>
+              <Tooltip
+                placement="top"
+                title={`Всего голосов ${totalScore}: ↑${positive} и ↓${negative}`}
+                arrow
+              >
+                <Typography className={classesDesktop.score}>
+                  {score > 0 ? '+' : ''}
+                  {score}
+                </Typography>
+              </Tooltip>
             </GreenRedNumber>
-            <IconButton className={classesDesktop.grayIcon}>
+            <IconButton
+              className={
+                classesDesktop[
+                  isScoreUpButtonDisabled ? 'scoreActiveIcon' : 'grayIcon'
+                ]
+              }
+              onClick={() => handleScoreClick('down')}
+              disabled={shouldDisableScoreButtons || isScoreDownButtonDisabled}
+            >
               <Icon16Down width={24} height={24} />
             </IconButton>
           </div>
           <div className={classesDesktop.section}>
-            <IconButton className={classesDesktop.grayIcon}>
-              <BookmarkIcon />
+            <IconButton
+              className={classesDesktop.grayIcon}
+              onClick={handleFavoriteClick}
+              color={isBookmarked ? 'primary' : 'default'}
+            >
+              {isFetchingBookmarkResponse && (
+                <CircularProgress
+                  className={classesDesktop.spinner}
+                  thickness={4}
+                />
+              )}
+              {!isFetchingBookmarkResponse && (
+                <BookmarkIcon color={isBookmarked ? 'primary' : 'inherit'} />
+              )}
             </IconButton>
-            <Typography className={classesDesktop.score}>{comments}</Typography>
+            <Typography className={classesDesktop.score}>
+              {favorites}
+            </Typography>
           </div>
           <div className={classesDesktop.section} style={{ marginLeft: 8 }}>
             <VisibilityIcon className={classesDesktop.grayIcon} />
@@ -525,8 +674,18 @@ const BottomBar = ({ post }: { post: Post }) => {
         <Typography className={classes.title}>Статистика</Typography>
         <Grid container direction="row" spacing={2}>
           <ViewsCard post={post} />
-          <ScoreCard post={post} />
-          <FavoritesCard post={post} />
+          <ScoreCard
+            post={post}
+            onClick={handleScoreClick}
+            isFetchingScoreResponse={isFetchingScoreResponse}
+            voteState={voteState}
+          />
+          <FavoritesCard
+            post={post}
+            onClick={handleFavoriteClick}
+            isFetchingBookmarkResponse={isFetchingBookmarkResponse}
+            isBookmarked={isBookmarked}
+          />
           <CommentsCard post={post} />
         </Grid>
         <Button
@@ -542,4 +701,4 @@ const BottomBar = ({ post }: { post: Post }) => {
   )
 }
 
-export default React.memo(BottomBar)
+export default React.memo(Statistics)

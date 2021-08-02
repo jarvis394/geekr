@@ -38,7 +38,8 @@ Sentry.init({
   dsn: SENTRY_DSN,
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 0,
-  environment: process.env.NODE_ENV
+  environment: process.env.NODE_ENV,
+  enabled: process.env.NODE_ENV === 'production'
 })
 
 dayjs.locale(userSettings.language.interface || 'ru')
