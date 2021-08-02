@@ -2,10 +2,10 @@ import * as React from 'react'
 import {
   makeStyles,
   fade,
-  useTheme,
   darken,
   lighten,
   Theme,
+  rgbToHex,
 } from '@material-ui/core/styles'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
@@ -22,6 +22,7 @@ import { useSelector } from 'src/hooks'
 import { UserSettings } from 'src/interfaces'
 import formatLink from 'src/utils/formatLink'
 import { Link } from 'react-router-dom'
+import blend from 'src/utils/blendColors'
 
 interface IframeResizeData {
   type: string
@@ -66,7 +67,13 @@ const useStyles = makeStyles<
     '& p+p': {
       marginTop: ({ disableParagraphMargin: d }) => (d ? 0 : theme.spacing(3)),
     },
-    '& em': { color: fade(theme.palette.text.primary, 0.75) },
+    '& em': {
+      color: blend(
+        rgbToHex(theme.palette.primary.light),
+        rgbToHex(theme.palette.text.primary),
+        0.5
+      ),
+    },
     '& code': {
       background: getInvertedContrastPaperColor(theme),
       padding: theme.spacing(0.25),
@@ -77,6 +84,12 @@ const useStyles = makeStyles<
       overflow: 'auto',
       marginTop: theme.spacing(2),
       wordBreak: 'normal',
+    },
+    '& sub, sup': {
+      fontSize: '75%',
+      lineHeight: 0,
+      position: 'relative',
+      verticalAlign: 'initial',
     },
     '& table': {
       width: '100%',
@@ -147,10 +160,12 @@ const useStyles = makeStyles<
       clear: 'both',
     },
     '& sup': {
-      color: theme.palette.text.secondary,
-      marginTop: theme.spacing(1),
-      fontSize: 14,
-      display: 'block',
+      color: blend(
+        rgbToHex(theme.palette.primary.light),
+        rgbToHex(theme.palette.text.primary),
+        0.5
+      ),
+      top: '-.5em',
     },
     // MathJaxNode overflow fix
     '& span.mjx-chtml': {
@@ -334,7 +349,9 @@ const FormattedText: React.FC<{
             document.getElementsByName(attribs.href.slice(1))[0]
           const yOffset = -APP_BAR_HEIGHT
           const y =
-            (el?.getBoundingClientRect()?.top || 0) + window.pageYOffset + yOffset
+            (el?.getBoundingClientRect()?.top || 0) +
+            window.pageYOffset +
+            yOffset
           window.scrollTo({ top: y, behavior: 'smooth' })
         }
         return (
@@ -345,11 +362,12 @@ const FormattedText: React.FC<{
       }
       if (name === 'a' && shouldChangeLinks) {
         const formattedLink = formatLink(attribs.href)
-        if (formattedLink) return (
-          <Link to={formattedLink as string}>
-            {domToReact(children, options)}
-          </Link>
-        )
+        if (formattedLink)
+          return (
+            <Link to={formattedLink as string}>
+              {domToReact(children, options)}
+            </Link>
+          )
       }
     },
   }

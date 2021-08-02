@@ -1,4 +1,4 @@
-function blend(color1: string, color2: string, percent: number) {
+const blend = (color1: string, color2: string, percent: number) => {
   const red1 = parseInt(color1[1] + color1[2], 16)
   const green1 = parseInt(color1[3] + color1[4], 16)
   const blue1 = parseInt(color1[5] + color1[6], 16)
@@ -14,16 +14,15 @@ function blend(color1: string, color2: string, percent: number) {
   return generateHex(red, green, blue)
 }
 
-function generateHex(
+const generateHex = (
   r: string | number,
   g: string | number,
   b: string | number
-) {
+) => {
   r = r.toString(16)
   g = g.toString(16)
   b = b.toString(16)
 
-  // to address problem mentioned by Alexis Wilke:
   while (r.length < 2) {
     r = '0' + r
   }
@@ -37,8 +36,7 @@ function generateHex(
   return '#' + r + g + b
 }
 
-function mix(start: number, end: number, percent: number) {
-  return start + percent * (end - start)
-}
+const mix = (start: number, end: number, percent: number) =>
+  start + percent * (end - start)
 
 export default blend
