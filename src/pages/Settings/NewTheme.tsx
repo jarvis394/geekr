@@ -615,11 +615,6 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
   const { themeType: paramsThemeType } = useParams<{ themeType: string }>()
   const editTheme =
     isEditMode && customThemes.find((e) => e.type === paramsThemeType)
-
-  if (isEditMode && !editTheme) {
-    return <Redirect to="/settings/appearance" />
-  }
-
   const [colorPickerState, setColorPickerState] = useState<ColorPickerState>({
     open: false,
     color: null,
@@ -672,6 +667,10 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
     setCurrentThemeUnwrapped(...props)
   }
 
+  if (isEditMode && !editTheme) {
+    return <Redirect to="/settings/appearance" />
+  }
+
   const handleSaveClick = () => {
     const newCustomThemes = [...customThemes]
     if (isAlreadySavedLocally) {
@@ -718,8 +717,8 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
       variant: 'success',
       autoHideDuration: 3000,
     })
-    history.goBack()
     setDeleteDialogOpen(false)
+    history.goBack()
   }
   const handleTitleEditClick = () => setTitleEditDialogOpen(true)
   const handleTitleEditDialogCancel = () => setTitleEditDialogOpen(false)
