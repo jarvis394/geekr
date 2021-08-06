@@ -69,7 +69,6 @@ const makeGradient = (theme: Theme) => {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: '100%',
-    backgroundColor: getContrastPaperColor(theme),
     paddingBottom: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
@@ -170,6 +169,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   content: {
     paddingBottom: theme.spacing(1.5),
+    backgroundColor: getContrastPaperColor(theme),
     [theme.breakpoints.up(MIN_WIDTH)]: {
       borderRadius: 8,
       backgroundColor: theme.palette.background.paper + ' !important',
@@ -326,7 +326,7 @@ const Post = () => {
         <Container>
           <FormattedText
             className={classes.text}
-            disableParagraphMargin={post.editorVersion === '1.0'}
+            oldHabrFormat={post.editorVersion === '1.0'}
           >
             {post.textHtml}
           </FormattedText>

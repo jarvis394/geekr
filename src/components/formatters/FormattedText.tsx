@@ -33,7 +33,7 @@ interface IframeResizeData {
 const useStyles = makeStyles<
   Theme,
   {
-    disableParagraphMargin: boolean
+    oldHabrFormat: boolean
     readerSettings: UserSettings['readerSettings']
   }
 >((theme) => ({
@@ -56,7 +56,7 @@ const useStyles = makeStyles<
       textDecoration: 'underline',
     },
     '& h1+p, h2+p, h3+p, h4+p': {
-      marginTop: ({ disableParagraphMargin: d }) =>
+      marginTop: ({ oldHabrFormat: d }) =>
         d ? 0 : theme.spacing(1.5),
     },
     '& p': {
@@ -65,7 +65,7 @@ const useStyles = makeStyles<
       fontFamily: ({ readerSettings }) => readerSettings.fontFamily,
     },
     '& p+p': {
-      marginTop: ({ disableParagraphMargin: d }) => (d ? 0 : theme.spacing(3)),
+      marginTop: ({ oldHabrFormat: d }) => (d ? 0 : theme.spacing(3)),
     },
     '& em': {
       color: blend(
@@ -118,7 +118,7 @@ const useStyles = makeStyles<
       lineHeight: '26px',
     },
     '& h1, h2, h3, h4, h5, h6': {
-      margin: `${theme.spacing(1)}px 0 0 0`,
+      margin: ({ oldHabrFormat: d }) => `${theme.spacing(d ? 1 : 4)}px 0 0 0`,
       fontFamily: 'Google Sans',
       fontWeight: 800,
     },
@@ -233,16 +233,16 @@ const useStyles = makeStyles<
 
 const FormattedText: React.FC<{
   children: string
-  disableParagraphMargin?: boolean
+  oldHabrFormat?: boolean
   className?: string
 }> = ({
   children: componentChildren,
   className = '',
-  disableParagraphMargin = false,
+  oldHabrFormat = false,
   ...props
 }) => {
   const readerSettings = useSelector((store) => store.settings.readerSettings)
-  const classes = useStyles({ disableParagraphMargin, readerSettings })
+  const classes = useStyles({ oldHabrFormat, readerSettings })
   const [iframeHeights, setIframeHeights] = React.useState<
     Record<string, number>
   >({})

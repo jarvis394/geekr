@@ -14,6 +14,9 @@ import {
   COMPANY_FETCH_FULFILLED,
   COMPANY_FETCH_REJECTED,
   SET_POST_COMMENT_SIZE,
+  POST_DOWNVOTE_REASONS_FETCH,
+  POST_DOWNVOTE_REASONS_FETCH_FULFILLED,
+  POST_DOWNVOTE_REASONS_FETCH_REJECTED,
 } from '../reducers/post/types'
 
 const parseComments = (nodes: Map<number, IComment>) => {
@@ -83,7 +86,32 @@ export const getPost = (id: number | string) => async (
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: POST_FETCH_REJECTED, payload: error })
+    dispatch({ type: POST_FETCH_REJECTED, payload: error.message })
+  }
+}
+
+/**
+ * Gets post downvote reasons
+ */
+export const getDownvoteReasons = () => async (
+  dispatch,
+  getState: () => RootState
+) => {
+  const storeData = getState().post.downvoteReasons
+  if (storeData.state === FetchingState.Fetched) {
+    return Promise.resolve()
+  }
+
+  dispatch({ type: POST_DOWNVOTE_REASONS_FETCH })
+
+  try {
+    const data = await api.getDownvoteReasons()
+    dispatch({
+      type: POST_DOWNVOTE_REASONS_FETCH_FULFILLED,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({ type: POST_DOWNVOTE_REASONS_FETCH_REJECTED, payload: error })
   }
 }
 

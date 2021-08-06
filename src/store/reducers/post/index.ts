@@ -5,13 +5,16 @@ import {
   COMPANY_FETCH,
   COMPANY_FETCH_FULFILLED,
   COMPANY_FETCH_REJECTED,
+  POST_DOWNVOTE_REASONS_FETCH,
+  POST_DOWNVOTE_REASONS_FETCH_FULFILLED,
+  POST_DOWNVOTE_REASONS_FETCH_REJECTED,
   POST_FETCH,
   POST_FETCH_FULFILLED,
   POST_FETCH_REJECTED,
   SET_POST_COMMENT_SIZE,
   State,
 } from './types'
-import { FetchingState } from 'src/interfaces'
+import { DownvoteReasons, FetchingState } from 'src/interfaces'
 
 const initialData = {
   data: null,
@@ -30,6 +33,7 @@ const initialState: State = {
   post: initialData,
   comments: initialCommentsData,
   company: initialData,
+  downvoteReasons: initialData,
 }
 
 export default (storeState = initialState, { type, payload }): State => {
@@ -71,7 +75,7 @@ export default (storeState = initialState, { type, payload }): State => {
         },
         comments: initialCommentsData,
       }
-    
+
     case SET_POST_COMMENT_SIZE: {
       storeState.comments.sizesMap[payload.id] = payload.size
       return storeState
@@ -142,6 +146,37 @@ export default (storeState = initialState, { type, payload }): State => {
           state: FetchingState.Error,
           fetchError: payload,
           data: null,
+        },
+      }
+
+    case POST_DOWNVOTE_REASONS_FETCH:
+      return {
+        ...storeState,
+        downvoteReasons: {
+          state: FetchingState.Fetching,
+          ...initialData,
+        },
+      }
+
+    case POST_DOWNVOTE_REASONS_FETCH_FULFILLED:
+      return {
+        ...storeState,
+        downvoteReasons: {
+          state: FetchingState.Fetched,
+          fetchError: null,
+          data: Object.values((payload as DownvoteReasons).data).sort(
+            (a, b) => a.order - b.order
+          ),
+        },
+      }
+
+    case POST_DOWNVOTE_REASONS_FETCH_REJECTED:
+      return {
+        ...storeState,
+        downvoteReasons: {
+          state: FetchingState.Error,
+          fetchError: payload,
+          data: initialData.data,
         },
       }
 

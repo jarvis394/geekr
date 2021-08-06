@@ -25,6 +25,7 @@ import useAutoChangeTheme from 'src/hooks/useAutoChangeTheme'
 import SideNavigationDrawer from './blocks/SideNavigationDrawer'
 import useUserDataFetch from 'src/hooks/useUserDataFetch'
 import UpdateNotification from 'src/components/blocks/UpdateNotification'
+import useGetDownvoteReasons from 'src/hooks/useGetDownvoteReasons'
 
 interface StyleProps {
   theme: Theme
@@ -137,6 +138,7 @@ const App = () => {
   useAutoChangeTheme()
   useAnalytics()
   useUserDataFetch()
+  useGetDownvoteReasons()
 
   // Set root classes
   document.body.className = classes.body

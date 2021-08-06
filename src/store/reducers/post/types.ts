@@ -1,4 +1,5 @@
-import { Comment, Comments, Company, FetchingState, Post } from 'src/interfaces'
+import { Comment, Comments, Company, DownvoteReasons, FetchingState, Post } from 'src/interfaces'
+import { DownvoteReason } from 'src/interfaces/DownvoteReasons'
 
 export const PREFIX = 'POST_'
 export const POST_FETCH = PREFIX + 'FETCH'
@@ -11,6 +12,9 @@ export const SET_POST_COMMENT_SIZE = 'SET_POST_COMMENT_SIZE'
 export const COMPANY_FETCH = PREFIX + 'COMPANY_FETCH'
 export const COMPANY_FETCH_FULFILLED = COMPANY_FETCH + '_FULFILLED'
 export const COMPANY_FETCH_REJECTED = COMPANY_FETCH + '_REJECTED'
+export const POST_DOWNVOTE_REASONS_FETCH = PREFIX + 'POST_DOWNVOTE_REASONS_FETCH'
+export const POST_DOWNVOTE_REASONS_FETCH_FULFILLED = POST_DOWNVOTE_REASONS_FETCH + '_FULFILLED'
+export const POST_DOWNVOTE_REASONS_FETCH_REJECTED = POST_DOWNVOTE_REASONS_FETCH + '_REJECTED'
 export interface State {
   comments: {
     fetchedData: Comments
@@ -26,6 +30,11 @@ export interface State {
   }
   company: {
     data: Company
+    state: FetchingState
+    fetchError: string
+  }
+  downvoteReasons: {
+    data: DownvoteReason[]
     state: FetchingState
     fetchError: string
   }

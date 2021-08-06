@@ -10,14 +10,17 @@ import ThumbDownAltRoundedIcon from '@material-ui/icons/ThumbDownAltRounded'
 import ThumbUpAltRoundedIcon from '@material-ui/icons/ThumbUpAltRounded'
 import { Icon28ShareOutline as ShareIcon } from '@vkontakte/icons'
 import formatNumber from 'src/utils/formatNumber'
-import { Post } from 'src/interfaces'
+import { FetchingState, Post } from 'src/interfaces'
 import {
   Button,
   ButtonBase,
   CircularProgress,
   Fade,
   fade,
+  FormControlLabel,
   IconButton,
+  Radio,
+  RadioGroup,
   Theme,
   Tooltip,
   Typography,
@@ -72,8 +75,12 @@ const useDesktopStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     padding: 12,
   },
-  scoreActiveIcon: {
+  scoreUpActive: {
     color: theme.palette.success.main + ' !important',
+    padding: 12,
+  },
+  scoreDownActive: {
+    color: theme.palette.error.main + ' !important',
     padding: 12,
   },
   shareButton: {
@@ -164,6 +171,15 @@ const useStyles = makeStyles((theme) => ({
     height: 48,
     marginTop: theme.spacing(1),
     color: theme.palette.text.secondary,
+  },
+  confirmDownvoteButton: {
+    height: 40,
+    marginTop: theme.spacing(2),
+    borderRadius: 8,
+    textTransform: 'none',
+    fontFamily: 'Google Sans',
+    fontSize: 15,
+    fontWeight: 500,
   },
   scoreDrawerText: {
     fontFamily: 'Google Sans',
@@ -336,15 +352,25 @@ const ViewsCard: React.FC<{
 }
 const ScoreCard: React.FC<{
   post: Post
-  onClick: (d: 'down' | 'up') => void
+  onClick: (d: 'down' | 'up', reason?: string) => void
   isFetchingScoreResponse: boolean
   voteState: {
     canVote: Post['relatedData']['canVote']
     vote: Post['relatedData']['vote']
     voteByDefault: boolean
   }
-}> = ({ post, onClick, isFetchingScoreResponse, voteState }) => {
-  const [isScoreCardDrawerOpen, setScoreCardDrawerOpen] = useState(false)
+  setDownvoteReasonsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
+  isScoreCardDrawerOpen: boolean
+  setScoreCardDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
+}> = ({
+  post,
+  onClick,
+  isFetchingScoreResponse,
+  voteState,
+  setDownvoteReasonsDrawerOpen,
+  isScoreCardDrawerOpen,
+  setScoreCardDrawerOpen,
+}) => {
   const { total, negative, positive, score } = getScoreTotal({
     post,
     voteState,
@@ -354,7 +380,8 @@ const ScoreCard: React.FC<{
   const authorizedRequestData = useSelector(
     (store) => store.auth.authorizedRequestData
   )
-  const shouldDisableButtons = !authorizedRequestData || isFetchingScoreResponse
+  const shouldDisableButtons =
+    !authorizedRequestData || isFetchingScoreResponse || !voteState.canVote
   const disableUpButton = voteState.vote.value === -1
   const disableDownButton = voteState.vote.value === 1
 
@@ -362,8 +389,17 @@ const ScoreCard: React.FC<{
     voteState.canVote && onClick('up')
   }
   const handleScoreButtonDownClick = () => {
-    voteState.canVote && onClick('down')
+    if (voteState.canVote) {
+      setDownvoteReasonsDrawerOpen(true)
+      setScoreCardDrawerOpen(false)
+    }
   }
+
+  React.useEffect(() => {
+    if (voteState.vote.value === -1 && !isFetchingScoreResponse) {
+      setDownvoteReasonsDrawerOpen(false)
+    }
+  }, [isFetchingScoreResponse])
 
   return (
     <>
@@ -378,6 +414,7 @@ const ScoreCard: React.FC<{
         isOpen={isScoreCardDrawerOpen}
         setOpen={setScoreCardDrawerOpen}
         headerText={'Голоса'}
+        hideOnDesktop
       >
         <Typography className={classes.scoreDrawerText}>
           Всего голосов: {total}
@@ -461,6 +498,13 @@ const Statistics = ({ post }: { post: Post }) => {
   const { enqueueSnackbar } = useSnackbar()
   const { id, titleHtml: title, statistics } = post
   const { commentsCount, readingCount } = statistics
+  const [isScoreCardDrawerOpen, setScoreCardDrawerOpen] = useState(false)
+  const [isDownvoteReasonsDrawerOpen, setDownvoteReasonsDrawerOpen] = useState(
+    false
+  )
+  const [currentDownvoteReason, setCurrentDownvoteReason] = useState<string>(
+    '1'
+  )
   const authData = useSelector((store) => store.auth.authData.data)
   const authorizedRequestData = useSelector(
     (store) => store.auth.authorizedRequestData
@@ -494,6 +538,12 @@ const Statistics = ({ post }: { post: Post }) => {
     !authorizedRequestData || isFetchingScoreResponse || !voteState.canVote
   const isScoreUpButtonDisabled = voteState.vote.value === -1
   const isScoreDownButtonDisabled = voteState.vote.value === 1
+  const downvoteReasonsFetchState = useSelector(
+    (store) => store.post.downvoteReasons.state
+  )
+  const downvoteReasons = useSelector(
+    (store) => store.post.downvoteReasons.data
+  )
   const share = () => {
     const shareData = {
       title,
@@ -521,7 +571,6 @@ const Statistics = ({ post }: { post: Post }) => {
       })
       if (response.ok) {
         setBookmarkState((prev) => !prev)
-        setIsFetchingBookmarkResponse(false)
       } else {
         enqueueSnackbar('Произошла ошибка', {
           variant: 'error',
@@ -529,6 +578,7 @@ const Statistics = ({ post }: { post: Post }) => {
         })
         console.error('Error in handleFavoriteClick:', response)
       }
+      setIsFetchingBookmarkResponse(false)
     } else {
       enqueueSnackbar('Нужна авторизация', {
         variant: 'error',
@@ -537,7 +587,7 @@ const Statistics = ({ post }: { post: Post }) => {
     }
   }
 
-  const handleScoreClick = async (mode: 'up' | 'down') => {
+  const handleScoreClick = async (mode: 'up' | 'down', reason?: string) => {
     if (isFetchingScoreResponse) return
     if (authData) {
       setIsFetchingScoreResponse(true)
@@ -545,6 +595,7 @@ const Statistics = ({ post }: { post: Post }) => {
         mode,
         authData: authorizedRequestData,
         id: post.id,
+        reason,
       })
       if (response?.score) {
         setVoteState({
@@ -552,7 +603,6 @@ const Statistics = ({ post }: { post: Post }) => {
           canVote: response.canVote,
           voteByDefault: false,
         })
-        setIsFetchingScoreResponse(false)
       } else if (
         ((response as unknown) as APIError)?.additional[0] ===
         'POST_VOTE_DUPLICATE'
@@ -568,12 +618,33 @@ const Statistics = ({ post }: { post: Post }) => {
         })
         console.error('Error in handleScoreClick:', response)
       }
+      setIsFetchingScoreResponse(false)
     } else {
       enqueueSnackbar('Нужна авторизация', {
         variant: 'error',
         autoHideDuration: 4000,
       })
     }
+  }
+
+  const handleDownvoteReasonChange = (
+    _event: React.ChangeEvent<HTMLInputElement>,
+    value: string
+  ) => {
+    setCurrentDownvoteReason(value)
+  }
+  const handleConfirmDownvoteButtonClick = () => {
+    if (!voteState.canVote) return
+    handleScoreClick('down', currentDownvoteReason)
+  }
+  const handleScoreButtonDownClick = () => {
+    if (voteState.canVote) {
+      setDownvoteReasonsDrawerOpen(true)
+      setScoreCardDrawerOpen(false)
+    }
+  }
+  const handleScoreButtonUpClick = () => {
+    voteState.canVote && handleScoreClick('up')
   }
 
   return (
@@ -585,10 +656,10 @@ const Statistics = ({ post }: { post: Post }) => {
             <IconButton
               className={
                 classesDesktop[
-                  isScoreDownButtonDisabled ? 'scoreActiveIcon' : 'grayIcon'
+                  isScoreDownButtonDisabled ? 'scoreUpActive' : 'grayIcon'
                 ]
               }
-              onClick={() => handleScoreClick('up')}
+              onClick={handleScoreButtonUpClick}
               disabled={shouldDisableScoreButtons || isScoreUpButtonDisabled}
             >
               <Icon16Up width={24} height={24} />
@@ -611,10 +682,10 @@ const Statistics = ({ post }: { post: Post }) => {
             <IconButton
               className={
                 classesDesktop[
-                  isScoreUpButtonDisabled ? 'scoreActiveIcon' : 'grayIcon'
+                  isScoreUpButtonDisabled ? 'scoreDownActive' : 'grayIcon'
                 ]
               }
-              onClick={() => handleScoreClick('down')}
+              onClick={handleScoreButtonDownClick}
               disabled={shouldDisableScoreButtons || isScoreDownButtonDisabled}
             >
               <Icon16Down width={24} height={24} />
@@ -679,6 +750,9 @@ const Statistics = ({ post }: { post: Post }) => {
             onClick={handleScoreClick}
             isFetchingScoreResponse={isFetchingScoreResponse}
             voteState={voteState}
+            setDownvoteReasonsDrawerOpen={setDownvoteReasonsDrawerOpen}
+            isScoreCardDrawerOpen={isScoreCardDrawerOpen}
+            setScoreCardDrawerOpen={setScoreCardDrawerOpen}
           />
           <FavoritesCard
             post={post}
@@ -697,6 +771,46 @@ const Statistics = ({ post }: { post: Post }) => {
           Поделиться
         </Button>
       </div>
+
+      <BottomDrawer
+        isOpen={isDownvoteReasonsDrawerOpen}
+        setOpen={setDownvoteReasonsDrawerOpen}
+        headerText={'Причина минуса'}
+      >
+        <Typography gutterBottom>
+          Укажите причину минуса, чтобы автор поработал над ошибками
+        </Typography>
+        {downvoteReasonsFetchState === FetchingState.Fetched && (
+          <RadioGroup
+            aria-label="downvote-reasons"
+            name="downvote-reasons"
+            value={currentDownvoteReason}
+            onChange={handleDownvoteReasonChange}
+          >
+            {downvoteReasons.map((e) => (
+              <FormControlLabel
+                value={e.id}
+                key={e.id}
+                control={
+                  <Radio disabled={shouldDisableScoreButtons} color="primary" />
+                }
+                label={e.title}
+              />
+            ))}
+          </RadioGroup>
+        )}
+        <Button
+          color="primary"
+          disableElevation
+          className={classes.confirmDownvoteButton}
+          fullWidth
+          disabled={shouldDisableScoreButtons}
+          variant="contained"
+          onClick={handleConfirmDownvoteButtonClick}
+        >
+          Отправить анонимно
+        </Button>
+      </BottomDrawer>
     </>
   )
 }

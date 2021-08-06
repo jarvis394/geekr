@@ -13,12 +13,13 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     background: theme.palette.background.paper,
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1.5),
     padding: theme.spacing(1.8, 2),
     borderRadius: 0,
     [theme.breakpoints.up(MIN_WIDTH)]: {
       display: 'flex',
       borderRadius: 8,
+      marginTop: theme.spacing(2),
     },
   },
   flexRow: {
