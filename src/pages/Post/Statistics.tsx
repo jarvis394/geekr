@@ -550,14 +550,15 @@ const Statistics = ({ post }: { post: Post }) => {
       url: process.env.PUBLIC_URL + '/post/' + id,
     }
 
-    try {
-      navigator.share(shareData)
-    } catch (e) {
-      enqueueSnackbar('Не удалось поделиться статьей', {
-        variant: 'error',
-        autoHideDuration: 3000,
-      })
-    }
+    navigator.share(shareData).catch((e) => {
+      if (e.message.startsWith('Internal error:')) {
+        console.log('On share in Statistics:', e)
+        enqueueSnackbar('Не удалось поделиться статьей', {
+          variant: 'error',
+          autoHideDuration: 3000,
+        })
+      }
+    })
   }
 
   const handleFavoriteClick = async () => {

@@ -23,7 +23,7 @@ import LazyLoadImage from './LazyLoadImage'
 import { useSelector } from 'src/hooks'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
 import { Button, Chip, fade, Theme } from '@material-ui/core'
-import { POST_LABELS as postLabels } from 'src/config/constants'
+import { POST_LABELS } from 'src/config/constants'
 import getPostLink from 'src/utils/getPostLink'
 import VisibilitySensor from 'react-visibility-sensor'
 import { useLocation, useHistory } from 'react-router-dom'
@@ -518,16 +518,19 @@ export const PostItem = ({
 
               {/** Post labels */}
               <div className={classes.labelsContainer}>
-                {post.postLabels.map((e, i) => (
-                  <Chip
-                    label={postLabels[e.type].text}
-                    variant="outlined"
-                    color="primary"
-                    size="small"
-                    key={i}
-                    style={{ marginRight: 8, marginTop: 8 }}
-                  />
-                ))}
+                {post.postLabels.map(
+                  (e, i) =>
+                    POST_LABELS[e.type] && (
+                      <Chip
+                        label={POST_LABELS[e.type]?.text}
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        key={i}
+                        style={{ marginRight: 8, marginTop: 8 }}
+                      />
+                    )
+                )}
               </div>
 
               {isExtended && (
