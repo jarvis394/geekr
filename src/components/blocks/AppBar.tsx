@@ -20,8 +20,15 @@ import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
 import { useRoute, useSelector } from 'src/hooks'
 import { FetchingState } from 'src/interfaces'
-import { CircularProgress, fade, Theme } from '@material-ui/core'
+import {
+  CircularProgress,
+  fade,
+  Theme,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core'
 import useAppBarScrollTrigger from 'src/hooks/useAppBarScrollTrigger'
+import UserMenu from './UserMenu'
 
 interface StyleProps {
   isTransformed: boolean
@@ -105,6 +112,9 @@ const AppBarComponent = () => {
   const shouldChangeColors = route.shouldAppBarChangeColors
   const appBarColor = route.appBarColor
   const isHidden = !route.shouldShowAppBar
+  const theme = useTheme()
+  const appHasDrawer = useMediaQuery(theme.breakpoints.up(MIDDLE_WIDTH))
+  const [isUserMenuOpen, setUserMenuOpen] = React.useState(false)
   const classes = useStyles({
     isTransformed: trigger,
     appBarColor,
@@ -128,10 +138,21 @@ const AppBarComponent = () => {
       history.push(mode ? `${mode.to}/p/1` : '/')
     }
   }
+  const goSettings = () =>
+    history.push('/settings', {
+      from: location.pathname + location.search,
+      scroll: window.pageYOffset,
+    })
+  const goAuth = () =>
+    history.push('/auth', {
+      from: location.pathname + location.search,
+      scroll: window.pageYOffset,
+    })
+  const openUserMenu = () => setUserMenuOpen(true)
 
   useEffect(() => {
-    // noop
-  }, [shouldChangeColors, isHidden, route])
+    if (appHasDrawer && isUserMenuOpen) setUserMenuOpen(false)
+  }, [shouldChangeColors, isHidden, route, appHasDrawer])
 
   // Do not render the AppBar if it is hidden by the route
   if (isHidden) return null
@@ -143,7 +164,7 @@ const AppBarComponent = () => {
           <div className={classes.content}>
             <div className={classes.headerTitleWrapper}>
               <Typography
-                onClick={() => goHome()}
+                onClick={goHome}
                 variant="h6"
                 className={classes.headerTitle}
               >
@@ -157,14 +178,7 @@ const AppBarComponent = () => {
                 <WifiOffRoundedIcon className={classes.offline} />
               </Offline>
             </div>
-            <IconButton
-              onClick={() =>
-                history.push('/settings', {
-                  from: location.pathname + location.search,
-                  scroll: window.pageYOffset,
-                })
-              }
-            >
+            <IconButton onClick={goSettings}>
               <Icon28SettingsOutline width={24} height={24} />
             </IconButton>
             {shouldShowLoadingSpinner && (
@@ -176,32 +190,23 @@ const AppBarComponent = () => {
               </IconButton>
             )}
             {!shouldShowUser && !shouldShowLoadingSpinner && (
-              <IconButton
-                onClick={() =>
-                  history.push('/auth', {
-                    from: location.pathname + location.search,
-                    scroll: window.pageYOffset,
-                  })
-                }
-              >
+              <IconButton onClick={goAuth}>
                 <Icon24UserOutline width={24} height={24} />
               </IconButton>
             )}
             {shouldShowUser && (
-              <IconButton
-                onClick={() =>
-                  history.push('/user/' + userData.alias, {
-                    from: location.pathname + location.search,
-                    scroll: window.pageYOffset,
-                  })
-                }
-              >
+              <IconButton onClick={openUserMenu}>
                 <Avatar className={classes.avatar} src={userData.avatarUrl} />
               </IconButton>
             )}
           </div>
         </Toolbar>
       </AppBar>
+      <UserMenu
+        variant="dialog"
+        isOpen={isUserMenuOpen}
+        setOpen={setUserMenuOpen}
+      />
     </>
   )
 }

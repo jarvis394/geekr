@@ -36,8 +36,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     background: theme.palette.background.paper,
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      borderRadius: 8
-    }
+      borderRadius: 8,
+    },
   },
   grid: {
     width: '100%',
@@ -73,10 +73,19 @@ const Login = () => {
   const authDataFetchingState = useSelector(
     (store) => store.auth.authData.state
   )
-  const authDataFetchingError = useSelector(
+  const authDataFetchError = useSelector(
     (store) => store.auth.authData.fetchError
   )
+  const csrfTokenFetchingState = useSelector(
+    (store) => store.auth.csrfToken.state
+  )
+  const csrfTokenFetchError = useSelector(
+    (store) => store.auth.csrfToken.fetchError
+  )
   const csrfToken = useSelector((store) => store.auth.csrfToken.data)
+  const shouldDisableLoginButton =
+    authDataFetchingState === FetchingState.Fetching ||
+    csrfTokenFetchingState === FetchingState.Fetching
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -99,22 +108,27 @@ const Login = () => {
       })
       history.push('/')
     } else if (authDataFetchingState === FetchingState.Error) {
-      if (authDataFetchingError.isAuthError) {
+      if (authDataFetchError.isAuthError) {
         enqueueSnackbar('Неверная почта или пароль', {
           variant: 'error',
           autoHideDuration: 4000,
         })
-      } else if (authDataFetchingError.isCaptchaError) {
+      } else if (authDataFetchError.isCaptchaError) {
         enqueueSnackbar('Введите капчу', {
           variant: 'error',
           autoHideDuration: 4000,
         })
-      } else if (authDataFetchingError.isUnknownAuthError) {
-        enqueueSnackbar(authDataFetchingError.message, {
+      } else if (authDataFetchError.isUnknownAuthError) {
+        enqueueSnackbar(authDataFetchError.message, {
           variant: 'error',
           autoHideDuration: 4000,
         })
       }
+    } else if (csrfTokenFetchingState === FetchingState.Error) {
+      enqueueSnackbar('Не удалось получить CSRF токен', {
+        variant: 'error',
+        autoHideDuration: 4000,
+      })
     }
   }, [authData, csrfToken, history, authDataFetchingState])
 
@@ -174,6 +188,7 @@ const Login = () => {
                 variant="contained"
                 color="primary"
                 type="submit"
+                disabled={shouldDisableLoginButton}
               >
                 Войти
               </Button>

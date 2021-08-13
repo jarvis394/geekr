@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   AppBar,
@@ -178,7 +178,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     padding: theme.spacing(0, 2),
-    width: '100%'
+    width: '100%',
   },
   backButtonDesktopText: {
     marginLeft: theme.spacing(2),
@@ -200,9 +200,10 @@ interface Props {
   onBackClick: (
     backLinkFunction: (history: History<unknown>) => void
   ) => unknown
+  scrollElement?: HTMLElement
 }
 
-const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
+const ShrinkedContentUnmemoized = ({ isShrinked, shrinkedHeaderText }) => {
   const classes = useAppBarStyles({})
   return (
     <Fade in={isShrinked} unmountOnExit mountOnEnter>
@@ -212,6 +213,7 @@ const ShrinkedContent = ({ isShrinked, shrinkedHeaderText }) => {
     </Fade>
   )
 }
+const ShrinkedContent = React.memo(ShrinkedContentUnmemoized)
 
 const backLinkFunction = (history: History<unknown>) => {
   const goHome = () => history.push(getCachedMode().to + '/p/1')
@@ -220,7 +222,7 @@ const backLinkFunction = (history: History<unknown>) => {
   } else goHome()
 }
 
-const UnshrinkedContent = ({
+const UnshrinkedContentUnmemoized = ({
   headerText,
   onBackClick,
   isShrinked,
@@ -252,8 +254,9 @@ const UnshrinkedContent = ({
     </Fade>
   )
 }
+const UnshrinkedContent = React.memo(UnshrinkedContentUnmemoized)
 
-const ToolbarIconsWrapper = ({ isShrinked, children }) => {
+const ToolbarIconsWrapperUnmemoized = ({ isShrinked, children }) => {
   const classes = useAppBarStyles({})
   return (
     <Fade in={!isShrinked}>
@@ -261,6 +264,7 @@ const ToolbarIconsWrapper = ({ isShrinked, children }) => {
     </Fade>
   )
 }
+const ToolbarIconsWrapper = React.memo(ToolbarIconsWrapperUnmemoized)
 
 const NavBarUnmemoized = ({
   headerText,
@@ -271,6 +275,7 @@ const NavBarUnmemoized = ({
   onBackClick,
   disableShrinking,
   toolbarIcons,
+  scrollElement,
 }: Partial<Props>) => {
   const isShrinkedTrigger = useScrollTrigger({
     threshold: 48,
@@ -288,25 +293,31 @@ const NavBarUnmemoized = ({
     shrinkedBackgroundColor,
     disableShrinking,
   })
-  const scrollCallback = () =>
-    requestAnimationFrame(() => {
-      const position = window.pageYOffset
-      const windowHeight =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight
-      const newScrollProgress = Math.min(
-        position / (windowHeight - (isMobile() ? chromeAddressBarHeight : 0)),
-        1
-      )
-      setScrollProgress(newScrollProgress)
-    })
+  const scrollCallback = useCallback(
+    () =>
+      requestAnimationFrame(() => {
+        const getElementScroll = (el: HTMLElement) => {
+          const docElement = document.documentElement
+          const docBody = document.body
+          const element = el || docElement || docBody
+          return (
+            (docElement.scrollTop || docBody.scrollTop) /
+            (element.offsetHeight - docElement.clientHeight)
+          )
+        }
+        const newScrollProgress = getElementScroll(scrollElement)
+        setScrollProgress(newScrollProgress)
+      }),
+    [scrollElement]
+  )
 
   useEffect(() => {
     if (!hidePositionBar && !disableShrinking) {
-      window.addEventListener('scroll', scrollCallback)
+      // passive: true enhances scrolling experience
+      window.addEventListener('scroll', scrollCallback, { passive: true })
       return () => window.removeEventListener('scroll', scrollCallback)
     } else return () => null
-  }, [hidePositionBar, disableShrinking])
+  }, [hidePositionBar, disableShrinking, scrollElement])
 
   // Remove fade effect on a title if it was set by default
   // If the title is being fetched (ex. Post),
@@ -328,7 +339,9 @@ const NavBarUnmemoized = ({
       >
         <div className={classes.backButtonDesktopWrapper}>
           <BackRoundedIcon />
-          <Typography className={classes.backButtonDesktopText}>Назад</Typography>
+          <Typography className={classes.backButtonDesktopText}>
+            Назад
+          </Typography>
         </div>
       </div>
       <AppBar className={classes.header} elevation={0}>
@@ -357,7 +370,7 @@ const NavBarUnmemoized = ({
 }
 const NavBar = React.memo(NavBarUnmemoized)
 
-const OutsidePage = ({ children, ...props }: Partial<Props>) => {
+const OutsidePage: React.FC<Partial<Props>> = ({ children, ...props }) => {
   const classes = useStyles()
 
   return (

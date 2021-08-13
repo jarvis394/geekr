@@ -1,4 +1,4 @@
-import { GET_ME, GET_AUTH_DATA, GET_CSRF_TOKEN } from '../reducers/auth/types'
+import { GET_ME, GET_AUTH_DATA, GET_CSRF_TOKEN, USER_LOGOUT } from '../reducers/auth/types'
 import * as api from 'src/api/auth'
 import AccountAuthData from 'src/interfaces/AccountAuthData'
 import { AuthorizedRequestParams } from 'src/interfaces'
@@ -63,4 +63,8 @@ export const getMe = (params: AuthorizedRequestParams) => async (dispatch) => {
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: error.message })
   }
+}
+
+export const userLogout = () => async (dispatch) => {
+  dispatch({ type: USER_LOGOUT })
 }

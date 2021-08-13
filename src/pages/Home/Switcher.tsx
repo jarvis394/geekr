@@ -157,7 +157,7 @@ const TabGroupUnmemoized: React.FC<TabGroupProps> = ({
       root: {
         textTransform: 'none',
         minWidth: desktop ? 122 : 72,
-        minHeight: desktop ? 40 : 36,
+        minHeight: desktop ? 40 : 38,
         flexGrow: 1,
         fontSize: 16,
         padding: 0,

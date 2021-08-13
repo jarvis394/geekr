@@ -2,7 +2,7 @@ import { AUTH_DATA_KEY, CSRF_TOKEN_KEY } from 'src/config/constants'
 import { FetchingState } from 'src/interfaces'
 import AuthData from 'src/interfaces/AuthData'
 import safeJSONParse from 'src/utils/safeJSONParse'
-import { GET_AUTH_DATA, GET_CSRF_TOKEN, GET_ME, State } from './types'
+import { GET_AUTH_DATA, GET_CSRF_TOKEN, GET_ME, State, USER_LOGOUT } from './types'
 
 const cachedAuthData = safeJSONParse<AuthData, null>(localStorage.getItem(AUTH_DATA_KEY), null)
 const cachedCSRFToken = localStorage.getItem(CSRF_TOKEN_KEY)
@@ -133,6 +133,25 @@ export default (reducerState = initialState, { type, payload }): State => {
           data: null,
         },
       }   
+    }
+
+    case USER_LOGOUT: {
+      localStorage.removeItem(AUTH_DATA_KEY)
+      localStorage.removeItem(CSRF_TOKEN_KEY)
+      return {
+        authData: {
+          data: null,
+          state: FetchingState.Idle,
+          fetchError: null,
+        },
+        csrfToken: {  
+          data: null,
+          state: FetchingState.Idle,
+          fetchError: null,
+        },
+        me: initialState.me,
+        authorizedRequestData: null
+      }
     }
 
     default:

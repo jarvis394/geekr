@@ -1,10 +1,11 @@
-import { AuthorizedRequestParams, FetchingState, UserExtended } from 'src/interfaces'
+import { AuthorizedRequestParams, FetchingState, Me } from 'src/interfaces'
 import AuthData from 'src/interfaces/AuthData'
 
 export const AUTH_PREFIX = 'AUTH_'
 export const GET_AUTH_DATA = AUTH_PREFIX + 'GET_AUTH_DATA'
 export const GET_CSRF_TOKEN = AUTH_PREFIX + 'GET_CSRF_TOKEN'
 export const GET_ME = AUTH_PREFIX + 'GET_ME'
+export const USER_LOGOUT = 'USER_LOGOUT'
 
 export interface State {
   authData: {
@@ -26,7 +27,7 @@ export interface State {
   me: {
     state: FetchingState
     fetchError: string
-    data: UserExtended
+    data: Me
   }
   authorizedRequestData: AuthorizedRequestParams | null
 }

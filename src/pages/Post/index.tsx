@@ -236,6 +236,7 @@ const Post = () => {
   const { id: strigifiedId, alias: companyAlias } = useParams<Params>()
   const id = Number(strigifiedId)
   const classes = useStyles()
+  const contentsRef = React.useRef<HTMLDivElement>()
   const isTranslated = post && !!post.translationData
   const shouldShowContents = post && (companyAlias ? post && company : post)
   const shouldShowCompanyInfo = !!company
@@ -368,9 +369,9 @@ const Post = () => {
   if (fetchError) return <ErrorComponent message={fetchError} />
   if (companyFetchError)
     console.error('Could not fetch company data:', companyFetchError)
-
+  
   return (
-    <OutsidePage headerText={post?.titleHtml}>
+    <OutsidePage hidePositionBar={!shouldShowContents} headerText={post?.titleHtml} scrollElement={contentsRef.current}>
       <MetaTags>
         <title>{(post ? post.titleHtml : 'Публикация') + ' | habra.'}</title>
         <meta name="twitter:card" content="summary_large_image" />
@@ -390,10 +391,10 @@ const Post = () => {
           name="twitter:description"
           content={post?.metadata.metaDescription}
         />
-        <meta itemProp="image" content={getPostSocialImage(post)} />
+        {/* <meta itemProp="image" content={getPostSocialImage(post)} />
         <meta property="og:image" content={getPostSocialImage(post)} />
         <meta property="vk:image" content={getPostSocialImage(post)} />
-        <meta name="twitter:image" content={getPostSocialImage(post)} />
+        <meta name="twitter:image" content={getPostSocialImage(post)} /> */}
         <meta property="og:type" content="article" />
         <meta
           property="og:url"
@@ -412,19 +413,13 @@ const Post = () => {
           {/** Company header */}
           <CompanyCard post={post} companyAlias={companyAlias} />
 
-          <div className={classes.content}>{contents}</div>
+          <div className={classes.content} ref={contentsRef}>{contents}</div>
 
           {/* Bottom bar with some article info */}
           {post && <Statistics post={post} />}
-
           {shouldShowCompanyInfo && <CompanyCardWithLinks post={post} />}
-
           <AuthorCard post={post} />
-
-          {/* Similar */}
           <SimilarPosts id={id} />
-
-          {/* Top day */}
           <TopDayPosts />
         </div>
       </MainBlock>

@@ -30,7 +30,7 @@ export const MAX_WIDTH = 1280
 /**
  * Negative threshold for VisibilitySensor in PostItem component
  */
-export const POST_ITEM_VISIBILITY_THRESHOLD = -1 * 250
+export const POST_ITEM_VISIBILITY_THRESHOLD = -1 * 500
 
 export const POST_IMAGE_HEIGHT = 212
 export const ADVERTS_BLOCK_HEIGHT = 128

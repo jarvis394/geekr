@@ -70,7 +70,7 @@ const useScrollTrigger = (options: Partial<Options> = {}) => {
     getTrigger = defaultTrigger,
     target = defaultTarget,
     threshold = defaultThreshold,
-    triggerValue = target.pageYOffset > threshold
+    triggerValue = target.pageYOffset > threshold,
   } = options
   const store: StoreRef = React.useRef({
     position: target.pageYOffset,
@@ -86,8 +86,10 @@ const useScrollTrigger = (options: Partial<Options> = {}) => {
       setTrigger(getTrigger(store, { target, trigger, threshold }))
     }
 
-    handleScroll() // Re-evaluate trigger when dependencies change
-    target.addEventListener('scroll', handleScroll)
+    // Re-evaluate trigger when dependencies change
+    handleScroll()
+    // passive: true enhances scrolling experience
+    target.addEventListener('scroll', handleScroll, { passive: true })
     return () => {
       target.removeEventListener('scroll', handleScroll)
     }
