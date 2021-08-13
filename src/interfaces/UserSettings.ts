@@ -43,6 +43,7 @@ export default interface UserSettings {
     isCompact: boolean
     hideMegaposts: boolean
     hideNewsBlock: boolean
+    disablePostImage: boolean
   }
   interfaceComments: {
     showThreads: boolean

@@ -4,6 +4,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { MIN_WIDTH, POST_IMAGE_HEIGHT } from 'src/config/constants'
+import { useSelector } from 'src/hooks'
+import { useTheme } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,8 +13,8 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.background.paper,
     borderRadius: 0,
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      borderRadius: 8
-    }
+      borderRadius: 8,
+    },
   },
   padding: {
     padding: theme.spacing(2),
@@ -29,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
 
 const PostSkeleton = () => {
   const classes = useStyles()
+  const disablePostImage = useSelector(
+    (store) => store.settings.interfaceFeed.disablePostImage
+  )
+  const theme = useTheme()
 
   return (
     <Paper elevation={0} className={classes.root}>
@@ -54,15 +60,21 @@ const PostSkeleton = () => {
             height={20}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Skeleton
-            variant="rect"
-            width="100%"
-            className={classes.skeletonImage}
-            height={POST_IMAGE_HEIGHT}
-          />
-        </Grid>
-        <Grid container className={classes.padding}>
+        {!disablePostImage && (
+          <Grid item xs={12}>
+            <Skeleton
+              variant="rect"
+              width="100%"
+              className={classes.skeletonImage}
+              height={POST_IMAGE_HEIGHT}
+            />
+          </Grid>
+        )}
+        <Grid
+          container
+          style={{ paddingTop: disablePostImage ? 0 : theme.spacing(2) }}
+          className={classes.padding}
+        >
           <Grid item xs={12}>
             <Skeleton
               variant="rect"

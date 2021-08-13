@@ -244,7 +244,7 @@ interface BottomRowItemType {
 export const PostItem = ({
   post,
   style,
-  hideImage = false,
+  hideImage: hideImageProp = false,
 }: {
   post?: Post
   style?: Record<string, unknown>
@@ -253,6 +253,10 @@ export const PostItem = ({
   const isExtended = useSelector(
     (store) => !store.settings.interfaceFeed.isCompact
   )
+  const disablePostImage = useSelector(
+    (store) => store.settings.interfaceFeed.disablePostImage
+  )
+  const hideImage = hideImageProp || disablePostImage
   const { enqueueSnackbar } = useSnackbar()
   const { titleHtml: unparsedTitle, statistics, postFirstImage, leadData } =
     post || {}
@@ -444,7 +448,7 @@ export const PostItem = ({
     )
   }
   const BottomRowItem = React.memo(BottomRowItemUnmemoized)
-
+  
   return (
     <VisibilitySensor
       partialVisibility

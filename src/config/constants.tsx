@@ -276,6 +276,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
     isCompact: true,
     hideMegaposts: false,
     hideNewsBlock: false,
+    disablePostImage: false,
   },
   interfaceComments: {
     showThreads: true,

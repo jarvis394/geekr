@@ -96,6 +96,18 @@ const Interface = () => {
             }
           />
           <SwitchButton
+            primary={'Убрать картинки в ленте'}
+            secondary={'В превью статьи не будет показана картинка'}
+            checked={userSettings.interfaceFeed.disablePostImage}
+            onChange={() =>
+              setInterfaceSettings(
+                'interfaceFeed',
+                'disablePostImage',
+                !userSettings.interfaceFeed.disablePostImage
+              )
+            }
+          />
+          <SwitchButton
             primary={'Скрыть мегапосты'}
             secondary={
               'На главной странице не будет отображаться блок с мегапостами'
