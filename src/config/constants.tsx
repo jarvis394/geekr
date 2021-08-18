@@ -191,6 +191,10 @@ export const HABR_LINKS_REPLACE_MAP = [
     regexp: /post\/?(.+)[/]?/,
     to: '/post/[0]',
   },
+  {
+    regexp: /news\/t\/?(.+)[/]?/,
+    to: '/post/[0]',
+  },
 ]
 
 export const READER_FONT_FAMILIES = ['Roboto', 'Segoe UI', 'Arial']

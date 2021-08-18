@@ -80,7 +80,7 @@ const UserAvatarAndLogin: React.FC<{ handleClose: () => void }> = ({
   return (
     <div className={classes.root}>
       <div className={classes.avatarAndLogin}>
-        <LinkToOutsidePage to={'/user/' + user?.alias} className={classes.link}>
+        <LinkToOutsidePage to={'/user/' + user?.alias} className={classes.link} onClick={handleClose}>
           <UserAvatar
             src={user?.avatarUrl}
             alias={user?.alias}

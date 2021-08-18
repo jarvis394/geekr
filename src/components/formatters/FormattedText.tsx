@@ -8,7 +8,7 @@ import {
   rgbToHex,
 } from '@material-ui/core/styles'
 import SyntaxHighlighter from 'react-syntax-highlighter'
-import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import { monokai as monokaiStyle } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import Spoiler from '../blocks/Spoiler'
 import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser'
 import LazyLoadImage from '../blocks/LazyLoadImage'
@@ -23,6 +23,7 @@ import { UserSettings } from 'src/interfaces'
 import formatLink from 'src/utils/formatLink'
 import { Link } from 'react-router-dom'
 import blend from 'src/utils/blendColors'
+import { Tooltip } from '@material-ui/core'
 
 interface IframeResizeData {
   type: string
@@ -56,22 +57,21 @@ const useStyles = makeStyles<
       textDecoration: 'underline',
     },
     '& h1+p, h2+p, h3+p, h4+p': {
-      marginTop: ({ oldHabrFormat: d }) =>
-        d ? 0 : theme.spacing(1.5),
+      marginTop: ({ oldHabrFormat: d }) => (d ? 0 : theme.spacing(1.5)),
     },
     '& p': {
       margin: 0,
       fontSize: ({ readerSettings }) => readerSettings.fontSize,
       fontFamily: ({ readerSettings }) => readerSettings.fontFamily,
     },
-    '& p+p': {
+    '& p+p, pre+p': {
       marginTop: ({ oldHabrFormat: d }) => (d ? 0 : theme.spacing(3)),
     },
     '& em': {
       color: blend(
         rgbToHex(theme.palette.primary.light),
         rgbToHex(theme.palette.text.primary),
-        0.5
+        0.9
       ),
     },
     '& code': {
@@ -126,8 +126,12 @@ const useStyles = makeStyles<
       margin: '12px 0',
       padding: '0 12px',
       display: 'block',
-      borderLeft: '2px solid ' + theme.palette.primary.light,
-      color: fade(theme.palette.text.primary, 0.9),
+      borderLeft: '4px solid ' + theme.palette.primary.light,
+      color: blend(
+        rgbToHex(theme.palette.primary.light),
+        rgbToHex(theme.palette.text.primary),
+        0.9
+      ),
       fontStyle: 'italic',
     },
     '& hr': {
@@ -163,7 +167,7 @@ const useStyles = makeStyles<
       color: blend(
         rgbToHex(theme.palette.primary.light),
         rgbToHex(theme.palette.text.primary),
-        0.5
+        0.9
       ),
       top: '-.5em',
     },
@@ -174,7 +178,7 @@ const useStyles = makeStyles<
   },
   syntaxHighlighter: {
     margin: 0,
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(3),
     display: 'block',
     tabSize: 4,
     overflow: 'auto',
@@ -229,6 +233,11 @@ const useStyles = makeStyles<
     minWidth: '100%',
     marginTop: theme.spacing(4),
   },
+  abbr: {
+    borderBottom: '1px dotted ' + fade(theme.palette.divider, 0.5),
+    cursor: 'help',
+    textDecoration: 'none',
+  }
 }))
 
 const FormattedText: React.FC<{
@@ -264,7 +273,7 @@ const FormattedText: React.FC<{
 
         return (
           <SyntaxHighlighter
-            style={style}
+            style={monokaiStyle}
             language={language}
             className={classes.syntaxHighlighter}
           >
@@ -368,6 +377,13 @@ const FormattedText: React.FC<{
               {domToReact(children, options)}
             </Link>
           )
+      }
+      if (name === 'abbr') {
+        return (
+          <Tooltip title={attribs.title} placement="bottom" className={classes.abbr}>
+            <span>{domToReact(children, options)}</span>
+          </Tooltip>
+        )
       }
     },
   }
