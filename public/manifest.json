@@ -21,8 +21,8 @@
   ],
   "start_url": "/top/daily/p/1",
   "display": "standalone",
-  "theme_color": "#2979ff",
+  "theme_color": "#1D76FE",
   "scope": "/",
-  "background_color": "#2979ff",
+  "background_color": "#1D76FE",
   "splash_pages": null
 }
