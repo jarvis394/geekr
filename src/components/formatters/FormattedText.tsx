@@ -17,13 +17,14 @@ import Iframe from 'react-iframe'
 import { Node as MathJaxNode } from '@nteract/mathjax'
 import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 import isDarkTheme from 'src/utils/isDarkTheme'
-import { APP_BAR_HEIGHT } from 'src/config/constants'
+import { APP_BAR_HEIGHT, MIN_WIDTH } from 'src/config/constants'
 import { useSelector } from 'src/hooks'
 import { UserSettings } from 'src/interfaces'
 import formatLink from 'src/utils/formatLink'
 import { Link } from 'react-router-dom'
 import blend from 'src/utils/blendColors'
 import { Tooltip } from '@material-ui/core'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 interface IframeResizeData {
   type: string
@@ -36,6 +37,7 @@ const useStyles = makeStyles<
   {
     oldHabrFormat: boolean
     readerSettings: UserSettings['readerSettings']
+    inverseColors: boolean
   }
 >((theme) => ({
   img: {
@@ -75,7 +77,10 @@ const useStyles = makeStyles<
       ),
     },
     '& code': {
-      background: getInvertedContrastPaperColor(theme),
+      background: ({ inverseColors }) =>
+        inverseColors
+          ? getContrastPaperColor(theme)
+          : getInvertedContrastPaperColor(theme),
       padding: theme.spacing(0.25),
       borderRadius: theme.shape.borderRadius,
       wordBreak: 'break-word',
@@ -185,7 +190,6 @@ const useStyles = makeStyles<
     border: '1px solid ' + theme.palette.divider,
     borderRadius: 4,
     padding: theme.spacing(2) + 'px !important',
-    background: getInvertedContrastPaperColor(theme) + ' !important',
     color: theme.palette.text.primary + ' !important',
     boxSizing: 'border-box',
     '-moz-tab-size': 4,
@@ -193,17 +197,26 @@ const useStyles = makeStyles<
     wordBreak: 'normal',
     wordSpacing: 'normal',
     wordWrap: 'normal',
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      backgroundColor: getContrastPaperColor(theme) + ' !important',
+    },
+    [theme.breakpoints.down(MIN_WIDTH)]: {
+      backgroundColor: ({ inverseColors }) =>
+        (inverseColors
+          ? getContrastPaperColor(theme)
+          : getInvertedContrastPaperColor(theme)) + ' !important',
+    },
     '& code': {
-      // whiteSpace: 'pre-wrap !important',
       whiteSpace: 'pre',
       wordBreak: 'normal',
       wordSpacing: 'normal',
       wordWrap: 'normal',
-      background: 'none',
+      background: 'none !important',
       padding: 0,
       '-moz-tab-size': 4,
       tabSize: 4,
       fontSize: 14,
+      fontFamily: 'Menlo,Monaco,Consolas,Courier New,Courier,monospace',
     },
     '&::-webkit-scrollbar': {
       height: 12,
@@ -237,21 +250,23 @@ const useStyles = makeStyles<
     borderBottom: '1px dotted ' + fade(theme.palette.divider, 0.5),
     cursor: 'help',
     textDecoration: 'none',
-  }
+  },
 }))
 
 const FormattedText: React.FC<{
   children: string
   oldHabrFormat?: boolean
   className?: string
+  inverseColors?: boolean
 }> = ({
   children: componentChildren,
   className = '',
   oldHabrFormat = false,
+  inverseColors = false,
   ...props
 }) => {
   const readerSettings = useSelector((store) => store.settings.readerSettings)
-  const classes = useStyles({ oldHabrFormat, readerSettings })
+  const classes = useStyles({ oldHabrFormat, readerSettings, inverseColors })
   const [iframeHeights, setIframeHeights] = React.useState<
     Record<string, number>
   >({})
@@ -380,7 +395,11 @@ const FormattedText: React.FC<{
       }
       if (name === 'abbr') {
         return (
-          <Tooltip title={attribs.title} placement="bottom" className={classes.abbr}>
+          <Tooltip
+            title={attribs.title}
+            placement="bottom"
+            className={classes.abbr}
+          >
             <span>{domToReact(children, options)}</span>
           </Tooltip>
         )

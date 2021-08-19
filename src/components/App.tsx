@@ -8,6 +8,7 @@ import {
   APP_BAR_HEIGHT,
   BOTTOM_BAR_HEIGHT,
   chromeAddressBarHeight,
+  DRAWER_WIDTH,
   MAX_WIDTH as maxWidth,
   MIDDLE_WIDTH,
   MIN_WIDTH,
@@ -124,6 +125,15 @@ const useStyles = makeStyles({
       ),
     },
   }),
+  appWrapper: ({ theme }: StyleProps) => ({
+    display: 'flex',
+    paddingLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
+      paddingLeft: DRAWER_WIDTH,
+      width: `calc(100% - ${DRAWER_WIDTH}px)`,
+    }
+  }),
 })
 
 const App = () => {
@@ -150,8 +160,8 @@ const App = () => {
     <>
       <ThemeProvider theme={theme}>
         <SnackbarProvider>
-          <div style={{ display: 'flex' }}>
-            <SideNavigationDrawer />
+          <SideNavigationDrawer />
+          <div className={classes.appWrapper}>
             <div className={classes.app}>
               <ScrollRestoration />
               <UpdateNotification />

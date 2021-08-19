@@ -16,11 +16,7 @@ import UserAvatar from 'src/components/blocks/UserAvatar'
 import Statistics from './Statistics'
 import SimilarPosts from './SimilarPosts'
 import TopDayPosts from './TopDayPosts'
-import {
-  Chip,
-  Fade,
-  Link as MUILink,
-} from '@material-ui/core'
+import { Chip, Fade, Link as MUILink } from '@material-ui/core'
 import { MIN_WIDTH, POST_LABELS as postLabels } from 'src/config/constants'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import { useSelector } from 'src/hooks'
@@ -256,109 +252,6 @@ const Post = () => {
         />
       )
     })
-  const contents = shouldShowContents ? (
-    <>
-      {/** Post header */}
-      <Fade in>
-        <div className={classes.postHeader}>
-          <Container>
-            <Grid
-              className={classes.authorBar}
-              container
-              direction="row"
-              alignItems="center"
-            >
-              <UserAvatar
-                alias={post.author.alias}
-                src={post.author.avatarUrl}
-                className={classes.avatar}
-              />
-              <Typography
-                component={Link}
-                to={'/user/' + post.author.alias}
-                className={classes.author}
-              >
-                {post.author.alias}
-              </Typography>
-              <Typography className={classes.ts}>
-                {dayjs(post.timePublished).fromNow()}
-              </Typography>
-              <GreenRedNumber
-                number={post.statistics.score}
-                wrapperProps={{ className: classes.scoreWrapper }}
-              >
-                <>
-                  <ThumbsUpDownIcon className={classes.scoreIcon} />
-                  <Typography className={classes.score}>
-                    {post.statistics.score > 0 ? '+' : ''}
-                    {post.statistics.score}
-                  </Typography>
-                </>
-              </GreenRedNumber>
-            </Grid>
-            <Typography className={classes.title}>{post.titleHtml}</Typography>
-            <div className={classes.hubs}>
-              {post.hubs.map((hub, i) => (
-                <span key={i} className={classes.hubWrapper}>
-                  <Link
-                    className={classes.hubLink}
-                    to={'/hub/' + hub.alias + '/p/1'}
-                  >
-                    {hub.title}
-                  </Link>
-                </span>
-              ))}
-            </div>
-            {labels}
-            {isTranslated && (
-              <MUILink
-                href={post.translationData.originalUrl}
-                className={classes.translatedBox}
-              >
-                Автор оригинала: {post.translationData.originalAuthorName}
-              </MUILink>
-            )}
-          </Container>
-        </div>
-      </Fade>
-
-      {/* Article text */}
-      <Fade in>
-        <Container>
-          <FormattedText
-            className={classes.text}
-            oldHabrFormat={post.editorVersion === '1.0'}
-          >
-            {post.textHtml}
-          </FormattedText>
-
-          <div className={classes.section}>
-            <Typography className={classes.sectionTitle}>Теги</Typography>
-            {post.tags.map((e, i) => (
-              <span key={i} className={classes.sectionLinkWrapper}>
-                <Link
-                  to={`/search/p/1?q=[${e.titleHtml}]`}
-                  className={classes.sectionLink}
-                >
-                  {e.titleHtml}
-                </Link>
-              </span>
-            ))}
-          </div>
-          <div className={classes.section}>
-            <Typography className={classes.sectionTitle}>Хабы</Typography>
-            <Grid spacing={1} container className={classes.hubsContainer}>
-              {post.hubs.map((e, i) => (
-                <HubsItem data={(e as unknown) as Hub} key={i} />
-              ))}
-            </Grid>
-          </div>
-        </Container>
-      </Fade>
-    </>
-  ) : (
-    <PostViewSkeleton />
-  )
 
   // Start fetching post data
   useEffect(() => {
@@ -369,9 +262,13 @@ const Post = () => {
   if (fetchError) return <ErrorComponent message={fetchError} />
   if (companyFetchError)
     console.error('Could not fetch company data:', companyFetchError)
-  
+
   return (
-    <OutsidePage hidePositionBar={!shouldShowContents} headerText={post?.titleHtml} scrollElement={contentsRef.current}>
+    <OutsidePage
+      hidePositionBar={!shouldShowContents}
+      headerText={post?.titleHtml}
+      scrollElement={contentsRef.current}
+    >
       <MetaTags>
         <title>{(post ? post.titleHtml : 'Публикация') + ' | habra.'}</title>
         <meta name="twitter:card" content="summary_large_image" />
@@ -413,7 +310,121 @@ const Post = () => {
           {/** Company header */}
           <CompanyCard post={post} companyAlias={companyAlias} />
 
-          <div className={classes.content} ref={contentsRef}>{contents}</div>
+          <div className={classes.content} ref={contentsRef}>
+            {shouldShowContents && (
+              <>
+                {/** Post header */}
+                <Fade in>
+                  <div className={classes.postHeader}>
+                    <Container>
+                      <Grid
+                        className={classes.authorBar}
+                        container
+                        direction="row"
+                        alignItems="center"
+                      >
+                        <UserAvatar
+                          alias={post.author.alias}
+                          src={post.author.avatarUrl}
+                          className={classes.avatar}
+                        />
+                        <Typography
+                          component={Link}
+                          to={'/user/' + post.author.alias}
+                          className={classes.author}
+                        >
+                          {post.author.alias}
+                        </Typography>
+                        <Typography className={classes.ts}>
+                          {dayjs(post.timePublished).fromNow()}
+                        </Typography>
+                        <GreenRedNumber
+                          number={post.statistics.score}
+                          wrapperProps={{ className: classes.scoreWrapper }}
+                        >
+                          <>
+                            <ThumbsUpDownIcon className={classes.scoreIcon} />
+                            <Typography className={classes.score}>
+                              {post.statistics.score > 0 ? '+' : ''}
+                              {post.statistics.score}
+                            </Typography>
+                          </>
+                        </GreenRedNumber>
+                      </Grid>
+                      <Typography className={classes.title}>
+                        {post.titleHtml}
+                      </Typography>
+                      <div className={classes.hubs}>
+                        {post.hubs.map((hub, i) => (
+                          <span key={i} className={classes.hubWrapper}>
+                            <Link
+                              className={classes.hubLink}
+                              to={'/hub/' + hub.alias + '/p/1'}
+                            >
+                              {hub.title}
+                            </Link>
+                          </span>
+                        ))}
+                      </div>
+                      {labels}
+                      {isTranslated && (
+                        <MUILink
+                          href={post.translationData.originalUrl}
+                          className={classes.translatedBox}
+                        >
+                          Автор оригинала:{' '}
+                          {post.translationData.originalAuthorName}
+                        </MUILink>
+                      )}
+                    </Container>
+                  </div>
+                </Fade>
+
+                {/* Article text */}
+                <Fade in>
+                  <Container>
+                    <FormattedText
+                      className={classes.text}
+                      oldHabrFormat={post.editorVersion === '1.0'}
+                    >
+                      {post.textHtml}
+                    </FormattedText>
+
+                    <div className={classes.section}>
+                      <Typography className={classes.sectionTitle}>
+                        Теги
+                      </Typography>
+                      {post.tags.map((e, i) => (
+                        <span key={i} className={classes.sectionLinkWrapper}>
+                          <Link
+                            to={`/search/p/1?q=[${e.titleHtml}]`}
+                            className={classes.sectionLink}
+                          >
+                            {e.titleHtml}
+                          </Link>
+                        </span>
+                      ))}
+                    </div>
+                    <div className={classes.section}>
+                      <Typography className={classes.sectionTitle}>
+                        Хабы
+                      </Typography>
+                      <Grid
+                        spacing={1}
+                        container
+                        className={classes.hubsContainer}
+                      >
+                        {post.hubs.map((e, i) => (
+                          <HubsItem data={(e as unknown) as Hub} key={i} />
+                        ))}
+                      </Grid>
+                    </div>
+                  </Container>
+                </Fade>
+              </>
+            )}
+            {!shouldShowContents && <PostViewSkeleton />}
+          </div>
 
           {/* Bottom bar with some article info */}
           {post && <Statistics post={post} />}

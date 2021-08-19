@@ -445,7 +445,7 @@ const Comment: React.FC<{
                   <MoreHorizIcon />
                 </IconButton>
               </div>
-              <FormattedText className={classes.message}>
+              <FormattedText inverseColors className={classes.message}>
                 {data.message}
               </FormattedText>
               <div className={classes.bottomBar}>
