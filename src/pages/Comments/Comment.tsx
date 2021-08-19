@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { Comment as CommentData } from 'src/interfaces'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import FormattedText from 'src/components/formatters/FormattedText'
@@ -11,6 +11,7 @@ import {
   Fade,
   Typography,
   useMediaQuery,
+  Tooltip,
 } from '@material-ui/core'
 import dayjs from 'dayjs'
 import { lightGreen } from '@material-ui/core/colors'
@@ -27,6 +28,7 @@ import { Icon16Up, Icon16Down } from '@vkontakte/icons'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import { setPostCommentSize } from 'src/store/actions/post'
+import Pencil from 'src/components/svg/Pencil'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,9 +64,6 @@ const useStyles = makeStyles((theme) => ({
     },
     paddingBottom: theme.spacing(1.5) + 'px !important',
   },
-  fade: {
-    transitionDuration: '0.5s',
-  },
   wrapper: {
     '&:hover': {
       opacity: '1 !important',
@@ -81,9 +80,6 @@ const useStyles = makeStyles((theme) => ({
     height: 24,
     '&:focus': {
       outline: '1px solid ' + fade(theme.palette.primary.main, 0.75),
-    },
-    [theme.breakpoints.up(MIN_WIDTH)]: {
-      height: 28,
     },
   },
   authorBarOP: {
@@ -116,10 +112,6 @@ const useStyles = makeStyles((theme) => ({
     height: 24,
     marginRight: theme.spacing(1),
     borderRadius: 2,
-    [theme.breakpoints.up(MIN_WIDTH)]: {
-      width: 28,
-      height: 28,
-    },
   },
   grayIcon: {
     color: fade(theme.palette.text.hint, 0.2),
@@ -127,11 +119,6 @@ const useStyles = makeStyles((theme) => ({
   },
   message: {
     marginTop: theme.spacing(1),
-    [theme.breakpoints.up(MIN_WIDTH)]: {
-      marginTop: theme.spacing(1.5),
-      lineHeight: '24px !important',
-      fontSize: '16px !important',
-    },
     lineHeight: '22px',
     fontSize: '15px !important',
     wordBreak: 'break-word',
@@ -139,14 +126,18 @@ const useStyles = makeStyles((theme) => ({
     '& p': {
       margin: 0,
       fontSize: '15px !important',
-      [theme.breakpoints.up(MIN_WIDTH)]: {
-        fontSize: '16px !important',
-      },
+    },
+    '& p+p, pre+p, blockquote, blockquote+p, details, details+p, figure, figure+p, iframe, iframe+p, pre, pre+p, table, table+p': {
+      marginTop: theme.spacing(1.5) + 'px !important',
     },
   },
   authorAndTS: {
     display: 'flex',
     flexDirection: 'column',
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
   },
   authorAlias: {
     color:
@@ -160,10 +151,6 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     flex: 1,
-    [theme.breakpoints.up(MIN_WIDTH)]: {
-      fontSize: 14,
-      lineHeight: '16px',
-    },
   },
   ts: {
     color: theme.palette.text.hint,
@@ -174,8 +161,9 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
     textDecoration: 'none',
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      fontSize: 11,
-      lineHeight: '12px',
+      fontSize: 13,
+      lineHeight: '15px',
+      marginLeft: theme.spacing(1),
     },
   },
   moreIcon: {
@@ -236,6 +224,19 @@ const useStyles = makeStyles((theme) => ({
   goToThreadLink: {
     textDecoration: 'none',
   },
+  editIcon: {
+    width: 12,
+    height: 12,
+    fill: theme.palette.primary.dark,
+    marginBottom: 2,
+  },
+  editIconWrapper: {
+    display: 'flex',
+    alignItems: 'flex-end',
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      alignItems: 'center',
+    },
+  },
 }))
 
 const getOpacity = (value: number) => {
@@ -268,6 +269,8 @@ const Comment: React.FC<{
     (store) => store.settings.interfaceComments.showThreads
   )
   const commentsSizesMap = useSelector((store) => store.post.comments.sizesMap)
+  const timeEdited = dayjs(data.timeChanged).format('DD.MM.YYYY [в] H:mm')
+  const isEdited = !!data.timeChanged
   const ts = dayjs(data.timePublished).format('DD.MM.YYYY [в] H:mm')
   const rootClasses = [classes.root]
   const authorBarClasses = [classes.authorBar]
@@ -358,7 +361,7 @@ const Comment: React.FC<{
           <Fade in>
             <div
               style={{ paddingLeft: commentPadding + MARGIN_LEVEL }}
-              className={[classes.ufo, classes.fade].join(' ')}
+              className={classes.ufo}
             >
               <FormattedText
                 className={[classes.ufoMessage, classes.message].join(' ')}
@@ -415,70 +418,75 @@ const Comment: React.FC<{
           )
         })}
         <Fade in>
-          <div className={classes.fade}>
-            <div
-              className={classes.wrapper}
-              style={{ paddingLeft: commentPadding, opacity: commentOpacity }}
-            >
-              <div className={authorBarClasses.join(' ')}>
-                <div className={classes.flexGrow}>
-                  <LinkToOutsidePage
-                    className={classes.authorBarLink}
-                    to={'/user/' + data.author.alias}
-                  >
-                    <UserAvatar
-                      src={data.author.avatarUrl}
-                      alias={data.author.alias}
-                      className={classes.avatar}
-                    />
-                    <div className={classes.authorAndTS}>
-                      <Typography className={classes.authorAlias}>
-                        {data.author.alias}
-                      </Typography>
-                      <Typography className={classes.ts} variant="caption">
-                        {ts}
-                      </Typography>
-                    </div>
-                  </LinkToOutsidePage>
-                </div>
-                <IconButton className={classes.moreIcon}>
-                  <MoreHorizIcon />
-                </IconButton>
+          <div
+            className={classes.wrapper}
+            style={{ paddingLeft: commentPadding, opacity: commentOpacity }}
+          >
+            <div className={authorBarClasses.join(' ')}>
+              <div className={classes.flexGrow}>
+                <LinkToOutsidePage
+                  className={classes.authorBarLink}
+                  to={'/user/' + data.author.alias}
+                >
+                  <UserAvatar
+                    src={data.author.avatarUrl}
+                    alias={data.author.alias}
+                    className={classes.avatar}
+                  />
+                  <div className={classes.authorAndTS}>
+                    <Typography className={classes.authorAlias}>
+                      {data.author.alias}
+                    </Typography>
+                    <Typography className={classes.ts} variant="caption">
+                      {ts}
+                    </Typography>
+                  </div>
+                </LinkToOutsidePage>
+                {isEdited && (
+                  <Tooltip title={`Коментарий изменён ${timeEdited}`}>
+                    <span className={classes.editIconWrapper}>
+                      <Pencil className={classes.editIcon} />
+                    </span>
+                  </Tooltip>
+                )}
               </div>
-              <FormattedText inverseColors className={classes.message}>
-                {data.message}
-              </FormattedText>
-              <div className={classes.bottomBar}>
-                <IconButton className={classes.grayIcon}>
-                  <Icon16Up width={24} height={24} />
-                </IconButton>
-                <GreenRedNumber
-                  number={data.score}
-                  wrapperProps={{ className: classes.greenRedNumber }}
-                >
-                  <Typography className={classes.score}>
-                    {data.score > 0 ? '+' : ''}
-                    {data.score}
-                  </Typography>
-                </GreenRedNumber>
-                <IconButton className={classes.grayIcon}>
-                  <Icon16Down width={24} height={24} />
-                </IconButton>
-                <div className={classes.flexGrow}>
-                  <Button size="small" className={classes.replyButton}>
-                    Ответить
-                  </Button>
-                </div>
-                <Button
-                  size="small"
-                  color="primary"
-                  className={classes.favoriteButton}
-                >
-                  <BookmarkIcon className={classes.favoriteIcon} />
+              <IconButton className={classes.moreIcon}>
+                <MoreHorizIcon />
+              </IconButton>
+            </div>
+            <FormattedText inverseColors className={classes.message}>
+              {data.message}
+            </FormattedText>
+            <div className={classes.bottomBar}>
+              <IconButton className={classes.grayIcon}>
+                <Icon16Up width={24} height={24} />
+              </IconButton>
+              <GreenRedNumber
+                number={data.score}
+                wrapperProps={{ className: classes.greenRedNumber }}
+              >
+                <Typography className={classes.score}>
+                  {data.score > 0 ? '+' : ''}
+                  {data.score}
+                </Typography>
+              </GreenRedNumber>
+              <IconButton className={classes.grayIcon}>
+                <Icon16Down width={24} height={24} />
+              </IconButton>
+              <div className={classes.flexGrow}>
+                <Button size="small" className={classes.replyButton}>
+                  Ответить
                 </Button>
               </div>
-              <GoToThreadButton />
+              <Button
+                size="small"
+                color="primary"
+                className={classes.favoriteButton}
+              >
+                <BookmarkIcon className={classes.favoriteIcon} />
+              </Button>
             </div>
+            <GoToThreadButton />
           </div>
         </Fade>
       </div>

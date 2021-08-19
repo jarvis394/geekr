@@ -81,7 +81,7 @@ const useStyles = makeStyles<
         inverseColors
           ? getContrastPaperColor(theme)
           : getInvertedContrastPaperColor(theme),
-      padding: theme.spacing(0.25),
+      padding: '3px 6px',
       borderRadius: theme.shape.borderRadius,
       wordBreak: 'break-word',
     },

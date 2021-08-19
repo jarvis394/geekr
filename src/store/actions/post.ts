@@ -123,7 +123,9 @@ export const getPostComments = (id: number | string) => async (
   dispatch,
   getState: () => RootState
 ) => {
-  const storeData = getState().post
+  const state = getState()
+  const storeData = state.post
+  const authData = state.auth.authorizedRequestData
   if (
     storeData.comments.state === FetchingState.Fetched &&
     storeData.post.data.id.toString() === id.toString()
@@ -134,7 +136,7 @@ export const getPostComments = (id: number | string) => async (
   dispatch({ type: COMMENTS_FETCH })
 
   try {
-    const data = await api.getComments(id)
+    const data = await api.getComments(id, authData)
     const parsedComments = parseComments(data.comments)
     const flattenComments = flatten(parsedComments)
     const commentsWithLevelInfo = setLevelInfo(flattenComments)

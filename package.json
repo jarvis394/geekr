@@ -15,7 +15,7 @@
     "@nteract/mathjax": "^4.0.15",
     "@sentry/react": "^6.10.0",
     "@sentry/tracing": "^6.10.0",
-    "@vkontakte/icons": "^1.83.0",
+    "@vkontakte/icons": "^1.124.0",
     "axios": "^0.21.1",
     "dayjs": "^1.10.4",
     "habra-auth": "^3.0.1",
