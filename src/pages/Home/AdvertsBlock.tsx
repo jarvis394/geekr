@@ -185,6 +185,8 @@ const AdvertsBlock = () => {
 
   if (error) return null
 
+  if (fetched && data.length === 0) return null
+
   return (
     <div className={classes.root}>
       <div className={classes.header}>Мегапосты</div>

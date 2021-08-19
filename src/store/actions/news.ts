@@ -32,7 +32,7 @@ export const getNews = (
       payload: { data, page, pagesCount, flow },
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error, page, flow } })
+    dispatch({ type: type + '_REJECTED', payload: { error: error.message, page, flow } })
   }
 }
 
@@ -53,6 +53,6 @@ export const getNewsPromo = (hubAlias?: string) => async (
     const data = await api.getNewsPromo({ hubAlias })
     dispatch({ type: type + '_FULFILLED', payload: { data } })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', error })
+    dispatch({ type: type + '_REJECTED', error: error.message })
   }
 }

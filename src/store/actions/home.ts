@@ -46,7 +46,7 @@ export const getPosts = ({
       payload: { data: data, mode, page, pagesCount, flow },
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error, mode, page, flow } })
+    dispatch({ type: type + '_REJECTED', payload: { error: error.message, mode, page, flow } })
   }
 }
 
@@ -63,7 +63,7 @@ export const getAdverts = () => async (dispatch) => {
       payload: data.adverts,
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error } })
+    dispatch({ type: type + '_REJECTED', payload: { error: error.message } })
   }
 }
 
@@ -80,7 +80,7 @@ export const getMostReading = () => async (dispatch) => {
       payload: data?.articles,
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error } })
+    dispatch({ type: type + '_REJECTED', payload: { error: error.message } })
   }
 }
 
@@ -97,6 +97,6 @@ export const getTopCompanies = () => async (dispatch) => {
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error } })
+    dispatch({ type: type + '_REJECTED', payload: { error: error.message } })
   }
 }

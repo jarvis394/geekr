@@ -86,7 +86,7 @@ export const getPost = (id: number | string) => async (
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: POST_FETCH_REJECTED, payload: error.message })
+    dispatch({ type: POST_FETCH_REJECTED, payload: error?.message })
   }
 }
 
@@ -111,7 +111,7 @@ export const getDownvoteReasons = () => async (
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: POST_DOWNVOTE_REASONS_FETCH_REJECTED, payload: error })
+    dispatch({ type: POST_DOWNVOTE_REASONS_FETCH_REJECTED, payload: error?.message })
   }
 }
 
@@ -146,7 +146,7 @@ export const getPostComments = (id: number | string) => async (
       payload: { comments: commentsWithLevelInfo, fetchedData: data },
     })
   } catch (error) {
-    dispatch({ type: COMMENTS_FETCH_REJECTED, payload: error })
+    dispatch({ type: COMMENTS_FETCH_REJECTED, payload: error?.message })
   }
 }
 
@@ -181,6 +181,6 @@ export const getCompany = (alias: string) => async (
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: COMPANY_FETCH_REJECTED, payload: error })
+    dispatch({ type: COMPANY_FETCH_REJECTED, payload: error?.message })
   }
 }

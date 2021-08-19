@@ -105,6 +105,6 @@ export const getProfileArticles = (alias: string, page: number) => async (
       payload: { data, page, pagesCount: data.pagesCount },
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error, page } })
+    dispatch({ type: type + '_REJECTED', payload: { error: error.message, page } })
   }
 }

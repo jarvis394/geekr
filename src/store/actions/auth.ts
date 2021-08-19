@@ -23,7 +23,7 @@ export const getAccountAuthData = (props: {
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: error })
+    dispatch({ type: type + '_REJECTED', payload: error?.message })
   }
 }
 
@@ -44,7 +44,7 @@ export const getCSRFToken = (props: AccountAuthData) => async (dispatch) => {
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: error })
+    dispatch({ type: type + '_REJECTED', payload: error?.message })
   }
 }
 
