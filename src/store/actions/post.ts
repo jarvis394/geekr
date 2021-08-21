@@ -17,10 +17,14 @@ import {
   POST_DOWNVOTE_REASONS_FETCH,
   POST_DOWNVOTE_REASONS_FETCH_FULFILLED,
   POST_DOWNVOTE_REASONS_FETCH_REJECTED,
+  GetPostCommentsOptions,
 } from '../reducers/post/types'
 
-const parseComments = (nodes: Map<number, IComment>) => {
-  const root = []
+const parseComments = (
+  nodes: Map<number, IComment>,
+  options?: Partial<GetPostCommentsOptions>
+) => {
+  const root: IComment[] = []
   for (const id in nodes) {
     const comment = nodes[id]
     comment.children = []
@@ -33,6 +37,8 @@ const parseComments = (nodes: Map<number, IComment>) => {
       parent.children.push(comment)
     }
   }
+
+  if (options?.sortByKarma) root.sort((a, b) => b.score - a.score)
 
   return root
 }
@@ -111,7 +117,37 @@ export const getDownvoteReasons = () => async (
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: POST_DOWNVOTE_REASONS_FETCH_REJECTED, payload: error?.message })
+    dispatch({
+      type: POST_DOWNVOTE_REASONS_FETCH_REJECTED,
+      payload: error?.message,
+    })
+  }
+}
+
+/**
+ * Parse existing comments
+ * @param id Post ID
+ */
+export const parsePostComments = (
+  id: number | string,
+  options: Partial<GetPostCommentsOptions> = {}
+) => async (dispatch, getState: () => RootState) => {
+  const state = getState()
+  const storeData = state.post
+
+  if (
+    storeData.comments.state === FetchingState.Fetched &&
+    storeData.post.data.id.toString() === id.toString()
+  ) {
+    const data = storeData.comments.fetchedData
+    const parsedComments = parseComments(data.comments, options)
+    const flattenComments = flatten(parsedComments)
+    const commentsWithLevelInfo = setLevelInfo(flattenComments)
+
+    dispatch({
+      type: COMMENTS_FETCH_FULFILLED,
+      payload: { comments: commentsWithLevelInfo, fetchedData: data },
+    })
   }
 }
 
@@ -119,10 +155,10 @@ export const getDownvoteReasons = () => async (
  * Gets post comments and dispatches the data to the `post` store
  * @param id Post ID
  */
-export const getPostComments = (id: number | string) => async (
-  dispatch,
-  getState: () => RootState
-) => {
+export const getPostComments = (
+  id: number | string,
+  options: Partial<GetPostCommentsOptions> = {}
+) => async (dispatch, getState: () => RootState) => {
   const state = getState()
   const storeData = state.post
   const authData = state.auth.authorizedRequestData
@@ -137,13 +173,17 @@ export const getPostComments = (id: number | string) => async (
 
   try {
     const data = await api.getComments(id, authData)
-    const parsedComments = parseComments(data.comments)
+    const parsedComments = parseComments(data.comments, options)
     const flattenComments = flatten(parsedComments)
     const commentsWithLevelInfo = setLevelInfo(flattenComments)
 
     dispatch({
       type: COMMENTS_FETCH_FULFILLED,
-      payload: { comments: commentsWithLevelInfo, fetchedData: data },
+      payload: {
+        comments: commentsWithLevelInfo,
+        fetchedData: data,
+        parseOptions: options,
+      },
     })
   } catch (error) {
     dispatch({ type: COMMENTS_FETCH_REJECTED, payload: error?.message })
@@ -151,9 +191,14 @@ export const getPostComments = (id: number | string) => async (
 }
 
 export const setPostCommentSize = (id: number | string, size: number) => (
-  dispatch
+  dispatch,
+  getState: () => RootState
 ) => {
-  dispatch({ type: SET_POST_COMMENT_SIZE, payload: { id, size } })
+  const sizesMap = getState().post.comments.sizesMap
+
+  if (!sizesMap[id]) {
+    dispatch({ type: SET_POST_COMMENT_SIZE, payload: { id, size } })
+  }
 }
 
 /**

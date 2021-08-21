@@ -250,16 +250,9 @@ const DEFAULT_PLACEHOLDER_SIZE = 128
 const Comment: React.FC<{
   data: CommentData
   isLastInFilteredRootThread: boolean
-  scrollPosition: ScrollPosition
   postId: string
   placeholderSize?: number
-}> = ({
-  data,
-  isLastInFilteredRootThread,
-  scrollPosition,
-  postId,
-  placeholderSize,
-}) => {
+}> = ({ data, isLastInFilteredRootThread, postId, placeholderSize }) => {
   const isRootComment = data.level === 0
   const { id, isLastInThread, isPostAuthor, isThreadStart } = data
   const theme = useTheme()
@@ -278,7 +271,7 @@ const Comment: React.FC<{
     noSsr: true,
   })
   const shouldShowThreadButton = shouldShowThreadButtonSetting && isThreadStart
-  const MARGIN_LEVEL = isTablet ? 24 : 16
+  const MARGIN_LEVEL = isTablet ? 20 : 16
   const commentPadding = data.level * MARGIN_LEVEL
   const commentOpacity = data.score < 0 ? getOpacity(data.score) : 1
   const shouldAddBottomPadding = isLastInFilteredRootThread
@@ -333,7 +326,6 @@ const Comment: React.FC<{
   if (!data.author) {
     return (
       <LazyLoadComponent
-        scrollPosition={scrollPosition}
         placeholder={
           <div
             style={{ height: getCommentSize() }}
@@ -378,7 +370,6 @@ const Comment: React.FC<{
 
   return (
     <LazyLoadComponent
-      scrollPosition={scrollPosition}
       afterLoad={setCommentSize}
       placeholder={
         <div
@@ -494,4 +485,4 @@ const Comment: React.FC<{
   )
 }
 
-export default Comment
+export default React.memo(Comment)

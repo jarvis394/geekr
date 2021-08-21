@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useRef } from 'react'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import { fade, makeStyles } from '@material-ui/core/styles'
 import { MIN_WIDTH, THREAD_LEVEL } from 'src/config/constants'
@@ -7,11 +7,14 @@ import { useDispatch } from 'react-redux'
 import {
   ListItem,
   ListItemText,
+  rgbToHex,
   Switch,
   Typography,
   useTheme,
 } from '@material-ui/core'
 import { setSettings } from 'src/store/actions/settings'
+import { useLocation } from 'react-router'
+import blend from 'src/utils/blendColors'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,11 +41,23 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 0,
     padding: theme.spacing(1.8, 2),
   },
+  highlight: {
+    animation: `$highlight 750ms ${theme.transitions.easing.easeOut}`,
+  },
+  '@keyframes highlight': {
+    from: {
+      backgroundColor: blend(
+        rgbToHex(theme.palette.primary.light),
+        rgbToHex(theme.palette.background.paper),
+        0.7
+      ),
+    },
+  },
 }))
 
 const SwitchButton: React.FC<{
   primary: string
-  secondary: string
+  secondary?: string
   checked: boolean
   onChange: () => void
 }> = ({ primary, secondary, checked, onChange }) => {
@@ -59,6 +74,10 @@ const Interface = () => {
   const theme = useTheme()
   const userSettings = useSelector((store) => store.settings)
   const dispatch = useDispatch()
+  const sectionRefs = {
+    comments: useRef<HTMLDivElement>(),
+    feed: useRef<HTMLDivElement>(),
+  }
   const setInterfaceSettings = (
     field: 'interfaceFeed' | 'interfaceComments',
     type: string,
@@ -73,6 +92,16 @@ const Interface = () => {
       })
     )
   }
+  const location = useLocation<{ highlightSection: 'comments' | 'feed' }>()
+
+  useEffect(() => {
+    if (location.state.highlightSection) {
+      sectionRefs[location.state.highlightSection].current.className = [
+        classes.section,
+        classes.highlight,
+      ].join(' ')
+    }
+  }, [])
 
   return (
     <OutsidePage
@@ -81,7 +110,7 @@ const Interface = () => {
       backgroundColor={theme.palette.background.paper}
     >
       <div className={classes.root}>
-        <div className={classes.section}>
+        <div className={classes.section} ref={sectionRefs.feed}>
           <Typography className={classes.sectionHeader}>Лента</Typography>
           <SwitchButton
             primary={'Компактный вид ленты'}
@@ -136,7 +165,7 @@ const Interface = () => {
             }
           />
         </div>
-        <div className={classes.section}>
+        <div className={classes.section} ref={sectionRefs.comments}>
           <Typography className={classes.sectionHeader}>Комментарии</Typography>
           <SwitchButton
             primary={'Включить ветки'}
@@ -147,6 +176,17 @@ const Interface = () => {
                 'interfaceComments',
                 'showThreads',
                 !userSettings.interfaceComments.showThreads
+              )
+            }
+          />
+          <SwitchButton
+            primary={'Сортировать по карме'}
+            checked={userSettings.interfaceComments.sortByKarma}
+            onChange={() =>
+              setInterfaceSettings(
+                'interfaceComments',
+                'sortByKarma',
+                !userSettings.interfaceComments.sortByKarma
               )
             }
           />

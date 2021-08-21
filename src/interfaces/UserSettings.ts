@@ -47,6 +47,7 @@ export default interface UserSettings {
   }
   interfaceComments: {
     showThreads: boolean
+    sortByKarma: boolean
   }
   language: {
     feed: 'ru' | 'en'

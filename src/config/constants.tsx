@@ -181,7 +181,7 @@ export const DONATION_TITLES_MAP = {
   paymentWebmoney: 'Webmoney',
 }
 
-export const HABR_BASE_REGEXP = /\/(habr|m\.habr)\.com\/(ru|en)\/(.+)/
+export const HABR_BASE_REGEXP = /(habr|m\.habr)\.com\/(ru|en)\/(.+)/
 export const HABR_LINKS_REPLACE_MAP = [
   {
     regexp: /company\/?(.+)\/blog\/([0-9]+)[/]?/,
@@ -284,6 +284,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   },
   interfaceComments: {
     showThreads: true,
+    sortByKarma: false,
   },
   language: {
     feed: 'ru',

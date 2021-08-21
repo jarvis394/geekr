@@ -21,9 +21,7 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const Thread: React.FC<{ scrollPosition: ScrollPosition }> = ({
-  scrollPosition,
-}) => {
+const Thread: React.FC = () => {
   const theme = useTheme()
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -75,7 +73,6 @@ const Thread: React.FC<{ scrollPosition: ScrollPosition }> = ({
           filteredComments.map((e, i) => (
             <Comment
               postId={id}
-              scrollPosition={scrollPosition}
               isLastInFilteredRootThread={i === filteredComments.length - 1}
               data={{
                 ...e,

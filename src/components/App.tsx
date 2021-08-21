@@ -35,8 +35,8 @@ interface StyleProps {
 }
 
 const useStyles = makeStyles({
-  // Needed for IconButton touch ripple tweaks
   '@global': {
+    // Needed for IconButton touch ripple tweaks
     '@keyframes enter': {
       '0%': {
         opacity: 0.1,
