@@ -77,6 +77,7 @@ const useStyles = makeStyles({
     boxSizing: 'border-box',
     [theme.breakpoints.up(MIDDLE_WIDTH)]: {
       marginTop: 0,
+      marginBottom: 0,
     },
     [theme.breakpoints.up(MIN_WIDTH)]: {
       padding: theme.spacing(0, 2),
