@@ -141,6 +141,7 @@ const useProfileButtonStyles = makeStyles((theme) => ({
     width: '100%',
     flexDirection: 'column',
     alignItems: 'flex-start',
+    overflow: 'hidden',
   },
   fullname: {
     fontFamily: 'Google Sans',
@@ -150,6 +151,7 @@ const useProfileButtonStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    width: '100%',
   },
 }))
 
