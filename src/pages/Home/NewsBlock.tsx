@@ -12,6 +12,7 @@ import { getNewsPromo } from 'src/store/actions/news'
 import { useSelector } from 'src/hooks'
 import { Post } from 'src/interfaces'
 import { MIN_WIDTH } from 'src/config/constants'
+import FormattedText from 'src/components/formatters/FormattedText'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -101,9 +102,9 @@ const NewsItem = React.memo(
         <Grid container direction="row" className={classes.item}>
           <Grid container direction="column">
             <Grid item>
-              <Typography className={classes.title}>
+              <FormattedText className={classes.title}>
                 {data.titleHtml}
-              </Typography>
+              </FormattedText>
             </Grid>
             <Grid container direction="row" alignItems="center">
               <Typography className={classes.ts}>{ts}</Typography>

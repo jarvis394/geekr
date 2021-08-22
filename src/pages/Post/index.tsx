@@ -351,9 +351,9 @@ const Post = () => {
                           </>
                         </GreenRedNumber>
                       </Grid>
-                      <Typography className={classes.title}>
+                      <FormattedText className={classes.title}>
                         {post.titleHtml}
-                      </Typography>
+                      </FormattedText>
                       <div className={classes.hubs}>
                         {post.hubs.map((hub, i) => (
                           <span key={i} className={classes.hubWrapper}>

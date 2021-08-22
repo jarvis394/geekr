@@ -147,6 +147,7 @@ const useStyles = makeStyles<
     '& figure': {
       margin: 0,
       marginTop: theme.spacing(4),
+      textAlign: 'center',
       '& figcaption': {
         color: theme.palette.text.secondary,
         fontSize: theme.typography.body2.fontSize,
