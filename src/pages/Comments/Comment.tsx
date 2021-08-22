@@ -413,7 +413,7 @@ const Comment: React.FC<{
             className={classes.wrapper}
             style={{ paddingLeft: commentPadding, opacity: commentOpacity }}
           >
-            <div className={authorBarClasses.join(' ')}>
+            <div className={authorBarClasses.join(' ')} tabIndex={-1}>
               <div className={classes.flexGrow}>
                 <LinkToOutsidePage
                   className={classes.authorBarLink}

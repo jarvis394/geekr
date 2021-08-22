@@ -52,7 +52,9 @@ const flatten = (nodes, a = []) => {
 }
 
 const setLevelInfo = (nodes: IComment[]) => {
+  const nodesLength = nodes.length
   nodes.forEach((_, i) => {
+    const isLast = i === nodesLength - 1
     const nextNode = nodes[Math.min(i + 1, nodes.length - 1)]
     const prevNode = nodes[Math.max(i - 1, 0)]
     const currentNode = nodes[i]
@@ -60,7 +62,7 @@ const setLevelInfo = (nodes: IComment[]) => {
     const nextThreadLevel = Math.trunc(nextNode.level / THREAD_LEVEL)
     nodes[i].threadLevel = threadLevel
     nodes[i].isThreadStart = nextThreadLevel > threadLevel
-    nodes[i].isLastInThread = nextNode.level === 0 && !!nextNode.author
+    nodes[i].isLastInThread = (nextNode.level === 0 && !!nextNode.author) || isLast
     nodes[i].isNewLevel = prevNode.level < currentNode.level
   })
   return nodes
