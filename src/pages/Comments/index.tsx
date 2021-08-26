@@ -1,6 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useHistory, useParams } from 'react-router'
-import { Fade, IconButton, Typography, useTheme } from '@material-ui/core'
+import {
+  CircularProgress,
+  Fade,
+  IconButton,
+  rgbToHex,
+  Typography,
+  useTheme,
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import { useDispatch } from 'react-redux'
@@ -13,6 +20,13 @@ import { useSelector } from 'src/hooks'
 import { FetchingState } from 'src/interfaces'
 import Comment from './Comment'
 import { Icon24Filter } from '@vkontakte/icons'
+import {
+  APP_BAR_HEIGHT,
+  BOTTOM_BAR_HEIGHT,
+  chromeAddressBarHeight,
+} from 'src/config/constants'
+import isMobile from 'is-mobile'
+import blend from 'src/utils/blendColors'
 
 const useStyles = makeStyles((theme) => ({
   errorText: {
@@ -24,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    paddingBottom: theme.spacing(1.5)
+    paddingBottom: theme.spacing(1.5),
   },
   header: {
     margin: theme.spacing(1.5, 2),
@@ -52,6 +66,29 @@ const useStyles = makeStyles((theme) => ({
     left: -6,
     top: -6,
   },
+  spinnerWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    minHeight: `calc(100vh - ${
+      APP_BAR_HEIGHT * 3
+    }px - ${BOTTOM_BAR_HEIGHT}px - ${
+      isMobile() ? chromeAddressBarHeight : 0
+    }px)`,
+  },
+  highlightComment: {
+    animation: `$highlightComment 750ms ${theme.transitions.easing.easeOut}`,
+  },
+  '@keyframes highlightComment': {
+    from: {
+      backgroundColor: blend(
+        rgbToHex(theme.palette.primary.light),
+        rgbToHex(theme.palette.background.paper),
+        0.7
+      ),
+    },
+  },
 }))
 
 const MAX_LEVEL = 10
@@ -73,6 +110,7 @@ const CommentsPage: React.FC = () => {
   const theme = useTheme()
   const classes = useStyles()
   const history = useHistory()
+  const selectedCommentID = history.location.hash || null
   const [commentsLength, setCommentsLength] = useState<number>()
   const shouldShowComments = commentsFetchingState === FetchingState.Fetched
   const shouldShowThreads = useSelector(
@@ -120,6 +158,17 @@ const CommentsPage: React.FC = () => {
     }
   }, [JSON.stringify(parseOptions)])
 
+  useEffect(() => {
+    if (selectedCommentID.startsWith('#comment_') && shouldShowComments) {
+      const commentID = selectedCommentID.slice('#'.length)
+      const commentElement = document.getElementById(commentID)
+      if (commentElement) {
+        commentElement.scrollIntoView(true)
+        window.scrollBy(0, -APP_BAR_HEIGHT)
+      }
+    }
+  }, [selectedCommentID, shouldShowComments])
+
   if (postFetchingState === FetchingState.Error)
     return (
       <Typography className={classes.errorText}>{postFetchingError}</Typography>
@@ -157,20 +206,23 @@ const CommentsPage: React.FC = () => {
             </IconButton>
           </div>
         </div>
-        <div>
-          {shouldShowComments &&
-            filteredComments.map((e, i) => (
-              <Comment
-                postId={id}
-                isLastInFilteredRootThread={
-                  filteredComments[Math.min(i + 1, filteredComments.length - 1)]
-                    .level === 0
-                }
-                data={e}
-                key={e.id}
-              />
-            ))}
-        </div>
+        {shouldShowComments &&
+          filteredComments.map((e, i) => (
+            <Comment
+              postId={id}
+              isLastInFilteredRootThread={
+                filteredComments[Math.min(i + 1, filteredComments.length - 1)]
+                  .level === 0
+              }
+              data={e}
+              key={e.id}
+            />
+          ))}
+        {!shouldShowComments && (
+          <div className={classes.spinnerWrapper}>
+            <CircularProgress />
+          </div>
+        )}
       </div>
     </OutsidePage>
   )

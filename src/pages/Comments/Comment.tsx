@@ -378,6 +378,7 @@ const Comment: React.FC<{
             marginTop: isRootComment ? theme.spacing(1.5) : 0,
           }}
           className={classes.placeholder}
+          id={'comment_' + id}
         />
       }
     >
@@ -389,6 +390,7 @@ const Comment: React.FC<{
           paddingRight: theme.spacing(MARGIN_LEVEL / theme.spacing(1)),
           marginTop: isRootComment ? theme.spacing(1.5) : 0,
         }}
+        id={'comment_' + id}
       >
         {[...Array(data.level)].map((_, i) => {
           let bottom = isLastInThread ? theme.spacing(1.2) : 0

@@ -1,6 +1,12 @@
-import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import {
-  AppBar,
   Button,
   ButtonBase,
   Dialog,
@@ -60,6 +66,7 @@ import {
 } from '@material-ui/core/colors'
 import { Redirect, useHistory, useParams } from 'react-router'
 import { History } from 'history'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 interface PaletteGridItem {
   text: string
@@ -141,6 +148,12 @@ const useStyles = makeStyles((theme) => ({
       isAlreadySavedLocally?: boolean
     }) => (isAlreadySavedLocally ? 0 : -48),
   },
+  code: {
+    background: getContrastPaperColor(theme),
+    padding: '3px 6px',
+    borderRadius: theme.shape.borderRadius,
+    wordBreak: 'break-word',
+  },
 }))
 
 const usePreviewStyles = makeStyles((theme) => ({
@@ -159,12 +172,16 @@ const usePreviewStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1.8),
   },
   appbar: {
-    backgroundColor: theme.palette.background.paper,
     height: 49,
     flexGrow: 1,
     marginBottom: theme.spacing(2),
     borderRadius: 8,
     zIndex: 1,
+    width: '100%',
+    display: 'flex',
+    boxSizing: 'border-box',
+    flexShrink: 0,
+    flexDirection: 'column',
   },
   toolbar: {
     margin: 'auto',
@@ -545,6 +562,9 @@ const getPaletteItems = (theme: CustomTheme) => [
 const PreviewBox = ({ currentTheme }: { currentTheme: CustomTheme }) => {
   const rootClasses = useStyles({})
   const classes = usePreviewStyles()
+  const compiledCurrentTheme = useCallback(() => createMuiTheme(currentTheme), [
+    JSON.stringify(currentTheme),
+  ])
   const buttonVariants: ['contained', 'outlined', 'text'] = [
     'contained',
     'outlined',
@@ -552,7 +572,7 @@ const PreviewBox = ({ currentTheme }: { currentTheme: CustomTheme }) => {
   ]
 
   return (
-    <ThemeProvider theme={createMuiTheme(currentTheme)}>
+    <ThemeProvider theme={compiledCurrentTheme}>
       <div className={rootClasses.section}>
         <Typography
           className={[rootClasses.sectionHeader, rootClasses.padding].join(' ')}
@@ -567,7 +587,7 @@ const PreviewBox = ({ currentTheme }: { currentTheme: CustomTheme }) => {
               </Grid>
             ))}
           </Grid>
-          <AppBar position="relative" className={classes.appbar} elevation={0}>
+          <Paper className={classes.appbar} elevation={0}>
             <Toolbar className={classes.toolbar}>
               <div className={classes.appbarContent}>
                 <Typography
@@ -582,7 +602,7 @@ const PreviewBox = ({ currentTheme }: { currentTheme: CustomTheme }) => {
                 <Divider style={{ width: '100%' }} />
               </div>
             </Toolbar>
-          </AppBar>
+          </Paper>
           <Grid container alignItems="center">
             {buttonVariants.map((e, i) => (
               <Button
@@ -694,6 +714,10 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
     })
   }
   const handleSaveDialogCancel = () => setSaveDialogOpen(false)
+  const handleSaveDialogDelete = () => {
+    setSaveDialogOpen(false)
+    history.goBack()
+  }
   const handleSaveDialogSubmit = () => {
     handleSaveClick()
     setSaveDialogOpen(false)
@@ -851,12 +875,13 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
           <DialogTitle>Cохранение</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Остались несохранённые изменения, сохранить?
+              Остались несохранённые изменения, сохранить? Нажмите{' '}
+              <code className={classes.code}>Esc</code>, чтобы отменить.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleSaveDialogCancel} color="primary">
-              Отмена
+            <Button onClick={handleSaveDialogDelete} color="primary">
+              Выйти без изменений
             </Button>
             <Button
               color="primary"
