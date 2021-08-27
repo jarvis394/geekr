@@ -25,8 +25,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     display: 'flex',
-    flexDirection: 'column'
-  }
+    flexDirection: 'column',
+  },
 }))
 
 const User = () => {

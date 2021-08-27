@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 const Settings = () => {
   const classes = useStyles()
   const theme = useTheme()
-  
+
   return (
     <OutsidePage
       headerText={'Настройки'}

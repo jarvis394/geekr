@@ -158,8 +158,8 @@ const SearchResultsScreen = ({ q }) => {
   const [fetchError, setError] = useState()
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page))
   const [pagesCount, setPagesCount] = useState<number>()
-  const authData = useSelector(store => store.auth.authData.data)
-  const csrfToken = useSelector(store => store.auth.csrfToken.data)
+  const authData = useSelector((store) => store.auth.authData.data)
+  const csrfToken = useSelector((store) => store.auth.csrfToken.data)
 
   const handleChange = (_, i) => {
     if (i === currentPage) return
@@ -180,10 +180,12 @@ const SearchResultsScreen = ({ q }) => {
           query: q,
           page: currentPage,
           order: 'relevance',
-          authData: csrfToken ? {
-            connectSID: authData.connectSID,
-            csrfToken
-          } : null
+          authData: csrfToken
+            ? {
+                connectSID: authData.connectSID,
+                csrfToken,
+              }
+            : null,
         })
         for (const id in d.articleRefs) {
           d.articleRefs[id].postFirstImage = getPostFirstImage(

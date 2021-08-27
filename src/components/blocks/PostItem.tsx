@@ -334,7 +334,10 @@ export const PostItem = ({
     (store) => store.auth.authorizedRequestData
   )
   const rootRef = React.useRef<HTMLDivElement>()
-  const placeholderStyles = React.useMemo(() => ({ height: getPostItemSize(post.id) }), [getPostItemSize])
+  const placeholderStyles = React.useMemo(
+    () => ({ height: getPostItemSize(post.id) }),
+    [getPostItemSize]
+  )
   const postLink = getPostLink(post)
   const shouldShowPostImage = postFirstImage && !hideImage && !isExtended
   const bottomRow: BottomRowItemType[] = [
@@ -476,10 +479,7 @@ export const PostItem = ({
       {({ isVisible }) => (
         <>
           {!isVisible && (
-            <div
-              style={placeholderStyles}
-              className={classes.placeholder}
-            />
+            <div style={placeholderStyles} className={classes.placeholder} />
           )}
           {isVisible && (
             <Paper

@@ -72,8 +72,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     '&:hover': {
       color: theme.palette.text.primary,
-    }
-  }
+    },
+  },
 }))
 
 const FlowsBar: React.FC<{

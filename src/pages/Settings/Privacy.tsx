@@ -4,7 +4,13 @@ import { fade, makeStyles } from '@material-ui/core/styles'
 import { MIN_WIDTH } from 'src/config/constants'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
-import { ListItem, ListItemText, Switch, Typography, useTheme } from '@material-ui/core'
+import {
+  ListItem,
+  ListItemText,
+  Switch,
+  Typography,
+  useTheme,
+} from '@material-ui/core'
 import { setSettings } from 'src/store/actions/settings'
 
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +69,11 @@ const Privacy = () => {
   }
 
   return (
-    <OutsidePage headerText={'Приватность'} disableShrinking backgroundColor={theme.palette.background.paper}>
+    <OutsidePage
+      headerText={'Приватность'}
+      disableShrinking
+      backgroundColor={theme.palette.background.paper}
+    >
       <div className={classes.root}>
         <div className={classes.section}>
           <Typography className={classes.sectionHeader}>Аналитика</Typography>
@@ -94,15 +104,16 @@ const Privacy = () => {
               , чтобы собирать статистику посещений приложения.
             </Typography>
             <Typography style={{ marginTop: 4 }} variant="body2">
-              На серевере включена <a
+              На серевере включена{' '}
+              <a
                 className={classes.link}
                 target="_blank"
                 rel="noreferrer"
                 href="https://matomo.org/docs/privacy-how-to/#step-1-automatically-anonymize-visitor-ips"
               >
                 анонимизация IP-адресов
-              </a>. Ваши данные никогда
-              не будут передаваться третьим лицам.
+              </a>
+              . Ваши данные никогда не будут передаваться третьим лицам.
             </Typography>
           </div>
         </div>

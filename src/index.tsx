@@ -14,7 +14,11 @@ import 'src/config/i18n'
 import { BrowserRouter as Router } from 'react-router-dom'
 import 'react-photoswipe/dist/photoswipe.css'
 import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
-import { MATOMO_SERVER_URL, MATOMO_SITE_ID, SENTRY_DSN } from 'src/config/constants'
+import {
+  MATOMO_SERVER_URL,
+  MATOMO_SITE_ID,
+  SENTRY_DSN,
+} from 'src/config/constants'
 import * as userSettingsUtils from 'src/utils/userSettings'
 import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
@@ -38,7 +42,7 @@ Sentry.init({
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 0,
   environment: process.env.NODE_ENV,
-  enabled: process.env.NODE_ENV === 'production'
+  enabled: process.env.NODE_ENV === 'production',
 })
 
 dayjs.locale(userSettings.language.interface || 'ru')

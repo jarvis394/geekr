@@ -6,7 +6,7 @@ const formatLink = (s: string): string | false => {
     const replaceObject = HABR_LINKS_REPLACE_MAP.find((e) => !!e.regexp.exec(s))
     // Cannot replace link, return false so FormattedText leaves <a> as is
     if (!replaceObject) return false
-    
+
     const matches = replaceObject.regexp.exec(s)
     let newHref = replaceObject.to
     matches?.slice(1)?.forEach((e, i) => {

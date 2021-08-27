@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.primary.main,
       fontWeight: 500,
     },
-  }
+  },
 }))
 
 const Item = ({ data }: { data: Hub }) => {

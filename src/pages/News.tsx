@@ -113,7 +113,9 @@ const News = () => {
           <PaginationComponent />
         </List>
       </MainBlock>
-      <div className={classes.sidebar}><Sidebar /></div>
+      <div className={classes.sidebar}>
+        <Sidebar />
+      </div>
     </>
   )
 }

@@ -46,7 +46,10 @@ const Spoiler = ({ children, title }) => {
       >
         {title}
       </b>
-      <Collapse className={[classes.collapse, classes.text].join(' ')} in={isOpen}>
+      <Collapse
+        className={[classes.collapse, classes.text].join(' ')}
+        in={isOpen}
+      >
         {children}
       </Collapse>
     </>

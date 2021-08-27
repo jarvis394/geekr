@@ -47,7 +47,7 @@ export const getProfileCard = (alias: string) => async (dispatch) => {
     storeType: PROFILE_CARD,
     params: [alias],
     dispatch,
-    v2: true
+    v2: true,
   })
 }
 
@@ -57,7 +57,7 @@ export const getProfileWhois = (alias: string) => async (dispatch) => {
     storeType: PROFILE_WHOIS,
     params: [alias],
     dispatch,
-    v2: true
+    v2: true,
   })
 }
 
@@ -67,7 +67,7 @@ export const getProfileCompanies = (alias: string) => async (dispatch) => {
     storeType: PROFILE_COMPANIES,
     params: [alias],
     dispatch,
-    v2: true
+    v2: true,
   })
 }
 
@@ -77,7 +77,7 @@ export const getProfileChildren = (alias: string) => async (dispatch) => {
     storeType: PROFILE_CHILDREN,
     params: [alias],
     dispatch,
-    v2: true
+    v2: true,
   })
 }
 
@@ -105,6 +105,9 @@ export const getProfileArticles = (alias: string, page: number) => async (
       payload: { data, page, pagesCount: data.pagesCount },
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error: error.message, page } })
+    dispatch({
+      type: type + '_REJECTED',
+      payload: { error: error.message, page },
+    })
   }
 }

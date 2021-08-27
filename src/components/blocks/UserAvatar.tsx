@@ -11,16 +11,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserAvatar :React.FC<{
+const UserAvatar: React.FC<{
   src: string
   alias: string
   className?: string
-}> = ({
-  src,
-  alias,
-  className,
-  ...props
-}) => {
+}> = ({ src, alias, className, ...props }) => {
   const habrStubPaths = [
     'habr.com/images/avatars/stub-user',
     'habr.com/images/stub-user',

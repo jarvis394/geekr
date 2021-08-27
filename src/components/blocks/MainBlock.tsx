@@ -13,18 +13,14 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down(MIN_WIDTH)]: {
       maxWidth: '100%',
       marginRight: 0,
-    }
+    },
   },
 }))
 
 const MainBlock = ({ children }) => {
   const classes = useStyles()
 
-  return (
-    <div className={classes.root}>
-      {children}
-    </div>
-  )
+  return <div className={classes.root}>{children}</div>
 }
 
 export default MainBlock

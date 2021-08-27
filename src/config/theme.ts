@@ -65,9 +65,9 @@ const generateTheme = (themeType?: PaletteType | string): ThemeOptions => {
       },
       MuiPaper: {
         rounded: {
-          borderRadius: 8
-        }
-      }
+          borderRadius: 8,
+        },
+      },
     },
     props: {
       // Ripple on IconButtons is delayed and not very effective in its action

@@ -1,10 +1,4 @@
-import {
-  Comment,
-  Comments,
-  Company,
-  FetchingState,
-  Post,
-} from 'src/interfaces'
+import { Comment, Comments, Company, FetchingState, Post } from 'src/interfaces'
 import { DownvoteReason } from 'src/interfaces/DownvoteReasons'
 
 export const PREFIX = 'POST_'

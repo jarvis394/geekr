@@ -25,5 +25,5 @@ export const About = ({
       <Typography className={classes.blockTitle}>О себе</Typography>
       <FormattedText>{whois.aboutHtml}</FormattedText>
     </div>
-  )
+  ) : null
 }

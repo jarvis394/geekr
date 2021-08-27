@@ -5,14 +5,14 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     justifyContent: 'center',
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
   },
   button: {
     borderRadius: 50,
     textTransform: 'none',
     fontFamily: 'Google Sans',
     padding: '2px 15px',
-    letterSpacing: '.04rem'
+    letterSpacing: '.04rem',
   },
 }))
 

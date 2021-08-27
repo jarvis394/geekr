@@ -16,5 +16,5 @@ export default combineReducers({
   auth,
   profile,
   post,
-  hub
+  hub,
 })

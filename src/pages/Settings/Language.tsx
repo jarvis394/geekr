@@ -84,7 +84,9 @@ const Language = () => {
     >
       <div className={classes.root}>
         <div className={classes.section}>
-          <Typography className={classes.sectionHeader}>{t`pages.SettingsLanguage.interface`}</Typography>
+          <Typography
+            className={classes.sectionHeader}
+          >{t`pages.SettingsLanguage.interface`}</Typography>
           <RadioGroup
             aria-label="language-interface"
             name="language-interface"
@@ -102,7 +104,9 @@ const Language = () => {
           </RadioGroup>
         </div>
         <div className={classes.section}>
-          <Typography className={classes.sectionHeader}>{t`pages.SettingsLanguage.publications`}</Typography>
+          <Typography
+            className={classes.sectionHeader}
+          >{t`pages.SettingsLanguage.publications`}</Typography>
           <RadioGroup
             aria-label="language-feed"
             name="language-feed"

@@ -152,7 +152,7 @@ const useProfileButtonStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     width: '100%',
-    textAlign: 'start'
+    textAlign: 'start',
   },
 }))
 

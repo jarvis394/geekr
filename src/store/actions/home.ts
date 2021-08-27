@@ -47,7 +47,10 @@ export const getPosts = ({
       payload: { data: data, mode, page, pagesCount, flow },
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error: error.message, mode, page, flow } })
+    dispatch({
+      type: type + '_REJECTED',
+      payload: { error: error.message, mode, page, flow },
+    })
   }
 }
 

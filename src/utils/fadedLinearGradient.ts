@@ -23,6 +23,9 @@ export default (theme: Theme) => {
     fade(t, 0.02),
     fade(t, 0),
   ]
-  
-  return `linear-gradient(to top, ${(isDarkTheme(theme) ? colors : colors.reverse()).join(',')})`
+
+  return `linear-gradient(to top, ${(isDarkTheme(theme)
+    ? colors
+    : colors.reverse()
+  ).join(',')})`
 }

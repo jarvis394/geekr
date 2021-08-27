@@ -38,7 +38,7 @@ const initialState: State = {
 
 export default (reducerState = initialState, { type, payload }): State => {
   const field = typeCorrespondings[type.split('_').slice(0, 3).join('_')]
-  
+
   if (field) {
     if (type.endsWith('FETCH')) {
       return {

@@ -133,7 +133,7 @@ const useStyles = makeStyles({
     [theme.breakpoints.up(MIDDLE_WIDTH)]: {
       paddingLeft: DRAWER_WIDTH,
       width: `calc(100% - ${DRAWER_WIDTH}px)`,
-    }
+    },
   }),
 })
 

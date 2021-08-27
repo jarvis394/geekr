@@ -4,7 +4,11 @@ import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import { Paper, useMediaQuery, useTheme } from '@material-ui/core'
 import { useLocation, useHistory } from 'react-router-dom'
-import { BOTTOM_BAR_HEIGHT, makeNavigationTabs, MIDDLE_WIDTH } from 'src/config/constants'
+import {
+  BOTTOM_BAR_HEIGHT,
+  makeNavigationTabs,
+  MIDDLE_WIDTH,
+} from 'src/config/constants'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import { useRoute } from 'src/hooks'
 import TabObject from 'src/interfaces/NavigationTabObject'
@@ -38,11 +42,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-
 const findPathValue = (route: Route): number => {
   const res = NAVIGATION_TABS.findIndex((e) => {
     if (Array.isArray(e.match)) {
-      return e.match.some(k => k === route.alias)
+      return e.match.some((k) => k === route.alias)
     } else {
       return e.match === route.alias
     }
@@ -60,9 +63,12 @@ const BottomBar = () => {
   const [value, setValue] = useState<number>(findPathValue(route))
   // future: https://material-ui.com/components/use-media-query/#server-side-rendering
   // when ssr is implemented, change `noSsr` to false.
-  const shouldHideBottomBar = useMediaQuery(theme.breakpoints.up(MIDDLE_WIDTH), {
-    noSsr: true,
-  })
+  const shouldHideBottomBar = useMediaQuery(
+    theme.breakpoints.up(MIDDLE_WIDTH),
+    {
+      noSsr: true,
+    }
+  )
   const handleChange = (
     _event: React.ChangeEvent<unknown>,
     newValue: number
@@ -84,7 +90,7 @@ const BottomBar = () => {
     hideAppBarHandler(route)
     setValue(findPathValue(route))
   }, [route])
-  
+
   if (shouldHideBottomBar) return null
 
   return isShown ? (

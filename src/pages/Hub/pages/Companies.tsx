@@ -3,9 +3,11 @@ import OutsidePage from 'src/components/blocks/OutsidePage'
 
 const Companies = () => {
   return (
-    <OutsidePage headerText="Компании" hidePositionBar disableShrinking>
-      
-    </OutsidePage>
+    <OutsidePage
+      headerText="Компании"
+      hidePositionBar
+      disableShrinking
+    ></OutsidePage>
   )
 }
 

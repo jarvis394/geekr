@@ -1,5 +1,11 @@
 import { Company, Hub } from 'src/interfaces'
-import { UserChildren, UserCompanies, UserExtended, UserHubs, UserWhois } from 'src/interfaces/User'
+import {
+  UserChildren,
+  UserCompanies,
+  UserExtended,
+  UserHubs,
+  UserWhois,
+} from 'src/interfaces/User'
 
 export const PROFILE = 'PROFILE_'
 export const PROFILE_CARD = PROFILE + 'CARD_'

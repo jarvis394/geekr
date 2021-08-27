@@ -51,9 +51,7 @@ const useStyles = makeStyles((theme) => ({
   collapseShadow: {
     position: 'absolute',
     background:
-      'linear-gradient(0deg,' +
-      getContrastPaperColor(theme) +
-      ',transparent)',
+      'linear-gradient(0deg,' + getContrastPaperColor(theme) + ',transparent)',
     bottom: 0,
     pointerEvents: 'none',
     height: 40,

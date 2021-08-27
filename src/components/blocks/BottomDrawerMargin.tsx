@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1, 0),
     padding: theme.spacing(2),
     background: theme.palette.background.paper,
-    border: '1px solid ' + fade(theme.palette.divider, 0.05)
+    border: '1px solid ' + fade(theme.palette.divider, 0.05),
   },
   drawerHeader: {
     display: 'flex',
@@ -59,11 +59,7 @@ interface Props {
   setOpen?: Dispatch<SetStateAction<boolean>>
 }
 
-const BottomDrawerMargin = ({
-  children,
-  isOpen,
-  setOpen,
-}: Props) => {
+const BottomDrawerMargin = ({ children, isOpen, setOpen }: Props) => {
   const classes = useStyles()
   const contents = (
     <Container className={classes.drawer}>

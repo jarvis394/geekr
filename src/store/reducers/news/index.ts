@@ -40,9 +40,7 @@ export default (state = initialState, { type, payload }) => {
       const refs = flow === 'all' ? data.articleRefs : data.newsRefs
 
       for (const id in refs) {
-        refs[id].postFirstImage = getPostFirstImage(
-          refs[id]
-        )
+        refs[id].postFirstImage = getPostFirstImage(refs[id])
       }
 
       if (flow === 'all') {

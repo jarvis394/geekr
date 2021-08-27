@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
   items: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   selectedItem: {
     background: theme.palette.action.selected,
@@ -125,12 +125,7 @@ const Pagination = ({
         </button>
         <div className={classes.items}>
           {items.slice(1, items.length - 1).map((item, i) => (
-            <PaginationItem
-              shape="rounded"
-              color="primary"
-              key={i}
-              {...item}
-            />
+            <PaginationItem shape="rounded" color="primary" key={i} {...item} />
           ))}
         </div>
         <button

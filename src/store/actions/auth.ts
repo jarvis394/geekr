@@ -1,4 +1,9 @@
-import { GET_ME, GET_AUTH_DATA, GET_CSRF_TOKEN, USER_LOGOUT } from '../reducers/auth/types'
+import {
+  GET_ME,
+  GET_AUTH_DATA,
+  GET_CSRF_TOKEN,
+  USER_LOGOUT,
+} from '../reducers/auth/types'
 import * as api from 'src/api/auth'
 import AccountAuthData from 'src/interfaces/AccountAuthData'
 import { AuthorizedRequestParams } from 'src/interfaces'

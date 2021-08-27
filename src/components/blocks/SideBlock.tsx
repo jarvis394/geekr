@@ -10,8 +10,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 8,
     marginTop: theme.spacing(1.5),
     '&:first-child': {
-      marginTop: 0
-    }
+      marginTop: 0,
+    },
   },
   titleContainer: {
     display: 'flex',

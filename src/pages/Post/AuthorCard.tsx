@@ -137,7 +137,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
     fontSize: 20,
     fontWeight: 800,
-  }
+  },
 }))
 
 const DonateDialog: React.FC<{
@@ -249,11 +249,16 @@ const AuthorCard: React.FC<{
             </div>
           </div>
         </div>
-        <Link to={'/user/' + post.author.alias} className={classes.nameAndAlias}>
+        <Link
+          to={'/user/' + post.author.alias}
+          className={classes.nameAndAlias}
+        >
           <Typography className={classes.fullname}>
             {post.author.fullname}
           </Typography>
-          <Typography className={post.author.fullname ? classes.alias : classes.aliasBig}>
+          <Typography
+            className={post.author.fullname ? classes.alias : classes.aliasBig}
+          >
             @{post.author.alias}
           </Typography>
         </Link>

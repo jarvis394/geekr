@@ -32,7 +32,10 @@ export const getNews = (
       payload: { data, page, pagesCount, flow },
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error: error.message, page, flow } })
+    dispatch({
+      type: type + '_REJECTED',
+      payload: { error: error.message, page, flow },
+    })
   }
 }
 

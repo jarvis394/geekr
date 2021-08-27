@@ -62,7 +62,8 @@ const setLevelInfo = (nodes: IComment[]) => {
     const nextThreadLevel = Math.trunc(nextNode.level / THREAD_LEVEL)
     nodes[i].threadLevel = threadLevel
     nodes[i].isThreadStart = nextThreadLevel > threadLevel
-    nodes[i].isLastInThread = (nextNode.level === 0 && !!nextNode.author) || isLast
+    nodes[i].isLastInThread =
+      (nextNode.level === 0 && !!nextNode.author) || isLast
     nodes[i].isNewLevel = prevNode.level < currentNode.level
   })
   return nodes

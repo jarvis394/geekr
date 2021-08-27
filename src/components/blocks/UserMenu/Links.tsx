@@ -13,12 +13,12 @@ const useStyles = makeStyles((theme) => ({
 const useListLinkStyles = makeStyles((theme) => ({
   root: {
     '-webkit-tap-highlight-color': 'transparent !important',
-    padding: theme.spacing(1.25, 2)
+    padding: theme.spacing(1.25, 2),
   },
   icon: {
     marginRight: theme.spacing(1.5),
-    color: theme.palette.primary.light
-  }
+    color: theme.palette.primary.light,
+  },
 }))
 
 interface ListLinkProps {
@@ -27,7 +27,11 @@ interface ListLinkProps {
   icon: typeof Icon28ArticleOutline
 }
 
-const ListLinkUnmemoized: React.FC<ListLinkProps> = ({ to, title, icon: Icon }) => {
+const ListLinkUnmemoized: React.FC<ListLinkProps> = ({
+  to,
+  title,
+  icon: Icon,
+}) => {
   const classes = useListLinkStyles()
 
   return (
@@ -43,7 +47,7 @@ const Links = () => {
   const classes = useStyles()
   const user = useSelector((store) => store.auth.me.data)
   const alias = user?.alias
-  
+
   return (
     <List className={classes.root}>
       <ListLink

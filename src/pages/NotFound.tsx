@@ -53,7 +53,9 @@ const NotFound = () => {
   return (
     <div className={classes.root}>
       <Typography className={classes.title}>four-o-four</Typography>
-      <Typography className={classes.text}>{t`pages.NotFound.title`}</Typography>
+      <Typography
+        className={classes.text}
+      >{t`pages.NotFound.title`}</Typography>
       <Typography className={classes.text}>
         <Trans i18nKey="pages.NotFound.text">
           <Link to="/" className={classes.link} />

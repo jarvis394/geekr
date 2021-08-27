@@ -27,7 +27,7 @@ export const get = (): UserSettings => {
 
 export const set = (payload: Partial<UserSettings>): UserSettings => {
   const data = get() || DEFAULT_USER_SETTINGS
-  
+
   for (const key in payload) {
     data[key] = payload[key]
   }

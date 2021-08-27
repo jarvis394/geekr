@@ -2,9 +2,18 @@ import { AUTH_DATA_KEY, CSRF_TOKEN_KEY } from 'src/config/constants'
 import { FetchingState } from 'src/interfaces'
 import AuthData from 'src/interfaces/AuthData'
 import safeJSONParse from 'src/utils/safeJSONParse'
-import { GET_AUTH_DATA, GET_CSRF_TOKEN, GET_ME, State, USER_LOGOUT } from './types'
+import {
+  GET_AUTH_DATA,
+  GET_CSRF_TOKEN,
+  GET_ME,
+  State,
+  USER_LOGOUT,
+} from './types'
 
-const cachedAuthData = safeJSONParse<AuthData, null>(localStorage.getItem(AUTH_DATA_KEY), null)
+const cachedAuthData = safeJSONParse<AuthData, null>(
+  localStorage.getItem(AUTH_DATA_KEY),
+  null
+)
 const cachedCSRFToken = localStorage.getItem(CSRF_TOKEN_KEY)
 const initialState: State = {
   authData: {
@@ -12,7 +21,7 @@ const initialState: State = {
     state: FetchingState[cachedAuthData ? 'Fetched' : 'Idle'],
     fetchError: null,
   },
-  csrfToken: {  
+  csrfToken: {
     data: cachedCSRFToken,
     state: FetchingState[cachedCSRFToken ? 'Fetched' : 'Idle'],
     fetchError: null,
@@ -22,10 +31,13 @@ const initialState: State = {
     fetchError: null,
     data: null,
   },
-  authorizedRequestData: (cachedAuthData && cachedCSRFToken) ? {
-    connectSID: cachedAuthData?.connectSID,
-    csrfToken: cachedCSRFToken
-  } : null
+  authorizedRequestData:
+    cachedAuthData && cachedCSRFToken
+      ? {
+          connectSID: cachedAuthData?.connectSID,
+          csrfToken: cachedCSRFToken,
+        }
+      : null,
 }
 
 export default (reducerState = initialState, { type, payload }): State => {
@@ -43,7 +55,7 @@ export default (reducerState = initialState, { type, payload }): State => {
       reducerState.authData.data = payload
       reducerState.authorizedRequestData = {
         ...reducerState.authorizedRequestData,
-        connectSID: payload.connectSID
+        connectSID: payload.connectSID,
       }
       localStorage.setItem(AUTH_DATA_KEY, JSON.stringify(payload))
       return reducerState
@@ -69,7 +81,7 @@ export default (reducerState = initialState, { type, payload }): State => {
       reducerState.csrfToken.data = payload
       reducerState.authorizedRequestData = {
         ...reducerState.authorizedRequestData,
-        csrfToken: payload
+        csrfToken: payload,
       }
       localStorage.setItem(CSRF_TOKEN_KEY, payload)
       return reducerState
@@ -110,8 +122,8 @@ export default (reducerState = initialState, { type, payload }): State => {
           me: {
             state: FetchingState.Error,
             fetchError: 'Expired authData',
-            data: null
-          }
+            data: null,
+          },
         }
       }
       return {
@@ -132,7 +144,7 @@ export default (reducerState = initialState, { type, payload }): State => {
           fetchError: payload,
           data: null,
         },
-      }   
+      }
     }
 
     case USER_LOGOUT: {
@@ -144,13 +156,13 @@ export default (reducerState = initialState, { type, payload }): State => {
           state: FetchingState.Idle,
           fetchError: null,
         },
-        csrfToken: {  
+        csrfToken: {
           data: null,
           state: FetchingState.Idle,
           fetchError: null,
         },
         me: initialState.me,
-        authorizedRequestData: null
+        authorizedRequestData: null,
       }
     }
 

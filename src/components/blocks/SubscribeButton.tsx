@@ -1,11 +1,20 @@
-import { ButtonBase, darken, lighten, makeStyles, Theme } from '@material-ui/core'
+import {
+  ButtonBase,
+  darken,
+  lighten,
+  makeStyles,
+  Theme,
+} from '@material-ui/core'
 import React from 'react'
 import isDarkTheme from 'src/utils/isDarkTheme'
 
-const useStyles = makeStyles<Theme, {
-  backgroundColor: string
-  isSubscribed: boolean
-}>((theme) => ({
+const useStyles = makeStyles<
+  Theme,
+  {
+    backgroundColor: string
+    isSubscribed: boolean
+  }
+>((theme) => ({
   subscribeButtonWrapper: {
     height: 32,
     width: 112,
@@ -27,9 +36,7 @@ const useStyles = makeStyles<Theme, {
     border: ({ isSubscribed }) =>
       isSubscribed ? 'none' : '1px solid ' + theme.palette.success.main,
     background: ({ isSubscribed, backgroundColor }) =>
-      isSubscribed
-        ? theme.palette.success.main
-        : backgroundColor,
+      isSubscribed ? theme.palette.success.main : backgroundColor,
     backgroundSize: '500%',
     transition: 'width .2s ease, background-color .2s ease',
     display: 'flex',

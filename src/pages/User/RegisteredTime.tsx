@@ -24,7 +24,8 @@ export const RegisteredTime = () => {
     <Typography variant="caption" className={classes.hintColor}>
       {user.gender !== '0' && (
         <>
-          {text} {timeRegistered(whois?.invitedBy?.timeCreated, user.registerDateTime)}
+          {text}{' '}
+          {timeRegistered(whois?.invitedBy?.timeCreated, user.registerDateTime)}
         </>
       )}
       {user.gender === '0' && (

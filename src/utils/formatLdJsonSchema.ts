@@ -8,7 +8,10 @@ export default (post: Post) => {
   if (!post) return ''
 
   const { schemaJsonLd } = post.metadata
-  const schema = safeJSONParse<SchemaJsonLd, Partial<SchemaJsonLd>>(schemaJsonLd, {})
+  const schema = safeJSONParse<SchemaJsonLd, Partial<SchemaJsonLd>>(
+    schemaJsonLd,
+    {}
+  )
   schema.mainEntityOfPage['@id'] = process.env.PUBLIC_URL + getPostLink(post)
   schema.url = process.env.PUBLIC_URL + getPostLink(post)
   schema.image = schema.image.filter(

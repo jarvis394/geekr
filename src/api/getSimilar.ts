@@ -5,5 +5,5 @@ export default async (id: number, authData?: AuthorizedRequestParams) =>
   await makeRequest<Posts>({
     path: `articles/${id}/similar`,
     version: 2,
-    authData
+    authData,
   })

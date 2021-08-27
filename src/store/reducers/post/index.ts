@@ -27,7 +27,7 @@ const initialCommentsData = {
   state: FetchingState.Idle,
   fetchError: null,
   sizesMap: {},
-  parseOptions: {}
+  parseOptions: {},
 }
 
 const initialState: State = {
@@ -101,7 +101,7 @@ export default (storeState = initialState, { type, payload }): State => {
           fetchedData: payload.fetchedData,
           comments: payload.comments,
           sizesMap: {},
-          parseOptions: payload.parseOptions
+          parseOptions: payload.parseOptions,
         },
       }
 
@@ -118,7 +118,7 @@ export default (storeState = initialState, { type, payload }): State => {
           fetchedData: null,
           comments: null,
           sizesMap: {},
-          parseOptions: {}
+          parseOptions: {},
         },
       }
 

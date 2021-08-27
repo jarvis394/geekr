@@ -7,7 +7,7 @@ export default async ({
   sort = 'rating',
   orderDirection = 'desc',
   sector = '',
-  authData
+  authData,
 }: Partial<{
   page: number
   perPage: number
@@ -47,5 +47,5 @@ export default async ({
       orderDirection,
     },
     version: 2,
-    authData
+    authData,
   })

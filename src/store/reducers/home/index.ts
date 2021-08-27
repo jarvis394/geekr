@@ -3,7 +3,7 @@ import {
   ADVERTS_PREFIX,
   SIDEBAR_TOP_COMPANIES,
   SIDEBAR_MOST_READING,
-  SET_HOME_POST_ITEM_SIZE
+  SET_HOME_POST_ITEM_SIZE,
 } from './types'
 import { FLOWS, RATING_MODES } from 'src/config/constants'
 import { Advert, FetchingState, FlowAlias, Posts } from 'src/interfaces'

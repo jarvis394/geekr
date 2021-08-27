@@ -30,7 +30,9 @@ const UserArticles = () => {
   const classes = useStyles()
   const theme = useTheme()
   const dispatch = useDispatch()
-  const isProfileFetched = useSelector((state) => state.profile.profile.card.fetched)
+  const isProfileFetched = useSelector(
+    (state) => state.profile.profile.card.fetched
+  )
   const isFetched = useSelector((state) => state.profile.articles.fetched)
   const isFetching = useSelector((state) => state.profile.articles.fetching)
   const fetchError = useSelector((state) => state.profile.articles.error)
