@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { routes } from 'src/config/routes'
+import useAnalytics from 'src/hooks/useAnalytics'
 
 const Router = () => {
   useAnalytics()
