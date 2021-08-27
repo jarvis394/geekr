@@ -18,10 +18,6 @@ export default async ({
     authData,
     requestOptions: {
       method: 'POST',
-      data: reason
-        ? {
-            reason,
-          }
-        : null,
+      data: reason ? { reason } : null,
     },
   })
