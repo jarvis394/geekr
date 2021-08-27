@@ -27,6 +27,8 @@ import {
 } from 'src/config/constants'
 import isMobile from 'is-mobile'
 import blend from 'src/utils/blendColors'
+import MainBlock from 'src/components/blocks/MainBlock'
+import PostSidebar from '../Post/Sidebar'
 
 const useStyles = makeStyles((theme) => ({
   errorText: {
@@ -159,7 +161,11 @@ const CommentsPage: React.FC = () => {
   }, [JSON.stringify(parseOptions)])
 
   useEffect(() => {
-    if (selectedCommentID.startsWith('#comment_') && shouldShowComments) {
+    if (
+      selectedCommentID &&
+      selectedCommentID.startsWith('#comment_') &&
+      shouldShowComments
+    ) {
       const commentID = selectedCommentID.slice('#'.length)
       const commentElement = document.getElementById(commentID)
       if (commentElement) {
@@ -187,43 +193,48 @@ const CommentsPage: React.FC = () => {
       headerText={post?.titleHtml}
       backgroundColor={theme.palette.background.paper}
     >
-      <div className={classes.root}>
-        <div className={classes.header}>
-          <Typography className={classes.headerText}>
-            Комментарии&nbsp;
-            {commentsLength && (
-              <Fade in={commentsLength !== 0}>
-                <span className={classes.commentsNumber}>{commentsLength}</span>
-              </Fade>
-            )}
-          </Typography>
-          <div className={classes.filterButtonWrapper}>
-            <IconButton
-              className={classes.filterButton}
-              onClick={goToCommentsSettings}
-            >
-              <Icon24Filter />
-            </IconButton>
+      <MainBlock>
+        <div className={classes.root}>
+          <div className={classes.header}>
+            <Typography className={classes.headerText}>
+              Комментарии&nbsp;
+              {commentsLength && (
+                <Fade in={commentsLength !== 0}>
+                  <span className={classes.commentsNumber}>
+                    {commentsLength}
+                  </span>
+                </Fade>
+              )}
+            </Typography>
+            <div className={classes.filterButtonWrapper}>
+              <IconButton
+                className={classes.filterButton}
+                onClick={goToCommentsSettings}
+              >
+                <Icon24Filter />
+              </IconButton>
+            </div>
           </div>
+          {shouldShowComments &&
+            filteredComments.map((e, i) => (
+              <Comment
+                postId={id}
+                isLastInFilteredRootThread={
+                  filteredComments[Math.min(i + 1, filteredComments.length - 1)]
+                    .level === 0
+                }
+                data={e}
+                key={e.id}
+              />
+            ))}
+          {!shouldShowComments && (
+            <div className={classes.spinnerWrapper}>
+              <CircularProgress />
+            </div>
+          )}
         </div>
-        {shouldShowComments &&
-          filteredComments.map((e, i) => (
-            <Comment
-              postId={id}
-              isLastInFilteredRootThread={
-                filteredComments[Math.min(i + 1, filteredComments.length - 1)]
-                  .level === 0
-              }
-              data={e}
-              key={e.id}
-            />
-          ))}
-        {!shouldShowComments && (
-          <div className={classes.spinnerWrapper}>
-            <CircularProgress />
-          </div>
-        )}
-      </div>
+      </MainBlock>
+      <PostSidebar />
     </OutsidePage>
   )
 }

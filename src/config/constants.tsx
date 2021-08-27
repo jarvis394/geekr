@@ -33,6 +33,7 @@ export const MAX_WIDTH = 1280
 export const POST_ITEM_VISIBILITY_THRESHOLD = -1 * 500
 
 export const POST_IMAGE_HEIGHT = 212
+export const DEFAULT_POST_ITEM_HEIGHT = 390
 export const ADVERTS_BLOCK_HEIGHT = 128
 export const ADVERTS_BLOCK_MAX_WIDTH = 364
 export const BOTTOM_BAR_HEIGHT = 52

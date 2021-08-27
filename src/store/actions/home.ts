@@ -8,6 +8,7 @@ import {
   ADVERTS_PREFIX,
   SIDEBAR_MOST_READING,
   SIDEBAR_TOP_COMPANIES,
+  SET_HOME_POST_ITEM_SIZE,
 } from '../reducers/home/types'
 
 interface GetPostsParams {
@@ -98,5 +99,16 @@ export const getTopCompanies = () => async (dispatch) => {
     })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: { error: error.message } })
+  }
+}
+
+export const setPostItemSize = (id: number | string, size: number) => (
+  dispatch,
+  getState: () => RootState
+) => {
+  const sizesMap = getState().home.sizesMap
+
+  if (!sizesMap[id]) {
+    dispatch({ type: SET_HOME_POST_ITEM_SIZE, payload: { id, size } })
   }
 }

@@ -10,6 +10,7 @@ import ErrorComponent from 'src/components/blocks/Error'
 import NewsBlock from 'src/pages/Home/NewsBlock'
 import {
   APP_BAR_HEIGHT,
+  DEFAULT_POST_ITEM_HEIGHT,
   FLOWS,
   Mode,
   RATING_MODES as modes,
@@ -17,7 +18,7 @@ import {
 } from 'src/config/constants'
 import Switcher from './Switcher'
 import { useDispatch } from 'react-redux'
-import { getPosts } from 'src/store/actions/home'
+import { getPosts, setPostItemSize } from 'src/store/actions/home'
 import { useSelector } from 'src/hooks'
 import getCachedMode from 'src/utils/getCachedMode'
 import AdvertsBlock from './AdvertsBlock'
@@ -74,6 +75,7 @@ const Home = () => {
   const location = useLocation()
   const classes = useStyles()
   const dispatch = useDispatch()
+  const postItemsSizesMap = useSelector((store) => store.home.sizesMap)
   const lastAllFlowsModeName = useSelector((state) => state.home.mode)
   const lastAllFlowsMode = RATING_MODES.find(
     (e) => e.mode === lastAllFlowsModeName
@@ -114,10 +116,21 @@ const Home = () => {
       />
     ) : null
 
+  const setPostItemSizeWrapper = (id: number | string, size: number) => {
+    !postItemsSizesMap[id] && dispatch(setPostItemSize(id, size))
+  }
+  const getPostItemSize = (id: number | string) => {
+    return postItemsSizesMap[id] || DEFAULT_POST_ITEM_HEIGHT
+  }
   const postsComponents =
     posts &&
     posts.articleIds.map((id, i) => (
-      <PostItem key={i} post={posts.articleRefs[id]} />
+      <PostItem
+        key={i}
+        setPostItemSize={setPostItemSizeWrapper}
+        getPostItemSize={getPostItemSize}
+        post={posts.articleRefs[id]}
+      />
     ))
 
   const handlePagination = (_, i) => {

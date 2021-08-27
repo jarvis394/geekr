@@ -3,6 +3,7 @@ import {
   ADVERTS_PREFIX,
   SIDEBAR_TOP_COMPANIES,
   SIDEBAR_MOST_READING,
+  SET_HOME_POST_ITEM_SIZE
 } from './types'
 import { FLOWS, RATING_MODES } from 'src/config/constants'
 import { Advert, FetchingState, FlowAlias, Posts } from 'src/interfaces'
@@ -41,6 +42,7 @@ const initialState = {
   fetched: false,
   error: null,
   data: modes,
+  sizesMap: {},
   flows: {
     fetching: false,
     fetched: false,
@@ -129,6 +131,11 @@ export default (
           },
         }
       }
+    }
+
+    case SET_HOME_POST_ITEM_SIZE: {
+      state.sizesMap[payload.id] = payload.size
+      return state
     }
 
     case ADVERTS_PREFIX + 'FETCH': {

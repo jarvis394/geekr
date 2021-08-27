@@ -15,6 +15,7 @@ import parse from 'html-react-parser'
 import { Post } from 'src/interfaces'
 import UserAvatar from './UserAvatar'
 import {
+  DEFAULT_POST_ITEM_HEIGHT,
   MIN_WIDTH,
   POST_IMAGE_HEIGHT,
   POST_ITEM_VISIBILITY_THRESHOLD,
@@ -34,6 +35,7 @@ import FormattedText from '../formatters/FormattedText'
 import getImagesFromText from 'src/utils/getImagesFromText'
 import { useSnackbar } from 'notistack'
 import setArticleBookmark from 'src/api/setArticleBookmark'
+import { useEffect } from 'react'
 
 const ld = (theme: Theme) => (isDarkTheme(theme) ? darken : lighten)
 const useStyles = makeStyles<
@@ -47,7 +49,7 @@ const useStyles = makeStyles<
     textDecoration: 'none !important',
   },
   placeholder: {
-    height: '390px',
+    height: DEFAULT_POST_ITEM_HEIGHT,
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -245,10 +247,14 @@ export const PostItem = ({
   post,
   style,
   hideImage: hideImageProp = false,
+  setPostItemSize,
+  getPostItemSize = () => DEFAULT_POST_ITEM_HEIGHT,
 }: {
   post?: Post
   style?: Record<string, unknown>
   hideImage?: boolean
+  setPostItemSize?: (id: number | string, size: number) => void
+  getPostItemSize?: (id?: number | string) => number
 }) => {
   const isExtended = useSelector(
     (store) => !store.settings.interfaceFeed.isCompact
@@ -327,6 +333,8 @@ export const PostItem = ({
   const authorizedRequestData = useSelector(
     (store) => store.auth.authorizedRequestData
   )
+  const rootRef = React.useRef<HTMLDivElement>()
+  const placeholderStyles = React.useMemo(() => ({ height: getPostItemSize(post.id) }), [getPostItemSize])
   const postLink = getPostLink(post)
   const shouldShowPostImage = postFirstImage && !hideImage && !isExtended
   const bottomRow: BottomRowItemType[] = [
@@ -448,7 +456,13 @@ export const PostItem = ({
     )
   }
   const BottomRowItem = React.memo(BottomRowItemUnmemoized)
-  
+
+  useEffect(() => {
+    if (setPostItemSize && isRendered && rootRef.current) {
+      setPostItemSize(post.id, rootRef.current.getBoundingClientRect().height)
+    }
+  }, [isRendered])
+
   return (
     <VisibilitySensor
       partialVisibility
@@ -461,9 +475,19 @@ export const PostItem = ({
     >
       {({ isVisible }) => (
         <>
-          {!isVisible && <div className={classes.placeholder} />}
+          {!isVisible && (
+            <div
+              style={placeholderStyles}
+              className={classes.placeholder}
+            />
+          )}
           {isVisible && (
-            <Paper elevation={0} className={classes.paper} style={style}>
+            <Paper
+              ref={rootRef}
+              elevation={0}
+              className={classes.paper}
+              style={style}
+            >
               <LinkToOutsidePage
                 to={'/user/' + alias}
                 className={classes.avatarContainer}
