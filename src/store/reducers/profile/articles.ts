@@ -1,4 +1,5 @@
 import { PROFILE_ARTICLES } from './types'
+import getPostFirstImage from 'src/utils/getPostFirstImage'
 
 const initialState = {
   fetching: false,
@@ -19,6 +20,12 @@ export default (state = initialState, { type, payload }) => {
 
     case PROFILE_ARTICLES + 'FETCH_FULFILLED': {
       const { page, pagesCount, data } = payload
+
+      for (const id in data.articleRefs) {
+        data.articleRefs[id].postFirstImage = getPostFirstImage(
+          data.articleRefs[id]
+        )
+      }
 
       state.data.pages[page] = {
         articleIds: data.articleIds,

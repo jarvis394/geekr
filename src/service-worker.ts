@@ -58,7 +58,7 @@ setCacheNameDetails({
 })
 
 // This allows the web app to trigger skipWaiting via
-// registration.waiting.postMessage({type: 'SKIP_WAITING'})
+// registration.waiting.postMessage({ type: 'SKIP_WAITING' })
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting()
@@ -133,6 +133,19 @@ registerRoute(
   /^https:\/\/fonts\.gstatic\.com/,
   new CacheFirst({
     cacheName: 'google-fonts-webfonts',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+    ],
+  })
+)
+
+// Cache local fonts
+registerRoute(
+  /.*\/fonts\/.*/,
+  new CacheFirst({
+    cacheName: 'habra-fonts',
     plugins: [
       new CacheableResponsePlugin({
         statuses: [0, 200],

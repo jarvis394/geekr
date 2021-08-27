@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { darken, fade, lighten, makeStyles } from '@material-ui/core/styles'
 import { UserAvatarAndLogin } from '../UserAvatarAndLogin'
 import { Statistics } from '../Statistics'
 import { InvitedTime } from '../InvitedTime'
@@ -12,28 +12,34 @@ import { Specialisation } from '../Specialisation'
 import Children from '../Children'
 import Companies from '../Companies'
 import Hubs from '../Hubs'
+import ProfileLinks from '../ProfileLinks'
+import { useSelector } from 'src/hooks'
+import fadedLinearGradient from 'src/utils/fadedLinearGradient'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 export const useStyles = makeStyles((theme) => ({
   topBlock: {
-    backgroundColor: theme.palette.background.paper,
+    background: fadedLinearGradient(theme),
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
     padding: theme.spacing(2),
+    paddingBottom: 0,
   },
   mainBlock: {
     paddingRight: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     paddingBottom: theme.spacing(2),
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: getContrastPaperColor(theme),
   },
   blockMargin: {
     marginTop: theme.spacing(2),
   },
 }))
 
-const Profile = ({ user }) => {
+const Profile = () => {
   const classes = useStyles()
+  const user = useSelector((state) => state.profile.profile.card.data)
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   useEffect(() => {}, [user.alias])
@@ -47,6 +53,7 @@ const Profile = ({ user }) => {
           FollowersCount,
           InvitedTime,
           RegisteredTime,
+          ProfileLinks,
         ].map((Component, i) => (
           <Component key={i} />
         ))}

@@ -1,11 +1,12 @@
 import React from 'react'
 import Spoiler from './Spoiler'
 import { makeStyles } from '@material-ui/core/styles'
+import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(4),
-    background: theme.palette.background.default,
+    background: getInvertedContrastPaperColor(theme),
     borderRadius: theme.shape.borderRadius,
     overflow: 'hidden',
     padding: theme.spacing(2),
@@ -34,4 +35,4 @@ const Details = ({ title, children }) => {
   )
 }
 
-export default Details
+export default React.memo(Details)

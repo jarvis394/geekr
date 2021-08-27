@@ -1,3 +1,4 @@
+import { Company, Hub } from 'src/interfaces'
 import { UserChildren, UserCompanies, UserExtended, UserHubs, UserWhois } from 'src/interfaces/User'
 
 export const PROFILE = 'PROFILE_'

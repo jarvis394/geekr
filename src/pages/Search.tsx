@@ -8,16 +8,15 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import PostItem from '../components/blocks/PostItem'
 import { getSearchResults } from '../api'
-import PostSkeleton from '../components/skeletons/Post'
+import PostSkeleton from '../components/skeletons/PostItem'
 import Pagintaion from '../components/blocks/Pagination'
 import EmptySVG from '../components/svg/Empty'
 import SearchSVG from '../components/svg/Search'
 import { Posts } from '../interfaces'
-
-/**
- * Custom hook for getting query from the URL
- */
-const useQuery = () => new URLSearchParams(useLocation().search)
+import useQuery from '../hooks/useQuery'
+import getPostFirstImage from 'src/utils/getPostFirstImage'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     minHeight: 600,
+    width: '100%',
     background: theme.palette.background.default,
   },
 }))
@@ -82,6 +82,7 @@ const useNoResultsStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     flexDirection: 'column',
     height: '100%',
+    margin: theme.spacing(2),
   },
   title: {
     fontFamily: 'Google Sans',
@@ -100,6 +101,7 @@ const useNoResultsStyles = makeStyles((theme) => ({
 const SearchInput = ({ q }) => {
   const classes = useSearchStyles()
   const history = useHistory()
+  const { t } = useTranslation()
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -113,7 +115,7 @@ const SearchInput = ({ q }) => {
           autoFocus
           name="q"
           defaultValue={q}
-          placeholder={'Поиск'}
+          placeholder={t`pages.Search.searchInputPlaceholder`}
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,
@@ -127,7 +129,7 @@ const SearchInput = ({ q }) => {
           variant="contained"
           className={classes.searchButton}
         >
-          Найти
+          {t`pages.Search.searchInputButtonText`}
         </Button>
       </Paper>
     </form>
@@ -136,10 +138,12 @@ const SearchInput = ({ q }) => {
 
 const NoResults = () => {
   const classes = useNoResultsStyles()
+  const { t } = useTranslation()
+
   return (
     <div className={classes.root}>
       <Typography className={classes.title}>
-        К сожалению, здесь пока нет ни одной публикации
+        {t`pages.Search.noResultsText`}
       </Typography>
       <EmptySVG className={classes.svg} />
     </div>
@@ -154,6 +158,8 @@ const SearchResultsScreen = ({ q }) => {
   const [fetchError, setError] = useState()
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page))
   const [pagesCount, setPagesCount] = useState<number>()
+  const authData = useSelector(store => store.auth.authData.data)
+  const csrfToken = useSelector(store => store.auth.csrfToken.data)
 
   const handleChange = (_, i) => {
     if (i === currentPage) return
@@ -170,7 +176,20 @@ const SearchResultsScreen = ({ q }) => {
 
     const get = async () => {
       try {
-        const d = await getSearchResults(q, currentPage, 'relevance')
+        const d = await getSearchResults({
+          query: q,
+          page: currentPage,
+          order: 'relevance',
+          authData: csrfToken ? {
+            connectSID: authData.connectSID,
+            csrfToken
+          } : null
+        })
+        for (const id in d.articleRefs) {
+          d.articleRefs[id].postFirstImage = getPostFirstImage(
+            d.articleRefs[id]
+          )
+        }
         setData(d)
         if (!pagesCount) setPagesCount(d.pagesCount)
       } catch (e) {
@@ -178,10 +197,9 @@ const SearchResultsScreen = ({ q }) => {
       }
     }
     get()
-    // eslint-disable-next-line
   }, [q, currentPage])
 
-  if (fetchError) return <NoResults />
+  if (fetchError || data?.articleIds?.length === 0) return <NoResults />
 
   return (
     <div>
@@ -193,6 +211,7 @@ const SearchResultsScreen = ({ q }) => {
       <Pagintaion
         disabled={!data}
         steps={pagesCount}
+        currentStep={currentPage}
         handleChange={handleChange}
       />
     </div>
@@ -202,11 +221,12 @@ const SearchResultsScreen = ({ q }) => {
 const SvgScreen = () => {
   const classes = useSvgStyles()
   const theme = useTheme()
+  const { t } = useTranslation()
 
   return (
     <div className={classes.svgHolder}>
       <Typography className={classes.svgTitle}>
-        Попробуй что-нибудь поискать!
+        {t`pages.Search.svgScreenText`}
       </Typography>
       <SearchSVG theme={theme.palette.type} className={classes.svg} />
     </div>

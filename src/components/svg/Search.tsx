@@ -1,8 +1,10 @@
+import { useTheme } from '@material-ui/core'
 import React from 'react'
 import Props from '../../interfaces/SVGProps'
 
 const SearchSVG = ({ svgProps, ...props }: Props) => {
   const isLight = props.theme === 'light'
+  const theme = useTheme()
 
   return (
     <div {...props}>
@@ -160,7 +162,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           y="183.93"
           width="149.48"
           height="4.67"
-          fill="#2979ff"
+          fill={theme.palette.primary.main}
           opacity="0.7"
         ></rect>
         <rect
@@ -249,14 +251,14 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
         <g clipPath="url(#42e7b1d1-2be2-47b0-aacb-a853df270819)">
           <polygon
             points="190.35 355.61 226.56 299.55 241.74 324.07 274.44 290.21 302.47 324.07 326.99 273.86 390.05 374.29 185.68 367.28 190.35 355.61"
-            fill={isLight ? '#2979ff' : '#aaa'}
+            fill={isLight ? theme.palette.primary.main : '#aaa'}
             opacity="0.4"
           ></polygon>
           <circle
             cx="218.38"
             cy="276.19"
             r="10.51"
-            fill={isLight ? '#2979ff' : '#aaa'}
+            fill={isLight ? theme.palette.primary.main : '#aaa'}
             opacity="0.4"
           ></circle>
         </g>
@@ -356,7 +358,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           width="88.75"
           height="4.67"
           transform="translate(-33.22 -143.21) rotate(11.24)"
-          fill="#2979ff"
+          fill={theme.palette.primary.main}
           opacity="0.7"
         ></rect>
         <rect
@@ -365,7 +367,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           width="154.15"
           height="4.67"
           transform="translate(-119.16 -175.95) rotate(11.24)"
-          fill="#2979ff"
+          fill={theme.palette.primary.main}
           opacity="0.7"
         ></rect>
         <rect
@@ -425,7 +427,7 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
           width="33.87"
           height="113.28"
           transform="translate(-69.19 -164.51) rotate(11.24)"
-          fill="#2979ff"
+          fill={theme.palette.primary.main}
         ></rect>
         <rect
           x="622.06"
@@ -469,17 +471,17 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
         <path
           d="M892.68,404.63a155.89,155.89,0,0,0-223.11-1.68c-59,59.48-60,156.33-2.29,217.07a155.89,155.89,0,0,0,199.9,22.05L979.86,759.29a7.59,7.59,0,0,0,10.73.21l28.08-27a7.59,7.59,0,0,0,.21-10.73L906.19,604.56A155.9,155.9,0,0,0,892.68,404.63ZM857.58,593a111.5,111.5,0,1,1,3.1-157.66A111.5,111.5,0,0,1,857.58,593Z"
           transform="translate(-179 -60.54)"
-          fill="#2979ff"
+          fill={theme.palette.primary.main}
         ></path>
         <path
           d="M697.72,481.67c-12.54,0-12.56,19.49,0,19.49S710.28,481.67,697.72,481.67Z"
           transform="translate(-179 -60.54)"
-          fill="#2979ff"
+          fill={theme.palette.primary.main}
         ></path>
         <path
           d="M785.13,419.25c-33.75-.76-64.46,16.17-80.79,41.73-5.33,8.34,9.8,15.71,15.1,7.41,13.52-21.16,39.21-34.6,67-33.9,29.12.73,55.62,17.39,69.65,40.51,5.32,8.77,19.27.8,14-7.92C853,439,820,420,785.13,419.25Z"
           transform="translate(-179 -60.54)"
-          fill="#2979ff"
+          fill={theme.palette.primary.main}
         ></path>
         <rect
           x="121.45"
@@ -526,4 +528,4 @@ const SearchSVG = ({ svgProps, ...props }: Props) => {
   )
 }
 
-export default SearchSVG
+export default React.memo(SearchSVG)

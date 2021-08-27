@@ -1,50 +1,101 @@
 import * as React from 'react'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import { fade, makeStyles } from '@material-ui/core/styles'
+import { fade, makeStyles, darken, lighten } from '@material-ui/core/styles'
 import { useParams } from 'react-router'
-import { getPost } from '../../api'
+import { getPost, getCompany } from 'src/store/actions/post'
 import { Link } from 'react-router-dom'
-import PostViewSkeleton from '../../components/skeletons/PostView'
-import ErrorComponent from '../../components/blocks/Error'
+import PostViewSkeleton from 'src/components/skeletons/PostView'
+import ErrorComponent from 'src/components/blocks/Error'
 import dayjs from 'dayjs'
-import FormattedText from '../../components/formatters/FormattedText'
+import FormattedText from 'src/components/formatters/FormattedText'
 import { Theme } from '@material-ui/core/styles'
-import { Post as IPost, Company as ICompany } from 'src/interfaces'
 import UserAvatar from 'src/components/blocks/UserAvatar'
-import BottomBar from './BottomBar'
-import CommentsButton from './CommentsButton'
+import Statistics from './Statistics'
 import SimilarPosts from './SimilarPosts'
 import TopDayPosts from './TopDayPosts'
-import getCompany from 'src/api/getCompany'
-import { Chip, Link as MUILink } from '@material-ui/core'
-import { POST_LABELS as postLabels } from 'src/config/constants'
+import { Chip, Fade, Link as MUILink } from '@material-ui/core'
+import { MIN_WIDTH, POST_LABELS as postLabels } from 'src/config/constants'
+import OutsidePage from 'src/components/blocks/OutsidePage'
+import { useSelector } from 'src/hooks'
+import { useDispatch } from 'react-redux'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
+import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
+import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
+import MetaTags from 'react-meta-tags'
+import getPostLink from 'src/utils/getPostLink'
+import getPostSocialImage from 'src/utils/getPostSocialImage'
+import formatLdJsonSchema from 'src/utils/formatLdJsonSchema'
+import MainBlock from 'src/components/blocks/MainBlock'
+import PostSidebar from './Sidebar'
+import { HubsItem } from '../User/Hubs'
+import { Hub } from 'src/interfaces'
+import AuthorCard from './AuthorCard'
+import CompanyCard from './CompanyCard'
+import CompanyCardWithLinks from './CompanyCardWithLinks'
+
+const makeGradient = (theme: Theme) => {
+  const t =
+    theme.palette.type === 'light'
+      ? lighten(theme.palette.background.default, 0.1)
+      : darken(theme.palette.background.paper, 0.1)
+  const colors = [
+    t,
+    fade(t, 0.98),
+    fade(t, 0.94),
+    fade(t, 0.88),
+    fade(t, 0.8),
+    fade(t, 0.71),
+    fade(t, 0.61),
+    fade(t, 0.5),
+    fade(t, 0.39),
+    fade(t, 0.29),
+    fade(t, 0.2),
+    fade(t, 0.12),
+    fade(t, 0.06),
+    fade(t, 0.02),
+    fade(t, 0),
+  ]
+
+  return `linear-gradient(to bottom, ${colors.join(',')})`
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: '100%',
-    maxWidth: '100vw',
-    backgroundColor: theme.palette.background.default,
+    paddingBottom: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'column',
   },
   hubs: {
     wordBreak: 'break-word',
     width: '100%',
+    marginBottom: theme.spacing(0.5),
   },
   hubLink: {
     color: theme.palette.text.hint,
-    fontWeight: 500,
+    fontFamily: 'Roboto',
+    fontWeight: 400,
+    fontSize: 13,
     transitionDuration: '100ms',
     textDecoration: 'none',
     '&:hover': {
       color: theme.palette.primary.light,
     },
+    ...theme.typography.body2,
   },
-  post: {
-    background: theme.palette.background.paper,
+  hubWrapper: {
+    color: theme.palette.text.hint,
+    '&::after': {
+      content: '",\u2004"',
+    },
+    '&:last-child::after': {
+      content: '""',
+    },
   },
-  authorBar: { paddingTop: theme.spacing(2.5) },
+  authorBar: { paddingTop: theme.spacing(2) },
   avatar: {
     width: theme.spacing(2.5),
     height: theme.spacing(2.5),
@@ -54,28 +105,42 @@ const useStyles = makeStyles((theme: Theme) => ({
   author: {
     color: theme.palette.primary.light,
     marginRight: theme.spacing(1),
-    fontWeight: 500,
-    fontSize: 14,
+    fontWeight: 700,
+    fontSize: 13,
     textDecoration: 'none',
   },
   ts: {
     color: theme.palette.text.hint,
-    fontWeight: 500,
-    fontSize: 14,
+    fontWeight: 400,
+    fontSize: 13,
+    flexGrow: 1,
+  },
+  score: {
+    fontWeight: 700,
+    fontSize: 13,
+    marginLeft: theme.spacing(1),
+  },
+  scoreIcon: {
+    fontSize: '1rem',
+  },
+  scoreWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    color: theme.palette.text.secondary,
   },
   text: {
     marginTop: theme.spacing(3),
-    paddingBottom: theme.spacing(2),
+    paddingBottom: theme.spacing(1),
     lineHeight: '1.56',
     wordBreak: 'break-word',
     hyphens: 'auto',
-    color: theme.palette.type === 'dark' ? '#eee' : theme.palette.text.primary,
+    color: theme.palette.text.primary,
   },
   title: {
     fontWeight: 800,
     fontFamily: 'Google Sans',
-    fontSize: 28,
-    lineHeight: '34px',
+    fontSize: 24,
+    lineHeight: '32px',
     wordBreak: 'break-word',
     hyphens: 'auto',
     marginBottom: theme.spacing(1),
@@ -83,14 +148,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   commentsButton: {
     marginTop: theme.spacing(2),
-  },
-  companyHeaderLink: {
-    display: 'flex',
-    background: theme.palette.background.default,
-    flexDirection: 'column',
-  },
-  companyHeader: {
-    width: '100%',
   },
   translatedBox: {
     backgroundColor: fade(theme.palette.primary.dark, 0.1),
@@ -106,154 +163,279 @@ const useStyles = makeStyles((theme: Theme) => ({
       opacity: 0.9,
     },
   },
+  content: {
+    paddingBottom: theme.spacing(1.5),
+    backgroundColor: getContrastPaperColor(theme),
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      borderRadius: 8,
+      backgroundColor: theme.palette.background.paper + ' !important',
+      marginTop: theme.spacing(1.5),
+    },
+  },
+  sectionTitle: {
+    fontFamily: 'Google Sans',
+    textTransform: 'uppercase',
+    fontWeight: 500,
+    fontSize: 13,
+    letterSpacing: '1px',
+    color: theme.palette.text.hint,
+    lineHeight: 'normal',
+    padding: theme.spacing(0.5, 0),
+  },
+  section: {
+    padding: theme.spacing(1.8 / 2, 0),
+  },
+  sectionLinkWrapper: {
+    '&::after': {
+      content: '",\u2004"',
+    },
+    '&:last-child::after': {
+      content: '""',
+    },
+    color: theme.palette.primary.main,
+  },
+  sectionLink: {
+    color: theme.palette.primary.main,
+    fontFamily: 'Roboto',
+    fontWeight: 400,
+    fontSize: 13,
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+    ...theme.typography.body2,
+  },
+  hubsContainer: {
+    marginTop: theme.spacing(0.5),
+  },
+  postHeader: {
+    background: makeGradient(theme),
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      background: 'transparent',
+    },
+  },
 }))
 
+interface Params {
+  id: string
+  alias?: string
+}
+
 const Post = () => {
-  const [post, setPost] = useState<IPost>()
-  const [company, setCompany] = useState<ICompany>()
-  const [fetchError, _setError] = useState<string>()
-  const { id } = useParams<{ id: string }>()
+  const dispatch = useDispatch()
+  const company = useSelector((store) => store.post.company.data)
+  const companyFetchError = useSelector(
+    (store) => store.post.company.fetchError
+  )
+  const post = useSelector((store) => store.post.post.data)
+  const fetchError = useSelector((store) => store.post.post.fetchError)
+  const { id: strigifiedId, alias: companyAlias } = useParams<Params>()
+  const id = Number(strigifiedId)
   const classes = useStyles()
-  const [shouldShowCompanyHeader, setCompanyHeaderState] = useState<boolean>(
-    post?.isCorporative || true
-  )
+  const contentsRef = React.useRef<HTMLDivElement>()
   const isTranslated = post && !!post.translationData
-  const shouldShowContents =
-    post && (shouldShowCompanyHeader ? post && company : post)
-  const contents = shouldShowContents ? (
-    <>
-      {/** Company header */}
-      {company && company?.settings?.branding?.imageUrl && (
-        <div className={classes.companyHeaderLink}>
-          <a style={{ display: 'flex' }} href={company.settings.branding.linkUrl}>
-            <img
-              alt={company.alias}
-              className={classes.companyHeader}
-              src={company.settings.branding.imageUrl}
-            />
-          </a>
-        </div>
-      )}
+  const shouldShowContents = post && (companyAlias ? post && company : post)
+  const shouldShowCompanyInfo = !!company
+  const labels =
+    shouldShowContents &&
+    post.postLabels.map((e, i) => {
+      const labelData = postLabels[e.type]
+      return (
+        <Chip
+          label={labelData.text}
+          variant="outlined"
+          color="primary"
+          size="small"
+          key={i}
+          component={labelData.link ? MUILink : 'span'}
+          style={{ marginRight: 8, marginTop: 8 }}
+        />
+      )
+    })
 
-      <Container className={classes.post}>
-        {/** Post header */}
-        <Grid
-          className={classes.authorBar}
-          container
-          direction="row"
-          alignItems="center"
-        >
-          <UserAvatar
-            alias={post.author.alias}
-            src={post.author.avatarUrl}
-            className={classes.avatar}
-          />
-          <Typography
-            component={Link}
-            to={'/user/' + post.author.alias}
-            className={classes.author}
-          >
-            {post.author.alias}
-          </Typography>
-          <Typography className={classes.ts}>
-            {dayjs(post.timePublished).fromNow()}
-          </Typography>
-        </Grid>
-        <Typography className={classes.title}>{post.titleHtml}</Typography>
-        <div className={classes.hubs}>
-          {post.hubs.map((hub, i) => (
-            <Typography key={i} variant="body2" component="span">
-              <Link className={classes.hubLink} to={'/hub/' + hub.alias}>
-                {hub.title}
-                {post.hubs.length - 1 !== i && ', '}
-              </Link>
-            </Typography>
-          ))}
-        </div>
-        {isTranslated && (
-          <MUILink
-            href={post.translationData.originalUrl}
-            className={classes.translatedBox}
-          >
-            Автор оригинала: {post.translationData.originalAuthorName}
-          </MUILink>
-        )}
-
-        {/* Article text */}
-        <FormattedText
-          className={classes.text}
-          disableParagraphMargin={post.editorVersion === '1.0'}
-        >
-          {post.textHtml}
-        </FormattedText>
-      </Container>
-
-      {/* Bottom bar with some article info */}
-      <BottomBar post={post} />
-    </>
-  ) : (
-    <PostViewSkeleton />
-  )
-
-  const setError = (e: string) => {
-    setPost(null)
-    return _setError(e)
-  }
-
-  // Get the post data
+  // Start fetching post data
   useEffect(() => {
-    const get = async () => {
-      // Reset error state
-      setError(null)
+    dispatch(getPost(id))
+    companyAlias && dispatch(getCompany(companyAlias))
+  }, [id, companyAlias])
 
-      try {
-        const data = await getPost(id)
-        setPost(data)
-        setCompanyHeaderState(data.isCorporative)
-      } catch (e) {
-        if (e?.statusCode === 404) return setError('Статья не найдена')
-        else return setError(e.message)
-      }
-    }
-    get()
-  }, [id])
-
-  // Get company data if post is corporative
-  useEffect(() => {
-    const get = async () => {
-      const hub = post.hubs.find((e) => e.type === 'corporative')
-      try {
-        hub && setCompany((await getCompany(hub.alias)))
-      } catch (e) {
-        console.warn(`Cannot get company data ${hub.alias}:`, e.message)
-        setCompanyHeaderState(false)
-      }
-    }
-    if (post && post.isCorporative) get()
-  }, [post])
-
-  if (post) document.title = post.titleHtml
   if (fetchError) return <ErrorComponent message={fetchError} />
+  if (companyFetchError)
+    console.error('Could not fetch company data:', companyFetchError)
 
   return (
-    <div className={classes.root}>
-      {contents}
-
-      {/* Button to Comments page */}
-      {post && (
-        <CommentsButton
-          className={classes.commentsButton}
-          id={id}
-          count={post.statistics.commentsCount}
+    <OutsidePage
+      hidePositionBar={!shouldShowContents}
+      headerText={post?.titleHtml}
+      scrollElement={contentsRef.current}
+    >
+      <MetaTags>
+        <title>{(post ? post.titleHtml : 'Публикация') + ' | habra.'}</title>
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@habrahabr" />
+        <meta name="twitter:title" content={post?.titleHtml} />
+        <meta name="description" content={post?.metadata.metaDescription} />
+        <meta itemProp="description" content={post?.metadata.metaDescription} />
+        <meta
+          property="og:description"
+          content={post?.metadata.metaDescription}
         />
-      )}
+        <meta
+          property="aiturec:description"
+          content={post?.metadata.metaDescription}
+        />
+        <meta
+          name="twitter:description"
+          content={post?.metadata.metaDescription}
+        />
+        {/* <meta itemProp="image" content={getPostSocialImage(post)} />
+        <meta property="og:image" content={getPostSocialImage(post)} />
+        <meta property="vk:image" content={getPostSocialImage(post)} />
+        <meta name="twitter:image" content={getPostSocialImage(post)} /> */}
+        <meta property="og:type" content="article" />
+        <meta
+          property="og:url"
+          content={process.env.PUBLIC_URL + getPostLink(post)}
+        />
+        <meta itemProp="name" content={post?.titleHtml} />
+        <meta property="og:title" content={post?.titleHtml} />
+        <meta property="aiturec:title" content={post?.titleHtml} />
+        <meta property="aiturec:item_id" content={post?.id.toString()} />
+        <meta property="aiturec:datetime" content={post?.timePublished} />
+        <script type="application/ld+json">{formatLdJsonSchema(post)}</script>
+      </MetaTags>
 
-      {/* Similar */}
-      <SimilarPosts id={id} />
+      <MainBlock>
+        <div className={classes.root}>
+          {/** Company header */}
+          <CompanyCard post={post} companyAlias={companyAlias} />
 
-      {/* Top day */}
-      <TopDayPosts />
-    </div>
+          <div className={classes.content} ref={contentsRef}>
+            {shouldShowContents && (
+              <>
+                {/** Post header */}
+                <Fade in>
+                  <div className={classes.postHeader}>
+                    <Container>
+                      <Grid
+                        className={classes.authorBar}
+                        container
+                        direction="row"
+                        alignItems="center"
+                      >
+                        <UserAvatar
+                          alias={post.author.alias}
+                          src={post.author.avatarUrl}
+                          className={classes.avatar}
+                        />
+                        <Typography
+                          component={Link}
+                          to={'/user/' + post.author.alias}
+                          className={classes.author}
+                        >
+                          {post.author.alias}
+                        </Typography>
+                        <Typography className={classes.ts}>
+                          {dayjs(post.timePublished).fromNow()}
+                        </Typography>
+                        <GreenRedNumber
+                          number={post.statistics.score}
+                          wrapperProps={{ className: classes.scoreWrapper }}
+                        >
+                          <>
+                            <ThumbsUpDownIcon className={classes.scoreIcon} />
+                            <Typography className={classes.score}>
+                              {post.statistics.score > 0 ? '+' : ''}
+                              {post.statistics.score}
+                            </Typography>
+                          </>
+                        </GreenRedNumber>
+                      </Grid>
+                      <FormattedText className={classes.title}>
+                        {post.titleHtml}
+                      </FormattedText>
+                      <div className={classes.hubs}>
+                        {post.hubs.map((hub, i) => (
+                          <span key={i} className={classes.hubWrapper}>
+                            <Link
+                              className={classes.hubLink}
+                              to={'/hub/' + hub.alias + '/p/1'}
+                            >
+                              {hub.title}
+                            </Link>
+                          </span>
+                        ))}
+                      </div>
+                      {labels}
+                      {isTranslated && (
+                        <MUILink
+                          href={post.translationData.originalUrl}
+                          className={classes.translatedBox}
+                        >
+                          Автор оригинала:{' '}
+                          {post.translationData.originalAuthorName}
+                        </MUILink>
+                      )}
+                    </Container>
+                  </div>
+                </Fade>
+
+                {/* Article text */}
+                <Fade in>
+                  <Container>
+                    <FormattedText
+                      className={classes.text}
+                      oldHabrFormat={post.editorVersion === '1.0'}
+                    >
+                      {post.textHtml}
+                    </FormattedText>
+
+                    <div className={classes.section}>
+                      <Typography className={classes.sectionTitle}>
+                        Теги
+                      </Typography>
+                      {post.tags.map((e, i) => (
+                        <span key={i} className={classes.sectionLinkWrapper}>
+                          <Link
+                            to={`/search/p/1?q=[${e.titleHtml}]`}
+                            className={classes.sectionLink}
+                          >
+                            {e.titleHtml}
+                          </Link>
+                        </span>
+                      ))}
+                    </div>
+                    <div className={classes.section}>
+                      <Typography className={classes.sectionTitle}>
+                        Хабы
+                      </Typography>
+                      <Grid
+                        spacing={1}
+                        container
+                        className={classes.hubsContainer}
+                      >
+                        {post.hubs.map((e, i) => (
+                          <HubsItem data={(e as unknown) as Hub} key={i} />
+                        ))}
+                      </Grid>
+                    </div>
+                  </Container>
+                </Fade>
+              </>
+            )}
+            {!shouldShowContents && <PostViewSkeleton />}
+          </div>
+
+          {/* Bottom bar with some article info */}
+          {post && <Statistics post={post} />}
+          {shouldShowCompanyInfo && <CompanyCardWithLinks post={post} />}
+          <AuthorCard post={post} />
+          <SimilarPosts id={id} />
+          <TopDayPosts />
+        </div>
+      </MainBlock>
+      <PostSidebar />
+    </OutsidePage>
   )
 }
 

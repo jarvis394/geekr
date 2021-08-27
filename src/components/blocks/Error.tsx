@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+    width: '100%',
     '@media (min-width: 768px)': {
       flexDirection: 'row',
     },
@@ -64,4 +65,4 @@ const ErrorComponent = ({ code = 500, message, to = '/' }: Params) => {
   )
 }
 
-export default ErrorComponent
+export default React.memo(ErrorComponent)

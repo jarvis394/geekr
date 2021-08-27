@@ -10,13 +10,38 @@ import relativeTimePlugin from 'dayjs/plugin/relativeTime'
 import calendarPlugin from 'dayjs/plugin/calendar'
 import updateLocalePlugin from 'dayjs/plugin/updateLocale'
 import 'dayjs/locale/ru'
-import ReactGA from 'react-ga'
-import { GA_ID_STRING } from 'src/config/constants'
+import 'src/config/i18n'
+import { BrowserRouter as Router } from 'react-router-dom'
 import 'react-photoswipe/dist/photoswipe.css'
+import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
+import { MATOMO_SERVER_URL, MATOMO_SITE_ID, SENTRY_DSN } from 'src/config/constants'
+import * as userSettingsUtils from 'src/utils/userSettings'
+import * as Sentry from '@sentry/react'
+import { Integrations } from '@sentry/tracing'
 
-ReactGA.initialize(GA_ID_STRING)
+const userSettings = userSettingsUtils.get()
+const instance = createInstance({
+  urlBase: MATOMO_SERVER_URL,
+  siteId: MATOMO_SITE_ID,
+  linkTracking: false,
+  configurations: {
+    setRequestMethod: 'POST',
+    setRequestContentType: 'application/json',
+    setDoNotTrack: false,
+    setSecureCookie: true,
+    disableCookies: userSettings.cookiesPreferences.disableCookies,
+  },
+})
 
-dayjs.locale('ru')
+Sentry.init({
+  dsn: SENTRY_DSN,
+  integrations: [new Integrations.BrowserTracing()],
+  tracesSampleRate: 0,
+  environment: process.env.NODE_ENV,
+  enabled: process.env.NODE_ENV === 'production'
+})
+
+dayjs.locale(userSettings.language.interface || 'ru')
 dayjs.extend(relativeTimePlugin)
 dayjs.extend(calendarPlugin)
 dayjs.extend(updateLocalePlugin)
@@ -29,11 +54,23 @@ dayjs.updateLocale('ru', {
     sameElse: 'DD.MM.YYYY',
   },
 })
+dayjs.updateLocale('en', {
+  calendar: {
+    lastWeek: 'D MMMM, at hh:mm',
+    sameDay: 'Today, at hh:mm',
+    lastDay: 'Yesterday, at hh:mm',
+    sameElse: 'DD.MM.YYYY',
+  },
+})
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <MatomoProvider value={instance}>
+    <Provider store={store}>
+      <Router>
+        <App />
+      </Router>
+    </Provider>
+  </MatomoProvider>,
   document.getElementById('root')
 )
 serviceWorker.register(swConfig)

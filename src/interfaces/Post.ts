@@ -1,10 +1,36 @@
 import Flow from './Flow'
 import { HubPost } from './Hub'
-import { User } from './User'
+import PostLabel from './PostLabel'
+import { UserExtended } from './User'
+
+export interface SchemaJsonLd {
+  '@context': string
+  '@type': string
+  mainEntityOfPage: {
+    '@type': string
+    '@id': string
+  }
+  headline: string
+  datePublished: string
+  dateModified: string
+  author: { '@type': string; name: string }
+  publisher: {
+    '@type': string
+    name: string
+    logo: {
+      '@type': string
+      url: string
+    }
+  }
+  description: string
+  url: string
+  about: string[]
+  image: string[]
+}
 
 export default interface Post {
   id: string | number
-  author: User
+  author: UserExtended
   commentsEnabled: boolean
   editorVersion: string
   flows: Flow[]
@@ -28,7 +54,7 @@ export default interface Post {
     vkShareImageUrl: string
   }
   polls: never[]
-  postLabels: string[]
+  postLabels: PostLabel[]
   postType: string
   statistics: {
     commentsCount: number
@@ -45,5 +71,20 @@ export default interface Post {
     originalAuthorName: string
     originalUrl: string
   }
+  relatedData?: {
+    bookmarked: boolean
+    canComment: boolean
+    canEdit: boolean
+    canViewVotes: boolean
+    canVote: boolean
+    unreadCommentsCount: number
+    vote: {
+      value: number | null
+      voteTimeExpired: string
+    }
+  }
+
+  /** Contains an URL of the first image in text preview */
+  postFirstImage?: string
   votesEnabled: boolean
 }

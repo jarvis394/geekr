@@ -1,24 +1,16 @@
-import { PaletteType } from 'src/config/constants'
+import { UserSettings } from 'src/interfaces'
 import {
-  SET_HIDDEN_AUTHORS,
-  SET_HIDDEN_COMPANIES,
-  SET_THEME,
+  SET_SETTINGS,
+  GET_SETTINGS
 } from '../reducers/settings/types'
 
-export const setTheme = (theme: PaletteType) => (dispatch) =>
+export const setSettings = (payload: Partial<UserSettings>) => (dispatch) =>
   dispatch({
-    type: SET_THEME,
-    payload: theme,
+    type: SET_SETTINGS,
+    payload
   })
 
-export const setHiddenAuthors = (data: string[]) => (dispatch) =>
+export const getSettings = () => (dispatch) =>
   dispatch({
-    type: SET_HIDDEN_AUTHORS,
-    payload: data,
-  })
-
-export const setHiddenCompanies = (data: string[]) => (dispatch) =>
-  dispatch({
-    type: SET_HIDDEN_COMPANIES,
-    payload: data,
+    type: GET_SETTINGS
   })

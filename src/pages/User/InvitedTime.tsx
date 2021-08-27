@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Typography } from '@material-ui/core'
 import dayjs from 'dayjs'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
+import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
+import { useDispatch } from 'react-redux'
+import { getProfileWhois } from 'src/store/actions/profile'
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -30,12 +33,12 @@ export const InvitedTime = () => {
       {textTimeInvited}{' '}
       {user.gender === '0' ? 'было получено приглашение от' : wasInvitedText}{' '}
       {whois.invitedBy.issuerLogin ? (
-        <Link
+        <LinkToOutsidePage
           className={classes.link}
           to={'/user/' + whois.invitedBy.issuerLogin}
         >
           @{whois.invitedBy.issuerLogin}
-        </Link>
+        </LinkToOutsidePage>
       ) : (
         'НЛО'
       )}

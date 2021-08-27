@@ -1,7 +1,5 @@
 import * as React from 'react'
 import { useState } from 'react'
-import FormattedText from '../formatters/FormattedText'
-import ReactDOMServer from 'react-dom/server'
 import { makeStyles, Collapse } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
       verticalAlign: 'middle',
     },
   },
-  rotate: {},
   text: {
     position: 'relative',
     marginTop: 10,
@@ -49,13 +46,11 @@ const Spoiler = ({ children, title }) => {
       >
         {title}
       </b>
-      <Collapse className={classes.collapse} in={isOpen}>
-        <FormattedText className={classes.text}>
-          {ReactDOMServer.renderToStaticMarkup(children)}
-        </FormattedText>
+      <Collapse className={[classes.collapse, classes.text].join(' ')} in={isOpen}>
+        {children}
       </Collapse>
     </>
   )
 }
 
-export default Spoiler
+export default React.memo(Spoiler)

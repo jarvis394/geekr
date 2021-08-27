@@ -15,7 +15,7 @@
     "moduleResolution": "node",
     "rootDir": "./src",
     "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "noImplicitThis": true,
     "noImplicitAny": false,
     "strictNullChecks": false,
@@ -33,7 +33,4 @@
   "include": [
     "src"
   ],
-  "exclude": [
-    "src/sw*"
-  ]
 }

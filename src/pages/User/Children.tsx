@@ -17,7 +17,8 @@ import useSelector from 'src/hooks/useSelector'
 import ProfileChildrenSkeleton from 'src/components/skeletons/ProfileChildren'
 import { useDispatch } from 'react-redux'
 import { getProfileChildren } from 'src/store/actions/profile'
-import { Link } from 'react-router-dom'
+import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -49,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   collapseShadow: {
     position: 'absolute',
     background:
-      'linear-gradient(0deg,' + theme.palette.background.default + ',transparent)',
+      'linear-gradient(0deg,' + getContrastPaperColor(theme) + ',transparent)',
     bottom: 0,
     pointerEvents: 'none',
     height: 40,
@@ -90,7 +91,7 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const Item = ({ data }: { data: User }) => (
     <ListItem
       style={{ paddingLeft: 0, paddingRight: 0 }}
-      component={Link}
+      component={LinkToOutsidePage}
       to={'/user/' + data.alias}
     >
       <ListItemAvatar>
@@ -152,4 +153,4 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   ) : null
 }
 
-export default Children
+export default React.memo(Children)

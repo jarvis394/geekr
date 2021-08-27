@@ -1,8 +1,9 @@
 import makeRequest from './makeRequest'
-import { APIResponse, Post } from '../interfaces'
+import { AuthorizedRequestParams, Posts } from '../interfaces'
 
-export default async (id: number) =>
-  await makeRequest<APIResponse<Post[]>>({
+export default async (id: number, authData?: AuthorizedRequestParams) =>
+  await makeRequest<Posts>({
     path: `articles/${id}/similar`,
     version: 2,
+    authData
   })

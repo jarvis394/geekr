@@ -7,20 +7,31 @@ import { List, Typography } from '@material-ui/core'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import { getHubsList } from 'src/store/actions/hubs'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory, useLocation } from 'react-router-dom'
 import ErrorComponent from 'src/components/blocks/Error'
 import EmptySVG from 'src/components/svg/Empty'
 import { getHubsSearchResults } from 'src/store/actions/hubs'
 import { HUBS_PREFIX } from 'src/store/reducers/hubs/types'
 import Pagination from 'src/components/blocks/Pagination'
+import OutsidePage from 'src/components/blocks/OutsidePage'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
+import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
+import useQuery from 'src/hooks/useQuery'
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  },
   list: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: getContrastPaperColor(theme),
+    marginTop: theme.spacing(-1),
+    paddingTop: 0,
   },
   pagination: {
     paddingTop: theme.spacing(2),
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: getInvertedContrastPaperColor(theme),
   },
 }))
 
@@ -37,6 +48,7 @@ const useNoResultsStyles = makeStyles((theme) => ({
     fontFamily: 'Google Sans',
     fontSize: 18,
     textAlign: 'center',
+    maxWidth: '75%',
   },
   svg: {
     marginTop: theme.spacing(4),
@@ -46,8 +58,6 @@ const useNoResultsStyles = makeStyles((theme) => ({
     '& svg': { maxWidth: 400, width: '100%', height: '100%' },
   },
 }))
-
-const THRESHOLD = 1000
 
 const NoResults = () => {
   const classes = useNoResultsStyles()
@@ -64,6 +74,7 @@ const NoResults = () => {
 const Hubs = () => {
   const dispatch = useDispatch()
   const history = useHistory()
+  const location = useLocation()
   const classes = useStyles()
   const params = useParams<{ page: string }>()
   const currentPage = Number(params.page)
@@ -72,77 +83,78 @@ const Hubs = () => {
   const fetchError = useSelector((state) => state.hubs.error)
   const pagesCount = useSelector((state) => state.hubs.data.pagesCount)
   const data = useSelector((state) => state.hubs.data.pages[currentPage])
-  const storeSearchQuery = useSelector((state) => state.hubs.search)
   const storeSearchResults = useSelector((state) => state.hubs.searchResults)
   const inputRef = useRef<HTMLInputElement>()
-  // Needs eslint disable because NodeJS is undefined. Too lazy to define it.
-  // eslint-disable-next-line
-  let searchTimer: NodeJS.Timeout
+  const searchParams = useQuery()
+  const query = searchParams.get('q')
+  const headerText = query ? '"' + query + '"' : 'Хабы'
 
-  /**
-   * TODO: Make a default search bar because it is more user-friendly
-   * and it can also cause some issues with repetitive API spam and
-   * future unexpected bugs.
-   */
   const search = () => {
-    clearTimeout(searchTimer)
-    const query = inputRef.current ? inputRef.current.value : null
+    const currentQuery = inputRef.current ? inputRef.current.value : null
 
-    if (!query || query === '')
+    if (!currentQuery || currentQuery === '')
       return dispatch({ type: HUBS_PREFIX + 'SEARCH_CLEAR' })
-    if (!query || query.length <= 3 || storeSearchQuery === query) return false
+    if (!currentQuery || currentQuery.length <= 3 || query === currentQuery)
+      return false
 
-    searchTimer = setTimeout(
-      () => dispatch(getHubsSearchResults(query)),
-      THRESHOLD
-    )
+    dispatch(getHubsSearchResults(currentQuery))
+    history.replace('/hubs/p/1?q=' + currentQuery, {
+      from: location.pathname,
+    })
 
     return true
   }
 
   const handlePagination = (_: never, i: number) => {
     if (i === currentPage) return
-    history.push('/hubs/p/' + i)
+    history.replace('/hubs/p/' + i)
   }
 
   useEffect(() => {
-    dispatch(getHubsList(currentPage))
+    const currentQuery = inputRef.current ? inputRef.current.value : null
+    if (currentQuery) {
+      dispatch(getHubsSearchResults(currentQuery))
+    } else {
+      dispatch(getHubsList(currentPage))
+    }
   }, [currentPage, dispatch])
 
   return fetchError ? (
     <ErrorComponent message={fetchError.error.message} />
   ) : (
-    <div>
-      <SearchBar inputRef={inputRef} onChange={search} />
-      <List className={classes.list}>
-        {isFetching && <Loader />}
-        {isFetched &&
-          storeSearchQuery &&
-          storeSearchResults.length !== 0 &&
-          storeSearchResults.hubIds.map((e: string, i: number) => (
-            <Item data={storeSearchResults.hubRefs[e]} key={i} />
-          ))}
-        {isFetched && storeSearchQuery && storeSearchResults.length === 0 && (
-          <NoResults />
+    <OutsidePage headerText={headerText} hidePositionBar disableShrinking>
+      <div className={classes.root}>
+        <SearchBar inputRef={inputRef} onSubmit={search} />
+        <List className={classes.list}>
+          {isFetching && <Loader />}
+          {isFetched &&
+            query &&
+            storeSearchResults.length !== 0 &&
+            storeSearchResults.hubIds.map((e: string, i: number) => (
+              <Item data={storeSearchResults.hubRefs[e]} key={i} />
+            ))}
+          {isFetched && query && storeSearchResults.pagesCount === 0 && (
+            <NoResults />
+          )}
+          {isFetched &&
+            !query &&
+            data &&
+            data.hubIds.map((e: string, i: number) => (
+              <Item data={data.hubRefs[e]} key={i} />
+            ))}
+        </List>
+        {pagesCount && !query && (
+          <div className={classes.pagination}>
+            <Pagination
+              disabled={isFetching}
+              steps={pagesCount}
+              handleChange={handlePagination}
+              currentStep={currentPage}
+            />
+          </div>
         )}
-        {isFetched &&
-          !storeSearchQuery &&
-          data &&
-          data.hubIds.map((e: string, i: number) => (
-            <Item data={data.hubRefs[e]} key={i} />
-          ))}
-      </List>
-      {pagesCount && !storeSearchQuery && (
-        <div className={classes.pagination}>
-          <Pagination
-            disabled={isFetching}
-            steps={pagesCount}
-            handleChange={handlePagination}
-            currentStep={currentPage}
-          />
-        </div>
-      )}
-    </div>
+      </div>
+    </OutsidePage>
   )
 }
 

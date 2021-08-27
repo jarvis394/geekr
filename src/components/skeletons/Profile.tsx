@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper'
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
-    background: theme.palette.background.paper,
+    background: theme.palette.background.default,
     borderRadius: 0,
     display: 'flex',
     alignItems: 'center',
@@ -96,4 +96,4 @@ const ProfileSkeleton = () => {
   )
 }
 
-export default ProfileSkeleton
+export default React.memo(ProfileSkeleton)

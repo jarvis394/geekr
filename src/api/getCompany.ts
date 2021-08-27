@@ -1,8 +1,9 @@
 import makeRequest from './makeRequest'
-import { Company } from '../interfaces'
+import { AuthorizedRequestParams, Company } from '../interfaces'
 
-export default async (alias: string) =>
+export default async (alias: string, authData?: AuthorizedRequestParams) =>
   await makeRequest<Company>({
     path: `companies/${alias}/card`,
     version: 2,
+    authData
   })

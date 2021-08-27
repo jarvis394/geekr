@@ -1,11 +1,12 @@
 import makeRequest from './makeRequest'
-import { HubsSearchResponse } from '../interfaces'
+import { AuthorizedRequestParams, HubsSearchResponse } from '../interfaces'
 
-export default async (q: string) =>
+export default async (q: string, authData?: AuthorizedRequestParams) =>
   await makeRequest<HubsSearchResponse>({
     path: 'hubs/search',
     params: {
       q,
     },
     version: 2,
+    authData,
   })

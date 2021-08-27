@@ -1,25 +1,21 @@
 import { useEffect } from 'react'
-import ReactGA from 'react-ga'
+import { useMatomo } from '@datapunt/matomo-tracker-react'
 import { useLocation } from 'react-router-dom'
-import { getCLS, getFID, getLCP } from 'web-vitals'
+import { APP_VERSION } from 'src/config/constants'
 
 const useAnalytics = () => {
   const location = useLocation()
-  const reportVitalsToGA = ({ name, delta, id }) => {
-    ReactGA.event({
-      category: 'Web Vitals',
-      action: name,
-      label: id,
-      value: Math.round(name === 'CLS' ? delta * 1000 : delta),
-      nonInteraction: true,
-    })
-  }
+  const { trackPageView } = useMatomo()
+
   useEffect(() => {
-    ReactGA.set({ page: location.pathname })
-    ReactGA.pageview(location.pathname)
-    getCLS(reportVitalsToGA)
-    getFID(reportVitalsToGA)
-    getLCP(reportVitalsToGA)
+    trackPageView({
+      customDimensions: [
+        {
+          id: 2,
+          value: APP_VERSION,
+        },
+      ],
+    })
   }, [location.pathname])
 }
 

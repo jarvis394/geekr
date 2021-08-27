@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { Paper, InputBase } from '@material-ui/core'
+import { Paper, InputBase, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import useQuery from 'src/hooks/useQuery'
 
 const useSearchStyles = makeStyles((theme) => ({
   search: {
@@ -17,23 +18,32 @@ const useSearchStyles = makeStyles((theme) => ({
     padding: theme.spacing(1, 1, 1, 2),
     width: '100%',
   },
+  searchButton: {
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+    textTransform: 'none',
+    fontFamily: 'Google Sans',
+    fontSize: 16,
+  },
 }))
 
-const SearchBar = ({ inputRef = null, onChange = null }) => {
+const SearchBar = ({ inputRef = null, onSubmit: onSubmitProp }) => {
   const classes = useSearchStyles()
+  const searchParams = useQuery()
+  const query = searchParams.get('q') || ''
 
   const onSubmit = (e) => {
     e.preventDefault()
+    onSubmitProp(e)
   }
 
   return (
     <form onSubmit={(e) => onSubmit(e)}>
       <Paper elevation={0} className={classes.search}>
         <InputBase
-          autoFocus
           name="q"
-          onChange={onChange}
           inputRef={inputRef}
+          defaultValue={query}
           placeholder={'Поиск среди хабов'}
           classes={{
             root: classes.inputRoot,
@@ -41,6 +51,15 @@ const SearchBar = ({ inputRef = null, onChange = null }) => {
           }}
           inputProps={{ 'aria-label': 'search' }}
         />
+        <Button
+          type="submit"
+          disableElevation
+          color="primary"
+          variant="contained"
+          className={classes.searchButton}
+        >
+          Найти
+        </Button>
       </Paper>
     </form>
   )

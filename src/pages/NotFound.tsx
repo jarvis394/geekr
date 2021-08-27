@@ -4,6 +4,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import isMobile from 'is-mobile'
+import { Trans, useTranslation } from 'react-i18next'
 
 const chromeAddressBarHeight = 56
 const useStyles = makeStyles((theme) => ({
@@ -12,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 600,
+    width: '100%',
     flexDirection: 'column',
     height: `calc(100vh - 96px - ${
       isMobile() ? chromeAddressBarHeight : '0'
@@ -46,17 +48,16 @@ const useStyles = makeStyles((theme) => ({
 const NotFound = () => {
   const classes = useStyles()
   const theme = useTheme()
+  const { t } = useTranslation()
 
   return (
     <div className={classes.root}>
       <Typography className={classes.title}>four-o-four</Typography>
-      <Typography className={classes.text}>Страница не найдена.</Typography>
+      <Typography className={classes.text}>{t`pages.NotFound.title`}</Typography>
       <Typography className={classes.text}>
-        Может,{' '}
-        <Link to="/" className={classes.link}>
-          вернёмся домой
-        </Link>
-        ?
+        <Trans i18nKey="pages.NotFound.text">
+          <Link to="/" className={classes.link} />
+        </Trans>
       </Typography>
       <NotFoundSVG theme={theme.palette.type} className={classes.svg} />
     </div>

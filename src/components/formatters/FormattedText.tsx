@@ -1,22 +1,45 @@
 import * as React from 'react'
-import { makeStyles, fade, useTheme } from '@material-ui/core/styles'
+import {
+  makeStyles,
+  fade,
+  darken,
+  lighten,
+  Theme,
+  rgbToHex,
+} from '@material-ui/core/styles'
 import SyntaxHighlighter from 'react-syntax-highlighter'
-import { monokai as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import { monokai as monokaiStyle } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import Spoiler from '../blocks/Spoiler'
 import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser'
 import LazyLoadImage from '../blocks/LazyLoadImage'
 import Details from '../blocks/Details'
 import Iframe from 'react-iframe'
 import { Node as MathJaxNode } from '@nteract/mathjax'
+import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
+import isDarkTheme from 'src/utils/isDarkTheme'
+import { APP_BAR_HEIGHT, MIN_WIDTH } from 'src/config/constants'
+import { useSelector } from 'src/hooks'
+import { UserSettings } from 'src/interfaces'
+import formatLink from 'src/utils/formatLink'
+import { Link } from 'react-router-dom'
+import blend from 'src/utils/blendColors'
+import { Tooltip } from '@material-ui/core'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
-type FloatType = 'left' | 'right'
 interface IframeResizeData {
   type: string
   id: number
   height: number
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles<
+  Theme,
+  {
+    oldHabrFormat: boolean
+    readerSettings: UserSettings['readerSettings']
+    inverseColors: boolean
+  }
+>((theme) => ({
   img: {
     maxWidth: '100%',
     verticalAlign: 'middle',
@@ -24,6 +47,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 4,
   },
   text: {
+    fontSize: ({ readerSettings }) => readerSettings.fontSize,
+    fontFamily: ({ readerSettings }) => readerSettings.fontFamily,
     '& a': {
       color: theme.palette.primary.main,
       textDecoration: 'none',
@@ -34,20 +59,42 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: 'underline',
     },
     '& h1+p, h2+p, h3+p, h4+p': {
-      marginTop: (d) => (d ? 0 : theme.spacing(1.5))
+      marginTop: ({ oldHabrFormat: d }) => (d ? 0 : theme.spacing(1.5)),
     },
-    '& p': { margin: 0, marginTop: (d) => (d ? 0 : theme.spacing(3)) },
-    '& em': { color: fade(theme.palette.text.primary, 0.75) },
+    '& p': {
+      margin: 0,
+      fontSize: ({ readerSettings }) => readerSettings.fontSize,
+      fontFamily: ({ readerSettings }) => readerSettings.fontFamily,
+    },
+    '& p+p, pre+p': {
+      marginTop: ({ oldHabrFormat: d }) => (d ? 0 : theme.spacing(3)),
+    },
+    '& em': {
+      color: blend(
+        rgbToHex(theme.palette.primary.light),
+        rgbToHex(theme.palette.text.primary),
+        0.9
+      ),
+    },
     '& code': {
-      background: theme.palette.background.default,
-      padding: theme.spacing(0.25),
+      background: ({ inverseColors }) =>
+        inverseColors
+          ? getContrastPaperColor(theme)
+          : getInvertedContrastPaperColor(theme),
+      padding: '3px 6px',
       borderRadius: theme.shape.borderRadius,
       wordBreak: 'break-word',
     },
     '& div.table, div.scrollable-table': {
       overflow: 'auto',
       marginTop: theme.spacing(2),
-      wordBreak: 'normal'
+      wordBreak: 'normal',
+    },
+    '& sub, sup': {
+      fontSize: '75%',
+      lineHeight: 0,
+      position: 'relative',
+      verticalAlign: 'initial',
     },
     '& table': {
       width: '100%',
@@ -76,26 +123,31 @@ const useStyles = makeStyles((theme) => ({
       lineHeight: '26px',
     },
     '& h1, h2, h3, h4, h5, h6': {
-      margin: `${theme.spacing(4)}px 0 0 0`,
+      margin: ({ oldHabrFormat: d }) => `${theme.spacing(d ? 1 : 4)}px 0 0 0`,
       fontFamily: 'Google Sans',
-      fontWeight: 800
+      fontWeight: 800,
     },
     '& blockquote': {
       margin: '12px 0',
       padding: '0 12px',
       display: 'block',
-      borderLeft: '2px solid ' + theme.palette.primary.light,
-      color: fade(theme.palette.text.primary, 0.9),
+      borderLeft: '4px solid ' + theme.palette.primary.light,
+      color: blend(
+        rgbToHex(theme.palette.primary.light),
+        rgbToHex(theme.palette.text.primary),
+        0.9
+      ),
       fontStyle: 'italic',
     },
     '& hr': {
       border: 'none',
       borderBottom: '1px solid ' + theme.palette.divider,
-      margin: theme.spacing(1, 2)
+      margin: theme.spacing(1, 2),
     },
     '& figure': {
       margin: 0,
       marginTop: theme.spacing(4),
+      textAlign: 'center',
       '& figcaption': {
         color: theme.palette.text.secondary,
         fontSize: theme.typography.body2.fontSize,
@@ -107,10 +159,10 @@ const useStyles = makeStyles((theme) => ({
     '& figure.float': {
       float: 'left',
       maxWidth: '50%',
-      marginRight: theme.spacing(4)
+      marginRight: theme.spacing(4),
     },
     '& figure+p': {
-      marginTop: theme.spacing(4)
+      marginTop: theme.spacing(4),
     },
     '& figure.float+p:after': {
       content: '""',
@@ -118,10 +170,12 @@ const useStyles = makeStyles((theme) => ({
       clear: 'both',
     },
     '& sup': {
-      color: theme.palette.text.secondary,
-      marginTop: theme.spacing(1),
-      fontSize: 14,
-      display: 'block'
+      color: blend(
+        rgbToHex(theme.palette.primary.light),
+        rgbToHex(theme.palette.text.primary),
+        0.9
+      ),
+      top: '-.5em',
     },
     // MathJaxNode overflow fix
     '& span.mjx-chtml': {
@@ -130,37 +184,102 @@ const useStyles = makeStyles((theme) => ({
   },
   syntaxHighlighter: {
     margin: 0,
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(3),
     display: 'block',
     tabSize: 4,
     overflow: 'auto',
     border: '1px solid ' + theme.palette.divider,
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: 4,
     padding: theme.spacing(2) + 'px !important',
-    background: theme.palette.background.default + ' !important',
     color: theme.palette.text.primary + ' !important',
+    boxSizing: 'border-box',
+    '-moz-tab-size': 4,
+    whiteSpace: 'pre',
+    wordBreak: 'normal',
+    wordSpacing: 'normal',
+    wordWrap: 'normal',
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      backgroundColor: getContrastPaperColor(theme) + ' !important',
+    },
+    [theme.breakpoints.down(MIN_WIDTH)]: {
+      backgroundColor: ({ inverseColors }) =>
+        (inverseColors
+          ? getContrastPaperColor(theme)
+          : getInvertedContrastPaperColor(theme)) + ' !important',
+    },
+    '& code': {
+      whiteSpace: 'pre',
+      wordBreak: 'normal',
+      wordSpacing: 'normal',
+      wordWrap: 'normal',
+      background: 'none !important',
+      padding: 0,
+      '-moz-tab-size': 4,
+      tabSize: 4,
+      fontSize: 14,
+      fontFamily: 'Menlo,Monaco,Consolas,Courier New,Courier,monospace',
+    },
+    '&::-webkit-scrollbar': {
+      height: 12,
+      background: theme.palette.background.default,
+      borderRadius: 2,
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background: isDarkTheme(theme)
+        ? lighten(theme.palette.background.paper, 0.08)
+        : darken(theme.palette.background.paper, 0.08),
+      borderRadius: 2,
+      transition: '0.1s',
+      '&:hover': {
+        background: isDarkTheme(theme)
+          ? lighten(theme.palette.background.paper, 0.1)
+          : darken(theme.palette.background.paper, 0.1),
+      },
+      '&:active': {
+        background: isDarkTheme(theme)
+          ? lighten(theme.palette.background.paper, 0.2)
+          : darken(theme.palette.background.paper, 0.2),
+      },
+    },
   },
   iframe: {
     width: '100%',
     minWidth: '100%',
     marginTop: theme.spacing(4),
   },
+  abbr: {
+    borderBottom: '1px dotted ' + fade(theme.palette.divider, 0.5),
+    cursor: 'help',
+    textDecoration: 'none',
+  },
 }))
 
-const FormattedText = ({
-  children,
+const FormattedText: React.FC<{
+  children: string
+  oldHabrFormat?: boolean
+  className?: string
+  inverseColors?: boolean
+}> = ({
+  children: componentChildren,
   className = '',
-  disableParagraphMargin = false,
+  oldHabrFormat = false,
+  inverseColors = false,
   ...props
 }) => {
-  const classes = useStyles(disableParagraphMargin)
+  const readerSettings = useSelector((store) => store.settings.readerSettings)
+  const classes = useStyles({ oldHabrFormat, readerSettings, inverseColors })
   const [iframeHeights, setIframeHeights] = React.useState<
     Record<string, number>
   >({})
-  const theme = useTheme()
+  const shouldChangeLinks = useSelector(
+    (store) => store.settings.readerSettings.changeLinks
+  )
   const options: HTMLReactParserOptions = {
     trim: true,
     replace: ({ name, children, attribs }): void | React.ReactElement => {
+      if (name === '&nbsp;') {
+        return <> </>
+      }
       if (name === 'pre') {
         const firstChild = children[0]
         const language = firstChild.attribs?.class || null
@@ -170,7 +289,7 @@ const FormattedText = ({
 
         return (
           <SyntaxHighlighter
-            style={style}
+            style={monokaiStyle}
             language={language}
             className={classes.syntaxHighlighter}
           >
@@ -197,13 +316,8 @@ const FormattedText = ({
         }
 
         const imgStyles = {
-          float: (attribs.align || 'none') as FloatType,
-          marginRight: attribs.align === 'left' ? theme.spacing(2) : 0,
-          marginLeft: attribs.align === 'right' ? theme.spacing(2) : 0,
-          marginBottom: attribs.align ? theme.spacing(1) : 0,
-          maxWidth: attribs.align ? '40%' : '100%',
-          width: attribs['data-width'] || attribs.width || 'auto',
-          height: attribs['data-height'] || attribs.height || 'auto',
+          width: attribs['data-width'] || attribs.width,
+          height: attribs['data-height'] || attribs.height,
         }
 
         return (
@@ -213,6 +327,7 @@ const FormattedText = ({
             // If not found, then use default 'src' attribute
             src={attribs['data-src'] || attribs.src}
             alt={attribs.alt || 'Изображение не загружено'}
+            align={attribs.align}
             style={imgStyles}
             className={classes.img}
           />
@@ -238,7 +353,7 @@ const FormattedText = ({
           (e) => e.attribs && e.attribs.class === 'spoiler_text'
         ).children
 
-        return <Spoiler title={title}>{domToReact(data)}</Spoiler>
+        return <Spoiler title={title}>{domToReact(data, options)}</Spoiler>
       }
       if (name === 'details' && attribs.class === 'spoiler') {
         const title: string = children.find((e) => e.name === 'summary')
@@ -247,7 +362,48 @@ const FormattedText = ({
           (e) => e.attribs && e.attribs.class === 'spoiler__content'
         ).children
 
-        return <Details title={title}>{domToReact(data)}</Details>
+        return <Details title={title}>{domToReact(data, options)}</Details>
+      }
+      if (name === 'a' && attribs?.href?.startsWith('#')) {
+        const handleLinkClick: React.MouseEventHandler<HTMLAnchorElement> = (
+          e
+        ) => {
+          e.preventDefault()
+          const el =
+            document.getElementById(attribs.href.slice(1)) ||
+            document.getElementsByName(attribs.href.slice(1))[0]
+          const yOffset = -APP_BAR_HEIGHT
+          const y =
+            (el?.getBoundingClientRect()?.top || 0) +
+            window.pageYOffset +
+            yOffset
+          window.scrollTo({ top: y, behavior: 'smooth' })
+        }
+        return (
+          <a onClick={handleLinkClick} {...attribs}>
+            {domToReact(children, options)}
+          </a>
+        )
+      }
+      if (name === 'a' && shouldChangeLinks) {
+        const formattedLink = formatLink(attribs.href)
+        if (formattedLink)
+          return (
+            <Link to={formattedLink as string}>
+              {domToReact(children, options)}
+            </Link>
+          )
+      }
+      if (name === 'abbr') {
+        return (
+          <Tooltip
+            title={attribs.title}
+            placement="bottom"
+            className={classes.abbr}
+          >
+            <span>{domToReact(children, options)}</span>
+          </Tooltip>
+        )
       }
     },
   }
@@ -269,7 +425,7 @@ const FormattedText = ({
 
   return (
     <div {...props} className={classes.text + ' ' + className}>
-      {parse(children, options)}
+      {parse(componentChildren, options)}
     </div>
   )
 }

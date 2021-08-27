@@ -10,7 +10,7 @@
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://bit.ly/CRA-PWA
 
-interface Config {
+export interface Config {
   onUpdate: (registration: ServiceWorkerRegistration) => void
   onSuccess: (registration: ServiceWorkerRegistration) => void
 }
@@ -87,7 +87,11 @@ function registerValidSW(swUrl: string, config?: Config): void {
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
-              console.log('Content is cached for offline use.')
+              console.log(
+                '%c[info] %cContent is cached for offline use.',
+                'color: #2979ff;',
+                'color: #e9e9e9;'
+              )
 
               // Execute callback
               if (config && config.onSuccess) {
@@ -99,7 +103,12 @@ function registerValidSW(swUrl: string, config?: Config): void {
       }
     })
     .catch((error) => {
-      console.error('Error during service worker registration:', error)
+      console.error(
+        '%c[error] %cError during service worker registration:',
+        'color: #ff5252;',
+        'color: #e9e9e9;',
+        error
+      )
     })
 }
 
@@ -128,7 +137,9 @@ function checkValidServiceWorker(swUrl: string, config?: Config): void {
     })
     .catch(() => {
       console.log(
-        'No internet connection found. App is running in offline mode.'
+        '%c[info] %cNo internet connection found. App is running in offline mode.',
+        'color: #2979ff;',
+        'color: #e9e9e9;'
       )
     })
 }

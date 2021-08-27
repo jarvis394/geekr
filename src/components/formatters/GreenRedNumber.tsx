@@ -1,48 +1,39 @@
 import * as React from 'react'
-import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
-  redText: { color: theme.palette.error.main },
-  greenText: { color: theme.palette.success.main },
+  redText: { color: theme.palette.error.main + ' !important' },
+  greenText: { color: theme.palette.success.main + ' !important' },
 }))
 
 interface Props {
   number: string | number
-  defaultClass?: string
-  style?: React.CSSProperties
-  classes?: string
-  noPlusSign?: boolean
+  children?: JSX.Element
+  wrapperProps?: Record<string, unknown>
 }
 
-const GreenRedNumber = ({
-  number,
-  defaultClass,
-  style,
-  classes: additionalClasses,
-  noPlusSign = false,
-  ...props
-}: Props) => {
+const GreenRedNumber = ({ children, wrapperProps = {}, number }: Props) => {
   const classes = useStyles()
+  const {
+    className: wrapperPropsClassName,
+    ...otherWrapperProps
+  } = wrapperProps
+  const wrapperClassName = wrapperPropsClassName
+    ? ' ' + wrapperPropsClassName
+    : ''
+  let className = ''
 
-  let className = defaultClass
-  let text = number.toString()
   if (number > 0) {
-    text = (noPlusSign ? '' : '+') + text
     className = classes.greenText
   } else if (number < 0) {
     className = classes.redText
   }
 
   return (
-    <Typography
-      style={style}
-      className={className + ' ' + additionalClasses}
-      {...props}
-    >
-      {text}
-    </Typography>
+    <div className={className + wrapperClassName} {...otherWrapperProps}>
+      {children}
+    </div>
   )
 }
 
-export default GreenRedNumber
+export default React.memo(GreenRedNumber)

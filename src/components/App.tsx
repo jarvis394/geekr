@@ -1,110 +1,180 @@
 import * as React from 'react'
-import ThemeProvider from '@material-ui/styles/ThemeProvider'
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
-import { makeStyles, ThemeOptions } from '@material-ui/core/styles/'
+import { ThemeProvider } from '@material-ui/core/styles'
+import createMuiTheme, { Theme } from '@material-ui/core/styles/createMuiTheme'
+import { fade, makeStyles } from '@material-ui/core/styles/'
 import AppRouter from './Router'
 import AppBar from './blocks/AppBar'
-import { BrowserRouter as Router } from 'react-router-dom'
-import { MIN_WIDTH as minWidth } from '../config/constants'
+import {
+  APP_BAR_HEIGHT,
+  BOTTOM_BAR_HEIGHT,
+  chromeAddressBarHeight,
+  DRAWER_WIDTH,
+  MAX_WIDTH as maxWidth,
+  MIDDLE_WIDTH,
+  MIN_WIDTH,
+} from '../config/constants'
 import { lighten, darken } from '@material-ui/core/styles'
 import isMobile from 'is-mobile'
-import Footer from './blocks/Footer'
-import { useSelector } from 'src/hooks'
-import Tabs from './blocks/Tabs/RouterTabs'
+import { useRoute, useSelector } from 'src/hooks'
 import ScrollRestoration from 'react-scroll-restoration'
-import RouterTitleChange from './RouterTitleChange'
 import { SnackbarProvider } from 'notistack'
-import StartupDialog from './StartupDialog'
+import BottomBar from './blocks/BottomBar'
+import useTitleChange from 'src/hooks/useTitleChange'
+import useAnalytics from 'src/hooks/useAnalytics'
+import isDarkTheme from 'src/utils/isDarkTheme'
+import useAutoChangeTheme from 'src/hooks/useAutoChangeTheme'
+import SideNavigationDrawer from './blocks/SideNavigationDrawer'
+import useUserDataFetch from 'src/hooks/useUserDataFetch'
+import UpdateNotification from 'src/components/blocks/UpdateNotification'
+import useGetDownvoteReasons from 'src/hooks/useGetDownvoteReasons'
+import { useEffect } from 'react'
 
-const chromeAddressBarHeight = 56
-const isDarkTheme = (t: ThemeOptions) => t.palette.type === 'dark'
-const useStyles = makeStyles(() => ({
-  app: {
-    display: 'flex',
-    minHeight: `calc(100vh - 48px - ${
-      isMobile() ? chromeAddressBarHeight : 0
-    }px - 196px)`,
-    borderRadius: 0,
-    flexDirection: 'column',
-    maxWidth: minWidth,
-    margin: '0px auto 0 auto',
+interface StyleProps {
+  theme: Theme
+  shouldShowAppBar: boolean
+}
+
+const useStyles = makeStyles({
+  '@global': {
+    // Needed for IconButton touch ripple tweaks
+    '@keyframes enter': {
+      '0%': {
+        opacity: 0.1,
+      },
+      '100%': {
+        opacity: 0.15,
+      },
+    },
+    '@keyframes exit': {
+      '0%': {
+        opacity: 1,
+      },
+      '100%': {
+        opacity: 0,
+      },
+    },
+    '.IconButton_TouchRipple-rippleVisible': {
+      animation: 'enter 0ms ease',
+      opacity: 0.15,
+    },
+    '.IconButton_TouchRipple-childLeaving': {
+      animation: 'exit 255ms ease',
+    },
   },
-  root: {
+  app: ({ shouldShowAppBar, theme }: StyleProps) => ({
+    display: 'flex',
+    minHeight: `calc(100vh - ${APP_BAR_HEIGHT}px - ${
+      isMobile() ? chromeAddressBarHeight : 0
+    }px - ${shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0}px)`,
+    borderRadius: 0,
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    width: '100%',
+    maxWidth: maxWidth,
+    margin: `${APP_BAR_HEIGHT}px auto ${
+      shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0
+    }px auto`,
+    boxSizing: 'border-box',
+    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
+      marginTop: 0,
+      marginBottom: 0,
+    },
+    [theme.breakpoints.up(MIN_WIDTH)]: {
+      padding: theme.spacing(0, 2),
+    },
+  }),
+  /** Body class */
+  body: ({ theme }: StyleProps) => ({
     /** Disable blue highlight for links. Can be bad for accessibility. */
     '& a': {
-      '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)',
+      '-webkit-tap-highlight-color': fade(theme.palette.background.paper, 0.3),
     },
-    backgroundColor: (theme: ThemeOptions) =>
-      theme.palette.type === 'dark'
-        ? darken(theme.palette.background.paper, 0.5)
-        : darken(theme.palette.background.paper, 0.04),
-    color: (theme: ThemeOptions) => theme.palette.text.primary,
+    backgroundColor: theme.palette.background.default,
+    color: theme.palette.text.primary,
     margin: 0,
     fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif',
     lineHeight: 1.5,
     '&::-webkit-scrollbar': {
       width: 15,
       height: 10,
-      background: (theme: ThemeOptions) =>
-        isDarkTheme(theme)
-          ? lighten(theme.palette.background.default, 0.03)
-          : theme.palette.background.paper,
-      border: (theme: ThemeOptions) =>
-        '1px solid ' + darken(theme.palette.background.paper, 0.05),
+      background: isDarkTheme(theme)
+        ? lighten(theme.palette.background.default, 0.03)
+        : theme.palette.background.paper,
+      border: '1px solid ' + darken(theme.palette.background.paper, 0.05),
     },
     '&::-webkit-scrollbar-thumb': {
       minHeight: 28,
-      background: (theme: ThemeOptions) =>
-        isDarkTheme(theme)
-          ? lighten(theme.palette.background.paper, 0.08)
-          : darken(theme.palette.background.paper, 0.08),
+      background: isDarkTheme(theme)
+        ? lighten(theme.palette.background.paper, 0.08)
+        : darken(theme.palette.background.paper, 0.08),
       transition: '0.1s',
       '&:hover': {
-        background: (theme: ThemeOptions) =>
-          isDarkTheme(theme)
-            ? lighten(theme.palette.background.paper, 0.1)
-            : darken(theme.palette.background.paper, 0.1),
+        background: isDarkTheme(theme)
+          ? lighten(theme.palette.background.paper, 0.1)
+          : darken(theme.palette.background.paper, 0.1),
       },
       '&:active': {
-        background: (theme: ThemeOptions) =>
-          isDarkTheme(theme)
-            ? lighten(theme.palette.background.paper, 0.2)
-            : darken(theme.palette.background.paper, 0.2),
+        background: isDarkTheme(theme)
+          ? lighten(theme.palette.background.paper, 0.2)
+          : darken(theme.palette.background.paper, 0.2),
       },
     },
-  },
-}))
+    '& *::selection': {
+      background: (isDarkTheme(theme) ? darken : lighten)(
+        theme.palette.primary.main,
+        0.5
+      ),
+    },
+  }),
+  appWrapper: ({ theme }: StyleProps) => ({
+    display: 'flex',
+    paddingLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up(MIDDLE_WIDTH)]: {
+      paddingLeft: DRAWER_WIDTH,
+      width: `calc(100% - ${DRAWER_WIDTH}px)`,
+    }
+  }),
+})
 
-const App = (): React.ReactElement => {
+const App = () => {
   const storeTheme = useSelector((state) => state.settings.theme)
-  const theme = createMuiTheme(storeTheme)
-  const classes = useStyles(theme)
+  const theme = React.useMemo(() => createMuiTheme(storeTheme), [storeTheme])
+  const route = useRoute()
+  const classes = useStyles({
+    theme,
+    shouldShowAppBar: route?.shouldShowAppBar,
+  })
+
+  useTitleChange()
+  useAutoChangeTheme()
+  useAnalytics()
+  useUserDataFetch()
+  useGetDownvoteReasons()
 
   // Set root classes
-  document.body.className = classes.root
+  useEffect(() => {
+    document.body.className = classes.body
+  }, [])
 
   return (
-    <ThemeProvider theme={theme}>
-      <SnackbarProvider>
-        <Router>
-          {/** Restores user scroll */}
-          <ScrollRestoration />
-
-          {/** Change document title on routing */}
-          <RouterTitleChange />
-
-          {/* <StartupDialog /> */}
-
-          <AppBar />
-          <div className={classes.app}>
-            <Tabs />
-            <AppRouter />
+    <>
+      <ThemeProvider theme={theme}>
+        <SnackbarProvider>
+          <SideNavigationDrawer />
+          <div className={classes.appWrapper}>
+            <div className={classes.app}>
+              <ScrollRestoration />
+              <UpdateNotification />
+              <AppBar />
+              <BottomBar />
+              <AppRouter />
+            </div>
           </div>
-          <Footer />
-        </Router>
-      </SnackbarProvider>
-    </ThemeProvider>
+        </SnackbarProvider>
+      </ThemeProvider>
+    </>
   )
 }
 
-export default App
+export default React.memo(App)

@@ -1,15 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, MutableRefObject } from 'react'
 import ProgressiveImage from 'react-lazy-progressive-image'
 import {
   CircularProgress,
   Fade,
   makeStyles,
-  Theme,
   Portal,
+  Theme,
 } from '@material-ui/core'
 import { PhotoSwipe } from 'react-photoswipe'
-
-const VISIBILITY_THRESHOLD = -250
+import { POST_ITEM_VISIBILITY_THRESHOLD } from 'src/config/constants'
 
 interface StylesProps {
   isLoading: boolean
@@ -35,8 +34,20 @@ const useStyles = makeStyles<Theme, StylesProps>((theme) => ({
     display: 'inline-block',
   },
   blurred: {
-    filter: 'blur(5px)',
+    filter: 'blur(16px)',
     clipPath: 'inset(0)',
+  },
+  'imgAlign-left': {
+    float: 'left',
+    marginRight: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    maxWidth: '40% !important',
+  },
+  'imgAlign-right': {
+    float: 'right',
+    marginLeft: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    maxWidth: '40% !important',
   },
 }))
 
@@ -48,18 +59,35 @@ interface ImageProps {
   alt: string
   className: string
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  disableZoom?: boolean
+  align?: 'left' | 'right' | null
+  onClick: () => void
 }
 
 const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
   function ImageComponent(
-    { src, loading, style, alt, className, setOpen },
+    {
+      src,
+      loading,
+      style,
+      alt,
+      className,
+      setOpen,
+      disableZoom,
+      align,
+      onClick,
+    },
     ref
   ) {
+    const [hasError, setHasError] = React.useState(false)
+    // If image loaded with error, the useStyles `isLoading` prop should be false,
+    // so the image won't be blurred
     const classes = useStyles({
-      isLoading: loading,
+      isLoading: hasError ? false : loading,
     })
+    const imgClasses = [classes.image, className]
 
-    if (!loading && (!src || src === '/img/image-loader.svg'))
+    if (loading && (!src || src === '/img/image-loader.svg'))
       return (
         <span
           className={classes.imagePlaceholder + ' ' + className}
@@ -83,17 +111,20 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
         </span>
       )
 
+    if (align) imgClasses.push(classes['imgAlign-' + align])
+
     return (
-      <Fade in timeout={250}>
+      <Fade in timeout={250} mountOnEnter>
         <img
           ref={ref}
-          onClick={() => !loading && setOpen(true)}
-          className={classes.image + ' ' + className}
-          width={style?.width || 'auto'}
-          height={style?.height || 'auto'}
+          onClick={() => !loading && !hasError && onClick()}
+          className={imgClasses.join(' ')}
+          width={style?.width}
+          height={style?.height}
           style={style}
           src={src}
           alt={alt || 'Изображение не загружено'}
+          onError={() => setHasError(true)}
         />
       </Fade>
     )
@@ -104,19 +135,21 @@ const Image = React.memo(ImageUnmemoized)
 const LazyLoadImage = (props) => {
   const [isOpen, setOpen] = useState(false)
   const imageRef = useRef<HTMLImageElement>(null)
-  const { style, alt, className } = props
-  const items: PhotoSwipe.Item[] = React.useMemo(
-    () => [
-      {
-        src: props.src,
-        w: imageRef?.current?.naturalWidth || 1200,
-        h: imageRef?.current?.naturalHeight || 900,
-      },
-    ],
-    [imageRef.current]
-  )
+  const { style, alt, className, disableZoom, align, placeholderSrc } = props
+  const showByDefault = !!placeholderSrc
+  // Set image dimensions after it is done loading
+  // PhotoSwipe requires image dimensions to be set before it is opened,
+  // so we set them as soon as the image (in FormattedText, probably) is loaded.
+  // User cannot open PhotoSwipe before image was loaded.
+  const items: MutableRefObject<PhotoSwipe.Item[]> = React.useRef([
+    {
+      src: props.src,
+      w: 1080,
+      h: 1920,
+    },
+  ])
   const pswpOptions: PhotoSwipe.UIFramework = {
-    showHideOpacity: true,
+    showHideOpacity: false,
     bgOpacity: 0.8,
     fullscreenEl: false,
     zoomEl: false,
@@ -127,18 +160,33 @@ const LazyLoadImage = (props) => {
     tapToClose: true,
     pinchToClose: false,
     maxSpreadZoom: 4,
+    history: false,
+  }
+
+  const onClick = () => {
+    if (disableZoom || !imageRef?.current) return
+    const windowWidth = window.innerWidth - 32
+    const n = windowWidth / imageRef?.current?.clientWidth
+    items.current = [
+      {
+        src: props.src,
+        w: windowWidth,
+        h: imageRef?.current?.clientHeight * n,
+      },
+    ]
+    setOpen(true)
   }
 
   return (
     <>
       <ProgressiveImage
-        placeholder={props.placeholderSrc}
+        placeholder={placeholderSrc}
         src={props.src}
         visibilitySensorProps={{
           partialVisibility: true,
           offset: {
-            top: VISIBILITY_THRESHOLD,
-            bottom: VISIBILITY_THRESHOLD,
+            top: showByDefault ? -Infinity : POST_ITEM_VISIBILITY_THRESHOLD,
+            bottom: showByDefault ? -Infinity : POST_ITEM_VISIBILITY_THRESHOLD,
           },
         }}
       >
@@ -147,11 +195,14 @@ const LazyLoadImage = (props) => {
             ref={imageRef}
             src={src}
             setOpen={setOpen}
+            onClick={onClick}
             loading={loading}
             isVisible={isVisible}
             style={style}
             alt={alt}
+            align={align}
             className={className}
+            disableZoom={disableZoom}
           />
         )}
       </ProgressiveImage>
@@ -160,7 +211,7 @@ const LazyLoadImage = (props) => {
           <PhotoSwipe
             options={pswpOptions}
             isOpen={isOpen}
-            items={items}
+            items={items.current}
             onClose={() => setOpen(false)}
           />
         </Portal>

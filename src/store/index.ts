@@ -3,7 +3,11 @@ import { createLogger } from 'redux-logger'
 import thunk from 'redux-thunk'
 import reducers from './reducers'
 
-const middleware = applyMiddleware(thunk, createLogger({ collapsed: true }))
+const middlewares = [thunk]
+
+if (process.env.NODE_ENV === 'development') {
+  middlewares.push(createLogger({ collapsed: true }))
+}
 
 export type RootState = ReturnType<typeof reducers>
-export default createStore(reducers, middleware)
+export default createStore(reducers, applyMiddleware(...middlewares))

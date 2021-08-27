@@ -9,11 +9,12 @@ import {
 } from '@material-ui/core'
 import { ComponentWithUserParams } from './index'
 import { makeStyles, fade } from '@material-ui/core/styles'
-import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { getProfileHubs } from 'src/store/actions/profile'
 import { useSelector } from 'src/hooks'
 import { Hub } from 'src/interfaces'
+import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
+import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 const useStyles = makeStyles((theme) => ({
   blockTitle: {
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     background:
       'linear-gradient(0deg,' +
-      theme.palette.background.default +
+      getContrastPaperColor(theme) +
       ',transparent)',
     bottom: 0,
     pointerEvents: 'none',
@@ -60,13 +61,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const HubsItem = ({ data }: { data: Hub }) => {
+export const HubsItem = ({ data }: { data: Hub }) => {
   const classes = useStyles()
   return (
     <Grid
       item
       className={classes.item}
-      component={Link}
+      component={LinkToOutsidePage}
       to={'/hub/' + data.alias + '/p/1'}
     >
       <Chip
@@ -103,7 +104,7 @@ const Hubs = ({ classes: additionalClasses }: ComponentWithUserParams) => {
         Не удалось загрузить список хабов
       </Typography>
     )
-  if (isFetching) return <Typography>загрузка...</Typography>
+  if (isFetching) return null
 
   return isFetched && hubs && hubs.hubIds.length !== 0 ? (
     <div className={additionalClasses}>
@@ -140,4 +141,4 @@ const Hubs = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   ) : null
 }
 
-export default Hubs
+export default React.memo(Hubs)

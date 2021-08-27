@@ -6,13 +6,13 @@ import {
   BACKGROUND_COLORS_PAPER,
   THEME_TYPES,
   PaletteType,
+  THEME_PRIMARY_COLORS,
+  THEME_TEXT_COLORS,
 } from './constants'
-
-const localStorageThemeType = localStorage.getItem('theme')
-const type = (localStorageThemeType || 'light') as MUIPaletteType
+import * as userSettings from 'src/utils/userSettings'
 
 export const makeBackgroundColors = (
-  t: PaletteType
+  t: PaletteType | string
 ): {
   default: string
   paper: string
@@ -22,32 +22,66 @@ export const makeBackgroundColors = (
 })
 
 export const makePrimaryColors = (
-  t: PaletteType
+  t: PaletteType | string
 ): {
   main: string
   light: string
   dark: string
-} => ({
-  main: THEME_TYPES[t] === 'dark' ? blue.A100 : blue.A400,
-  light: THEME_TYPES[t] === 'dark' ? blue.A100 : blue.A400,
-  dark: THEME_TYPES[t] === 'dark' ? darken(blue.A100, 0.1) : blue.A700,
-})
+} => THEME_PRIMARY_COLORS[t]
 
-const generateTheme = (themeType?: PaletteType): ThemeOptions => ({
-  palette: {
-    type: THEME_TYPES[themeType || type],
-    primary: makePrimaryColors(themeType ? themeType : type),
-    secondary: { main: '#fff' },
-    background: makeBackgroundColors(themeType ? themeType : type),
-  },
-  shape: { borderRadius: 4 },
-  overrides: {
-    MuiTab: {
-      wrapper: {
-        flexDirection: 'row',
+export const makeTextColors = (
+  t: PaletteType | string
+): {
+  primary: string
+  secondary: string
+  disabled: string
+  hint: string
+} => THEME_TEXT_COLORS[t]
+
+export const makeType = (t: PaletteType | string): MUIPaletteType =>
+  THEME_TYPES[t]
+
+const generateTheme = (themeType?: PaletteType | string): ThemeOptions => {
+  const localStorageUserSettings = userSettings.get()
+  const localStorageCustomThemes = localStorageUserSettings.customThemes
+  const localStorageThemeType = localStorageUserSettings.themeType
+  const type = (localStorageThemeType || 'light') as MUIPaletteType
+  const customTheme = localStorageCustomThemes.find((e) => e.type === type)
+  const defaultPalette = {
+    type: makeType(themeType || type),
+    primary: makePrimaryColors(themeType || type),
+    background: makeBackgroundColors(themeType || type),
+    text: makeTextColors(themeType || type),
+  }
+
+  return {
+    palette: customTheme ? customTheme.palette : defaultPalette,
+    shape: { borderRadius: 4 },
+    overrides: {
+      MuiTab: {
+        wrapper: {
+          flexDirection: 'row',
+        },
+      },
+      MuiPaper: {
+        rounded: {
+          borderRadius: 8
+        }
+      }
+    },
+    props: {
+      // Ripple on IconButtons is delayed and not very effective in its action
+      // So we change its styles to the custom ones
+      MuiIconButton: {
+        TouchRippleProps: {
+          classes: {
+            rippleVisible: 'IconButton_TouchRipple-rippleVisible',
+            childLeaving: 'IconButton_TouchRipple-childLeaving',
+          },
+        },
       },
     },
-  },
-})
+  }
+}
 
 export default generateTheme

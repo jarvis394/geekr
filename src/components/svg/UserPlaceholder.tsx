@@ -14,4 +14,4 @@ const UserPlaceholder = ({ num }: { num: number }) => {
   )
 }
 
-export default UserPlaceholder
+export default React.memo(UserPlaceholder)

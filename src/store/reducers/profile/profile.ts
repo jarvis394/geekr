@@ -41,6 +41,8 @@ export default (
   }
 
   const field = fieldsMap[typesMap.findIndex((e) => type.startsWith(e))]
+  if (!field) return state
+
   return Object.assign({}, state, {
     [field]: { ...state[field], ...actionHandler(type) },
   })
