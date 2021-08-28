@@ -13,6 +13,7 @@ export const getNews = (
 
   // Get data from root store to find out if we're going to fetch a data or not
   const storeState = getState()
+  const authData = storeState.auth.authorizedRequestData
   const storeData =
     flow === 'all'
       ? storeState.news.data.pages[page]
@@ -24,7 +25,7 @@ export const getNews = (
   dispatch({ type, payload: { page, flow } })
 
   try {
-    const data = await api.getNews({ page, flow })
+    const data = await api.getNews({ page, flow, authData })
     const pagesCount = data?.pagesCount
 
     dispatch({
@@ -45,7 +46,9 @@ export const getNewsPromo = (hubAlias?: string) => async (
 ) => {
   const type = NEWS_PREFIX + 'PROMO_FETCH'
   // Get data from root store to find out if we're going to fetch a data or not
-  const storeData = getState().news.block
+  const storeState = getState()
+  const storeData = storeState.news.block
+  const authData = storeState.auth.authorizedRequestData
   if (!hubAlias && !shouldUpdate(storeData)) {
     return Promise.resolve()
   }
@@ -53,7 +56,7 @@ export const getNewsPromo = (hubAlias?: string) => async (
   dispatch({ type })
 
   try {
-    const data = await api.getNewsPromo({ hubAlias })
+    const data = await api.getNewsPromo({ hubAlias, authData })
     dispatch({ type: type + '_FULFILLED', payload: { data } })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', error: error.message })

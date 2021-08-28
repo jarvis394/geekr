@@ -10,7 +10,6 @@ import { useHistory, useLocation } from 'react-router-dom'
 import {
   APP_BAR_HEIGHT,
   MAX_WIDTH,
-  MIN_WIDTH,
   MIDDLE_WIDTH,
   RATING_MODES,
 } from 'src/config/constants'

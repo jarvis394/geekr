@@ -27,6 +27,7 @@ export const getPosts = ({
   const type = HOME_PREFIX + 'FETCH'
   // Get data from root store to find out if we're going to fetch a data or not
   const storeState = getState()
+  const authData = storeState.auth.authorizedRequestData
   const storeData =
     flow === 'all'
       ? storeState.home.data[mode].pages[page]
@@ -39,7 +40,7 @@ export const getPosts = ({
   dispatch({ type, payload: { mode, flow } })
 
   try {
-    const data = await api.getPosts({ mode, page, flow })
+    const data = await api.getPosts({ mode, page, flow, authData })
     const pagesCount = data?.pagesCount
 
     dispatch({
@@ -71,13 +72,14 @@ export const getAdverts = () => async (dispatch) => {
   }
 }
 
-export const getMostReading = () => async (dispatch) => {
+export const getMostReading = () => async (dispatch, getState: () => RootState) => {
   const type = SIDEBAR_MOST_READING + 'FETCH'
+  const authData = getState().auth.authorizedRequestData
 
   dispatch({ type })
 
   try {
-    const data = await api.getMostReadingArticles()
+    const data = await api.getMostReadingArticles(authData)
 
     dispatch({
       type: type + '_FULFILLED',

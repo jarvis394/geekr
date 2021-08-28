@@ -302,7 +302,7 @@ const NavBarUnmemoized = ({
           const element = el || docElement || docBody
           return (
             (docElement.scrollTop || docBody.scrollTop) /
-            (element.offsetHeight - docElement.clientHeight)
+            (element.offsetHeight - 200)
           )
         }
         const newScrollProgress = getElementScroll(scrollElement)

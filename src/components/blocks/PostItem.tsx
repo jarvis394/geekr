@@ -6,7 +6,7 @@ import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress, Divider } from '@material-ui/core'
 import { makeStyles, darken, lighten } from '@material-ui/core/styles'
 import formatNumber from 'src/utils/formatNumber'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
@@ -48,6 +48,7 @@ const useStyles = makeStyles<
   noDeco: {
     textDecoration: 'none !important',
   },
+  unreadCommentsCount: { color: theme.palette.primary.main, marginLeft: 4 },
   placeholder: {
     height: DEFAULT_POST_ITEM_HEIGHT,
     width: '100%',
@@ -181,11 +182,22 @@ const useStyles = makeStyles<
       else return 0
     },
   },
+  trollWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+    textDecoration: 'none !important',
+  },
   trollText: {
     color: theme.palette.text.hint,
     fontFamily: 'Google Sans',
     fontWeight: 500,
-    flexGrow: 1,
+  },
+  trollTextTitle: {
+    color: theme.palette.text.hint,
+    fontFamily: 'Google Sans',
+    fontWeight: 400,
+    textDecoration: 'none !important',
   },
   trollLink: {
     color: theme.palette.primary.main,
@@ -236,7 +248,7 @@ const useStyles = makeStyles<
 
 interface BottomRowItemType {
   icon: JSX.Element
-  text: string | number
+  text: JSX.Element
   coloredText?: boolean
   number?: number
   isActive?: boolean
@@ -295,6 +307,7 @@ export const PostItem = ({
   const hiddenAuthors = useSelector((state) => state.settings.hiddenAuthors)
   const hiddenCompanies = useSelector((state) => state.settings.hiddenCompanies)
   const postBookmarked = post?.relatedData?.bookmarked
+  const unreadCommentsCount = post?.relatedData?.unreadCommentsCount
   const [isBookmarked, setBookmarkState] = React.useState<boolean>(
     postBookmarked
   )
@@ -343,13 +356,13 @@ export const PostItem = ({
   const bottomRow: BottomRowItemType[] = [
     {
       icon: <ThumbsUpDownIcon className={classes.postBottomRowItemIcon} />,
-      text: score,
+      text: <>{score}</>,
       coloredText: true,
       number: unformattedScore,
     },
     {
       icon: <VisibilityIcon className={classes.postBottomRowItemIcon} />,
-      text: reads,
+      text: <>{reads}</>,
     },
     {
       icon: isFetchingBookmarkResponse ? (
@@ -364,7 +377,7 @@ export const PostItem = ({
           color={isBookmarked ? 'primary' : 'inherit'}
         />
       ),
-      text: favorites,
+      text: <>{favorites}</>,
       isActive: isBookmarked,
       action: async () => {
         if (authData) {
@@ -388,7 +401,16 @@ export const PostItem = ({
     },
     {
       icon: <ChatBubbleIcon className={classes.postBottomRowItemIcon} />,
-      text: comments,
+      text: (
+        <>
+          {comments}
+          {unreadCommentsCount !== 0 ? (
+            <span className={classes.unreadCommentsCount}>
+              +{unreadCommentsCount}
+            </span>
+          ) : null}
+        </>
+      ),
       action: () => {
         history.push(postLink + '/comments', {
           from: currentLocation,
@@ -404,19 +426,23 @@ export const PostItem = ({
     (isCorporative && hiddenCompanies.includes(companyAlias))
   )
     return (
-      <Paper
-        style={{ padding: 16, display: 'flex', flexDirection: 'row' }}
-        elevation={0}
-        className={classes.paper}
-      >
-        <Typography className={classes.trollText}>Тут был тролль</Typography>
-        <LinkToOutsidePage className={classes.trollLink} to={postLink}>
-          <Typography className={classes.trollLink}>
-            всё равно читать
-          </Typography>
-          <RightIcon />
-        </LinkToOutsidePage>
-      </Paper>
+      <LinkToOutsidePage to={postLink} style={{ textDecoration: 'none' }}>
+        <Paper
+          style={{ padding: 16, display: 'flex', flexDirection: 'row' }}
+          elevation={0}
+          className={classes.paper}
+        >
+          <div className={classes.trollWrapper}>
+            <Typography className={classes.trollText}>
+              Тут был тролль / @{alias}
+            </Typography>
+            <Typography className={classes.trollTextTitle}>{title}</Typography>
+          </div>
+          <div className={classes.trollLink}>
+            <RightIcon />
+          </div>
+        </Paper>
+      </LinkToOutsidePage>
     )
 
   const BottomRowItemUnmemoized = ({ item }: { item: BottomRowItemType }) => {
@@ -476,124 +502,118 @@ export const PostItem = ({
       active={!isRendered}
       onChange={(newIsVisible) => setIsRendered(newIsVisible)}
     >
-      {({ isVisible }) => (
-        <>
-          {!isVisible && (
-            <div style={placeholderStyles} className={classes.placeholder} />
-          )}
-          {isVisible && (
-            <Paper
-              ref={rootRef}
-              elevation={0}
-              className={classes.paper}
-              style={style}
+      {({ isVisible }) =>
+        isVisible ? (
+          <Paper
+            ref={rootRef}
+            elevation={0}
+            className={classes.paper}
+            style={style}
+          >
+            <LinkToOutsidePage
+              to={'/user/' + alias}
+              className={classes.avatarContainer}
             >
-              <LinkToOutsidePage
-                to={'/user/' + alias}
-                className={classes.avatarContainer}
-              >
-                <UserAvatar
-                  src={avatarUrl}
-                  alias={alias}
-                  className={classes.postAvatar}
+              <UserAvatar
+                src={avatarUrl}
+                alias={alias}
+                className={classes.postAvatar}
+              />
+              <Typography className={classes.postAuthor} variant="caption">
+                {alias}
+              </Typography>
+              <Typography className={classes.postTs} variant="caption">
+                {ts}
+              </Typography>
+            </LinkToOutsidePage>
+            {shouldShowPostImage && (
+              <LinkToOutsidePage className={classes.imageHolder} to={postLink}>
+                <LazyLoadImage
+                  src={postFirstImage}
+                  alt={'Post header image'}
+                  className={classes.image}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
                 />
-                <Typography className={classes.postAuthor} variant="caption">
-                  {alias}
-                </Typography>
-                <Typography className={classes.postTs} variant="caption">
-                  {ts}
-                </Typography>
               </LinkToOutsidePage>
-              {shouldShowPostImage && (
-                <LinkToOutsidePage
-                  className={classes.imageHolder}
-                  to={postLink}
-                >
-                  <LazyLoadImage
-                    src={postFirstImage}
-                    alt={'Post header image'}
-                    className={classes.image}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                    }}
-                  />
-                </LinkToOutsidePage>
-              )}
+            )}
 
-              <LinkToOutsidePage
-                className={[classes.postLink, classes.noDeco].join(' ')}
-                to={postLink}
-              >
-                {title}
-              </LinkToOutsidePage>
+            <LinkToOutsidePage
+              className={[classes.postLink, classes.noDeco].join(' ')}
+              to={postLink}
+            >
+              {title}
+            </LinkToOutsidePage>
 
-              {/** Post hubs */}
-              {isExtended && (
-                <div className={classes.hubs}>
-                  {post.hubs.map((hub, i) => (
-                    <span key={i} className={classes.hubWrapper}>
-                      <LinkToOutsidePage
-                        className={classes.hubLink}
-                        to={'/hub/' + hub.alias + '/p/1'}
-                      >
-                        {hub.title}
-                      </LinkToOutsidePage>
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              {/** Post labels */}
-              <div className={classes.labelsContainer}>
-                {post.postLabels.map(
-                  (e, i) =>
-                    POST_LABELS[e.type] && (
-                      <Chip
-                        label={POST_LABELS[e.type]?.text}
-                        variant="outlined"
-                        color="primary"
-                        size="small"
-                        key={i}
-                        style={{ marginRight: 8, marginTop: 8 }}
-                      />
-                    )
-                )}
-              </div>
-
-              {isExtended && (
-                <div className={classes.leadText}>
-                  {!hasImagesInLeadText && postFirstImage && (
-                    <div className={classes.leadImageWrapper}>
-                      <img
-                        src={postFirstImage}
-                        alt={'Post header image'}
-                        className={classes.leadImage}
-                      />
-                    </div>
-                  )}
-                  <FormattedText>{leadData.textHtml}</FormattedText>
-                  <LinkToOutsidePage to={postLink} className={classes.link}>
-                    <Button
-                      color="primary"
-                      className={classes.leadButton}
-                      variant={'outlined'}
+            {/** Post hubs */}
+            {isExtended && (
+              <div className={classes.hubs}>
+                {post.hubs.map((hub, i) => (
+                  <span key={i} className={classes.hubWrapper}>
+                    <LinkToOutsidePage
+                      className={classes.hubLink}
+                      to={'/hub/' + hub.alias + '/p/1'}
                     >
-                      {parse(leadData.buttonTextHtml)}
-                    </Button>
-                  </LinkToOutsidePage>
-                </div>
-              )}
-
-              <div className={classes.postBottomRow}>
-                {bottomRow.map((e, i) => (
-                  <BottomRowItem item={e} key={i} />
+                      {hub.title}
+                    </LinkToOutsidePage>
+                  </span>
                 ))}
               </div>
-            </Paper>
-          )}
-        </>
-      )}
+            )}
+
+            {/** Post labels */}
+            <div className={classes.labelsContainer}>
+              {post.postLabels.map(
+                (e, i) =>
+                  POST_LABELS[e.type] && (
+                    <Chip
+                      label={POST_LABELS[e.type]?.text}
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      key={i}
+                      style={{ marginRight: 8, marginTop: 8 }}
+                    />
+                  )
+              )}
+            </div>
+
+            {isExtended && (
+              <div className={classes.leadText}>
+                {!hasImagesInLeadText && postFirstImage && (
+                  <div className={classes.leadImageWrapper}>
+                    <img
+                      src={postFirstImage}
+                      alt={'Post header image'}
+                      className={classes.leadImage}
+                    />
+                  </div>
+                )}
+                <FormattedText>{leadData.textHtml}</FormattedText>
+                <LinkToOutsidePage to={postLink} className={classes.link}>
+                  <Button
+                    color="primary"
+                    className={classes.leadButton}
+                    variant={'outlined'}
+                  >
+                    {parse(leadData.buttonTextHtml)}
+                  </Button>
+                </LinkToOutsidePage>
+              </div>
+            )}
+
+            <div className={classes.postBottomRow}>
+              {bottomRow.map((e, i) => (
+                <BottomRowItem item={e} key={i} />
+              ))}
+            </div>
+          </Paper>
+        ) : (
+          <div style={placeholderStyles} className={classes.placeholder} />
+        )
+      }
     </VisibilitySensor>
   )
 }

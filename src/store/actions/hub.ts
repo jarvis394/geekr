@@ -11,18 +11,23 @@ import getHubCompaniesRequest from 'src/api/getHubCompanies'
 import getHubPostsRequest from 'src/api/getHubPosts'
 import getNewsPromo from 'src/api/getNewsPromo'
 import { Mode } from 'src/config/constants'
+import { RootState } from '..'
 
 /**
  * Gets hub's profile data
  * @param alias Hub alias
  */
-export const getHub = (alias: string) => async (dispatch) => {
+export const getHub = (alias: string) => async (
+  dispatch,
+  getState: () => RootState
+) => {
   const type = GET_PROFILE + '_FETCH'
+  const authData = getState().auth.authorizedRequestData
 
   dispatch({ type })
 
   try {
-    const data = await getHubProfile(alias)
+    const data = await getHubProfile(alias, authData)
 
     dispatch({
       type: type + '_FULFILLED',
@@ -37,13 +42,17 @@ export const getHub = (alias: string) => async (dispatch) => {
  * Gets hub's news promo
  * @param alias Hub alias
  */
-export const getHubNews = (alias: string) => async (dispatch) => {
+export const getHubNews = (alias: string) => async (
+  dispatch,
+  getState: () => RootState
+) => {
   const type = GET_NEWS + '_FETCH'
+  const authData = getState().auth.authorizedRequestData
 
   dispatch({ type })
 
   try {
-    const data = await getNewsPromo({ hubAlias: alias })
+    const data = await getNewsPromo({ hubAlias: alias, authData })
 
     dispatch({
       type: type + '_FULFILLED',
@@ -61,14 +70,16 @@ export const getHubNews = (alias: string) => async (dispatch) => {
  * @param alias Hub alias
  */
 export const getHubPosts = (mode: Mode, page: number, alias: string) => async (
-  dispatch
+  dispatch,
+  getState: () => RootState
 ) => {
   const type = GET_POSTS + '_FETCH'
-
+  const authData = getState().auth.authorizedRequestData
+  
   dispatch({ type })
 
   try {
-    const data = await getHubPostsRequest({ mode, page, alias })
+    const data = await getHubPostsRequest({ mode, page, alias, authData })
 
     dispatch({
       type: type + '_FULFILLED',

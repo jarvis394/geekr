@@ -212,7 +212,9 @@ export const getCompany = (alias: string) => async (
   dispatch,
   getState: () => RootState
 ) => {
-  const storeData = getState().post
+  const storeState = getState()
+  const storeData = storeState.post
+  const authData = storeState.auth.authorizedRequestData
   if (
     storeData.company.state === FetchingState.Fetched &&
     alias === storeData.company.data.alias
@@ -223,7 +225,7 @@ export const getCompany = (alias: string) => async (
   dispatch({ type: COMPANY_FETCH })
 
   try {
-    const data = await apiGetCompany(alias)
+    const data = await apiGetCompany(alias, authData)
     dispatch({
       type: COMPANY_FETCH_FULFILLED,
       payload: data,

@@ -28,6 +28,8 @@ import useUserDataFetch from 'src/hooks/useUserDataFetch'
 import UpdateNotification from 'src/components/blocks/UpdateNotification'
 import useGetDownvoteReasons from 'src/hooks/useGetDownvoteReasons'
 import { useEffect } from 'react'
+import { ErrorBoundary } from '@sentry/react'
+import ErrorPage from 'src/pages/Error'
 
 interface StyleProps {
   theme: Theme
@@ -158,8 +160,8 @@ const App = () => {
   }, [])
 
   return (
-    <>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <ErrorBoundary fallback={(props) => <ErrorPage {...props} />}>
         <SnackbarProvider>
           <SideNavigationDrawer />
           <div className={classes.appWrapper}>
@@ -172,8 +174,8 @@ const App = () => {
             </div>
           </div>
         </SnackbarProvider>
-      </ThemeProvider>
-    </>
+      </ErrorBoundary>
+    </ThemeProvider>
   )
 }
 

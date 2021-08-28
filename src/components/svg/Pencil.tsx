@@ -10,4 +10,4 @@ const Pencil = (
   )
 }
 
-export default Pencil
+export default React.memo(Pencil)
