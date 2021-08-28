@@ -1,2 +1,0 @@
-language = "typescript"
-run = "npm run start:dev"

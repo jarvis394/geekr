@@ -11,8 +11,8 @@
 Go to the [habra.vercel.app](https://habra.vercel.app/top/weekly/p/1) site and feel yourself at home! It can do almost everything that the original site does, but with its own tricks and features.
 
 ## Features
-- **Dark mode** 😲 and also OLED mode and sepia
-- Tons of customization settings (planned more)
+- **Dark mode** 😲 and lots of other themes
+- Tons of customization settings and theme creation
 - Styled following Material Design
 - Mobile friendly
 - Coded with React, TypeScript and Redux
