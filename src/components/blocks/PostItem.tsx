@@ -404,7 +404,7 @@ export const PostItem = ({
       text: (
         <>
           {comments}
-          {unreadCommentsCount !== 0 ? (
+          {(unreadCommentsCount && unreadCommentsCount !== 0) ? (
             <span className={classes.unreadCommentsCount}>
               +{unreadCommentsCount}
             </span>
