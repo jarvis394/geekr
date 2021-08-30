@@ -279,7 +279,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
     changeLinks: false,
   },
   interfaceFeed: {
-    isCompact: true,
+    isCompact: false,
     hideMegaposts: false,
     hideNewsBlock: false,
     disablePostImage: false,
