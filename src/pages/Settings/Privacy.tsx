@@ -104,7 +104,7 @@ const Privacy = () => {
               , чтобы собирать статистику посещений приложения.
             </Typography>
             <Typography style={{ marginTop: 4 }} variant="body2">
-              На серевере включена{' '}
+              На сервере включена{' '}
               <a
                 className={classes.link}
                 target="_blank"
