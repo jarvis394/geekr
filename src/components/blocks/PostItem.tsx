@@ -598,7 +598,7 @@ export const PostItem = ({
                     className={classes.leadButton}
                     variant={'outlined'}
                   >
-                    {parse(leadData.buttonTextHtml)}
+                    {parse(leadData.buttonTextHtml || 'Читать далее')}
                   </Button>
                 </LinkToOutsidePage>
               </div>
