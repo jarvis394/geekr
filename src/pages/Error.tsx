@@ -61,21 +61,17 @@ const Error: React.FC<{
 }> = ({ error, componentStack }) => {
   const classes = useStyles()
   const location = useLocation()
-  const linkHref = `https://github.com/jarvis394/habra/issues/new?labels=bug&title=Encountered+an+error+(${error.toString()})&body=${encodeURIComponent(
-    `### Describe the problem:\nGot an error message at \`${
-      location.pathname + location.search + location.hash
-    }\`:\n\`\`\`javascript\n${error.toString()}\n${componentStack}\n\`\`\``
-  )}`
+  const linkHref = '/'
 
   return (
     <div className={classes.root}>
       <ErrorSVG className={classes.svg} />
       <Typography className={classes.title}>Произошла ошибка</Typography>
       <Typography className={classes.text}>
-        <a className={classes.link} target="_blank" rel="noreferrer" href={linkHref}>
+        <a className={classes.link} href={linkHref}>
           Нажми сюда
         </a>
-        , чтобы сообщить о проблеме в проект
+        , чтобы вернуться домой. Эта ошибка записана в логи Sentry и будет обработана в ближайшее время.
       </Typography>
       <div className={classes.code}>
         <FormattedText>{`<pre><code class="javascript">${error.toString()}\n${componentStack}</code></pre>`}</FormattedText>
