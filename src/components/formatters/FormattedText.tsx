@@ -88,6 +88,7 @@ const useStyles = makeStyles<
     '& div.table, div.scrollable-table': {
       overflow: 'auto',
       marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
       wordBreak: 'normal',
     },
     '& sub, sup': {
