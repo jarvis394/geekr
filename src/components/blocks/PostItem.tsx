@@ -213,6 +213,7 @@ const useStyles = makeStyles<
   postTypeVoice: {
     color: theme.palette.error.light,
     marginBottom: theme.spacing(1),
+    overflowWrap: 'break-word',
   },
   link: {
     textDecoration: 'none',
@@ -291,15 +292,13 @@ export const PostItem = ({
   if (post.postType === 'voice') {
     return (
       <Paper elevation={0} className={classes.paper} style={style}>
-        <Typography
-          className={[
-            classes.postLink,
-            classes.noDeco,
-            classes.postTypeVoice,
-          ].join(' ')}
-        >
+        <FormattedText className={[
+          classes.postLink,
+          classes.noDeco,
+          classes.postTypeVoice,
+        ].join(' ')}>
           {leadData.textHtml}
-        </Typography>
+        </FormattedText>
       </Paper>
     )
   }
