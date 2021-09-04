@@ -313,6 +313,10 @@ export const LANGUAGES_FEED = [
     type: 'en',
     name: 'English',
   },
+  {
+    type: 'ru,en',
+    name: 'Русский и English'
+  }
 ]
 
 export const THEMES: PaletteType[] = [

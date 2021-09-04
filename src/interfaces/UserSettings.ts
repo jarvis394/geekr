@@ -50,7 +50,7 @@ export default interface UserSettings {
     sortByKarma: boolean
   }
   language: {
-    feed: 'ru' | 'en'
+    feed: 'ru' | 'en' | 'ru,en'
     interface: 'ru' | 'en'
   }
 }
