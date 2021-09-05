@@ -276,7 +276,7 @@ export const PostItem = ({
   )
   const shouldOpenInNewTab =
     !isPWA &&
-    useSelector((store) => !store.settings.interfaceFeed.openPostsInNewTab)
+    useSelector((store) => store.settings.interfaceFeed.openPostsInNewTab)
   const disablePostImage = useSelector(
     (store) => store.settings.interfaceFeed.disablePostImage
   )
