@@ -151,7 +151,7 @@ const Home = () => {
 
   const onFlowsBarLinkClick = (e: FlowObject) => {
     if (e.alias === 'all') {
-      history.push(lastAllFlowsMode.to + '/p/1')
+      history.push(lastAllFlowsMode.to + 'p/1')
     } else {
       history.push('/all/p/1?flow=' + e.alias)
     }

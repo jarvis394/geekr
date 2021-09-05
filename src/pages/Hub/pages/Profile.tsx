@@ -254,7 +254,7 @@ const Posts = ({ mode }) => {
     if (currentModeObject.mode === 'all') {
       history.replace('/hub/' + alias + '/p/' + i)
     } else {
-      history.replace('/hub/' + alias + currentModeObject.to + '/p/' + i)
+      history.replace('/hub/' + alias + currentModeObject.to + 'p/' + i)
     }
   }
 

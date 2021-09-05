@@ -210,7 +210,7 @@ export const makeNavigationTabs = (
     {
       label: 'Статьи',
       icon: <Icon20HomeOutline width={w} height={h} />,
-      to: () => `${getCachedMode().to}/p/1`,
+      to: () => `${getCachedMode().to}p/1`,
       match: 'feed',
       tab: 'home',
     },

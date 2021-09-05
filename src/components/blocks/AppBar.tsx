@@ -134,7 +134,7 @@ const AppBarComponent = () => {
   const goHome = () => {
     window.scrollTo(0, 0)
     if (location.pathname !== `${mode?.to}/p/1`) {
-      history.push(mode ? `${mode.to}/p/1` : '/')
+      history.push(mode ? `${mode.to}p/1` : '/')
     }
   }
   const goSettings = () =>

@@ -329,7 +329,7 @@ export const routes: Route[] = [
   },
   {
     path: '/',
-    component: <Redirect to={`${getCachedMode().to}/p/1`} />,
+    component: <Redirect to={`${getCachedMode().to}p/1`} />,
     shouldShowAppBar: true,
     shouldAppBarChangeColors: true,
     appBarColor: (theme) => theme.palette.background.default,
