@@ -283,6 +283,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
     hideMegaposts: false,
     hideNewsBlock: false,
     disablePostImage: false,
+    openPostsInNewTab: false,
   },
   interfaceComments: {
     showThreads: true,

@@ -237,7 +237,8 @@ const Post = () => {
   const id = Number(strigifiedId)
   const classes = useStyles()
   const contentsRef = React.useRef<HTMLDivElement>()
-  const isTranslated = post && !!post.translationData
+  const isTranslated = post && post.postLabels.some(e => e.type === 'translation')
+  const translationData = isTranslated && post.postLabels.find(e => e.type === 'translation')?.data
   const shouldShowContents = post && (companyAlias ? post && company : post)
   const shouldShowCompanyInfo = !!company
   const labels =
@@ -383,11 +384,11 @@ const Post = () => {
                       {labels}
                       {isTranslated && (
                         <MUILink
-                          href={post.translationData.originalUrl}
+                          href={translationData.originalUrl}
                           className={classes.translatedBox}
                         >
                           Автор оригинала:{' '}
-                          {post.translationData.originalAuthorName}
+                          {translationData.originalAuthorName}
                         </MUILink>
                       )}
                     </Container>

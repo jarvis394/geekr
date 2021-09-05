@@ -15,6 +15,7 @@ import {
 import { setSettings } from 'src/store/actions/settings'
 import { useLocation } from 'react-router'
 import blend from 'src/utils/blendColors'
+import useIsPWA from 'src/hooks/useIsPWA'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,6 +73,7 @@ const SwitchButton: React.FC<{
 const Interface = () => {
   const classes = useStyles()
   const theme = useTheme()
+  const isPWA = useIsPWA()
   const userSettings = useSelector((store) => store.settings)
   const dispatch = useDispatch()
   const sectionRefs = {
@@ -161,6 +163,20 @@ const Interface = () => {
                 'interfaceFeed',
                 'hideNewsBlock',
                 !userSettings.interfaceFeed.hideNewsBlock
+              )
+            }
+          />
+          <SwitchButton
+            primary={'Открывать статьи в новой вкладке'}
+            secondary={
+              isPWA ? 'Функция отключена в PWA приложении' : null
+            }
+            checked={userSettings.interfaceFeed.openPostsInNewTab}
+            onChange={() =>
+              setInterfaceSettings(
+                'interfaceFeed',
+                'openPostsInNewTab',
+                !userSettings.interfaceFeed.openPostsInNewTab
               )
             }
           />

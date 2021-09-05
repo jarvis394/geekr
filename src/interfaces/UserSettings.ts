@@ -44,6 +44,7 @@ export default interface UserSettings {
     hideMegaposts: boolean
     hideNewsBlock: boolean
     disablePostImage: boolean
+    openPostsInNewTab: boolean
   }
   interfaceComments: {
     showThreads: boolean
