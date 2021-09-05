@@ -215,7 +215,7 @@ const Switcher: React.FC<{
   const [showMode, setShowMode] = useState<ShowMode>(
     current.isNewMode ? 'new' : 'top'
   )
-  const [drawerMode, setDrawerMode] = useState<ModeObject>(current)
+  const [currentMode, setCurrentMode] = useState<ModeObject>(current)
   const currentFlow = flow ? FLOWS.find((e) => e.alias === flow) : null
   const classes = useStyles()
 
@@ -226,13 +226,13 @@ const Switcher: React.FC<{
     if (newShowMode !== showMode) {
       setShowMode(newShowMode)
       if (newShowMode === 'new') {
-        setDrawerMode(switcherButtonsDataNew[0])
+        setCurrentMode(switcherButtonsDataNew[0])
         if (updateMode) {
           setMode(switcherButtonsDataNew[0].mode)
           handleClick(switcherButtonsDataNew[0])
         }
       } else {
-        setDrawerMode(switcherButtonsDataTop[0])
+        setCurrentMode(switcherButtonsDataTop[0])
         if (updateMode) {
           setMode(switcherButtonsDataTop[0].mode)
           handleClick(switcherButtonsDataTop[0])
@@ -241,13 +241,13 @@ const Switcher: React.FC<{
     }
   }
   const handleApplyClick = () => {
-    setMode(drawerMode.mode)
-    handleClick(drawerMode)
+    setMode(currentMode.mode)
+    handleClick(currentMode)
     setOpen(false)
   }
-  const onChange = (e: ModeObject) => setDrawerMode(e)
+  const onChange = (e: ModeObject) => setCurrentMode(e)
   const onDesktopSwitcherChange = (e: ModeObject) => {
-    setDrawerMode(e)
+    setCurrentMode(e)
     setMode(e.mode)
     handleClick(e)
   }
@@ -255,7 +255,7 @@ const Switcher: React.FC<{
   useEffect(() => {
     const newCurrentMode = modes.find((e) => e.mode === mode)
     setShowMode(newCurrentMode.isNewMode ? 'new' : 'top')
-    setDrawerMode(newCurrentMode)
+    setCurrentMode(newCurrentMode)
   }, [mode, handleClick])
 
   return (
@@ -290,7 +290,7 @@ const Switcher: React.FC<{
                 : switcherButtonsDataTop
             }
             onChange={onDesktopSwitcherChange}
-            currentValue={drawerMode.mode}
+            currentValue={currentMode.mode}
             inline
           />
         </div>
@@ -317,7 +317,7 @@ const Switcher: React.FC<{
             <SwitcherButtons
               data={switcherButtonsDataNew}
               onChange={onChange}
-              currentValue={drawerMode.mode}
+              currentValue={currentMode.mode}
             />
           </>
         )}
@@ -334,7 +334,7 @@ const Switcher: React.FC<{
             <SwitcherButtons
               data={switcherButtonsDataTop}
               onChange={onChange}
-              currentValue={drawerMode.mode}
+              currentValue={currentMode.mode}
             />
           </>
         )}

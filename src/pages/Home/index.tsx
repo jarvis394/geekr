@@ -24,7 +24,7 @@ import getCachedMode from 'src/utils/getCachedMode'
 import AdvertsBlock from './AdvertsBlock'
 import MainBlock from 'src/components/blocks/MainBlock'
 import Sidebar from 'src/pages/Home/Sidebar'
-import useLastMode from 'src/utils/useLastMode'
+import useLastMode from 'src/hooks/useLastMode'
 import FlowsBar from 'src/components/blocks/FlowsBar'
 import useQuery from 'src/hooks/useQuery'
 import NotFound from '../NotFound'
@@ -144,7 +144,7 @@ const Home = () => {
     ({ mode: newMode, to }) => {
       localStorage.setItem('mode', newMode)
       setMode(newMode)
-      history.push(to + '/p/1?' + query.toString())
+      history.push(to + 'p/1?' + query.toString())
     },
     [flow, location.pathname, location.search]
   )
