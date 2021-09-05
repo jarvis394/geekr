@@ -51,6 +51,17 @@ const useStyles = makeStyles<Theme, StylesProps>((theme) => ({
   },
 }))
 
+interface LazyLoadImageProps {
+  src: string
+  placeholderSrc?: string
+  style: Record<string, string | number>
+  alt: string
+  className: string
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>
+  disableZoom?: boolean
+  align?: 'left' | 'right' | null
+}
+
 interface ImageProps {
   src: string
   loading: boolean
@@ -58,7 +69,7 @@ interface ImageProps {
   style: Record<string, string | number>
   alt: string
   className: string
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>
   disableZoom?: boolean
   align?: 'left' | 'right' | null
   onClick: () => void
@@ -66,17 +77,7 @@ interface ImageProps {
 
 const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
   function ImageComponent(
-    {
-      src,
-      loading,
-      style,
-      alt,
-      className,
-      setOpen,
-      disableZoom,
-      align,
-      onClick,
-    },
+    { src, loading, style, alt, className, align, onClick },
     ref
   ) {
     const [hasError, setHasError] = React.useState(false)
@@ -132,7 +133,7 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
 )
 const Image = React.memo(ImageUnmemoized)
 
-const LazyLoadImage = (props) => {
+const LazyLoadImage: React.FC<LazyLoadImageProps> = (props) => {
   const [isOpen, setOpen] = useState(false)
   const imageRef = useRef<HTMLImageElement>(null)
   const { style, alt, className, disableZoom, align, placeholderSrc } = props
@@ -194,7 +195,6 @@ const LazyLoadImage = (props) => {
           <Image
             ref={imageRef}
             src={src}
-            setOpen={setOpen}
             onClick={onClick}
             loading={loading}
             isVisible={isVisible}
@@ -202,11 +202,10 @@ const LazyLoadImage = (props) => {
             alt={alt}
             align={align}
             className={className}
-            disableZoom={disableZoom}
           />
         )}
       </ProgressiveImage>
-      {isOpen && imageRef.current && (
+      {isOpen && !disableZoom && imageRef.current && (
         <Portal container={document.body}>
           <PhotoSwipe
             options={pswpOptions}

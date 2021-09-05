@@ -60,10 +60,11 @@ const SwitchButton: React.FC<{
   primary: string
   secondary?: string
   checked: boolean
+  disabled?: boolean
   onChange: () => void
-}> = ({ primary, secondary, checked, onChange }) => {
+}> = ({ primary, secondary, checked, onChange, disabled }) => {
   return (
-    <ListItem button onClick={() => onChange()}>
+    <ListItem button disabled={disabled} onClick={() => onChange()}>
       <ListItemText primary={primary} secondary={secondary} />
       <Switch disableRipple checked={checked} color="primary" />
     </ListItem>
@@ -168,9 +169,7 @@ const Interface = () => {
           />
           <SwitchButton
             primary={'Открывать статьи в новой вкладке'}
-            secondary={
-              isPWA ? 'Функция отключена в PWA приложении' : null
-            }
+            secondary={isPWA ? 'Функция отключена в PWA приложении' : null}
             checked={userSettings.interfaceFeed.openPostsInNewTab}
             onChange={() =>
               setInterfaceSettings(
@@ -179,6 +178,7 @@ const Interface = () => {
                 !userSettings.interfaceFeed.openPostsInNewTab
               )
             }
+            disabled={isPWA}
           />
         </div>
         <div className={classes.section} ref={sectionRefs.comments}>

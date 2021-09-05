@@ -136,7 +136,7 @@ const Home = () => {
   const handlePagination = (_, i) => {
     if (i === currentPage) return
     history.push(
-      modes.find((e) => e.mode === mode).to + '/p/' + i + '?' + query.toString()
+      modes.find((e) => e.mode === mode).to + 'p/' + i + '?' + query.toString()
     )
   }
 

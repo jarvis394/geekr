@@ -216,7 +216,7 @@ const ShrinkedContentUnmemoized = ({ isShrinked, shrinkedHeaderText }) => {
 const ShrinkedContent = React.memo(ShrinkedContentUnmemoized)
 
 const backLinkFunction = (history: History<unknown>) => {
-  const goHome = () => history.push(getCachedMode().to + '/p/1')
+  const goHome = () => history.push(getCachedMode().to + 'p/1')
   if (history.length > 1) {
     history.goBack()
   } else goHome()

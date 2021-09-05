@@ -36,6 +36,7 @@ import getImagesFromText from 'src/utils/getImagesFromText'
 import { useSnackbar } from 'notistack'
 import setArticleBookmark from 'src/api/setArticleBookmark'
 import { useEffect } from 'react'
+import useIsPWA from 'src/hooks/useIsPWA'
 
 const ld = (theme: Theme) => (isDarkTheme(theme) ? darken : lighten)
 const useStyles = makeStyles<
@@ -269,9 +270,13 @@ export const PostItem = ({
   setPostItemSize?: (id: number | string, size: number) => void
   getPostItemSize?: (id?: number | string) => number
 }) => {
+  const isPWA = useIsPWA()
   const isExtended = useSelector(
     (store) => !store.settings.interfaceFeed.isCompact
   )
+  const shouldOpenInNewTab =
+    !isPWA &&
+    useSelector((store) => !store.settings.interfaceFeed.openPostsInNewTab)
   const disablePostImage = useSelector(
     (store) => store.settings.interfaceFeed.disablePostImage
   )
@@ -292,11 +297,13 @@ export const PostItem = ({
   if (post.postType === 'voice') {
     return (
       <Paper elevation={0} className={classes.paper} style={style}>
-        <FormattedText className={[
-          classes.postLink,
-          classes.noDeco,
-          classes.postTypeVoice,
-        ].join(' ')}>
+        <FormattedText
+          className={[
+            classes.postLink,
+            classes.noDeco,
+            classes.postTypeVoice,
+          ].join(' ')}
+        >
           {leadData.textHtml}
         </FormattedText>
       </Paper>
@@ -351,6 +358,10 @@ export const PostItem = ({
     [getPostItemSize]
   )
   const postLink = getPostLink(post)
+  const linkProps = {
+    rel: 'noreferrer',
+    target: shouldOpenInNewTab ? '_target' : '_self',
+  }
   const shouldShowPostImage = postFirstImage && !hideImage && !isExtended
   const bottomRow: BottomRowItemType[] = [
     {
@@ -403,7 +414,7 @@ export const PostItem = ({
       text: (
         <>
           {comments}
-          {(unreadCommentsCount && unreadCommentsCount !== 0) ? (
+          {unreadCommentsCount && unreadCommentsCount !== 0 ? (
             <span className={classes.unreadCommentsCount}>
               +{unreadCommentsCount}
             </span>
@@ -425,7 +436,11 @@ export const PostItem = ({
     (isCorporative && hiddenCompanies.includes(companyAlias))
   )
     return (
-      <LinkToOutsidePage to={postLink} style={{ textDecoration: 'none' }}>
+      <LinkToOutsidePage
+        {...linkProps}
+        to={postLink}
+        style={{ textDecoration: 'none' }}
+      >
         <Paper
           style={{ padding: 16, display: 'flex', flexDirection: 'row' }}
           elevation={0}
@@ -526,7 +541,7 @@ export const PostItem = ({
               </Typography>
             </LinkToOutsidePage>
             {shouldShowPostImage && (
-              <LinkToOutsidePage className={classes.imageHolder} to={postLink}>
+              <LinkToOutsidePage {...linkProps} className={classes.imageHolder} to={postLink}>
                 <LazyLoadImage
                   src={postFirstImage}
                   alt={'Post header image'}
@@ -535,6 +550,7 @@ export const PostItem = ({
                     width: '100%',
                     height: '100%',
                   }}
+                  disableZoom
                 />
               </LinkToOutsidePage>
             )}
@@ -542,6 +558,7 @@ export const PostItem = ({
             <LinkToOutsidePage
               className={[classes.postLink, classes.noDeco].join(' ')}
               to={postLink}
+              {...linkProps}
             >
               {title}
             </LinkToOutsidePage>
@@ -591,7 +608,7 @@ export const PostItem = ({
                   </div>
                 )}
                 <FormattedText>{leadData.textHtml}</FormattedText>
-                <LinkToOutsidePage to={postLink} className={classes.link}>
+                <LinkToOutsidePage {...linkProps} to={postLink} className={classes.link}>
                   <Button
                     color="primary"
                     className={classes.leadButton}
