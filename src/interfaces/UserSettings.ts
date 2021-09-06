@@ -38,6 +38,7 @@ export default interface UserSettings {
     fontSize: number
     fontFamily: string
     changeLinks: boolean
+    replaceImagesWithPlaceholder: boolean
   }
   interfaceFeed: {
     isCompact: boolean

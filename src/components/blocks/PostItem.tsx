@@ -274,13 +274,17 @@ export const PostItem = ({
   const isExtended = useSelector(
     (store) => !store.settings.interfaceFeed.isCompact
   )
+  const shouldReplaceImagesWithPlaceholder = useSelector(
+    (store) => store.settings.readerSettings.replaceImagesWithPlaceholder
+  )
   const shouldOpenInNewTab =
     !isPWA &&
     useSelector((store) => store.settings.interfaceFeed.openPostsInNewTab)
   const disablePostImage = useSelector(
     (store) => store.settings.interfaceFeed.disablePostImage
   )
-  const hideImage = hideImageProp || disablePostImage
+  const hideImage =
+    hideImageProp || disablePostImage || shouldReplaceImagesWithPlaceholder
   const { enqueueSnackbar } = useSnackbar()
   const { titleHtml: unparsedTitle, statistics, postFirstImage, leadData } =
     post || {}
@@ -541,7 +545,11 @@ export const PostItem = ({
               </Typography>
             </LinkToOutsidePage>
             {shouldShowPostImage && (
-              <LinkToOutsidePage {...linkProps} className={classes.imageHolder} to={postLink}>
+              <LinkToOutsidePage
+                {...linkProps}
+                className={classes.imageHolder}
+                to={postLink}
+              >
                 <LazyLoadImage
                   src={postFirstImage}
                   alt={'Post header image'}
@@ -607,8 +615,14 @@ export const PostItem = ({
                     />
                   </div>
                 )}
-                <FormattedText>{leadData.textHtml}</FormattedText>
-                <LinkToOutsidePage {...linkProps} to={postLink} className={classes.link}>
+                <FormattedText disableImageZoom>
+                  {leadData.textHtml}
+                </FormattedText>
+                <LinkToOutsidePage
+                  {...linkProps}
+                  to={postLink}
+                  className={classes.link}
+                >
                   <Button
                     color="primary"
                     className={classes.leadButton}

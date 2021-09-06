@@ -259,6 +259,17 @@ const Reader = () => {
               setReaderSettings('changeLinks', !readerSettings.changeLinks)
             }}
           />
+          <SwitchButton
+            primary={'Скрыть изображения и медиаэлементы'}
+            secondary={'Позволит уменьшить потребление трафика'}
+            checked={readerSettings.replaceImagesWithPlaceholder}
+            onChange={() => {
+              setReaderSettings(
+                'replaceImagesWithPlaceholder',
+                !readerSettings.replaceImagesWithPlaceholder
+              )
+            }}
+          />
         </div>
       </div>
     </OutsidePage>

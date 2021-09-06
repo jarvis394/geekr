@@ -6,23 +6,25 @@ import {
   makeStyles,
   Portal,
   Theme,
+  Typography,
 } from '@material-ui/core'
 import { PhotoSwipe } from 'react-photoswipe'
 import { POST_ITEM_VISIBILITY_THRESHOLD } from 'src/config/constants'
+import { useSelector } from 'src/hooks'
 
-interface StylesProps {
-  isLoading: boolean
-}
-
-const useStyles = makeStyles<Theme, StylesProps>((theme) => ({
+const useStyles = makeStyles((theme) => ({
+  imageContainer: {
+    background: theme.palette.action.hover,
+    overflow: 'hidden',
+    width: '100%',
+    height: '100%'
+  },
   image: {
     height: 'auto',
     maxWidth: '100%',
     verticalAlign: 'middle',
     '-webkit-tap-highlight-color': 'transparent',
     cursor: 'pointer',
-    filter: ({ isLoading }) => (isLoading ? 'blur(5px)' : ''),
-    clipPath: ({ isLoading }) => (isLoading ? 'inset(0)' : ''),
     color: theme.palette.text.secondary,
     fontStyle: 'italic',
     fontSize: 12,
@@ -31,11 +33,8 @@ const useStyles = makeStyles<Theme, StylesProps>((theme) => ({
     height: 'auto',
     maxWidth: '100%',
     verticalAlign: 'middle',
-    display: 'inline-block',
-  },
-  blurred: {
-    filter: 'blur(16px)',
-    clipPath: 'inset(0)',
+    display: 'block',
+    background: theme.palette.action.hover,
   },
   'imgAlign-left': {
     float: 'left',
@@ -50,6 +49,72 @@ const useStyles = makeStyles<Theme, StylesProps>((theme) => ({
     maxWidth: '40% !important',
   },
 }))
+
+const useImagePlaceholderStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    background: theme.palette.action.hover,
+    borderRadius: 4,
+    maxWidth: '100%',
+    width: '100%',
+  },
+  title: {
+    fontFamily: 'Google Sans',
+    fontSize: 16,
+    fontWeight: 500,
+    color: theme.palette.text.primary + ' !important',
+  },
+  text: {
+    fontFamily: 'Roboto',
+    fontSize: '14px !important',
+    fontWeight: 'normal',
+    color: theme.palette.text.secondary,
+    textDecoration: 'underline',
+    marginTop: theme.spacing(1) + 'px !important',
+  },
+  button: {
+    padding: theme.spacing(1.5, 2),
+    width: '100%',
+    cursor: 'pointer',
+    border: 'none',
+    background: 'transparent',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    '&:hover > p': {
+      color: theme.palette.primary.main,
+    },
+  },
+}))
+
+const ImagePlaceholderUnmemoized: React.FC<{
+  style?: Record<string, string | number>
+  showMediaElementText?: boolean
+  setShouldShowImage: React.Dispatch<React.SetStateAction<boolean>>
+}> = ({ style, showMediaElementText, setShouldShowImage }) => {
+  const classes = useImagePlaceholderStyles()
+  const handleClick = () => setShouldShowImage(true)
+
+  return (
+    <div
+      className={classes.root}
+      style={{ aspectRatio: `auto ${style.width} / ${style.height}` }}
+    >
+      <button onClick={handleClick} className={classes.button}>
+        <Typography className={classes.title}>
+          {showMediaElementText
+            ? 'Здесь был медиаэлемент'
+            : 'Здесь была картинка'}
+        </Typography>
+        <Typography className={classes.text}>
+          Нажмите здесь, чтобы показать элемент
+        </Typography>
+      </button>
+    </div>
+  )
+}
+const ImagePlaceholder = React.memo(ImagePlaceholderUnmemoized)
 
 interface LazyLoadImageProps {
   src: string
@@ -83,16 +148,19 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
     const [hasError, setHasError] = React.useState(false)
     // If image loaded with error, the useStyles `isLoading` prop should be false,
     // so the image won't be blurred
-    const classes = useStyles({
-      isLoading: hasError ? false : loading,
-    })
+    const classes = useStyles()
     const imgClasses = [classes.image, className]
+    const loadingStyle = hasError || !loading ? {} : { filter: 'blur(16px)' }
+    console.log(src, loading)
 
     if (loading && (!src || src === '/img/image-loader.svg'))
       return (
         <span
           className={classes.imagePlaceholder + ' ' + className}
-          style={style}
+          style={{
+            ...style,
+            aspectRatio: `auto ${style.width} / ${style.height}`,
+          }}
         >
           <Fade
             in
@@ -115,26 +183,37 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
     if (align) imgClasses.push(classes['imgAlign-' + align])
 
     return (
-      <Fade in timeout={250} mountOnEnter>
-        <img
-          ref={ref}
-          onClick={() => !loading && !hasError && onClick()}
-          className={imgClasses.join(' ')}
-          width={style?.width}
-          height={style?.height}
-          style={style}
-          src={src}
-          alt={alt || 'Изображение не загружено'}
-          onError={() => setHasError(true)}
-        />
-      </Fade>
+      <div
+        className={classes.imageContainer}
+        style={{ aspectRatio: `auto ${style.width} / ${style.height}` }}
+      >
+        <Fade in timeout={250} mountOnEnter>
+          <img
+            ref={ref}
+            onClick={() => !loading && !hasError && onClick()}
+            className={imgClasses.join(' ')}
+            width={style?.width}
+            height={style?.height}
+            style={{ ...style, ...loadingStyle }}
+            src={src}
+            alt={alt || 'Изображение не загружено'}
+            onError={() => setHasError(true)}
+          />
+        </Fade>
+      </div>
     )
   }
 )
 const Image = React.memo(ImageUnmemoized)
 
 const LazyLoadImage: React.FC<LazyLoadImageProps> = (props) => {
+  const shouldReplaceImagesWithPlaceholder = useSelector(
+    (store) => store.settings.readerSettings.replaceImagesWithPlaceholder
+  )
   const [isOpen, setOpen] = useState(false)
+  const [shouldShowImage, setShouldShowImage] = useState(
+    !shouldReplaceImagesWithPlaceholder
+  )
   const imageRef = useRef<HTMLImageElement>(null)
   const { style, alt, className, disableZoom, align, placeholderSrc } = props
   const showByDefault = !!placeholderSrc
@@ -178,7 +257,7 @@ const LazyLoadImage: React.FC<LazyLoadImageProps> = (props) => {
     setOpen(true)
   }
 
-  return (
+  return shouldShowImage ? (
     <>
       <ProgressiveImage
         placeholder={placeholderSrc}
@@ -216,6 +295,8 @@ const LazyLoadImage: React.FC<LazyLoadImageProps> = (props) => {
         </Portal>
       )}
     </>
+  ) : (
+    <ImagePlaceholder setShouldShowImage={setShouldShowImage} style={style} />
   )
 }
 

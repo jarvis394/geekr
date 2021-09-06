@@ -21,7 +21,6 @@ import BookmarkIcon from '@material-ui/icons/Bookmark'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
 import {
   LazyLoadComponent,
-  ScrollPosition,
 } from 'react-lazy-load-image-component'
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded'
 import { Icon16Up, Icon16Down } from '@vkontakte/icons'

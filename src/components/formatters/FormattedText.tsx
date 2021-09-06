@@ -23,7 +23,7 @@ import { UserSettings } from 'src/interfaces'
 import formatLink from 'src/utils/formatLink'
 import { Link } from 'react-router-dom'
 import blend from 'src/utils/blendColors'
-import { Tooltip } from '@material-ui/core'
+import { Tooltip, Typography } from '@material-ui/core'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 interface IframeResizeData {
@@ -260,11 +260,13 @@ const FormattedText: React.FC<{
   oldHabrFormat?: boolean
   className?: string
   inverseColors?: boolean
+  disableImageZoom?: boolean
 }> = ({
   children: componentChildren,
   className = '',
   oldHabrFormat = false,
   inverseColors = false,
+  disableImageZoom = false,
   ...props
 }) => {
   const readerSettings = useSelector((store) => store.settings.readerSettings)
@@ -323,6 +325,7 @@ const FormattedText: React.FC<{
 
         return (
           <LazyLoadImage
+            disableZoom={disableImageZoom}
             placeholderSrc={attribs.src}
             // First try to load src from 'data-src' attribute
             // If not found, then use default 'src' attribute
