@@ -99,7 +99,6 @@ const useStyles = makeStyles<
     display: 'flex',
     height: ({ hasImage }) => (hasImage ? POST_IMAGE_HEIGHT : '100%'),
     marginBottom: ({ hasImage }) => (hasImage ? theme.spacing(2) : 0),
-    background: theme.palette.action.hover,
   },
   image: {
     maxWidth: '100%',
