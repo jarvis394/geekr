@@ -237,7 +237,7 @@ const Post = () => {
   const id = Number(strigifiedId)
   const classes = useStyles()
   const contentsRef = React.useRef<HTMLDivElement>()
-  const isTranslated = post && post.postLabels.some(e => e.type === 'translation')
+  const isTranslated = post && post?.postLabels?.some(e => e.type === 'translation')
   const translationData = isTranslated && post.postLabels.find(e => e.type === 'translation')?.data
   const shouldShowContents = post && (companyAlias ? post && company : post)
   const shouldShowCompanyInfo = !!company

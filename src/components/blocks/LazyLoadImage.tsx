@@ -151,7 +151,6 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
     const classes = useStyles()
     const imgClasses = [classes.image, className]
     const loadingStyle = hasError || !loading ? {} : { filter: 'blur(16px)' }
-    console.log(src, loading)
 
     if (loading && (!src || src === '/img/image-loader.svg'))
       return (

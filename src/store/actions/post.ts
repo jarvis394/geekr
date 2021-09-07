@@ -2,6 +2,7 @@ import * as api from 'src/api'
 import apiGetCompany from 'src/api/getCompany'
 import { THREAD_LEVEL } from 'src/config/constants'
 import { FetchingState, Comment as IComment } from 'src/interfaces'
+import APIError from 'src/interfaces/APIError'
 import { RootState } from '..'
 import {
   COMMENTS_FETCH,
@@ -90,12 +91,22 @@ export const getPost = (id: number | string) => async (
 
   try {
     const data = await api.getPost(id, authorizedRequestData)
+
+    if (
+      (data as APIError).data &&
+      Object.keys((data as APIError).data).length === 0
+    ) {
+      throw data
+    }
     dispatch({
       type: POST_FETCH_FULFILLED,
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: POST_FETCH_REJECTED, payload: error?.message })
+    dispatch({
+      type: POST_FETCH_REJECTED,
+      payload: (error as APIError).message,
+    })
   }
 }
 
@@ -122,7 +133,7 @@ export const getDownvoteReasons = () => async (
   } catch (error) {
     dispatch({
       type: POST_DOWNVOTE_REASONS_FETCH_REJECTED,
-      payload: error?.message,
+      payload: (error as Error).message,
     })
   }
 }
@@ -189,7 +200,10 @@ export const getPostComments = (
       },
     })
   } catch (error) {
-    dispatch({ type: COMMENTS_FETCH_REJECTED, payload: error?.message })
+    dispatch({
+      type: COMMENTS_FETCH_REJECTED,
+      payload: (error as Error).message,
+    })
   }
 }
 
@@ -231,6 +245,9 @@ export const getCompany = (alias: string) => async (
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: COMPANY_FETCH_REJECTED, payload: error?.message })
+    dispatch({
+      type: COMPANY_FETCH_REJECTED,
+      payload: (error as Error).message,
+    })
   }
 }
