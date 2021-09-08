@@ -237,8 +237,10 @@ const Post = () => {
   const id = Number(strigifiedId)
   const classes = useStyles()
   const contentsRef = React.useRef<HTMLDivElement>()
-  const isTranslated = post && post?.postLabels?.some(e => e.type === 'translation')
-  const translationData = isTranslated && post.postLabels.find(e => e.type === 'translation')?.data
+  const isTranslated =
+    post && post?.postLabels?.some((e) => e.type === 'translation')
+  const translationData =
+    isTranslated && post.postLabels.find((e) => e.type === 'translation')?.data
   const shouldShowContents = post && (companyAlias ? post && company : post)
   const shouldShowCompanyInfo = !!company
   const labels =
@@ -277,6 +279,24 @@ const Post = () => {
   if (fetchError) return <ErrorComponent message={fetchError} />
   if (companyFetchError)
     console.error('Could not fetch company data:', companyFetchError)
+
+  if (post && post?.postType === 'megaproject') {
+    return (
+      <Container style={{ display: 'flex', flexDirection: 'column' }}>
+        <Typography variant="h5">
+          Мегапосты в текущее время не поддерживаются.
+        </Typography>
+        <MUILink
+          href={'https://habr.com/ru/post/' + id}
+          rel="noreferrer"
+          target="_blank"
+          style={{ paddingTop: 16 }}
+        >
+          Смотреть на habr.com
+        </MUILink>
+      </Container>
+    )
+  }
 
   return (
     <OutsidePage
@@ -387,8 +407,7 @@ const Post = () => {
                           href={translationData.originalUrl}
                           className={classes.translatedBox}
                         >
-                          Автор оригинала:{' '}
-                          {translationData.originalAuthorName}
+                          Автор оригинала: {translationData.originalAuthorName}
                         </MUILink>
                       )}
                     </Container>
