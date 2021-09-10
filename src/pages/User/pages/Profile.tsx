@@ -42,7 +42,7 @@ const Profile = () => {
   const user = useSelector((state) => state.profile.profile.card.data)
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  useEffect(() => {}, [user.alias])
+  useEffect(() => {}, [user?.alias])
 
   return (
     <>

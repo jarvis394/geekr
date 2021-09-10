@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
 import {
   getProfileCard,
-  getProfileChildren,
   getProfileWhois,
 } from 'src/store/actions/profile'
 import UserPageSkeleton from 'src/components/skeletons/Profile'
