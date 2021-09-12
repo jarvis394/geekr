@@ -211,9 +211,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   postHeader: {
     background: makeGradient(theme),
+    padding: theme.spacing(0, 2),
     [theme.breakpoints.up(MIN_WIDTH)]: {
       background: 'transparent',
     },
+  },
+  postContainer: {
+    padding: theme.spacing(0, 2),
   },
 }))
 
@@ -351,72 +355,70 @@ const Post = () => {
                 {/** Post header */}
                 <Fade in>
                   <div className={classes.postHeader}>
-                    <Container>
-                      <Grid
-                        className={classes.authorBar}
-                        container
-                        direction="row"
-                        alignItems="center"
+                    <Grid
+                      className={classes.authorBar}
+                      container
+                      direction="row"
+                      alignItems="center"
+                    >
+                      <UserAvatar
+                        alias={post.author.alias}
+                        src={post.author.avatarUrl}
+                        className={classes.avatar}
+                      />
+                      <Typography
+                        component={Link}
+                        to={'/user/' + post.author.alias}
+                        className={classes.author}
                       >
-                        <UserAvatar
-                          alias={post.author.alias}
-                          src={post.author.avatarUrl}
-                          className={classes.avatar}
-                        />
-                        <Typography
-                          component={Link}
-                          to={'/user/' + post.author.alias}
-                          className={classes.author}
-                        >
-                          {post.author.alias}
-                        </Typography>
-                        <Typography className={classes.ts}>
-                          {dayjs(post.timePublished).fromNow()}
-                        </Typography>
-                        <GreenRedNumber
-                          number={post.statistics.score}
-                          wrapperProps={{ className: classes.scoreWrapper }}
-                        >
-                          <>
-                            <ThumbsUpDownIcon className={classes.scoreIcon} />
-                            <Typography className={classes.score}>
-                              {post.statistics.score > 0 ? '+' : ''}
-                              {post.statistics.score}
-                            </Typography>
-                          </>
-                        </GreenRedNumber>
-                      </Grid>
-                      <FormattedText className={classes.title}>
-                        {post.titleHtml}
-                      </FormattedText>
-                      <div className={classes.hubs}>
-                        {post.hubs.map((hub, i) => (
-                          <span key={i} className={classes.hubWrapper}>
-                            <Link
-                              className={classes.hubLink}
-                              to={'/hub/' + hub.alias + '/p/1'}
-                            >
-                              {hub.title}
-                            </Link>
-                          </span>
-                        ))}
-                      </div>
-                      {labels}
-                      {isTranslated && (
-                        <MUILink
-                          href={translationData.originalUrl}
-                          className={classes.translatedBox}
-                        >
-                          Автор оригинала: {translationData.originalAuthorName}
-                        </MUILink>
-                      )}
-                    </Container>
+                        {post.author.alias}
+                      </Typography>
+                      <Typography className={classes.ts}>
+                        {dayjs(post.timePublished).fromNow()}
+                      </Typography>
+                      <GreenRedNumber
+                        number={post.statistics.score}
+                        wrapperProps={{ className: classes.scoreWrapper }}
+                      >
+                        <>
+                          <ThumbsUpDownIcon className={classes.scoreIcon} />
+                          <Typography className={classes.score}>
+                            {post.statistics.score > 0 ? '+' : ''}
+                            {post.statistics.score}
+                          </Typography>
+                        </>
+                      </GreenRedNumber>
+                    </Grid>
+                    <FormattedText className={classes.title}>
+                      {post.titleHtml}
+                    </FormattedText>
+                    <div className={classes.hubs}>
+                      {post.hubs.map((hub, i) => (
+                        <span key={i} className={classes.hubWrapper}>
+                          <Link
+                            className={classes.hubLink}
+                            to={'/hub/' + hub.alias + '/p/1'}
+                          >
+                            {hub.title}
+                          </Link>
+                        </span>
+                      ))}
+                    </div>
+                    {labels}
+                    {isTranslated && (
+                      <MUILink
+                        href={translationData.originalUrl}
+                        className={classes.translatedBox}
+                      >
+                        Автор оригинала: {translationData.originalAuthorName}
+                      </MUILink>
+                    )}
                   </div>
                 </Fade>
 
                 {/* Article text */}
                 <Fade in>
-                  <Container>
+                  <div className={classes.postContainer}>
                     <FormattedText
                       className={classes.text}
                       oldHabrFormat={post.editorVersion === '1.0'}
@@ -453,7 +455,7 @@ const Post = () => {
                         ))}
                       </Grid>
                     </div>
-                  </Container>
+                  </div>
                 </Fade>
               </>
             )}

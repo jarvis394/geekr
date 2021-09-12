@@ -15,8 +15,7 @@ const useStyles = makeStyles((theme) => ({
   imageContainer: {
     background: theme.palette.action.hover,
     overflow: 'hidden',
-    width: '100%',
-    height: '100%',
+    display: 'inline-flex'
   },
   image: {
     height: 'auto',

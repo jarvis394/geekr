@@ -59,7 +59,7 @@ const useStyles = makeStyles<
       textDecoration: 'underline',
     },
     '& h1+p, h2+p, h3+p, h4+p': {
-      marginTop: ({ oldHabrFormat: d }) => (d ? 0 : theme.spacing(1.5)),
+      marginTop: ({ oldHabrFormat: d }) => (d ? 0 : theme.spacing(1.75)),
     },
     '& p': {
       margin: 0,
