@@ -5,7 +5,6 @@ import {
   Fade,
   makeStyles,
   Portal,
-  Theme,
   Typography,
 } from '@material-ui/core'
 import { PhotoSwipe } from 'react-photoswipe'
@@ -17,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.action.hover,
     overflow: 'hidden',
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   image: {
     height: 'auto',
@@ -151,6 +150,7 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
     const classes = useStyles()
     const imgClasses = [classes.image, className]
     const loadingStyle = hasError || !loading ? {} : { filter: 'blur(16px)' }
+    const imageContainerClasses = [classes.imageContainer]
 
     if (loading && (!src || src === '/img/image-loader.svg'))
       return (
@@ -179,12 +179,14 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
         </span>
       )
 
-    if (align) imgClasses.push(classes['imgAlign-' + align])
+    if (align) imageContainerClasses.push(classes['imgAlign-' + align])
 
     return (
       <div
-        className={classes.imageContainer}
-        style={{ aspectRatio: `auto ${style.width} / ${style.height}` }}
+        className={imageContainerClasses.join(' ')}
+        style={{
+          aspectRatio: `auto ${style.width} / ${style.height}`,
+        }}
       >
         <Fade in timeout={250} mountOnEnter>
           <img
@@ -193,7 +195,7 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
             className={imgClasses.join(' ')}
             width={style?.width}
             height={style?.height}
-            style={{ ...style, ...loadingStyle }}
+            style={loadingStyle}
             src={src}
             alt={alt || 'Изображение не загружено'}
             onError={() => setHasError(true)}
