@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
       APP_BAR_HEIGHT * 3
     }px - ${BOTTOM_BAR_HEIGHT}px - ${
       isMobile() ? chromeAddressBarHeight : 0
-    }px)`,
+    }px - env(safe-area-inset-bottom, 0px))`,
   },
   highlightComment: {
     animation: `$highlightComment 750ms ${theme.transitions.easing.easeOut}`,
