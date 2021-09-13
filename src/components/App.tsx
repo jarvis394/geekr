@@ -67,15 +67,15 @@ const useStyles = makeStyles({
     display: 'flex',
     minHeight: `calc(100vh - ${APP_BAR_HEIGHT}px - ${
       isMobile() ? chromeAddressBarHeight : 0
-    }px - ${shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0}px)`,
+    }px - ${shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0}px + env(safe-area-inset-bottom, 0px))`,
     borderRadius: 0,
     alignItems: 'flex-start',
     flexDirection: 'row',
     width: '100%',
     maxWidth: maxWidth,
-    margin: `${APP_BAR_HEIGHT}px auto ${
+    margin: `${APP_BAR_HEIGHT}px auto calc(${
       shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0
-    }px auto`,
+    }px + env(safe-area-inset-bottom, 0px)) auto`,
     boxSizing: 'border-box',
     [theme.breakpoints.up(MIDDLE_WIDTH)]: {
       marginTop: 0,
