@@ -351,7 +351,7 @@ const HomeSidebar = () => {
           {mostReadingState !== FetchingState.Fetched && (
             <MostReadingSideBlockSkeleton />
           )}
-          {mostReadingState === FetchingState.Fetched &&
+          {mostReadingState === FetchingState.Fetched && mostReading.?articleIds && 
             mostReading.articleIds
               .slice(0, 5)
               .map((e) => (
