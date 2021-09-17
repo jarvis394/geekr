@@ -108,9 +108,9 @@ const UpdateNotification = () => {
     <div
       className={classes.rootWrapper}
       style={{
-        transform: `translateY(${
+        transform: `translateY(calc(${
           noBottomMargin ? 0 : -1 * BOTTOM_BAR_HEIGHT
-        }px)`,
+        }px + env(safe-area-inset-bottom, 0px)))`,
       }}
     >
       <ButtonBase className={classes.root} onClick={onClick}>

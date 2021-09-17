@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     background: getContrastPaperColor(theme),
     height: BOTTOM_BAR_HEIGHT,
+    paddingBottom: 'env(safe-area-inset-bottom, 0)',
   },
   item: {
     fontFamily: 'Google Sans',
