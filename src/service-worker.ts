@@ -54,7 +54,6 @@ setCacheNameDetails({
   suffix: 'v2',
   precache: 'precache',
   runtime: 'runtime',
-  googleAnalytics: 'ga',
 })
 
 // This allows the web app to trigger skipWaiting via

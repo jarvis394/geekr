@@ -223,7 +223,7 @@ export const makeNavigationTabs = (
       match: 'news',
     },
     {
-      label: 'Хабы',
+      label: 'Сервисы',
       icon: <Icon28ServicesOutline width={w} height={h} />,
       to: () => '/services',
       match: 'services',

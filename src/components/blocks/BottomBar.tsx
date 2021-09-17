@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import { Paper, useMediaQuery, useTheme } from '@material-ui/core'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import {
   BOTTOM_BAR_HEIGHT,
   makeNavigationTabs,
@@ -58,7 +58,6 @@ const BottomBar = () => {
   const classes = useStyles()
   const theme = useTheme()
   const history = useHistory()
-  const location = useLocation()
   const [isShown, setShown] = React.useState(false)
   const [value, setValue] = useState<number>(findPathValue(route))
   // future: https://material-ui.com/components/use-media-query/#server-side-rendering
