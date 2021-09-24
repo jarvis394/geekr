@@ -119,6 +119,24 @@ registerRoute(
   })
 )
 
+registerRoute(
+  /^https?:\/\/jarvis394-backend\.ml\/habra\/.*/,
+  new NetworkFirst({
+    networkTimeoutSeconds: 10,
+    cacheName: 'api-cache',
+    plugins: [
+      ...cacheHeaderPlugin,
+      new CacheableResponsePlugin({
+        statuses: [0, 201],
+      }),
+      new ExpirationPlugin({
+        maxAgeSeconds: 24 * 60 * 60, // one day
+        maxEntries: 100,
+      }),
+    ],
+  })
+)
+
 // Cache the Google Fonts stylesheets with a stale-while-revalidate strategy.
 registerRoute(
   /^https:\/\/fonts\.googleapis\.com/,
