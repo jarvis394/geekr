@@ -109,10 +109,10 @@ registerRoute(
     plugins: [
       ...cacheHeaderPlugin,
       new CacheableResponsePlugin({
-        statuses: [0, 200],
+        statuses: [0, 201],
       }),
       new ExpirationPlugin({
-        maxAgeSeconds: 24 * 60 * 60 * 30, // one month
+        maxAgeSeconds: 24 * 60 * 60, // one day
         maxEntries: 100,
       }),
     ],

@@ -6,7 +6,7 @@ import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
-import { CircularProgress, Divider } from '@material-ui/core'
+import { CircularProgress } from '@material-ui/core'
 import { makeStyles, darken, lighten } from '@material-ui/core/styles'
 import formatNumber from 'src/utils/formatNumber'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
@@ -38,6 +38,8 @@ import setArticleBookmark from 'src/api/setArticleBookmark'
 import { useEffect } from 'react'
 import useIsPWA from 'src/hooks/useIsPWA'
 
+const NBSP_CHAR = ' '
+const WHITESPACE_CHAR = ' '
 const ld = (theme: Theme) => (isDarkTheme(theme) ? darken : lighten)
 const useStyles = makeStyles<
   Theme,
@@ -105,6 +107,8 @@ const useStyles = makeStyles<
     height: '100%',
     objectFit: 'cover',
     width: '100vw',
+    display: 'flex',
+    background: theme.palette.action.hover,
   },
   leadImageWrapper: {
     marginBottom: theme.spacing(2),
@@ -337,7 +341,7 @@ export const PostItem = ({
     score: unformattedScore,
   } = statistics
   const score = formatNumber(unformattedScore)
-  const title = parse(unparsedTitle)
+  const title = parse(unparsedTitle.replace(NBSP_CHAR, WHITESPACE_CHAR))
   const reads = formatNumber(readingCount)
   let favoritesCountAddAmount = 0
   if (postBookmarked) {

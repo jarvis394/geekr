@@ -13,9 +13,8 @@ import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   imageContainer: {
-    background: theme.palette.action.hover,
     overflow: 'hidden',
-    display: 'inline-flex'
+    display: 'inline-flex',
   },
   image: {
     height: 'auto',
@@ -32,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     verticalAlign: 'middle',
     display: 'block',
-    background: theme.palette.action.hover,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   'imgAlign-left': {
     float: 'left',
@@ -160,21 +160,7 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
             aspectRatio: `auto ${style.width} / ${style.height}`,
           }}
         >
-          <Fade
-            in
-            timeout={1000}
-            style={{
-              transitionDelay: '1s',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <span>
-              <CircularProgress size="1.25rem" thickness={5} />
-            </span>
-          </Fade>
+          <CircularProgress size="1.25rem" thickness={5} />
         </span>
       )
 
