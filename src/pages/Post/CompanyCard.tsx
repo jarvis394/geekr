@@ -100,17 +100,15 @@ const useStyles = makeStyles((theme) => ({
   companyHeader: {
     width: '100%',
     borderRadius: 0,
-    minHeight: 'calc(100% / 4.4)',
+    height: 'calc(100% / 4.4)',
   },
   brandingLink: {
     display: 'flex',
-    height: '100%',
     position: 'relative',
     background: theme.palette.action.hover,
     '&::before': {
       paddingBottom: 'calc(100% / 4.4)',
       content: '""',
-      width: '100%',
     },
   },
 }))
