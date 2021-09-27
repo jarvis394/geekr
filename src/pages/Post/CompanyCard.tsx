@@ -120,7 +120,7 @@ const CompanyCardSkeleton = () => {
     <div className={classes.root}>
       <Skeleton
         variant="rect"
-        style={{ borderRadius: 0 }}
+        style={{ borderRadius: 0, height: '100%' }}
         className={[classes.skeleton, classes.brandingLink].join(' ')}
       />
       <div className={classes.paper}>

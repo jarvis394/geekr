@@ -123,7 +123,7 @@ registerRoute(
   /^https?:\/\/jarvis394-backend\.ml\/habra\/.*/,
   new NetworkFirst({
     networkTimeoutSeconds: 10,
-    cacheName: 'api-cache',
+    cacheName: 'api-cache-habra',
     plugins: [
       ...cacheHeaderPlugin,
       new CacheableResponsePlugin({
