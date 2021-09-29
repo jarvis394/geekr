@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
   imageContainer: {
     overflow: 'hidden',
     display: 'inline-flex',
+    flexDirection: 'column',
   },
   image: {
     height: 'auto',
