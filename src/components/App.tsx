@@ -163,7 +163,7 @@ const App = () => {
 
     if (window.location.hostname === 'habra.vercel.app') {
       window.location.replace(
-        'https://geekr.vercel.app/' +
+        'https://geekr.vercel.app' +
           window.location.pathname +
           window.location.search
       )
