@@ -325,7 +325,7 @@ const Services = () => {
             subtext="Справка о том, как написать первую статью"
           />
           <Card
-            to="/habra-about"
+            to="/geekr-about"
             paper
             text="О сайте"
             icon={Icon24InfoCircleOutline}
@@ -345,7 +345,7 @@ const Services = () => {
             </Grid>
             <Grid item xs={6}>
               <CardLink
-                to="https://github.com/jarvis394/habra"
+                to="https://github.com/jarvis394/geekr"
                 text="GitHub"
                 icon={GitHubIcon}
               />

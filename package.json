@@ -1,11 +1,11 @@
 {
-  "name": "habra",
+  "name": "geekr.",
   "version": "0.1.0",
   "private": true,
   "engines": {
     "node": "12.x"
   },
-  "homepage": "https://habra.vercel.app/",
+  "homepage": "https://geekr.vercel.app/",
   "dependencies": {
     "@datapunt/matomo-tracker-react": "^0.4.0",
     "@material-ui/core": "^4.11.3",

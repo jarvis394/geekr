@@ -188,13 +188,13 @@ export const routes: Route[] = [
     alias: 'settings',
   },
   {
-    path: '/habra-about',
+    path: '/geekr-about',
     component: <AboutPage />,
     title: 'О проекте',
     shouldShowAppBar: false,
     shouldAppBarChangeColors: true,
     appBarColor: (theme) => theme.palette.background.default,
-    alias: 'habraAbout',
+    alias: 'geekr',
   },
   {
     path: ['/search', '/search/p/:page'],

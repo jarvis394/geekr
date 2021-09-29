@@ -250,7 +250,7 @@ const Reader = () => {
                 </Typography>{' '}
                 на{' '}
                 <Typography component="span" color="primary">
-                  habra.vercel.app
+                  geekr.vercel.app
                 </Typography>
               </>
             }

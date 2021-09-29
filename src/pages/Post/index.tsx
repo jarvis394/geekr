@@ -309,7 +309,7 @@ const Post = () => {
       scrollElement={contentsRef.current}
     >
       <MetaTags>
-        <title>{(post ? post.titleHtml : 'Публикация') + ' | habra.'}</title>
+        <title>{(post ? post.titleHtml : 'Публикация') + ' | geekr.'}</title>
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@habrahabr" />
         <meta name="twitter:title" content={post?.titleHtml} />

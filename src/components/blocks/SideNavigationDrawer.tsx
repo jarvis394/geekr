@@ -341,7 +341,7 @@ const SideNavigationDrawer = () => {
             variant="h6"
             className={classes.logo}
           >
-            habra.
+            geekr.
           </Typography>
           <Divider className={classes.logoDivider} />
         </div>

@@ -167,7 +167,7 @@ const AppBarComponent = () => {
                 variant="h6"
                 className={classes.headerTitle}
               >
-                habra.
+                geekr.
               </Typography>
               <Offline
                 polling={{

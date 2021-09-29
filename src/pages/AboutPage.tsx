@@ -162,7 +162,7 @@ const AboutPage = () => {
         >
           Проект{' '}
           <Link className={classes.link} to="/">
-            habra.
+            geekr.
           </Link>{' '}
           - это неофициальный клон одной из крупнейших IT-площадок Рунета{' '}
           <a
@@ -192,7 +192,7 @@ const AboutPage = () => {
             target="_blank"
             rel="noreferrer"
             className={classes.link}
-            href="https://github.com/jarvis394/habra"
+            href="https://github.com/jarvis394/geekr"
           >
             доступен
           </a>{' '}
@@ -234,7 +234,7 @@ const AboutPage = () => {
           <Card
             iconSrc="https://img.icons8.com/material-outlined/24/000000/github.png"
             title="GitHub"
-            to="https://github.com/jarvis394/habra/"
+            to="https://github.com/jarvis394/geekr/"
             subtitle="Репозиторий проекта"
             medium
           />
