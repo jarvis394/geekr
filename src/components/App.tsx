@@ -30,6 +30,7 @@ import useGetDownvoteReasons from 'src/hooks/useGetDownvoteReasons'
 import { useEffect } from 'react'
 import { ErrorBoundary } from '@sentry/react'
 import ErrorPage from 'src/pages/Error'
+import RebrandingModal from 'src/components/modals/Rebranding'
 
 interface StyleProps {
   theme: Theme
@@ -173,6 +174,7 @@ const App = () => {
               <AppRouter />
             </div>
           </div>
+          <RebrandingModal />
         </SnackbarProvider>
       </ErrorBoundary>
     </ThemeProvider>

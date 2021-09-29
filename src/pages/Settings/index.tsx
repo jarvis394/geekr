@@ -14,6 +14,7 @@ import { Icon243SquareOutline } from '@vkontakte/icons'
 import { Icon28ArticleOutline } from '@vkontakte/icons'
 import { Icon28GlobeOutline } from '@vkontakte/icons'
 import { Icon28PrivacyOutline } from '@vkontakte/icons'
+import { Icon28DownloadOutline } from '@vkontakte/icons'
 
 const items = [
   {
@@ -45,6 +46,11 @@ const items = [
     icon: Icon28GlobeOutline,
     to: '/language',
     text: 'Настройки языка',
+  },
+  {
+    icon: Icon28DownloadOutline,
+    to: '/import',
+    text: 'Импорт настроек',
   },
 ]
 

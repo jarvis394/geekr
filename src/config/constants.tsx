@@ -48,6 +48,7 @@ export const COLLAPSED_COMMENTS_IDS_KEY = 'habra_COLLAPSED_COMMENTS_IDS'
 export const NEEDS_UPDATE_KEY = 'habra_NEEDS_UPDATE'
 export const AUTH_DATA_KEY = 'habra_AUTH_DATA'
 export const CSRF_TOKEN_KEY = 'habra_CSRF_TOKEN'
+export const REBRANDING_MODAL_WAS_SHOWN = 'habra_rebranding'
 
 export const FLOWS: FlowObject[] = [
   {

@@ -12,6 +12,7 @@ import SettingsNewTheme from 'src/pages/Settings/NewTheme'
 import SettingsInterface from 'src/pages/Settings/Interface'
 import SettingsReader from 'src/pages/Settings/Reader'
 import SettingsPrivacy from 'src/pages/Settings/Privacy'
+import SettingsImport from 'src/pages/Settings/ImportSettings'
 import SettingsLanguage from 'src/pages/Settings/Language'
 import Search from 'src/pages/Search'
 import News from 'src/pages/News'
@@ -179,6 +180,15 @@ export const routes: Route[] = [
     alias: 'settingsBlacklist',
   },
   {
+    path: '/settings/import',
+    component: <SettingsImport />,
+    title: 'Импорт настроек',
+    shouldShowAppBar: false,
+    shouldAppBarChangeColors: false,
+    appBarColor: (theme) => getContrastPaperColor(theme),
+    alias: 'settingsBlacklist',
+  },
+  {
     path: '/settings',
     component: <Settings />,
     title: 'Настройки',
@@ -194,7 +204,7 @@ export const routes: Route[] = [
     shouldShowAppBar: false,
     shouldAppBarChangeColors: true,
     appBarColor: (theme) => theme.palette.background.default,
-    alias: 'geekr',
+    alias: 'geekrAbout',
   },
   {
     path: ['/search', '/search/p/:page'],
