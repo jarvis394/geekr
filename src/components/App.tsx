@@ -68,7 +68,9 @@ const useStyles = makeStyles({
     display: 'flex',
     minHeight: `calc(100vh - ${APP_BAR_HEIGHT}px - ${
       isMobile() ? chromeAddressBarHeight : 0
-    }px - ${shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0}px + env(safe-area-inset-bottom, 0px))`,
+    }px - ${
+      shouldShowAppBar ? BOTTOM_BAR_HEIGHT : 0
+    }px + env(safe-area-inset-bottom, 0px))`,
     borderRadius: 0,
     alignItems: 'flex-start',
     flexDirection: 'row',
@@ -158,6 +160,14 @@ const App = () => {
   // Set root classes
   useEffect(() => {
     document.body.className = classes.body
+
+    if (window.location.hostname === 'habra.vercel.app') {
+      window.location.replace(
+        'https://geekr.vercel.app/' +
+          window.location.pathname +
+          window.location.search
+      )
+    }
   }, [])
 
   return (
