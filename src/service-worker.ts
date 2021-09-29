@@ -50,7 +50,7 @@ registerRoute(
 )
 
 setCacheNameDetails({
-  prefix: 'habra-app',
+  prefix: 'geekr-app',
   suffix: 'v2',
   precache: 'precache',
   runtime: 'runtime',
@@ -105,7 +105,7 @@ registerRoute(
   /^https?:\/\/.*\/kek\/(v1|v2)\/.*/,
   new NetworkFirst({
     networkTimeoutSeconds: 10,
-    cacheName: 'api-cache',
+    cacheName: 'api-cache-geekr',
     plugins: [
       ...cacheHeaderPlugin,
       new CacheableResponsePlugin({
@@ -123,7 +123,7 @@ registerRoute(
   /^https?:\/\/jarvis394-backend\.ml\/habra\/.*/,
   new NetworkFirst({
     networkTimeoutSeconds: 10,
-    cacheName: 'api-cache-habra',
+    cacheName: 'api-cache-geekr',
     plugins: [
       ...cacheHeaderPlugin,
       new CacheableResponsePlugin({
@@ -162,7 +162,7 @@ registerRoute(
 registerRoute(
   /.*\/fonts\/.*/,
   new CacheFirst({
-    cacheName: 'habra-fonts',
+    cacheName: 'geekr-fonts',
     plugins: [
       new CacheableResponsePlugin({
         statuses: [0, 200],
