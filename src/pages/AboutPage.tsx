@@ -5,6 +5,9 @@ import OutsidePage from 'src/components/blocks/OutsidePage'
 import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    marginBottom: theme.spacing(4),
+  },
   text: {
     marginTop: theme.spacing(4),
     fontFamily: 'Google Sans',
@@ -95,64 +98,9 @@ const Card: React.FC<{
 const AboutPage = () => {
   const classes = useStyles()
 
-  // const text = [
-  //   {
-  //     data: 'Привет!',
-  //     props: { variant: 'h4' },
-  //   },
-  //   {
-  //     data: (
-  //       <>
-  //         Проект&nbsp;
-  //         <a className={classes.link} href="/">
-  //           habra
-  //         </a>
-  //         &nbsp; - это , что и на оригинальном&nbsp;
-  //         <a className={classes.link} href="https://habr.com">
-  //           Habrahabr
-  //         </a>
-  //         . В чём разница, спросите вы? Удобство, красота и юзабилити - вот к
-  //         чему стремится неофициальный клон одной из крупнейших площадок Рунета
-  //         с многомиллионной аудиторией.
-  //       </>
-  //     ),
-  //     props: { variant: 'body1', style: { fontSize: 22, lineHeight: '32px' } },
-  //   },
-  //   {
-  //     data: (
-  //       <>
-  //         В один из солнечных дней Петербурга,&nbsp;
-  //         <a className={classes.link} href="/">
-  //           jarvis394
-  //         </a>
-  //         &nbsp;чуть не разбил телефон из-за того, что приложение Хабра на
-  //         телефоне глючило и фигово отображало картинки, из-за чего весь контент
-  //         страницы дёргался и прыгал. Тогда он решил исправить ситуацию самым
-  //         долгим, нудным и ресурсоёмким способом - он взял и сделал свой Хабр,
-  //         с&nbsp;
-  //         <span className={classes.cross}>блекджеком</span>
-  //         &nbsp;тёмной темой и кэшированием!
-  //       </>
-  //     ),
-  //     props: { variant: 'body1', style: { fontSize: 18, lineHeight: '28px' } },
-  //   },
-  //   {
-  //     data: (
-  //       <>
-  //         Зачем так стараться? Познание React - Typescript - Redux, а
-  //         также&nbsp;
-  //         <span className={classes.cross}>боли и страданий</span>
-  //         &nbsp;получение разнообразного опыта в сфере фронтенда. Ну и Хабр свой
-  //         хотелось бы иметь, да.
-  //       </>
-  //     ),
-  //     props: { variant: 'body1', style: { fontSize: 18, lineHeight: '28px' } },
-  //   },
-  // ]
-
   return (
-    <OutsidePage headerText="О проекте">
-      <Container>
+    <OutsidePage headerText="О проекте" disableShrinking hidePositionBar>
+      <Container className={classes.root}>
         <Typography className={classes.text} variant="h4">
           Привет!
         </Typography>

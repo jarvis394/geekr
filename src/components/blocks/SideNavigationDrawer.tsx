@@ -27,6 +27,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { Route } from 'src/config/routes'
 import { FetchingState } from 'src/interfaces'
 import UserMenu from './UserMenu'
+import RUVDSPromoBlock from './RUVDSPromo/Block'
 
 const NAVIGATION_TABS = makeNavigationTabs(28, 28, true)
 const avatarWidth = 32
@@ -79,7 +80,6 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   bottomBlock: {
-    padding: theme.spacing(0, 2),
     margin: theme.spacing(1, 0),
   },
 }))
@@ -157,6 +157,9 @@ const useProfileButtonStyles = makeStyles((theme) => ({
 }))
 
 const useAboutButtonStyles = makeStyles((theme) => ({
+  rootWrapper: {
+    margin: theme.spacing(0, 2)
+  },
   root: {
     padding: theme.spacing(0.8, 1),
     borderRadius: 8,
@@ -285,19 +288,21 @@ const AboutButton = () => {
   const history = useHistory()
 
   return (
-    <ButtonBase
-      onClick={() =>
-        history.push('/habra-about', {
-          from: location.pathname,
-        })
-      }
-      className={classes.root}
-    >
-      <div className={classes.header}>
-        <Icon24InfoCircleOutline width={24} height={24} />
-        <Typography className={classes.text}>О сайте</Typography>
-      </div>
-    </ButtonBase>
+    <div className={classes.rootWrapper}>
+      <ButtonBase
+        onClick={() =>
+          history.push('/geekr-about', {
+            from: location.pathname,
+          })
+        }
+        className={classes.root}
+      >
+        <div className={classes.header}>
+          <Icon24InfoCircleOutline width={24} height={24} />
+          <Typography className={classes.text}>О сайте</Typography>
+        </div>
+      </ButtonBase>
+    </div>
   )
 }
 
@@ -352,7 +357,8 @@ const SideNavigationDrawer = () => {
           ))}
         </div>
         <div className={classes.bottomBlock}>
-          <Divider />
+          <RUVDSPromoBlock />
+          <Divider className={classes.logoDivider} />
           <AboutButton />
         </div>
       </div>

@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
     display: 'flex',
     justifyContent: 'center',
-    zIndex: theme.zIndex.snackbar,
+    zIndex: theme.zIndex.drawer + 1,
     [theme.breakpoints.up(MIN_WIDTH)]: {
       right: 0,
     },
@@ -31,8 +31,10 @@ const useStyles = makeStyles((theme) => ({
     width: `calc(100% - ${theme.spacing(2) * 2}px)`,
     transitionDuration: '0.1s',
     transitionTimingFunction: theme.transitions.easing.easeOut,
+    pointerEvents: 'none',
   },
   root: {
+    pointerEvents: 'auto',
     backgroundColor: theme.palette.primary.dark,
     borderRadius: 8,
     marginBottom: 0,

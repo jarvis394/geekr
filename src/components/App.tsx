@@ -31,6 +31,7 @@ import { useEffect } from 'react'
 import { ErrorBoundary } from '@sentry/react'
 import ErrorPage from 'src/pages/Error'
 import RebrandingModal from 'src/components/modals/Rebranding'
+import RUVDSPromoNotification from './blocks/RUVDSPromo/Notification'
 
 interface StyleProps {
   theme: Theme
@@ -179,6 +180,7 @@ const App = () => {
             <div className={classes.app}>
               <ScrollRestoration />
               <UpdateNotification />
+              <RUVDSPromoNotification />
               <AppBar />
               <BottomBar />
               <AppRouter />

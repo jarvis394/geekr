@@ -18,7 +18,7 @@ import getCachedMode from 'src/utils/getCachedMode'
 export const APP_VERSION = 'v2'
 
 export const API_URL = 'https://habr.com/kek/'
-export const API_TOKEN_URL = 'https://jarvis394-backend.ml/habra/'
+export const API_TOKEN_URL = 'https://habra.jarvis394.ml/'
 export const SENTRY_DSN =
   'https://a2e39aec97c844269660ef4e0db0c264@o929832.ingest.sentry.io/5878570'
 export const MATOMO_SERVER_URL = 'https://matomo.jarvis394-backend.ml/'
@@ -49,6 +49,7 @@ export const NEEDS_UPDATE_KEY = 'habra_NEEDS_UPDATE'
 export const AUTH_DATA_KEY = 'habra_AUTH_DATA'
 export const CSRF_TOKEN_KEY = 'habra_CSRF_TOKEN'
 export const REBRANDING_MODAL_WAS_SHOWN = 'habra_rebranding'
+export const RUVDS_MODAL_WAS_SHOWN = 'habra_ruvds_promo'
 
 export const FLOWS: FlowObject[] = [
   {

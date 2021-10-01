@@ -7,7 +7,6 @@ import {
 } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { blue, orange, red, green } from '@material-ui/core/colors'
-
 import { Icon24Fire } from '@vkontakte/icons'
 import { Icon36Newsfeed } from '@vkontakte/icons'
 import { Icon36Users3Outline } from '@vkontakte/icons'
@@ -22,6 +21,7 @@ import { Icon24InfoCircleOutline } from '@vkontakte/icons'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import useMediaExtendedQuery from 'src/hooks/useMediaExtendedQuery'
 import { MIDDLE_WIDTH, MIN_WIDTH } from 'src/config/constants'
+import RUVDSLogo from 'src/components/svg/RUVDSLogo'
 
 const makeCardTextColor = (theme: Theme, hasSubtext: boolean) => {
   if (theme.palette.type === 'dark') {
@@ -138,6 +138,8 @@ const useCardLinkStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontFamily: 'Google Sans',
     flexGrow: 1,
+    position: 'relative',
+    top: 1,
   },
   header: {
     display: 'flex',
@@ -149,6 +151,39 @@ const useCardLinkStyles = makeStyles((theme) => ({
     marginRight: -8,
     width: 24,
     height: 24,
+  },
+}))
+
+const useSponsorCardStyles = makeStyles((theme) => ({
+  root: {
+    borderRadius: 8,
+    width: '100%',
+    display: 'flex',
+    alignItems: 'initial',
+    flexDirection: 'column',
+    textAlign: 'left',
+    background: (s) => theme.palette.background[s ? 'paper' : 'default'],
+    marginTop: theme.spacing(1),
+  },
+  a: {
+    padding: theme.spacing(1.5, 2),
+    textDecoration: 'none',
+    color: 'initial',
+    '-webkit-tap-highlight-color': 'transparent',
+  },
+  text: {
+    fontSize: 18,
+    fontWeight: 600,
+    fontFamily: 'Google Sans',
+    flexGrow: 1,
+    position: 'relative',
+    marginTop: theme.spacing(1)
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    color: theme.palette.text.primary,
   },
 }))
 
@@ -205,6 +240,10 @@ interface CardProps {
   subtext?: string
   to: string
   paper?: boolean
+}
+
+interface SponsorCardProps extends CardProps {
+  fill?: string
 }
 
 const Button = ({ text, icon: Icon, color, to }: ButtonProps) => {
@@ -272,6 +311,21 @@ const CardLink = ({ text, icon: Icon, to }: CardProps) => {
       <a href={to} target="_blank" rel="noreferrer" className={classes.a}>
         <div className={classes.header}>
           <Icon width={24} height={24} />
+          <Typography className={classes.text}>{text}</Typography>
+        </div>
+      </a>
+    </ButtonBase>
+  )
+}
+
+const SponsorCard = ({ text, icon: Icon, to, fill }: SponsorCardProps) => {
+  const classes = useSponsorCardStyles()
+
+  return (
+    <ButtonBase className={classes.root}>
+      <a href={to} target="_blank" rel="noreferrer" className={classes.a}>
+        <div className={classes.header}>
+          <Icon width={40} height={40} fill={fill} />
           <Typography className={classes.text}>{text}</Typography>
         </div>
       </a>
@@ -348,6 +402,21 @@ const Services = () => {
                 to="https://github.com/jarvis394/geekr"
                 text="GitHub"
                 icon={GitHubIcon}
+              />
+            </Grid>
+          </Grid>
+        </div>
+        <div className={classes.wrapper} style={{ marginTop: 6 }}>
+          <Typography variant="caption" className={classes.dividerTitle}>
+            Спонсоры
+          </Typography>
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <SponsorCard
+                to="https://ruvds.com/ru-rub"
+                text="RUVDS"
+                icon={RUVDSLogo}
+                fill={'#4bb0ff'}
               />
             </Grid>
           </Grid>

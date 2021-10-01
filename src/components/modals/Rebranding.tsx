@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 380,
     borderRadius: 16,
     justifyContent: 'center',
+    zIndex: theme.zIndex.snackbar + 1
   },
   imageHolder: {
     display: 'flex',
