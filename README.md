@@ -1,4 +1,4 @@
-<p align="center"><a href="https://geekr.vercel.app/top/weekly/p/1/"><img width=830 src="images/logo.png" alt="geekr logo" /></a></p>
+<p align="center"><a href="https://geekr.vercel.app/top/weekly/p/1/"><img width=830 src="images/promo.png" alt="geekr logo" /></a></p>
 <h5 align="center">✨🎉 Habrahabr, but with a new client</h5>
 
 <p align="center">
