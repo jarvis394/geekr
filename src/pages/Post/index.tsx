@@ -206,6 +206,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     ...theme.typography.body2,
   },
+  tagsContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    overflow: 'hidden'
+  },
   hubsContainer: {
     marginTop: theme.spacing(0.5),
   },
@@ -430,16 +435,18 @@ const Post = () => {
                       <Typography className={classes.sectionTitle}>
                         Теги
                       </Typography>
-                      {post.tags.map((e, i) => (
-                        <span key={i} className={classes.sectionLinkWrapper}>
-                          <Link
-                            to={`/search/p/1?q=[${e.titleHtml}]`}
-                            className={classes.sectionLink}
-                          >
-                            {e.titleHtml}
-                          </Link>
-                        </span>
-                      ))}
+                      <div className={classes.tagsContainer}>
+                        {post.tags.map((e, i) => (
+                          <span key={i} className={classes.sectionLinkWrapper}>
+                            <Link
+                              to={`/search/p/1?q=[${e.titleHtml}]`}
+                              className={classes.sectionLink}
+                            >
+                              {e.titleHtml}
+                            </Link>
+                          </span>
+                        ))}
+                      </div>
                     </div>
                     <div className={classes.section}>
                       <Typography className={classes.sectionTitle}>
