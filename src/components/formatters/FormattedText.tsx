@@ -278,7 +278,6 @@ const FormattedText: React.FC<{
     (store) => store.settings.readerSettings.changeLinks
   )
   const options: HTMLReactParserOptions = {
-    trim: true,
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === '&nbsp;') {
         return <> </>
