@@ -1,4 +1,5 @@
 type FlowAlias =
+  'feed'
   | 'all'
   | 'develop'
   | 'design'

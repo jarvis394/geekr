@@ -80,6 +80,10 @@ export const FLOWS: FlowObject[] = [
     title: 'Научпоп',
     alias: 'popsci',
   },
+  {
+    title: 'Моя лента',
+    alias: 'feed',
+  },
 ]
 
 export const RATING_MODES: ModeObject[] = [

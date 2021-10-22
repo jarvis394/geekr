@@ -10,6 +10,7 @@ import {
 } from 'src/config/constants'
 import getSecondaryAppBarColor from 'src/utils/getSecondaryAppBarColor'
 import { FlowAlias, FlowObject } from 'src/interfaces'
+import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,21 +82,32 @@ const FlowsBar: React.FC<{
   onClick: (e: FlowObject) => void
 }> = ({ flow, onClick }) => {
   const classes = useStyles()
+  const isLoggedIn = useSelector((store) => !!store.auth.authorizedRequestData)
+  const FlowItem: React.FC<{ data: FlowObject }> = ({ data }) => (
+    <a
+      className={[classes.link]
+        .concat(flow == data.alias ? [classes.selected] : [])
+        .join(' ')}
+      onClick={() => onClick(data)}
+    >
+      {data.title}
+    </a>
+  )
 
   return (
     <AppBar className={classes.root} elevation={0}>
       <Toolbar className={classes.toolbar}>
         <div className={classes.content}>
+          {isLoggedIn && (
+            <FlowItem
+              data={{
+                title: 'Моя лента',
+                alias: 'feed',
+              }}
+            />
+          )}
           {FLOWS.map((e, i) => (
-            <a
-              className={[classes.link]
-                .concat(flow == e.alias ? [classes.selected] : [])
-                .join(' ')}
-              key={i}
-              onClick={() => onClick(e)}
-            >
-              {e.title}
-            </a>
+            <FlowItem key={i} data={e} />
           ))}
         </div>
       </Toolbar>
