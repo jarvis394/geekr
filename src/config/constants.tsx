@@ -19,10 +19,10 @@ export const APP_VERSION = 'v2'
 
 export const API_URL = 'https://habr.com/kek/'
 export const API_TOKEN_URL = 'https://habra.jarvis394.ml/'
+export const MATOMO_SERVER_URL = 'https://matomo.jarvis394.ml/'
+export const MATOMO_SITE_ID = 2
 export const SENTRY_DSN =
   'https://a2e39aec97c844269660ef4e0db0c264@o929832.ingest.sentry.io/5878570'
-export const MATOMO_SERVER_URL = 'https://matomo.jarvis394-backend.ml/'
-export const MATOMO_SITE_ID = 2
 
 export const MIN_WIDTH = 960
 export const MIDDLE_WIDTH = 1175
@@ -174,8 +174,7 @@ export const POST_LABELS: Record<
   recovery: { text: 'Recovery' },
   technotext2020: {
     text: '🔥 Технотекст 2020',
-    link:
-      'https://contenting.io/challenge.html?utm_source=habr&utm_medium=label',
+    link: 'https://contenting.io/challenge.html?utm_source=habr&utm_medium=label',
   },
 }
 
@@ -284,7 +283,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
     fontFamily: 'Roboto',
     fontSize: 16,
     changeLinks: false,
-    replaceImagesWithPlaceholder: false
+    replaceImagesWithPlaceholder: false,
   },
   interfaceFeed: {
     isCompact: false,
@@ -324,8 +323,8 @@ export const LANGUAGES_FEED = [
   },
   {
     type: 'ru,en',
-    name: 'Русский и English'
-  }
+    name: 'Русский и English',
+  },
 ]
 
 export const THEMES: PaletteType[] = [

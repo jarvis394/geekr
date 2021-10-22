@@ -109,7 +109,7 @@ registerRoute(
     plugins: [
       ...cacheHeaderPlugin,
       new CacheableResponsePlugin({
-        statuses: [0, 201],
+        statuses: [200, 302],
       }),
       new ExpirationPlugin({
         maxAgeSeconds: 24 * 60 * 60, // one day
@@ -120,14 +120,14 @@ registerRoute(
 )
 
 registerRoute(
-  /^https?:\/\/jarvis394-backend\.ml\/habra\/.*/,
+  /^https?:\/\/habra\.jarvis394\.ml\/.*/,
   new NetworkFirst({
     networkTimeoutSeconds: 10,
     cacheName: 'api-cache-geekr',
     plugins: [
       ...cacheHeaderPlugin,
       new CacheableResponsePlugin({
-        statuses: [0, 201],
+        statuses: [200, 302],
       }),
       new ExpirationPlugin({
         maxAgeSeconds: 24 * 60 * 60, // one day
