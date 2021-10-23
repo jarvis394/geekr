@@ -166,12 +166,14 @@ const Home = () => {
     <div className={classes.root}>
       <FlowsBar onClick={onFlowsBarLinkClick} flow={flow} />
       {currentPage === 1 && <AdvertsBlock />}
-      <Switcher
-        flow={flow}
-        setMode={setMode}
-        mode={mode}
-        handleClick={handleSwitcher}
-      />
+      {flow !== 'feed' && (
+        <Switcher
+          flow={flow}
+          setMode={setMode}
+          mode={mode}
+          handleClick={handleSwitcher}
+        />
+      )}
 
       <div className={classes.flexContainer}>
         <MainBlock>
