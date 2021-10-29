@@ -155,7 +155,7 @@ const SearchResultsScreen = ({ q }) => {
   const location = useLocation()
   const history = useHistory()
   const [data, setData] = useState<Posts>()
-  const [fetchError, setError] = useState()
+  const [fetchError, setError] = useState<string>()
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page))
   const [pagesCount, setPagesCount] = useState<number>()
   const authorizedRequestData = useSelector((store) => store.auth.authorizedRequestData)
@@ -189,7 +189,7 @@ const SearchResultsScreen = ({ q }) => {
         setData(d)
         if (!pagesCount) setPagesCount(d.pagesCount)
       } catch (e) {
-        setError(e.message)
+        setError((e as Error).message)
       }
     }
     get()

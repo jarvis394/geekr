@@ -34,7 +34,7 @@ export const getHub = (alias: string) => async (
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: error.message })
+    dispatch({ type: type + '_REJECTED', payload: (error as Error)?.message })
   }
 }
 
@@ -59,7 +59,7 @@ export const getHubNews = (alias: string) => async (
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: error.message })
+    dispatch({ type: type + '_REJECTED', payload: (error as Error)?.message })
   }
 }
 
@@ -86,7 +86,7 @@ export const getHubPosts = (mode: Mode, page: number, alias: string) => async (
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: error.message })
+    dispatch({ type: type + '_REJECTED', payload: (error as Error)?.message })
   }
 }
 
@@ -112,7 +112,7 @@ export const getHubAuthors = ({
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: error.message })
+    dispatch({ type: type + '_REJECTED', payload: (error as Error)?.message })
   }
 }
 
@@ -136,6 +136,6 @@ export const getHubCompanies = (alias: string, page: number) => async (
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: error.message })
+    dispatch({ type: type + '_REJECTED', payload: (error as Error)?.message })
   }
 }

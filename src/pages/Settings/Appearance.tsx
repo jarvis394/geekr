@@ -287,6 +287,17 @@ const useThemeCardStyles = makeStyles((theme) => ({
   radioChecked: {
     color: theme.palette.primary.main,
   },
+  themeLimitedLabel: {
+    position: 'absolute',
+    top: theme.spacing(1),
+    background: ({ color }: { color: string }) => color,
+    padding: '3px 6px',
+    color: ({ color }: { color: string }) =>
+      theme.palette.getContrastText(color),
+    textTransform: 'uppercase',
+    borderRadius: 8,
+    lineHeight: 'normal',
+  },
 }))
 
 const makeCustomThemeFromThemeType = (type: PaletteType): CustomTheme => ({
@@ -338,6 +349,11 @@ const ThemeCard = ({ theme }: { theme: CustomTheme }) => {
         className={`${classes.box} ${isCurrent ? classes.border : ''}`}
         style={{ background: paper }}
       >
+        {theme.type === 'halloween' && (
+          <Typography variant="caption" className={classes.themeLimitedLabel}>
+            буу-у-у!
+          </Typography>
+        )}
         <Grid
           item
           xs={6}

@@ -136,7 +136,7 @@ const NewsBlock = ({ hubAlias }: { hubAlias?: string }) => {
 
   useEffect(() => {
     dispatch(getNewsPromo(hubAlias))
-  }, [dispatch])
+  }, [])
 
   const GoToNewsButton = () => (
     <Button

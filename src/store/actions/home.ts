@@ -50,7 +50,7 @@ export const getPosts = ({
   } catch (error) {
     dispatch({
       type: type + '_REJECTED',
-      payload: { error: error.message, mode, page, flow },
+      payload: { error: (error as Error)?.message, mode, page, flow },
     })
   }
 }
@@ -68,7 +68,7 @@ export const getAdverts = () => async (dispatch) => {
       payload: data.adverts,
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error: error.message } })
+    dispatch({ type: type + '_REJECTED', payload: { error: (error as Error)?.message } })
   }
 }
 
@@ -86,7 +86,7 @@ export const getMostReading = () => async (dispatch, getState: () => RootState) 
       payload: data?.articles,
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error: error.message } })
+    dispatch({ type: type + '_REJECTED', payload: { error: (error as Error)?.message } })
   }
 }
 
@@ -103,7 +103,7 @@ export const getTopCompanies = () => async (dispatch) => {
       payload: data,
     })
   } catch (error) {
-    dispatch({ type: type + '_REJECTED', payload: { error: error.message } })
+    dispatch({ type: type + '_REJECTED', payload: { error: (error as Error)?.message } })
   }
 }
 

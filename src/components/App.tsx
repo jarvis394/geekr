@@ -32,6 +32,7 @@ import { ErrorBoundary } from '@sentry/react'
 import ErrorPage from 'src/pages/Error'
 import RebrandingModal from 'src/components/modals/Rebranding'
 import RUVDSPromoNotification from './blocks/RUVDSPromo/Notification'
+import HalloweenNotification from './blocks/HalloweenThemePromo/Notification'
 
 interface StyleProps {
   theme: Theme
@@ -181,6 +182,7 @@ const App = () => {
               <ScrollRestoration />
               <UpdateNotification />
               <RUVDSPromoNotification />
+              <HalloweenNotification />
               <AppBar />
               <BottomBar />
               <AppRouter />

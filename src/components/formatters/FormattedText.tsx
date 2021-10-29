@@ -278,6 +278,8 @@ const FormattedText: React.FC<{
     (store) => store.settings.readerSettings.changeLinks
   )
   const options: HTMLReactParserOptions = {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === '&nbsp;') {
         return <> </>

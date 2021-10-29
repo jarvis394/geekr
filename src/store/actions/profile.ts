@@ -36,7 +36,7 @@ export const request = async ({
   } catch (error) {
     dispatch({
       type: type + '_REJECTED',
-      payload: { error: error.message, ...params },
+      payload: { error: (error as Error)?.message, ...params },
     })
   }
 }
@@ -107,7 +107,7 @@ export const getProfileArticles = (alias: string, page: number) => async (
   } catch (error) {
     dispatch({
       type: type + '_REJECTED',
-      payload: { error: error.message, page },
+      payload: { error: (error as Error)?.message, page },
     })
   }
 }

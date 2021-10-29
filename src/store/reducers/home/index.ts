@@ -5,11 +5,10 @@ import {
   SIDEBAR_MOST_READING,
   SET_HOME_POST_ITEM_SIZE,
 } from './types'
-import { FLOWS, RATING_MODES } from 'src/config/constants'
+import { FLOWS, Mode, RATING_MODES } from 'src/config/constants'
 import { Advert, FetchingState, FlowAlias, Posts } from 'src/interfaces'
 import getCachedMode from 'src/utils/getCachedMode'
 import getPostFirstImage from 'src/utils/getPostFirstImage'
-import { Mode } from 'node:fs'
 
 interface ModeObject {
   pages: Record<number, Omit<Posts, 'pagesCount'>>
@@ -17,7 +16,7 @@ interface ModeObject {
   lastUpdated: number
 }
 
-const modes: Record<Mode, ModeObject> = {}
+const modes: Record<Mode, ModeObject> = {} as Record<Mode, ModeObject>
 const flowModes = {} as Record<FlowAlias, Record<string, ModeObject>>
 RATING_MODES.forEach(({ mode }) => {
   modes[mode] = {

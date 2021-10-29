@@ -28,6 +28,7 @@ import {
 } from '@material-ui/core'
 import useAppBarScrollTrigger from 'src/hooks/useAppBarScrollTrigger'
 import UserMenu from './UserMenu'
+import BatSvg from 'src/components/svg/Bat'
 
 interface StyleProps {
   isTransformed: boolean
@@ -70,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   headerTitle: {
+    position: 'relative',
     color: theme.palette.text.primary,
     fontWeight: 800,
     height: '100%',
@@ -101,6 +103,15 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: `calc(100% - ${theme.spacing(2) * 2}px)`,
   },
+  batIcon: {
+    position: 'absolute',
+    right: -11,
+    top: 4,
+    transform: 'rotate(30deg)',
+    width: 24,
+    height: 11.85,
+    fill: '#eb4b2b !important'
+  }
 }))
 
 const AppBarComponent = () => {
@@ -168,6 +179,7 @@ const AppBarComponent = () => {
                 className={classes.headerTitle}
               >
                 geekr.
+                <BatSvg className={classes.batIcon} />
               </Typography>
               <Offline
                 polling={{

@@ -50,6 +50,7 @@ export const AUTH_DATA_KEY = 'habra_AUTH_DATA'
 export const CSRF_TOKEN_KEY = 'habra_CSRF_TOKEN'
 export const REBRANDING_MODAL_WAS_SHOWN = 'habra_rebranding'
 export const RUVDS_MODAL_WAS_SHOWN = 'habra_ruvds_promo'
+export const HALLOWEEN_MODAL_WAS_SHOWN = 'habra_halloween'
 
 export const FLOWS: FlowObject[] = [
   {
@@ -174,7 +175,8 @@ export const POST_LABELS: Record<
   recovery: { text: 'Recovery' },
   technotext2020: {
     text: '🔥 Технотекст 2020',
-    link: 'https://contenting.io/challenge.html?utm_source=habr&utm_medium=label',
+    link:
+      'https://contenting.io/challenge.html?utm_source=habr&utm_medium=label',
   },
 }
 
@@ -328,6 +330,7 @@ export const LANGUAGES_FEED = [
 ]
 
 export const THEMES: PaletteType[] = [
+  'halloween',
   'light',
   'dark',
   'oled',
@@ -342,6 +345,7 @@ export const BACKGROUND_COLORS_DEFAULT = {
   oled: '#000000',
   sepia: '#f5e2a8',
   dimmed: '#1c2128',
+  halloween: '#080707',
 }
 
 /** Colors for app foreground elements, such as Paper */
@@ -351,6 +355,7 @@ export const BACKGROUND_COLORS_PAPER = {
   oled: '#0e0e0e',
   sepia: '#ffecb3',
   dimmed: '#252c35',
+  halloween: '#181616',
 }
 
 export const THEME_PRIMARY_COLORS = {
@@ -378,6 +383,11 @@ export const THEME_PRIMARY_COLORS = {
     main: blue.A100,
     light: lighten(blue.A100, 0.05),
     dark: darken(blue.A100, 0.1),
+  },
+  halloween: {
+    main: '#eb4b2b',
+    light: lighten('#eb4b2b', 0.05),
+    dark: darken('#eb4b2b', 0.1),
   },
 }
 
@@ -412,6 +422,12 @@ export const THEME_TEXT_COLORS = {
     disabled: fade('#cdd9e5', 0.38),
     hint: fade('#cdd9e5', 0.38),
   },
+  halloween: {
+    primary: '#ece1e1',
+    secondary: fade('#ece1e1', 0.54),
+    disabled: fade('#ece1e1', 0.38),
+    hint: fade('#ece1e1', 0.38),
+  },
 }
 
 export const THEME_NAMES = {
@@ -420,11 +436,19 @@ export const THEME_NAMES = {
   oled: 'OLED',
   sepia: 'Ночной режим',
   dimmed: 'Ночная тема',
+  halloween: 'Тыковка',
 }
 
-export type PaletteType = 'light' | 'dark' | 'oled' | 'sepia' | 'dimmed'
+export type PaletteType =
+  | 'halloween'
+  | 'light'
+  | 'dark'
+  | 'oled'
+  | 'sepia'
+  | 'dimmed'
 
 export const THEME_TYPES: Record<PaletteType, MUIPaletteType> = {
+  halloween: 'dark',
   light: 'light',
   dark: 'dark',
   oled: 'dark',

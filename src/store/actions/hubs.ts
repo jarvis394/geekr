@@ -19,7 +19,7 @@ export const getHubsList = (page: number) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: type + '_REJECTED',
-      payload: { error: error.message, page },
+      payload: { error: (error as Error)?.message, page },
     })
   }
 }
@@ -38,7 +38,7 @@ export const getHubsSearchResults = (query: string) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: type + '_REJECTED',
-      payload: { error: error.message, query },
+      payload: { error: (error as Error)?.message, query },
     })
   }
 }

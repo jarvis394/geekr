@@ -56,8 +56,8 @@ const TopDayPosts = () => {
       try {
         setData(await getPosts({ mode: 'daily', page: 1 }))
       } catch (e) {
-        console.warn('Could not fetch top day posts:', e.message)
-        setError(e.message)
+        console.warn('Could not fetch top day posts:', (e as Error).message)
+        setError((e as Error).message)
       }
     }
     get()

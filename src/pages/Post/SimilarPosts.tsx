@@ -61,8 +61,8 @@ const SimilarPosts = (props: Props) => {
       try {
         setData(await getSimilar(Number(id)))
       } catch (e) {
-        console.warn('Could not fetch similar posts:', e.message)
-        setError(e.message)
+        console.warn('Could not fetch similar posts:', (e as Error).message)
+        setError((e as Error).message)
       }
     }
     get()

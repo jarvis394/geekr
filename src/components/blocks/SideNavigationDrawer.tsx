@@ -28,6 +28,8 @@ import { Route } from 'src/config/routes'
 import { FetchingState } from 'src/interfaces'
 import UserMenu from './UserMenu'
 import RUVDSPromoBlock from './RUVDSPromo/Block'
+import HalloweenPromoBlock from './HalloweenThemePromo/Block'
+import BatIcon from 'src/components/svg/Bat'
 
 const NAVIGATION_TABS = makeNavigationTabs(28, 28, true)
 const avatarWidth = 32
@@ -68,6 +70,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 20,
     marginLeft: theme.spacing(2),
     fontFamily: 'Google Sans',
+    position: 'relative',
   },
   logoDivider: {
     margin: theme.spacing(0, 2),
@@ -81,6 +84,15 @@ const useStyles = makeStyles((theme) => ({
   },
   bottomBlock: {
     margin: theme.spacing(1, 0),
+  },
+  batIcon: {
+    position: 'absolute',
+    left: 48,
+    top: 12,
+    transform: 'rotate(30deg)',
+    width: 24,
+    height: 11.85,
+    fill: '#eb4b2b !important',
   },
 }))
 
@@ -158,7 +170,7 @@ const useProfileButtonStyles = makeStyles((theme) => ({
 
 const useAboutButtonStyles = makeStyles((theme) => ({
   rootWrapper: {
-    margin: theme.spacing(0, 2)
+    margin: theme.spacing(0, 2),
   },
   root: {
     padding: theme.spacing(0.8, 1),
@@ -340,13 +352,10 @@ const SideNavigationDrawer = () => {
       }}
     >
       <div className={classes.drawerContainer}>
-        <div className={classes.logoHolder}>
-          <Typography
-            onClick={() => goHome()}
-            variant="h6"
-            className={classes.logo}
-          >
+        <div className={classes.logoHolder} onClick={goHome}>
+          <Typography variant="h6" className={classes.logo}>
             geekr.
+            <BatIcon className={classes.batIcon} />
           </Typography>
           <Divider className={classes.logoDivider} />
         </div>
@@ -357,6 +366,7 @@ const SideNavigationDrawer = () => {
           ))}
         </div>
         <div className={classes.bottomBlock}>
+          <HalloweenPromoBlock />
           <RUVDSPromoBlock />
           <Divider className={classes.logoDivider} />
           <AboutButton />
