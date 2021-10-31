@@ -423,10 +423,10 @@ export const THEME_TEXT_COLORS = {
     hint: fade('#cdd9e5', 0.38),
   },
   halloween: {
-    primary: '#ece1e1',
-    secondary: fade('#ece1e1', 0.54),
-    disabled: fade('#ece1e1', 0.38),
-    hint: fade('#ece1e1', 0.38),
+    primary: '#fdf4f4',
+    secondary: fade('#fdf4f4', 0.54),
+    disabled: fade('#fdf4f4', 0.38),
+    hint: fade('#fdf4f4', 0.38),
   },
 }
 
