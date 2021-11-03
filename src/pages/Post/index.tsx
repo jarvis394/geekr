@@ -134,7 +134,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingBottom: theme.spacing(1),
     lineHeight: '1.56',
     wordBreak: 'break-word',
-    hyphens: 'auto',
+    hyphens: 'none',
     color: theme.palette.text.primary,
   },
   title: {
@@ -143,7 +143,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: 24,
     lineHeight: '32px',
     wordBreak: 'break-word',
-    hyphens: 'auto',
+    hyphens: 'none',
     marginBottom: theme.spacing(1),
     marginTop: theme.spacing(1.5),
   },

@@ -121,7 +121,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '22px',
     fontSize: '15px !important',
     wordBreak: 'break-word',
-    hyphens: 'auto',
+    hyphens: 'none',
     '& p': {
       margin: 0,
       fontSize: '15px !important',
