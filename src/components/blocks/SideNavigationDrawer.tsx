@@ -29,7 +29,6 @@ import { FetchingState } from 'src/interfaces'
 import UserMenu from './UserMenu'
 import RUVDSPromoBlock from './RUVDSPromo/Block'
 import HalloweenPromoBlock from './HalloweenThemePromo/Block'
-import BatIcon from 'src/components/svg/Bat'
 
 const NAVIGATION_TABS = makeNavigationTabs(28, 28, true)
 const avatarWidth = 32
@@ -85,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
   bottomBlock: {
     margin: theme.spacing(1, 0),
   },
-  batIcon: {
+  halloween_batIcon: {
     position: 'absolute',
     left: 48,
     top: 12,
@@ -355,7 +354,6 @@ const SideNavigationDrawer = () => {
         <div className={classes.logoHolder} onClick={goHome}>
           <Typography variant="h6" className={classes.logo}>
             geekr.
-            <BatIcon className={classes.batIcon} />
           </Typography>
           <Divider className={classes.logoDivider} />
         </div>
@@ -366,7 +364,6 @@ const SideNavigationDrawer = () => {
           ))}
         </div>
         <div className={classes.bottomBlock}>
-          <HalloweenPromoBlock />
           <RUVDSPromoBlock />
           <Divider className={classes.logoDivider} />
           <AboutButton />

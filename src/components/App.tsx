@@ -182,7 +182,6 @@ const App = () => {
               <ScrollRestoration />
               <UpdateNotification />
               <RUVDSPromoNotification />
-              <HalloweenNotification />
               <AppBar />
               <BottomBar />
               <AppRouter />

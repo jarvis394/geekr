@@ -28,7 +28,6 @@ import {
 } from '@material-ui/core'
 import useAppBarScrollTrigger from 'src/hooks/useAppBarScrollTrigger'
 import UserMenu from './UserMenu'
-import BatSvg from 'src/components/svg/Bat'
 
 interface StyleProps {
   isTransformed: boolean
@@ -103,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: `calc(100% - ${theme.spacing(2) * 2}px)`,
   },
-  batIcon: {
+  halloween_batIcon: {
     position: 'absolute',
     right: -11,
     top: 4,
@@ -179,7 +178,6 @@ const AppBarComponent = () => {
                 className={classes.headerTitle}
               >
                 geekr.
-                <BatSvg className={classes.batIcon} />
               </Typography>
               <Offline
                 polling={{
