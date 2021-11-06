@@ -335,6 +335,8 @@ export const THEMES: PaletteType[] = [
   'oled',
   'sepia',
   'dimmed',
+  'solarized_light',
+  'solarized_dark',
 ]
 
 /** Colors for app background */
@@ -344,6 +346,8 @@ export const BACKGROUND_COLORS_DEFAULT = {
   oled: '#000000',
   sepia: '#f5e2a8',
   dimmed: '#1c2128',
+  solarized_light: '#eee8d5',
+  solarized_dark: '#002027',
 }
 
 /** Colors for app foreground elements, such as Paper */
@@ -353,6 +357,8 @@ export const BACKGROUND_COLORS_PAPER = {
   oled: '#0e0e0e',
   sepia: '#ffecb3',
   dimmed: '#252c35',
+  solarized_light: '#fdf6e3',
+  solarized_dark: '#002b36'
 }
 
 export const THEME_PRIMARY_COLORS = {
@@ -380,6 +386,16 @@ export const THEME_PRIMARY_COLORS = {
     main: blue.A100,
     light: lighten(blue.A100, 0.05),
     dark: darken(blue.A100, 0.1),
+  },
+  solarized_light: {
+    main: '#268bd2',
+    light: lighten('#268bd2', 0.05),
+    dark: darken('#268bd2', 0.1),
+  },
+  solarized_dark: {
+    main: '#268bd2',
+    light: lighten('#268bd2', 0.05),
+    dark: darken('#268bd2', 0.1),
   },
 }
 
@@ -414,14 +430,28 @@ export const THEME_TEXT_COLORS = {
     disabled: fade('#cdd9e5', 0.38),
     hint: fade('#cdd9e5', 0.38),
   },
+  solarized_light: {
+    primary: '#586e75',
+    secondary: fade('#586e75', 0.54),
+    disabled: fade('#586e75', 0.38),
+    hint: fade('#586e75', 0.38),
+  },
+  solarized_dark: {
+    primary: '#9cadad',
+    secondary: fade('#9cadad', 0.54),
+    disabled: fade('#9cadad', 0.38),
+    hint: fade('#9cadad', 0.38),
+  }
 }
 
-export const THEME_NAMES = {
+export const THEME_NAMES: Record<PaletteType, string> = {
   light: 'Светлая',
   dark: 'Тёмная',
   oled: 'OLED',
   sepia: 'Ночной режим',
   dimmed: 'Ночная тема',
+  solarized_light: 'Solarized Light',
+  solarized_dark: 'Solarized Dark',
 }
 
 export type PaletteType =
@@ -430,6 +460,8 @@ export type PaletteType =
   | 'oled'
   | 'sepia'
   | 'dimmed'
+  | 'solarized_light'
+  | 'solarized_dark'
 
 export const THEME_TYPES: Record<PaletteType, MUIPaletteType> = {
   light: 'light',
@@ -437,6 +469,8 @@ export const THEME_TYPES: Record<PaletteType, MUIPaletteType> = {
   oled: 'dark',
   sepia: 'light',
   dimmed: 'dark',
+  solarized_light: 'light',
+  solarized_dark: 'dark',
 }
 
 export type Mode =
