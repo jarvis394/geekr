@@ -402,9 +402,7 @@ const paletteTextToThemeField = {
 
 const CustomColorfulPicker = ({ color, presetColors, onChange, ...props }) => {
   const classes = useColorPickerStyles()
-  const hexString = useMemo(() => {
-    return color.startsWith('#') ? color : tinycolor(color).toHexString()
-  }, [color])
+  const hexString = useMemo(() => tinycolor(color).toHexString(), [color])
 
   return (
     <>
@@ -442,7 +440,7 @@ const ColorPicker = ({
   const [color, setColor] = useState(state.color)
   const handleSubmit = () => {
     setCurrentTheme((theme) =>
-      paletteTextToThemeField[state.item](theme, color)
+      paletteTextToThemeField[state.item](theme, tinycolor(color).toHexString())
     )
     setState({
       open: false,
