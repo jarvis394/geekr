@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.shape.borderRadius,
     overflow: 'hidden',
     padding: theme.spacing(2),
-    'user-select': 'none',
     '& figcaption': {
       color: theme.palette.text.hint,
       fontSize: 14,
