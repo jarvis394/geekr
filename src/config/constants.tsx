@@ -178,6 +178,11 @@ export const POST_LABELS: Record<
     link:
       'https://contenting.io/challenge.html?utm_source=habr&utm_medium=label',
   },
+  technotext2021: {
+    text: '🔥 Технотекст 2021',
+    link:
+      'https://contenting.io/2021.html',
+  },
 }
 
 export const DONATION_LINKS_MAP = {
