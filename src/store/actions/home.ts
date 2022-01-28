@@ -83,7 +83,7 @@ export const getMostReading = () => async (dispatch, getState: () => RootState) 
 
     dispatch({
       type: type + '_FULFILLED',
-      payload: data?.articles,
+      payload: data,
     })
   } catch (error) {
     dispatch({ type: type + '_REJECTED', payload: { error: (error as Error)?.message } })
