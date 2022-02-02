@@ -255,7 +255,7 @@ const AuthorCard: React.FC<{
           className={classes.nameAndAlias}
         >
           <FormattedText className={classes.fullname}>
-            {post.author.fullname}
+            {post.author.fullname || ''}
           </FormattedText>
           <Typography
             className={post.author.fullname ? classes.alias : classes.aliasBig}

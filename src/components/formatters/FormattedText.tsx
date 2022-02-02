@@ -430,7 +430,7 @@ const FormattedText: React.FC<{
 
   return (
     <div {...props} className={classes.text + ' ' + className}>
-      {parse(componentChildren, options)}
+      {parse(componentChildren || '', options)}
     </div>
   )
 }
