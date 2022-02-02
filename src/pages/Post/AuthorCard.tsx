@@ -24,6 +24,7 @@ import SubscribeButton from 'src/components/blocks/SubscribeButton'
 import { Icon16Up, Icon16Down } from '@vkontakte/icons'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
 import { CloseRounded } from '@material-ui/icons'
+import FormattedText from 'src/components/formatters/FormattedText'
 
 const INLINE_BUTTONS_WIDTH = 660
 
@@ -253,9 +254,9 @@ const AuthorCard: React.FC<{
           to={'/user/' + post.author.alias}
           className={classes.nameAndAlias}
         >
-          <Typography className={classes.fullname}>
+          <FormattedText className={classes.fullname}>
             {post.author.fullname}
-          </Typography>
+          </FormattedText>
           <Typography
             className={post.author.fullname ? classes.alias : classes.aliasBig}
           >

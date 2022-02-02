@@ -225,9 +225,9 @@ const CompanyCard: React.FC<{
           to={'/company/' + company.alias}
           className={classes.companyNameAndDescription}
         >
-          <Typography className={classes.companyName}>
+          <FormattedText className={classes.companyName}>
             {company.titleHtml}
-          </Typography>
+          </FormattedText>
           {company.descriptionHtml && (
             <FormattedText className={classes.description}>
               {company.descriptionHtml}

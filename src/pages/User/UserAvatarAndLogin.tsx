@@ -4,6 +4,7 @@ import UserAvatar from 'src/components/blocks/UserAvatar'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
+import FormattedText from 'src/components/formatters/FormattedText'
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -41,7 +42,9 @@ export const UserAvatarAndLogin = () => {
       />
       {user.fullname ? (
         <>
-          <Typography className={classes.login}>{user.fullname}</Typography>
+          <FormattedText className={classes.login}>
+            {user.fullname}
+          </FormattedText>
           <Link to={'/user/' + user.alias} className={classes.link}>
             @{user.alias}
           </Link>

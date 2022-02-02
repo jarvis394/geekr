@@ -106,9 +106,9 @@ const CompanyCardWithLinks: React.FC<{
             alias={company.alias}
           />
           <div className={classes.companyNameAndDescription}>
-            <Typography className={classes.companyName}>
+            <FormattedText className={classes.companyName}>
               {company.titleHtml}
-            </Typography>
+            </FormattedText>
             {company.descriptionHtml && (
               <FormattedText className={classes.description}>
                 {company.descriptionHtml}
