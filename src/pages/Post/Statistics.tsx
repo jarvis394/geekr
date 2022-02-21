@@ -407,7 +407,7 @@ const ScoreCard: React.FC<{
         icon={<ThumbsUpDownIcon />}
         style={{ background: fade(getScoreColor(score, theme), 0.7) }}
         amount={score > 0 ? '+' + formatNumber(score) : formatNumber(score)}
-        text={'голосов'}
+        text={'рейтинга'}
         onClick={() => setScoreCardDrawerOpen(true)}
       />
       <BottomDrawer
