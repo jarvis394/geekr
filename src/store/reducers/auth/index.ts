@@ -17,13 +17,13 @@ const cachedAuthData = safeJSONParse<AuthData, null>(
 const cachedCSRFToken = localStorage.getItem(CSRF_TOKEN_KEY)
 const initialState: State = {
   authData: {
-    data: cachedAuthData,
-    state: FetchingState[cachedAuthData ? 'Fetched' : 'Idle'],
+    data: null, // cachedAuthData,
+    state: FetchingState.Idle, // FetchingState[cachedAuthData ? 'Fetched' : 'Idle'],
     fetchError: null,
   },
   csrfToken: {
-    data: cachedCSRFToken,
-    state: FetchingState[cachedCSRFToken ? 'Fetched' : 'Idle'],
+    data: null, // cachedCSRFToken,
+    state: FetchingState.Idle // FetchingState[cachedCSRFToken ? 'Fetched' : 'Idle'],
     fetchError: null,
   },
   me: {
@@ -31,12 +31,12 @@ const initialState: State = {
     fetchError: null,
     data: null,
   },
-  authorizedRequestData:
-    cachedAuthData && cachedCSRFToken ? {
-      connectSID: cachedAuthData?.connectSID,
-      csrfToken: cachedCSRFToken,
-    }
-    : null,
+  authorizedRequestData: null,
+    // cachedAuthData && cachedCSRFToken ? {
+    //   connectSID: cachedAuthData?.connectSID,
+    //   csrfToken: cachedCSRFToken,
+    // }
+    // : null,
 }
 
 export default (reducerState = initialState, { type, payload }): State => {
