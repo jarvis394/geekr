@@ -23,7 +23,7 @@ const initialState: State = {
   },
   csrfToken: {
     data: null, // cachedCSRFToken,
-    state: FetchingState.Idle // FetchingState[cachedCSRFToken ? 'Fetched' : 'Idle'],
+    state: FetchingState.Idle, // FetchingState[cachedCSRFToken ? 'Fetched' : 'Idle'],
     fetchError: null,
   },
   me: {
