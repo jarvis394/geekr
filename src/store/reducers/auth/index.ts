@@ -32,11 +32,11 @@ const initialState: State = {
     data: null,
   },
   authorizedRequestData: null,
-    // cachedAuthData && cachedCSRFToken ? {
-    //   connectSID: cachedAuthData?.connectSID,
-    //   csrfToken: cachedCSRFToken,
-    // }
-    // : null,
+  // cachedAuthData && cachedCSRFToken ? {
+  //   connectSID: cachedAuthData?.connectSID,
+  //   csrfToken: cachedCSRFToken,
+  // }
+  // : null,
 }
 
 export default (reducerState = initialState, { type, payload }): State => {
