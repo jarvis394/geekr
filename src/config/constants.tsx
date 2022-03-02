@@ -18,7 +18,7 @@ import getCachedMode from 'src/utils/getCachedMode'
 export const APP_VERSION = 'v2'
 
 export const API_URL = 'https://habr.com/kek/'
-export const API_TOKEN_URL = 'https://habra.jarvis394.ml/'
+export const API_TOKEN_URL = 'https://geekr-lambda.vercel.app/' // 'https://habra.jarvis394.ml/'
 export const MATOMO_SERVER_URL = 'https://matomo.jarvis394.ml/'
 export const MATOMO_SITE_ID = 2
 export const SENTRY_DSN =
