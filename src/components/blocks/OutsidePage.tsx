@@ -74,6 +74,7 @@ const useAppBarStyles = makeStyles((theme) => ({
     position: 'fixed',
     willChange: 'transform',
     flexGrow: 1,
+    boxShadow: '0 -1px 0 0 ' + theme.palette.background.default,
     transform: ({ isShrinked }: StyleProps) =>
       `translateZ(0) translateY(${isShrinked ? -16 : 0}px)`,
     transition: ({ disableShrinking }: StyleProps) =>
