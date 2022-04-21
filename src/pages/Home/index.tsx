@@ -124,14 +124,14 @@ const Home = () => {
   }
   const postsComponents =
     posts &&
-    posts.articleIds.map((id, i) => (
+    posts?.articleIds?.map((id, i) => (
       <PostItem
         key={i}
         setPostItemSize={setPostItemSizeWrapper}
         getPostItemSize={getPostItemSize}
         post={posts.articleRefs[id]}
       />
-    ))
+    )) || []
 
   const handlePagination = (_, i) => {
     if (i === currentPage) return
