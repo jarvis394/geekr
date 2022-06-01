@@ -297,6 +297,9 @@ export const PostItem = ({
     isExtended,
   })
 
+  /** Do not show megaproject articles (not supported) */
+  if (post.postType === 'megaproject') return null
+
   /**
    * Post with postType 'voice' needs just a title to be shown.
    * Example: https://habr.com/ru/search/?q=%D1%81%D0%B8%D1%81#h
