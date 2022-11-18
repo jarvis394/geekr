@@ -183,6 +183,10 @@ export const POST_LABELS: Record<
     link:
       'https://contenting.io/2021.html',
   },
+  technotext2022: {
+    text: '✏️ Технотекст 2022',
+    link: 'https://habr.com/ru/technotext/2022/',
+  }
 }
 
 export const DONATION_LINKS_MAP = {
