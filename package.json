@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "12.x"
+    "node": "16.x"
   },
   "homepage": "https://geekr.vercel.app/",
   "dependencies": {
