@@ -256,7 +256,7 @@ const Post = () => {
     shouldShowContents &&
     post.postLabels.map((e, i) => {
       const labelData = postLabels[e.type]
-      return (
+      return labelData ? (
         <Chip
           label={labelData.text}
           variant="outlined"
@@ -266,7 +266,7 @@ const Post = () => {
           component={labelData.link ? MUILink : 'span'}
           style={{ marginRight: 8, marginTop: 8 }}
         />
-      )
+      ) : null
     })
 
   // Start fetching post data
