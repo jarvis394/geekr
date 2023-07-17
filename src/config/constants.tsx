@@ -203,15 +203,15 @@ export const DONATION_TITLES_MAP = {
 export const HABR_BASE_REGEXP = /(habr|m\.habr)\.com\/(ru|en)\/(.+)/
 export const HABR_LINKS_REPLACE_MAP = [
   {
-    regexp: /company\/?(.+)\/blog\/([0-9]+)[/]?/,
+    regexp: /companies\/?(.+)\/articles\/([0-9]+)[\/]?,
     to: '/company/[0]/blog/[1]',
   },
   {
-    regexp: /post\/?(.+)[/]?/,
+    regexp: /articles\/?(.+)[\/]?,
     to: '/post/[0]',
   },
   {
-    regexp: /news\/t\/?(.+)[/]?/,
+    regexp: /news\/t\/?(.+)[\/]?/,
     to: '/post/[0]',
   },
 ]
