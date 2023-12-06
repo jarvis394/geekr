@@ -19,8 +19,6 @@ export const APP_VERSION = 'v2'
 
 export const API_URL = 'https://habr.com/kek/'
 export const API_TOKEN_URL = 'https://geekr-lambda.vercel.app/api/' // 'https://habra.jarvis394.ml/'
-export const MATOMO_SERVER_URL = 'https://matomo.jarvis394.ml/'
-export const MATOMO_SITE_ID = 2
 export const SENTRY_DSN =
   'https://a2e39aec97c844269660ef4e0db0c264@o929832.ingest.sentry.io/5878570'
 
@@ -203,15 +201,15 @@ export const DONATION_TITLES_MAP = {
 export const HABR_BASE_REGEXP = /(habr|m\.habr)\.com\/(ru|en)\/(.+)/
 export const HABR_LINKS_REPLACE_MAP = [
   {
-    regexp: /companies\/?(.+)\/articles\/([0-9]+)[\/]?,
+    regexp: /companies\/?(.+)\/articles\/([0-9]+)[/]?/,
     to: '/company/[0]/blog/[1]',
   },
   {
-    regexp: /articles\/?(.+)[\/]?,
+    regexp: /articles\/?(.+)[/]?/,
     to: '/post/[0]',
   },
   {
-    regexp: /news\/t\/?(.+)[\/]?/,
+    regexp: /news\/t\/?(.+)[/]?/,
     to: '/post/[0]',
   },
 ]

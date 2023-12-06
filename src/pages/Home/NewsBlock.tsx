@@ -74,52 +74,51 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const NewsItem = React.memo(
-  ({ data }: { data: Post }): React.ReactElement => {
-    const classes = useStyles()
-    const ts = dayjs(data.timePublished).calendar()
-    const commentsCount = numToWord.convert(data.statistics.commentsCount, {
-      currency: {
-        currencyNameCases: ['комментарий', 'комментария', 'комментариев'],
-        fractionalPartNameCases: ['', '', ''],
-        currencyNounGender: {
-          integer: 0,
-          fractionalPart: 0,
-        },
+// eslint-disable-next-line react/display-name
+const NewsItem = React.memo(({ data }: { data: Post }): React.ReactElement => {
+  const classes = useStyles()
+  const ts = dayjs(data.timePublished).calendar()
+  const commentsCount = numToWord.convert(data.statistics.commentsCount, {
+    currency: {
+      currencyNameCases: ['комментарий', 'комментария', 'комментариев'],
+      fractionalPartNameCases: ['', '', ''],
+      currencyNounGender: {
+        integer: 0,
+        fractionalPart: 0,
       },
-      showNumberParts: {
-        integer: true,
-        fractional: false,
-      },
-      convertNumbertToWords: {
-        integer: false,
-        fractional: false,
-      },
-    })
+    },
+    showNumberParts: {
+      integer: true,
+      fractional: false,
+    },
+    convertNumbertToWords: {
+      integer: false,
+      fractional: false,
+    },
+  })
 
-    return (
-      <Link to={'/post/' + data.id} className={classes.article}>
-        <Grid container direction="row" className={classes.item}>
-          <Grid container direction="column">
-            <Grid item>
-              <FormattedText className={classes.title}>
-                {data.titleHtml}
-              </FormattedText>
-            </Grid>
-            <Grid container direction="row" alignItems="center">
-              <Typography className={classes.ts}>{ts}</Typography>
-              <span className={classes.dot}>•</span>
-              <Typography className={classes.ts}>{commentsCount}</Typography>
-            </Grid>
-          </Grid>
+  return (
+    <Link to={'/post/' + data.id} className={classes.article}>
+      <Grid container direction="row" className={classes.item}>
+        <Grid container direction="column">
           <Grid item>
-            <RightIcon color="disabled" />
+            <FormattedText className={classes.title}>
+              {data.titleHtml}
+            </FormattedText>
+          </Grid>
+          <Grid container direction="row" alignItems="center">
+            <Typography className={classes.ts}>{ts}</Typography>
+            <span className={classes.dot}>•</span>
+            <Typography className={classes.ts}>{commentsCount}</Typography>
           </Grid>
         </Grid>
-      </Link>
-    )
-  }
-)
+        <Grid item>
+          <RightIcon color="disabled" />
+        </Grid>
+      </Grid>
+    </Link>
+  )
+})
 
 const NewsBlock = ({ hubAlias }: { hubAlias?: string }) => {
   const classes = useStyles()
@@ -178,3 +177,4 @@ const NewsBlock = ({ hubAlias }: { hubAlias?: string }) => {
 }
 
 export default React.memo(NewsBlock)
+

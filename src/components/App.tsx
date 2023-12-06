@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
-import createMuiTheme, { Theme } from '@material-ui/core/styles/createMuiTheme'
+import createMuiTheme, { Theme } from '@material-ui/core/styles/createTheme'
 import { fade, makeStyles } from '@material-ui/core/styles/'
 import AppRouter from './Router'
 import AppBar from './blocks/AppBar'
@@ -20,7 +20,6 @@ import ScrollRestoration from 'react-scroll-restoration'
 import { SnackbarProvider } from 'notistack'
 import BottomBar from './blocks/BottomBar'
 import useTitleChange from 'src/hooks/useTitleChange'
-import useAnalytics from 'src/hooks/useAnalytics'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import useAutoChangeTheme from 'src/hooks/useAutoChangeTheme'
 import SideNavigationDrawer from './blocks/SideNavigationDrawer'
@@ -144,7 +143,7 @@ const useStyles = makeStyles({
   }),
 })
 
-const App = () => {
+const App: React.FC = () => {
   const storeTheme = useSelector((state) => state.settings.theme)
   const theme = React.useMemo(() => createMuiTheme(storeTheme), [storeTheme])
   const route = useRoute()
@@ -155,7 +154,6 @@ const App = () => {
 
   useTitleChange()
   useAutoChangeTheme()
-  useAnalytics()
   useUserDataFetch()
   useGetDownvoteReasons()
 
