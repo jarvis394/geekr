@@ -28,28 +28,28 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const Statistics = () => {
-  const user = useSelector((store) => store.profile.profile.card.data)
+  const user = useSelector((store) => store.profile.profile.card?.data)
   const classes = useStyles()
   const items = [
-    { field: 'Карма', number: user.scoreStats.score, colored: true },
-    { field: 'Рейтинг', number: user.rating },
+    { field: 'Карма', number: user?.scoreStats.score, colored: true },
+    { field: 'Рейтинг', number: user?.rating },
   ]
 
-  if (user.ratingPos) {
+  if (user?.ratingPos) {
     items.push({ field: 'Позиция', number: user.ratingPos })
   }
 
   return (
-    <Grid className={classes.headerContainer} container justify="center">
+    <Grid className={classes.headerContainer} container justifyContent="center">
       {items.map((e, i) => (
         <div key={i} className={classes.headerColumn}>
           <Typography className={classes.headerTitle}>
             {e.field.toUpperCase()}
           </Typography>
           {e.colored ? (
-            <GreenRedNumber number={e.number}>
+            <GreenRedNumber number={e.number || 0}>
               <Typography className={classes.headerNumber}>
-                {e.number > 0 ? '+' : ''}
+                {(e.number || 0) > 0 ? '+' : ''}
                 {e.number}
               </Typography>
             </GreenRedNumber>

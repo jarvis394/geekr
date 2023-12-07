@@ -82,9 +82,11 @@ const Hubs = () => {
   const isFetched = useSelector((state) => state.hubs.fetched)
   const fetchError = useSelector((state) => state.hubs.error)
   const pagesCount = useSelector((state) => state.hubs.data.pagesCount)
+  // TODO: fix types
+  //@ts-expect-error
   const data = useSelector((state) => state.hubs.data.pages[currentPage])
   const storeSearchResults = useSelector((state) => state.hubs.searchResults)
-  const inputRef = useRef<HTMLInputElement>()
+  const inputRef = useRef<HTMLInputElement>(null)
   const searchParams = useQuery()
   const query = searchParams.get('q')
   const headerText = query ? '"' + query + '"' : 'Хабы'
@@ -105,7 +107,7 @@ const Hubs = () => {
     return true
   }
 
-  const handlePagination = (_: never, i: number) => {
+  const handlePagination = (_: any, i: number) => {
     if (i === currentPage) return
     history.replace('/hubs/p/' + i)
   }

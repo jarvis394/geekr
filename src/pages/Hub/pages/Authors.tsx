@@ -20,6 +20,11 @@ import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  list: {
     backgroundColor: getContrastPaperColor(theme),
     paddingBottom: 0,
     marginBottom: theme.spacing(2),
@@ -111,7 +116,7 @@ const Authors = () => {
   const history = useHistory()
   const location = useLocation()
 
-  const handlePagination = (_, i) => {
+  const handlePagination = (_: any, i: string | number) => {
     if (i === currentPage) return
     history.replace('/hub/' + alias + '/authors/p/' + i, {
       from: location.pathname,
@@ -124,25 +129,29 @@ const Authors = () => {
 
   return (
     <OutsidePage headerText="Авторы" hidePositionBar disableShrinking>
-      <List className={classes.root}>
-        {fetchState === FetchingState.Fetching &&
-          [...new Array(12)].map((_, i) => (
-            <HubAuthorListItemSkeleton key={i} />
-          ))}
-        {fetchState === FetchingState.Fetched &&
-          data.authorIds.map((e, i) => (
-            <Item key={i} data={data.authorRefs[e]} />
-          ))}
-        {fetchError && <ErrorComponent message="Не удалось получить авторов" />}
-      </List>
-      {pagesCount && (
-        <Pagination
-          disabled={!data}
-          handleChange={handlePagination}
-          steps={pagesCount}
-          currentStep={currentPage}
-        />
-      )}
+      <div className={classes.root}>
+        <List className={classes.list}>
+          {fetchState === FetchingState.Fetching &&
+            [...new Array(12)].map((_, i) => (
+              <HubAuthorListItemSkeleton key={i} />
+            ))}
+          {fetchState === FetchingState.Fetched &&
+            data?.authorIds.map((e, i) => (
+              <Item key={i} data={data.authorRefs[e]} />
+            ))}
+          {fetchError && (
+            <ErrorComponent message="Не удалось получить авторов" />
+          )}
+        </List>
+        {pagesCount && (
+          <Pagination
+            disabled={!data}
+            handleChange={handlePagination}
+            steps={pagesCount}
+            currentStep={currentPage}
+          />
+        )}
+      </div>
     </OutsidePage>
   )
 }

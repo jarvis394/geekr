@@ -25,7 +25,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Details = ({ title, children }) => {
+const Details: React.FC<React.PropsWithChildren<{ title: string }>> = ({
+  title,
+  children,
+}) => {
   const classes = useStyles()
   return (
     <div className={classes.root}>

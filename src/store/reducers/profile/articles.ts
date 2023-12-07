@@ -12,6 +12,8 @@ const initialState = {
   },
 }
 
+// TODO: fix types
+//@ts-expect-error
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case PROFILE_ARTICLES + 'FETCH': {
@@ -21,15 +23,17 @@ export default (state = initialState, { type, payload }) => {
     case PROFILE_ARTICLES + 'FETCH_FULFILLED': {
       const { page, pagesCount, data } = payload
 
-      for (const id in data.articleRefs) {
-        data.articleRefs[id].postFirstImage = getPostFirstImage(
-          data.articleRefs[id]
+      for (const id in data.publicationRefs) {
+        data.publicationRefs[id].postFirstImage = getPostFirstImage(
+          data.publicationRefs[id]
         )
       }
 
+      // TODO: fix types
+      //@ts-expect-error
       state.data.pages[page] = {
-        articleIds: data.articleIds,
-        articleRefs: data.articleRefs,
+        publicationIds: data.publicationIds,
+        publicationRefs: data.publicationRefs,
         lastUpdated: Date.now(),
       }
       state.data.pagesCount = pagesCount

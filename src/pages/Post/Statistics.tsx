@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { alpha, makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import { MIDDLE_WIDTH, MIN_WIDTH } from 'src/config/constants'
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
@@ -16,7 +16,6 @@ import {
   ButtonBase,
   CircularProgress,
   Fade,
-  fade,
   FormControlLabel,
   IconButton,
   Radio,
@@ -26,7 +25,7 @@ import {
   Typography,
   useTheme,
 } from '@material-ui/core'
-import { useHistory, useLocation } from 'react-router'
+import { useHistory } from 'react-router'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import BottomDrawer from 'src/components/blocks/BottomDrawer'
@@ -43,9 +42,9 @@ import APIError from 'src/interfaces/APIError'
 import getScoreTotal from 'src/utils/getScoreTotal'
 
 const getScoreColor = (score: number, theme: Theme) => {
-  if (score === 0) return theme.palette.background.paper
-  else if (score > 0) return theme.palette.success.main
+  if (score > 0) return theme.palette.success.main
   else if (score < 0) return theme.palette.error.main
+  return theme.palette.background.paper
 }
 
 const SEPARATE_COMMENTS_BUTTON_WIDTH = 1416
@@ -195,19 +194,19 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     // Thumbs Up
     '&:nth-child(1)': {
-      backgroundColor: fade(theme.palette.success.light, 0.7),
+      backgroundColor: alpha(theme.palette.success.light, 0.7),
       marginRight: theme.spacing(1),
       '&:disabled': {
-        backgroundColor: fade(theme.palette.success.light, 0.4),
+        backgroundColor: alpha(theme.palette.success.light, 0.4),
         color: theme.palette.text.disabled,
       },
     },
     // Thumbs Down
     '&:nth-child(2)': {
-      backgroundColor: fade(theme.palette.error.light, 0.7),
+      backgroundColor: alpha(theme.palette.error.light, 0.7),
       marginLeft: theme.spacing(1),
       '&:disabled': {
-        backgroundColor: fade(theme.palette.error.light, 0.4),
+        backgroundColor: alpha(theme.palette.error.light, 0.4),
         color: theme.palette.text.disabled,
       },
     },
@@ -222,7 +221,7 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.action.hover + ' !important',
   },
   favoritesCard: {
-    background: fade(theme.palette.primary.main, 0.5),
+    background: alpha(theme.palette.primary.main, 0.5),
     transitionDuration: theme.transitions.duration.complex.toString() + 'ms',
     '&:disabled': {
       pointerEvents: 'none',
@@ -231,7 +230,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   favoritesCardActive: {
-    background: fade(theme.palette.primary.main, 0.7),
+    background: alpha(theme.palette.primary.main, 0.7),
     transitionDuration: theme.transitions.duration.complex.toString() + 'ms',
     '&:disabled': {
       pointerEvents: 'none',
@@ -240,7 +239,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   commentsCard: {
-    background: fade(theme.palette.background.paper, 0.7),
+    background: alpha(theme.palette.background.paper, 0.7),
     boxShadow: '0 0 0 2px inset ' + theme.palette.primary.main,
   },
 }))
@@ -277,7 +276,7 @@ const useCardStyles = makeStyles((theme) => ({
     fontSize: 16,
     lineHeight: '16px',
     fontWeight: 500,
-    color: fade(theme.palette.text.primary, 0.5),
+    color: alpha(theme.palette.text.primary, 0.5),
   },
   spinner: {
     width: '32px !important',
@@ -355,8 +354,11 @@ const ScoreCard: React.FC<{
   onClick: (d: 'down' | 'up', reason?: string) => void
   isFetchingScoreResponse: boolean
   voteState: {
-    canVote: Post['relatedData']['canVote']
-    vote: Post['relatedData']['vote']
+    canVote: boolean
+    vote: {
+      value: number | null
+      voteTimeExpired: string | null
+    }
     voteByDefault: boolean
   }
   setDownvoteReasonsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -405,7 +407,7 @@ const ScoreCard: React.FC<{
     <>
       <Card
         icon={<ThumbsUpDownIcon />}
-        style={{ background: fade(getScoreColor(score, theme), 0.7) }}
+        style={{ background: alpha(getScoreColor(score, theme), 0.7) }}
         amount={score > 0 ? '+' + formatNumber(score) : formatNumber(score)}
         text={'рейтинга'}
         onClick={() => setScoreCardDrawerOpen(true)}
@@ -499,22 +501,19 @@ const Statistics = ({ post }: { post: Post }) => {
   const { id, titleHtml: title, statistics } = post
   const { commentsCount, readingCount } = statistics
   const [isScoreCardDrawerOpen, setScoreCardDrawerOpen] = useState(false)
-  const [isDownvoteReasonsDrawerOpen, setDownvoteReasonsDrawerOpen] = useState(
-    false
-  )
-  const [currentDownvoteReason, setCurrentDownvoteReason] = useState<string>(
-    '1'
-  )
+  const [isDownvoteReasonsDrawerOpen, setDownvoteReasonsDrawerOpen] =
+    useState(false)
+  const [currentDownvoteReason, setCurrentDownvoteReason] =
+    useState<string>('1')
   const authData = useSelector((store) => store.auth.authData.data)
   const authorizedRequestData = useSelector(
     (store) => store.auth.authorizedRequestData
   )
   const [isBookmarked, setBookmarkState] = useState(
-    post?.relatedData?.bookmarked
+    post?.relatedData?.bookmarked || false
   )
-  const [isFetchingBookmarkResponse, setIsFetchingBookmarkResponse] = useState(
-    false
-  )
+  const [isFetchingBookmarkResponse, setIsFetchingBookmarkResponse] =
+    useState(false)
   const [voteState, setVoteState] = useState({
     canVote: post?.relatedData?.canVote || false,
     vote: post?.relatedData?.vote || {
@@ -526,7 +525,12 @@ const Statistics = ({ post }: { post: Post }) => {
   const [isFetchingScoreResponse, setIsFetchingScoreResponse] = useState(false)
   const classes = useStyles()
   const classesDesktop = useDesktopStyles()
-  const { total: totalScore, negative, positive, score } = getScoreTotal({
+  const {
+    total: totalScore,
+    negative,
+    positive,
+    score,
+  } = getScoreTotal({
     post,
     voteState,
   })
@@ -547,7 +551,7 @@ const Statistics = ({ post }: { post: Post }) => {
   const share = () => {
     const shareData = {
       title,
-      url: process.env.PUBLIC_URL + '/post/' + id,
+      url: import.meta.url + '/post/' + id,
     }
 
     navigator.share(shareData).catch((e) => {
@@ -567,7 +571,7 @@ const Statistics = ({ post }: { post: Post }) => {
       setIsFetchingBookmarkResponse(true)
       const response = await setArticleBookmark({
         mode: isBookmarked ? 'remove' : 'add',
-        authData: authorizedRequestData,
+        authData: authorizedRequestData || undefined,
         id: post.id,
       })
       if (response.ok) {
@@ -594,7 +598,7 @@ const Statistics = ({ post }: { post: Post }) => {
       setIsFetchingScoreResponse(true)
       const response = await setArticleVote({
         mode,
-        authData: authorizedRequestData,
+        authData: authorizedRequestData || undefined,
         id: post.id,
         reason,
       })
@@ -605,7 +609,7 @@ const Statistics = ({ post }: { post: Post }) => {
           voteByDefault: false,
         })
       } else if (
-        ((response as unknown) as APIError)?.additional[0] ===
+        (response as unknown as APIError)?.additional[0] ===
         'POST_VOTE_DUPLICATE'
       ) {
         enqueueSnackbar('Повторное голосование запрещено', {
@@ -788,7 +792,7 @@ const Statistics = ({ post }: { post: Post }) => {
             value={currentDownvoteReason}
             onChange={handleDownvoteReasonChange}
           >
-            {downvoteReasons.map((e) => (
+            {downvoteReasons?.map((e) => (
               <FormControlLabel
                 value={e.id}
                 key={e.id}

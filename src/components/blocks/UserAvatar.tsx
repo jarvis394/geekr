@@ -12,8 +12,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const UserAvatar: React.FC<{
-  src: string
-  alias: string
+  src?: string
+  alias?: string
   className?: string
 }> = ({ src, alias, className, ...props }) => {
   const habrStubPaths = [

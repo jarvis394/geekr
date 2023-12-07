@@ -8,7 +8,7 @@ import {
   Fade,
 } from '@material-ui/core'
 import { ComponentWithUserParams } from './index'
-import { makeStyles, fade } from '@material-ui/core/styles'
+import { makeStyles, alpha } from '@material-ui/core/styles'
 import { useDispatch } from 'react-redux'
 import { getProfileHubs } from 'src/store/actions/profile'
 import { useSelector } from 'src/hooks'
@@ -31,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
   },
   itemChip: {
-    background: fade(theme.palette.primary.main, 0.1),
+    background: alpha(theme.palette.primary.main, 0.1),
     borderRadius: 4,
-    color: fade(theme.palette.text.primary, 0.8),
+    color: alpha(theme.palette.text.primary, 0.8),
     fontWeight: 500,
   },
   holder: {
@@ -84,17 +84,19 @@ const Hubs = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const dispatch = useDispatch()
   const [showAll, setShowAll] = useState<boolean>(false)
   const classes = useStyles()
-  const profile = useSelector((store) => store.profile.profile.card.data)
-  const hubs = useSelector((store) => store.profile.profile.hubs.data)
-  const isFetched = useSelector((store) => store.profile.profile.hubs.fetched)
-  const isFetching = useSelector((store) => store.profile.profile.hubs.fetching)
-  const fetchError = useSelector((store) => store.profile.profile.hubs.error)
+  const profile = useSelector((store) => store.profile.profile.card?.data)
+  const hubs = useSelector((store) => store.profile.profile.hubs?.data)
+  const isFetched = useSelector((store) => store.profile.profile.hubs?.fetched)
+  const isFetching = useSelector(
+    (store) => store.profile.profile.hubs?.fetching
+  )
+  const fetchError = useSelector((store) => store.profile.profile.hubs?.error)
   const shouldCollapse = hubs ? hubs.hubIds.length > 25 : false
 
   useEffect(() => {
     setShowAll(false)
-    if (!isFetched) dispatch(getProfileHubs(profile.alias))
-  }, [profile.alias, dispatch, isFetched])
+    if (!isFetched) dispatch(getProfileHubs(profile?.alias || ''))
+  }, [profile?.alias, dispatch, isFetched])
 
   if (fetchError)
     return (
@@ -115,6 +117,8 @@ const Hubs = ({ classes: additionalClasses }: ComponentWithUserParams) => {
       >
         <Grid spacing={1} container className={classes.holder}>
           {hubs.hubIds.map((e, i) => (
+            // TODO: fix types
+            //@ts-expect-error
             <HubsItem data={hubs.hubRefs[e]} key={i} />
           ))}
         </Grid>

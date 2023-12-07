@@ -36,21 +36,23 @@ const useStyles = makeStyles((theme) => ({
 const Companies = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const profile = useSelector((store) => store.profile.profile.card.data)
-  const companies = useSelector((store) => store.profile.profile.companies.data)
+  const profile = useSelector((store) => store.profile.profile.card?.data)
+  const companies = useSelector(
+    (store) => store.profile.profile.companies?.data
+  )
   const isFetched = useSelector(
-    (store) => store.profile.profile.companies.fetched
+    (store) => store.profile.profile.companies?.fetched
   )
   const isFetching = useSelector(
-    (store) => store.profile.profile.companies.fetching
+    (store) => store.profile.profile.companies?.fetching
   )
   const fetchError = useSelector(
-    (store) => store.profile.profile.companies.error
+    (store) => store.profile.profile.companies?.error
   )
 
   useEffect(() => {
-    dispatch(getProfileCompanies(profile.alias))
-  }, [profile.alias, dispatch])
+    dispatch(getProfileCompanies(profile?.alias || ''))
+  }, [profile?.alias, dispatch])
 
   const Item = ({ data }: { data: Company }) => (
     <ListItem
@@ -88,6 +90,8 @@ const Companies = ({ classes: additionalClasses }: ComponentWithUserParams) => {
         Подписан на компании
       </Typography>
       {companies.companyIds.map((e, i) => (
+        // TODO: fix types
+        //@ts-expect-error
         <Item data={companies.companyRefs[e]} key={i} />
       ))}
     </div>

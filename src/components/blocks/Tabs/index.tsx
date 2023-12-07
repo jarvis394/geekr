@@ -10,14 +10,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function LinkTab({ isLink, ...props }) {
+function LinkTab({ isLink = true, ...props }) {
   return <Tab component={isLink ? Link : 'div'} {...props} />
 }
 const LinkTabMemoized = React.memo(LinkTab)
 
 export interface TabObject {
   label: React.ReactElement | string
-  to: () => string
+  to: () => string | null
   match: string[] | string | RegExp | RegExp[]
   tab: string
 }

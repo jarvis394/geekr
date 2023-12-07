@@ -10,8 +10,8 @@ import { GET_POSTS, typeCorrespondings } from './types'
 
 interface FetchBaseInterface<T> {
   state: FetchingState
-  fetchError: string
-  data: T
+  fetchError: string | null
+  data: T | null
 }
 
 interface State {
@@ -36,6 +36,8 @@ const initialState: State = {
   companies: defaultFetchData,
 }
 
+// TODO: fix types
+//@ts-expect-error
 export default (reducerState = initialState, { type, payload }): State => {
   const field = typeCorrespondings[type.split('_').slice(0, 3).join('_')]
 
@@ -51,9 +53,9 @@ export default (reducerState = initialState, { type, payload }): State => {
       }
     } else if (type.endsWith('FETCH_FULFILLED')) {
       if (field === typeCorrespondings[GET_POSTS]) {
-        for (const id in payload.articleRefs) {
-          payload.articleRefs[id].postFirstImage = getPostFirstImage(
-            payload.articleRefs[id]
+        for (const id in payload.publicationRefs) {
+          payload.publicationRefs[id].postFirstImage = getPostFirstImage(
+            payload.publicationRefs[id]
           )
         }
       }

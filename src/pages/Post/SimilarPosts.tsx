@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Typography, Paper } from '@material-ui/core'
-import { makeStyles, fade } from '@material-ui/core/styles'
-import { Posts } from 'src/interfaces'
+import { makeStyles, alpha } from '@material-ui/core/styles'
 import DensePostsSkeleton from 'src/components/skeletons/DensePosts'
 import getSimilar from 'src/api/getSimilar'
 import DensePostItem from './DensePostItem'
 import { MIN_WIDTH } from 'src/config/constants'
+import { PostsDeprecated } from 'src/interfaces/Posts'
 
 interface Props {
   id: number | string
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(1.5),
     marginTop: theme.spacing(0.5),
     '&:not(:first-child)': {
-      borderTop: '1px solid ' + fade(theme.palette.divider, 0.05),
+      borderTop: '1px solid ' + alpha(theme.palette.divider, 0.05),
     },
     '&:first-child': {
       paddingTop: theme.spacing(1),
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 const SimilarPosts = (props: Props) => {
   const { id } = props
   const classes = useStyles()
-  const [data, setData] = useState<Posts>()
+  const [data, setData] = useState<PostsDeprecated>()
   const [error, setError] = useState<string>()
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const SimilarPosts = (props: Props) => {
     get()
   }, [id])
 
-  return data && data.articleIds.length !== 0 ? (
+  return data && data?.articleIds?.length !== 0 ? (
     <Paper elevation={0} className={classes.root}>
       <Typography className={classes.header}>Похожие статьи</Typography>
       {error && (
@@ -79,7 +79,7 @@ const SimilarPosts = (props: Props) => {
       <div>
         {!data && <DensePostsSkeleton n={3} />}
         {data &&
-          data.articleIds.map((e, i) => (
+          data?.articleIds?.map((e, i) => (
             <DensePostItem
               className={classes.postItem}
               post={data.articleRefs[e]}

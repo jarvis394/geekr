@@ -1,13 +1,7 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import {
-  ButtonBase,
-  IconButton,
-  Typography,
-} from '@material-ui/core'
-import {
-  RUVDS_MODAL_WAS_SHOWN,
-} from 'src/config/constants'
+import { ButtonBase, IconButton, Typography } from '@material-ui/core'
+import { RUVDS_MODAL_WAS_SHOWN } from 'src/config/constants'
 import RUVDSLogo from 'src/components/svg/RUVDSLogo'
 import { Icon20Clear } from '@vkontakte/icons'
 import { Icon16Chevron } from '@vkontakte/icons'
@@ -81,7 +75,7 @@ const RUVDSPromoBlock = () => {
     setIsHidden(true)
   }
 
-  if (isHidden) return null 
+  if (isHidden) return null
 
   return (
     <div className={classes.root}>

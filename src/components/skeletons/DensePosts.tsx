@@ -63,7 +63,7 @@ const DensePostsSkeleton = ({ n = 3 }: { n?: number }) => {
                   .fill(null)
                   .map((_, i) => (
                     <Grid
-                      justify="center"
+                      justifyContent="center"
                       style={{ width: '25%' }}
                       container
                       key={i}

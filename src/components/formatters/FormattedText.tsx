@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {
   makeStyles,
-  fade,
+  alpha,
   darken,
   lighten,
   Theme,
@@ -55,7 +55,7 @@ const useStyles = makeStyles<
       '-webkit-tap-highlight-color': 'transparent !important',
     },
     '& a:hover': {
-      color: fade(theme.palette.primary.main, 0.8),
+      color: alpha(theme.palette.primary.main, 0.8),
       textDecoration: 'underline',
     },
     '& h1+p, h2+p, h3+p, h4+p': {
@@ -249,7 +249,7 @@ const useStyles = makeStyles<
     marginTop: theme.spacing(4),
   },
   abbr: {
-    borderBottom: '1px dotted ' + fade(theme.palette.divider, 0.5),
+    borderBottom: '1px dotted ' + alpha(theme.palette.divider, 0.5),
     cursor: 'help',
     textDecoration: 'none',
   },
@@ -279,7 +279,7 @@ const FormattedText: React.FC<{
   )
   const options: HTMLReactParserOptions = {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
+    //@ts-expect-error
     replace: ({ name, children, attribs }): void | React.ReactElement => {
       if (name === '&nbsp;') {
         return <> </>
@@ -302,7 +302,9 @@ const FormattedText: React.FC<{
         )
       }
       if (name === 'img') {
-        const imgClasses = attribs.class ? attribs.class.split(' ') : []
+        const imgClasses: string[] = attribs.class
+          ? attribs.class.split(' ')
+          : []
         if (attribs['data-tex']) {
           const formula = attribs['alt'].slice(1, attribs['alt'].length - 1)
           return (
@@ -352,19 +354,23 @@ const FormattedText: React.FC<{
       }
       if (name === 'div' && attribs.class === 'spoiler') {
         const title: string = children.find(
-          (e) => e.attribs && e.attribs.class === 'spoiler_title'
+          (e: { attribs: { class: string } }) =>
+            e.attribs && e.attribs.class === 'spoiler_title'
         ).children[0]?.data
         const data = children.find(
-          (e) => e.attribs && e.attribs.class === 'spoiler_text'
+          (e: { attribs: { class: string } }) =>
+            e.attribs && e.attribs.class === 'spoiler_text'
         ).children
 
         return <Spoiler title={title}>{domToReact(data, options)}</Spoiler>
       }
       if (name === 'details' && attribs.class === 'spoiler') {
-        const title: string = children.find((e) => e.name === 'summary')
-          .children[0]?.data
+        const title: string = children.find(
+          (e: { name: string }) => e.name === 'summary'
+        ).children[0]?.data
         const data = children.find(
-          (e) => e.attribs && e.attribs.class === 'spoiler__content'
+          (e: { attribs: { class: string } }) =>
+            e.attribs && e.attribs.class === 'spoiler__content'
         ).children
 
         return <Details title={title}>{domToReact(data, options)}</Details>

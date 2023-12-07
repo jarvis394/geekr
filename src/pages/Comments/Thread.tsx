@@ -40,14 +40,14 @@ const Thread: React.FC = () => {
   const filteredComments = useMemo(() => {
     const a = comments?.filter(
       (e) =>
-        e.threadLevel === rootComment.threadLevel + 1 ||
-        e.level === THREAD_LEVEL * (rootComment.threadLevel + 1) - 1
+        e.threadLevel === (rootComment?.threadLevel || 0) + 1 ||
+        e.level === THREAD_LEVEL * ((rootComment?.threadLevel || 0) + 1) - 1
     )
     const rootIndex = a?.findIndex((e) => e.id.toString() === threadId)
     const lastIndex = a?.findIndex(
       (e, i) =>
-        e.level === THREAD_LEVEL * (rootComment.threadLevel + 1) - 1 &&
-        i > rootIndex
+        e.level === THREAD_LEVEL * ((rootComment?.threadLevel || 0) + 1) - 1 &&
+        i > (rootIndex || 0)
     )
     const slice = a?.slice(rootIndex, lastIndex)
     return slice
@@ -70,7 +70,7 @@ const Thread: React.FC = () => {
           <p>{commentsFetchingError}</p>
         )}
         {shouldShowComments &&
-          filteredComments.map((e, i) => (
+          filteredComments?.map((e, i) => (
             <Comment
               postId={id}
               isLastInFilteredRootThread={i === filteredComments.length - 1}
@@ -78,7 +78,9 @@ const Thread: React.FC = () => {
                 ...e,
                 isThreadStart: i === 0 ? false : e.isThreadStart,
                 level:
-                  e.level + 1 - THREAD_LEVEL * (rootComment.threadLevel + 1),
+                  e.level +
+                  1 -
+                  THREAD_LEVEL * ((rootComment?.threadLevel || 0) + 1),
               }}
               key={e.id}
             />

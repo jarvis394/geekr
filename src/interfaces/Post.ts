@@ -63,7 +63,7 @@ export default interface Post {
     score: number
     votesCount: number
   }
-  tags: { titleHtml: string }[]
+  tags: Array<{ titleHtml: string }>
   textHtml: string
   timePublished: string
   titleHtml: string

@@ -37,6 +37,8 @@ const initialState: State = {
   downvoteReasons: initialData,
 }
 
+// TODO: fix types
+//@ts-expect-error
 export default (storeState = initialState, { type, payload }): State => {
   switch (type) {
     /** New post is being fetched, so we need to reset `comments` and `company` data */
@@ -87,8 +89,8 @@ export default (storeState = initialState, { type, payload }): State => {
       return {
         ...storeState,
         comments: {
-          state: FetchingState.Fetching,
           ...initialCommentsData,
+          state: FetchingState.Fetching,
         },
       }
 
@@ -156,8 +158,8 @@ export default (storeState = initialState, { type, payload }): State => {
       return {
         ...storeState,
         downvoteReasons: {
-          state: FetchingState.Fetching,
           ...initialData,
+          state: FetchingState.Fetching,
         },
       }
 

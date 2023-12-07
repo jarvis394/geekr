@@ -1,4 +1,4 @@
 export default interface AuthorizedRequestParams {
-  connectSID: string
+  connectSID?: string
   csrfToken?: string
 }

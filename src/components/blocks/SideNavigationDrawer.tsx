@@ -8,7 +8,7 @@ import {
   Typography,
   useTheme,
 } from '@material-ui/core'
-import { makeStyles, fade } from '@material-ui/core/styles'
+import { makeStyles, alpha } from '@material-ui/core/styles'
 import {
   APP_BAR_HEIGHT,
   makeNavigationTabs,
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     flexDirection: 'column',
     cursor: 'pointer',
-    '-webkit-tap-highlight-color': fade(theme.palette.background.paper, 0.3),
+    '-webkit-tap-highlight-color': alpha(theme.palette.background.paper, 0.3),
     userSelect: 'none',
   },
   logo: {
@@ -105,7 +105,7 @@ const useNavButtonStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     color: theme.palette.text.secondary,
     '&:hover': {
-      color: fade(theme.palette.text.primary, 0.75),
+      color: alpha(theme.palette.text.primary, 0.75),
     },
   },
   icon: {
@@ -113,7 +113,7 @@ const useNavButtonStyles = makeStyles((theme) => ({
   },
   match: {
     color: theme.palette.text.primary + ' !important',
-    background: fade(theme.palette.text.primary, 0.1),
+    background: alpha(theme.palette.text.primary, 0.1),
   },
   label: {
     transitionDuration: '0.1s',
@@ -132,13 +132,13 @@ const useProfileButtonStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     padding: theme.spacing(1, 1.2),
     textDecoration: 'none !important',
-    background: fade(theme.palette.text.primary, 0.075),
+    background: alpha(theme.palette.text.primary, 0.075),
     borderRadius: 8,
     transitionDuration: '100ms',
     transitionTimingFunction: theme.transitions.easing.easeIn,
     alignItems: 'center',
     '&:hover': {
-      background: fade(theme.palette.text.primary, 0.1),
+      background: alpha(theme.palette.text.primary, 0.1),
     },
   },
   avatar: {
@@ -267,10 +267,10 @@ const ProfileButton: React.FC = () => {
   return shouldShowUser ? (
     <>
       <ButtonBase className={classes.root} onClick={openUserMenu}>
-        <Avatar className={classes.avatar} src={userData.avatarUrl} />
+        <Avatar className={classes.avatar} src={userData?.avatarUrl} />
         <div className={classes.textHolder}>
           <Typography className={classes.fullname}>
-            {userData.fullname}
+            {userData?.fullname}
           </Typography>
         </div>
       </ButtonBase>

@@ -58,7 +58,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const List = ({ items, setItems }) => {
+const List: React.FC<{
+  items: string[]
+  setItems: (items: string[]) => (dispatch: any) => any
+}> = ({ items, setItems }) => {
   const { t } = useTranslation()
   const [selectedItem, setSelectedItem] = useState<string>()
   const [isAlertDialogOpen, setAlertDialogOpen] = useState(false)

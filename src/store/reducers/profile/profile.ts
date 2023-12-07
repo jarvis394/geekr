@@ -3,6 +3,8 @@ import { State, fieldsMap, typesMap } from './types'
 const initialState: State = {}
 fieldsMap.forEach(
   (e: string) =>
+    // TODO: fix types
+    //@ts-expect-error
     (initialState[e] = {
       data: null,
       fetching: false,
@@ -44,6 +46,8 @@ export default (
   if (!field) return state
 
   return Object.assign({}, state, {
+    // TODO: fix types
+    //@ts-expect-error
     [field]: { ...state[field], ...actionHandler(type) },
   })
 }

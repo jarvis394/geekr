@@ -1,4 +1,6 @@
 import React, { useState, useRef, MutableRefObject } from 'react'
+// TODO: fix types
+//@ts-expect-error
 import ProgressiveImage from 'react-lazy-progressive-image'
 import {
   CircularProgress,
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     verticalAlign: 'middle',
     display: 'block',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   'imgAlign-left': {
     float: 'left',
@@ -98,7 +100,7 @@ const ImagePlaceholderUnmemoized: React.FC<{
   return (
     <div
       className={classes.root}
-      style={{ aspectRatio: `auto ${style.width} / ${style.height}` }}
+      style={{ aspectRatio: `auto ${style?.width} / ${style?.height}` }}
     >
       <button onClick={handleClick} className={classes.button}>
         <Typography className={classes.title}>
@@ -165,7 +167,13 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
         </span>
       )
 
-    if (align) imageContainerClasses.push(classes['imgAlign-' + align])
+    if (align) {
+      imageContainerClasses.push(
+        // TODO: fix types
+        //@ts-expect-error
+        classes['imgAlign-' + align]
+      )
+    }
 
     return (
       <div

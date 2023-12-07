@@ -89,9 +89,13 @@ const Login = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const handleLoginSubmit = async (e) => {
+  const handleLoginSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault()
+    // TODO: fix types
+    //@ts-expect-error
     const email = e.target.email.value
+    // TODO: fix types
+    //@ts-expect-error
     const password = e.target.password.value
 
     // Get auth data with user's email and password
@@ -108,18 +112,18 @@ const Login = () => {
       })
       history.push('/')
     } else if (authDataFetchingState === FetchingState.Error) {
-      if (authDataFetchError.isAuthError) {
+      if (authDataFetchError?.isAuthError) {
         enqueueSnackbar('Неверная почта или пароль', {
           variant: 'error',
           autoHideDuration: 4000,
         })
-      } else if (authDataFetchError.isCaptchaError) {
+      } else if (authDataFetchError?.isCaptchaError) {
         enqueueSnackbar('Введите капчу', {
           variant: 'error',
           autoHideDuration: 4000,
         })
-      } else if (authDataFetchError.isUnknownAuthError) {
-        enqueueSnackbar(authDataFetchError.message, {
+      } else if (authDataFetchError?.isUnknownAuthError) {
+        enqueueSnackbar(authDataFetchError?.message, {
           variant: 'error',
           autoHideDuration: 4000,
         })

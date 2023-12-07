@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid, Paper, Typography } from '@material-ui/core'
-import { fade, makeStyles, lighten, darken } from '@material-ui/core/styles'
+import { alpha, makeStyles, lighten, darken } from '@material-ui/core/styles'
 import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
 import dayjs from 'dayjs'
@@ -23,6 +23,8 @@ const useStyles = makeStyles((theme) => ({
   postLink: {
     color: theme.palette.text.primary,
     '&:visited > p': {
+      // TODO: fix types
+      //@ts-expect-error
       color: ld[theme.palette.type + 'en'](theme.palette.text.primary, 0.4),
     },
     fontWeight: 800,
@@ -60,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     fontWeight: 600,
-    '-webkit-tap-highlight-color': fade(theme.palette.background.paper, 0.3),
+    '-webkit-tap-highlight-color': alpha(theme.palette.background.paper, 0.3),
   },
   postBottomRowItemIcon: {
     fontSize: 16,
@@ -88,13 +90,17 @@ const DensePostItem = ({
   post?: Post
   className?: string
 }) => {
+  if (!post) return
+
   const classes = useStyles()
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
   const { titleHtml: unparsedTitle, statistics } = post || {}
   const history = useHistory<OutsidePageLocationState>()
   const location = useLocation()
   const currentLocation = location.pathname
-  const ts = dayjs(post.timePublished).calendar().toLowerCase()
+  const ts = dayjs(post?.timePublished)
+    .calendar()
+    .toLowerCase()
   const {
     readingCount,
     favoritesCount,
@@ -158,13 +164,13 @@ const DensePostItem = ({
       >
         {item.coloredText ? (
           <GreenRedNumber
-            number={item.number}
+            number={item.number || 0}
             wrapperProps={{ style: { display: 'flex', alignItems: 'center' } }}
           >
             <>
               {itemIcon}
               <Typography className={classes.postBottomRowItemText}>
-                {item.number > 0 ? '+' : ''}
+                {(item.number || 0) > 0 ? '+' : ''}
                 {item.text}
               </Typography>
             </>

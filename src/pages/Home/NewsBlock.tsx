@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useEffect } from 'react'
 import { Paper, Grid, Typography, Button } from '@material-ui/core'
-import { makeStyles, fade } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
 import numToWord from 'number-to-words-ru'
 import { Link } from 'react-router-dom'
@@ -161,14 +161,14 @@ const NewsBlock = ({ hubAlias }: { hubAlias?: string }) => {
       {isFetching &&
         !fetchError &&
         [...Array(5)].map((_, i) => <NewsItemSkeleton key={i} />)}
-      {isFetched &&
-        news &&
-        news
-          // Sort news in a descending order based on their timePublished
-          .sort(
-            (a, b) => +new Date(b.timePublished) - +new Date(a.timePublished)
-          )
-          .map((e, i) => <NewsItem data={e} key={i} />)}
+      {news
+        // Sort news in a descending order based on their timePublished
+        ?.sort(
+          // TODO: fix types
+          //@ts-expect-error
+          (a, b) => +new Date(b.timePublished) - +new Date(a.timePublished)
+        )
+        ?.map((e, i) => <NewsItem data={e} key={i} />)}
       <div className={classes.linkBox}>
         <GoToNewsButton />
       </div>
@@ -177,4 +177,3 @@ const NewsBlock = ({ hubAlias }: { hubAlias?: string }) => {
 }
 
 export default React.memo(NewsBlock)
-

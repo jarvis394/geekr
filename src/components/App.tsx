@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { ThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider, alpha, makeStyles } from '@material-ui/core/styles'
 import createMuiTheme, { Theme } from '@material-ui/core/styles/createTheme'
-import { fade, makeStyles } from '@material-ui/core/styles/'
 import AppRouter from './Router'
 import AppBar from './blocks/AppBar'
 import {
@@ -93,7 +92,7 @@ const useStyles = makeStyles({
   body: ({ theme }: StyleProps) => ({
     /** Disable blue highlight for links. Can be bad for accessibility. */
     '& a': {
-      '-webkit-tap-highlight-color': fade(theme.palette.background.paper, 0.3),
+      '-webkit-tap-highlight-color': alpha(theme.palette.background.paper, 0.3),
     },
     backgroundColor: theme.palette.background.default,
     color: theme.palette.text.primary,
@@ -149,7 +148,7 @@ const App: React.FC = () => {
   const route = useRoute()
   const classes = useStyles({
     theme,
-    shouldShowAppBar: route?.shouldShowAppBar,
+    shouldShowAppBar: route?.shouldShowAppBar || false,
   })
 
   useTitleChange()

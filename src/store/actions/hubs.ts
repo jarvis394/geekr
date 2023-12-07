@@ -1,6 +1,8 @@
 import * as api from 'src/api'
 import { HUBS_PREFIX } from '../reducers/hubs/types'
 
+// TODO: fix types
+//@ts-expect-error
 export const getHubsList = (page: number) => async (dispatch, getState) => {
   const storeData = getState().hubs.data.pages[page]
   if (storeData) {
@@ -24,6 +26,8 @@ export const getHubsList = (page: number) => async (dispatch, getState) => {
   }
 }
 
+// TODO: fix types
+//@ts-expect-error
 export const getHubsSearchResults = (query: string) => async (dispatch) => {
   const type = HUBS_PREFIX + 'SEARCH_FETCH'
   dispatch({ type, payload: { query } })

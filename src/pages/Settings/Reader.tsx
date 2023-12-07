@@ -107,7 +107,7 @@ const Reader = () => {
   const theme = useTheme()
   const readerSettings = useSelector((store) => store.settings.readerSettings)
   const classes = useStyles({ readerSettings })
-  const fontSizeInputRef = useRef<HTMLInputElement>()
+  const fontSizeInputRef = useRef<HTMLInputElement>(null)
   const [isFontSizeDialogOpen, setFontSizeDialogOpen] = useState(false)
   const [isFontFamilyDialogOpen, setFontFamilyDialogOpen] = useState(false)
   const [fontFamilyRadioValue, setFontFamilyRadioValue] = useState(
@@ -130,7 +130,8 @@ const Reader = () => {
   const handleFontSizeDialogSubmit = () => {
     setReaderSettings(
       'fontSize',
-      parseInt(fontSizeInputRef.current.value, 10) || readerSettings.fontSize
+      parseInt(fontSizeInputRef.current?.value || '0', 10) ||
+        readerSettings.fontSize
     )
     setFontSizeDialogOpen(false)
   }

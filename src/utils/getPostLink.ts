@@ -5,7 +5,7 @@ export default (post: Post) => {
 
   const { id, isCorporative } = post
   const companyAlias = isCorporative
-    ? post.hubs.find((e) => e.type === 'corporative').alias
+    ? post.hubs.find((e) => e.type === 'corporative')?.alias
     : null
   return isCorporative
     ? '/company/' + companyAlias + '/blog/' + id

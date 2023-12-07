@@ -12,7 +12,7 @@ import {
 import * as userSettings from 'src/utils/userSettings'
 
 export const makeBackgroundColors = (
-  t: PaletteType | string
+  t: PaletteType
 ): {
   default: string
   paper: string
@@ -22,7 +22,7 @@ export const makeBackgroundColors = (
 })
 
 export const makePrimaryColors = (
-  t: PaletteType | string
+  t: PaletteType
 ): {
   main: string
   light: string
@@ -30,7 +30,7 @@ export const makePrimaryColors = (
 } => THEME_PRIMARY_COLORS[t]
 
 export const makeTextColors = (
-  t: PaletteType | string
+  t: PaletteType
 ): {
   primary: string
   secondary: string
@@ -38,10 +38,9 @@ export const makeTextColors = (
   hint: string
 } => THEME_TEXT_COLORS[t]
 
-export const makeType = (t: PaletteType | string): MUIPaletteType =>
-  THEME_TYPES[t]
+export const makeType = (t: PaletteType): MUIPaletteType => THEME_TYPES[t]
 
-const generateTheme = (themeType?: PaletteType | string): ThemeOptions => {
+const generateTheme = (themeType?: PaletteType): ThemeOptions => {
   const localStorageUserSettings = userSettings.get()
   const localStorageCustomThemes = localStorageUserSettings.customThemes
   const localStorageThemeType = localStorageUserSettings.themeType

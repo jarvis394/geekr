@@ -82,8 +82,8 @@ const BottomBar = () => {
     }
   }
 
-  const hideAppBarHandler = (r) => {
-    setShown(r.shouldShowAppBar)
+  const hideAppBarHandler = (r: Route) => {
+    setShown(r.shouldShowAppBar || false)
   }
 
   useEffect(() => {

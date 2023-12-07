@@ -31,16 +31,16 @@ const useStyles = makeStyles((theme) => ({
 
 export const UserAvatarAndLogin = () => {
   const classes = useStyles()
-  const user = useSelector((store) => store.profile.profile.card.data)
+  const user = useSelector((store) => store.profile.profile.card?.data)
 
   return (
     <>
       <UserAvatar
         className={classes.avatar}
-        alias={user.alias}
-        src={user.avatarUrl}
+        alias={user?.alias}
+        src={user?.avatarUrl}
       />
-      {user.fullname ? (
+      {user?.fullname ? (
         <>
           <FormattedText className={classes.login}>
             {user.fullname}
@@ -50,7 +50,7 @@ export const UserAvatarAndLogin = () => {
           </Link>
         </>
       ) : (
-        <Typography className={classes.login}>@{user.alias}</Typography>
+        <Typography className={classes.login}>@{user?.alias}</Typography>
       )}
     </>
   )

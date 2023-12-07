@@ -1,4 +1,3 @@
-import { Company, Hub } from 'src/interfaces'
 import {
   UserChildren,
   UserCompanies,

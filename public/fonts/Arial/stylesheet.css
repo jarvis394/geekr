@@ -1,43 +1,51 @@
 @font-face {
-	font-family: 'Arial';
-	src: url('Arial-ItalicMT.eot');
-	src: local('Arial Italic'), local('Arial-ItalicMT'),
-		url('Arial-ItalicMT.eot?#iefix') format('embedded-opentype'),
-		url('Arial-ItalicMT.woff') format('woff'),
-		url('Arial-ItalicMT.ttf') format('truetype');
-	font-weight: normal;
-	font-style: italic;
+  font-family: 'Arial';
+  src: url('Arial-ItalicMT.eot');
+  src:
+    local('Arial Italic'),
+    local('Arial-ItalicMT'),
+    url('Arial-ItalicMT.eot?#iefix') format('embedded-opentype'),
+    url('Arial-ItalicMT.woff') format('woff'),
+    url('Arial-ItalicMT.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
 }
 
 @font-face {
-	font-family: 'Arial';
-	src: url('Arial-BoldItalicMT.eot');
-	src: local('Arial Bold Italic'), local('Arial-BoldItalicMT'),
-		url('Arial-BoldItalicMT.eot?#iefix') format('embedded-opentype'),
-		url('Arial-BoldItalicMT.woff') format('woff'),
-		url('Arial-BoldItalicMT.ttf') format('truetype');
-	font-weight: bold;
-	font-style: italic;
+  font-family: 'Arial';
+  src: url('Arial-BoldItalicMT.eot');
+  src:
+    local('Arial Bold Italic'),
+    local('Arial-BoldItalicMT'),
+    url('Arial-BoldItalicMT.eot?#iefix') format('embedded-opentype'),
+    url('Arial-BoldItalicMT.woff') format('woff'),
+    url('Arial-BoldItalicMT.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
 }
 
 @font-face {
-	font-family: 'Arial';
-	src: url('ArialMT.eot');
-	src: local('Arial'), local('ArialMT'),
-		url('ArialMT.eot?#iefix') format('embedded-opentype'),
-		url('ArialMT.woff') format('woff'),
-		url('ArialMT.ttf') format('truetype');
-	font-weight: normal;
-	font-style: normal;
+  font-family: 'Arial';
+  src: url('ArialMT.eot');
+  src:
+    local('Arial'),
+    local('ArialMT'),
+    url('ArialMT.eot?#iefix') format('embedded-opentype'),
+    url('ArialMT.woff') format('woff'),
+    url('ArialMT.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-	font-family: 'Arial';
-	src: url('Arial-BoldMT.eot');
-	src: local('Arial Bold'), local('Arial-BoldMT'),
-		url('Arial-BoldMT.eot?#iefix') format('embedded-opentype'),
-		url('Arial-BoldMT.woff') format('woff'),
-		url('Arial-BoldMT.ttf') format('truetype');
-	font-weight: bold;
-	font-style: normal;
+  font-family: 'Arial';
+  src: url('Arial-BoldMT.eot');
+  src:
+    local('Arial Bold'),
+    local('Arial-BoldMT'),
+    url('Arial-BoldMT.eot?#iefix') format('embedded-opentype'),
+    url('Arial-BoldMT.woff') format('woff'),
+    url('Arial-BoldMT.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
 }

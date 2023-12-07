@@ -1,10 +1,10 @@
 import React from 'react'
-import { fade, makeStyles, Typography } from '@material-ui/core'
+import { alpha, makeStyles, Typography } from '@material-ui/core'
 import { useSelector } from 'src/hooks'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    background: fade(theme.palette.divider, 0.075),
+    background: alpha(theme.palette.divider, 0.075),
     padding: theme.spacing(1.5, 2),
   },
 }))

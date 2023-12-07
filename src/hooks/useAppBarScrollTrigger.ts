@@ -5,7 +5,7 @@ interface Options {
   target: Window
 }
 
-const defaultTarget = typeof window !== 'undefined' ? window : null
+const defaultTarget = window
 
 function defaultTrigger(options: Partial<Options>) {
   const { target } = options

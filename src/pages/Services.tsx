@@ -7,17 +7,19 @@ import {
 } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { blue, orange, red, green } from '@material-ui/core/colors'
-import { Icon24Fire } from '@vkontakte/icons'
-import { Icon36Newsfeed } from '@vkontakte/icons'
-import { Icon36Users3Outline } from '@vkontakte/icons'
-import { Icon28CompassOutline } from '@vkontakte/icons'
-import { Icon28WorkOutline } from '@vkontakte/icons'
-import { Icon24CubeBoxOutline } from '@vkontakte/icons'
-import { Icon24ChevronCompactRight } from '@vkontakte/icons'
-import { Icon28Users3Outline } from '@vkontakte/icons'
-import { Icon28LogoVkOutline } from '@vkontakte/icons'
+import {
+  Icon24Fire,
+  Icon36Newsfeed,
+  Icon36Users3Outline,
+  Icon28CompassOutline,
+  Icon28LogoVkOutline,
+  Icon28Users3Outline,
+  Icon24InfoCircleOutline,
+  Icon24ChevronCompactRight,
+  Icon24CubeBoxOutline,
+  Icon28WorkOutline,
+} from '@vkontakte/icons'
 import { useHistory, useLocation } from 'react-router'
-import { Icon24InfoCircleOutline } from '@vkontakte/icons'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import useMediaExtendedQuery from 'src/hooks/useMediaExtendedQuery'
 import { MIDDLE_WIDTH, MIN_WIDTH } from 'src/config/constants'
@@ -177,7 +179,7 @@ const useSponsorCardStyles = makeStyles((theme) => ({
     fontFamily: 'Google Sans',
     flexGrow: 1,
     position: 'relative',
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   header: {
     display: 'flex',

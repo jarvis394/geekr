@@ -1,8 +1,9 @@
 import makeRequest from './makeRequest'
-import { AuthorizedRequestParams, Posts } from '../interfaces'
+import { AuthorizedRequestParams } from '../interfaces'
+import { PostsDeprecated } from 'src/interfaces/Posts'
 
 export default async (id: number, authData?: AuthorizedRequestParams) =>
-  await makeRequest<Posts>({
+  await makeRequest<PostsDeprecated>({
     path: `articles/${id}/similar`,
     version: 2,
     authData,

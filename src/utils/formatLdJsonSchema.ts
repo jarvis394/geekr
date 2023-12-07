@@ -9,15 +9,18 @@ export default (post: Post) => {
 
   const { schemaJsonLd } = post.metadata
   const schema = safeJSONParse<SchemaJsonLd, Partial<SchemaJsonLd>>(
-    schemaJsonLd,
+    schemaJsonLd || '{}',
     {}
   )
-  schema.mainEntityOfPage['@id'] = process.env.PUBLIC_URL + getPostLink(post)
-  schema.url = process.env.PUBLIC_URL + getPostLink(post)
-  schema.image = schema.image.filter(
+
+  if (!schema.mainEntityOfPage) return
+
+  schema.mainEntityOfPage['@id'] = import.meta.url + getPostLink(post)
+  schema.url = import.meta.url + getPostLink(post)
+  schema.image = schema.image?.filter(
     (e) => !e.startsWith('https://habr.com/share/publication')
   )
-  schema.image.unshift(getPostSocialImage(post))
+  schema.image?.unshift(getPostSocialImage(post))
 
   return JSON.stringify(schema)
 }

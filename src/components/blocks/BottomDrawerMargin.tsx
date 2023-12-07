@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import { MIN_WIDTH } from '../../config/constants'
-import { Drawer, fade, IconButton, SwipeableDrawer } from '@material-ui/core'
+import { Drawer, alpha, IconButton, SwipeableDrawer } from '@material-ui/core'
 import { Icon24Cancel } from '@vkontakte/icons'
 
 const useStyles = makeStyles((theme) => ({
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1, 0),
     padding: theme.spacing(2),
     background: theme.palette.background.paper,
-    border: '1px solid ' + fade(theme.palette.divider, 0.05),
+    border: '1px solid ' + alpha(theme.palette.divider, 0.05),
   },
   drawerHeader: {
     display: 'flex',
@@ -71,8 +71,8 @@ const BottomDrawerMargin = ({ children, isOpen, setOpen }: Props) => {
     <SwipeableDrawer
       open={isOpen}
       anchor="bottom"
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
+      onClose={() => setOpen?.(false)}
+      onOpen={() => setOpen?.(true)}
       disableBackdropTransition
       disableDiscovery
       disableSwipeToOpen

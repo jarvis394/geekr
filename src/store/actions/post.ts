@@ -27,9 +27,13 @@ const parseComments = (
 ) => {
   const root: IComment[] = []
   for (const id in nodes) {
+    // TODO: fix types
+    //@ts-expect-error
     const comment = nodes[id]
     comment.children = []
 
+    // TODO: fix types
+    //@ts-expect-error
     const parent = comment.parentId !== 0 ? nodes[comment.parentId] : null
 
     if (!parent) {
@@ -44,7 +48,7 @@ const parseComments = (
   return root
 }
 
-const flatten = (nodes, a = []) => {
+const flatten = (nodes: any[], a: any[] = []) => {
   nodes.forEach((e) => {
     a.push(e)
     flatten(e.children, a)
@@ -74,180 +78,185 @@ const setLevelInfo = (nodes: IComment[]) => {
  * Gets post data and dispatches it to the `post` store
  * @param id Post ID
  */
-export const getPost = (id: number | string) => async (
-  dispatch,
-  getState: () => RootState
-) => {
-  const storeData = getState().post.post
-  const authorizedRequestData = getState().auth.authorizedRequestData
-  if (
-    storeData.state === FetchingState.Fetched &&
-    storeData.data.id.toString() === id.toString()
-  ) {
-    return Promise.resolve()
-  }
-
-  dispatch({ type: POST_FETCH })
-
-  try {
-    const data = await api.getPost(id, authorizedRequestData)
-
+export const getPost =
+  // TODO: fix types
+  //@ts-expect-error
+  (id: number | string) => async (dispatch, getState: () => RootState) => {
+    const storeData = getState().post.post
+    const authorizedRequestData = getState().auth.authorizedRequestData
     if (
-      (data as APIError).data &&
-      Object.keys((data as APIError).data).length === 0
+      storeData.state === FetchingState.Fetched &&
+      storeData.data?.id.toString() === id.toString()
     ) {
-      throw data
+      return Promise.resolve()
     }
-    dispatch({
-      type: POST_FETCH_FULFILLED,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: POST_FETCH_REJECTED,
-      payload: (error as APIError).message,
-    })
+
+    dispatch({ type: POST_FETCH })
+
+    try {
+      const data = await api.getPost(id, authorizedRequestData)
+
+      if (
+        (data as APIError).data &&
+        Object.keys((data as APIError).data).length === 0
+      ) {
+        throw data
+      }
+      dispatch({
+        type: POST_FETCH_FULFILLED,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: POST_FETCH_REJECTED,
+        payload: (error as APIError).message,
+      })
+    }
   }
-}
 
 /**
  * Gets post downvote reasons
  */
-export const getDownvoteReasons = () => async (
-  dispatch,
-  getState: () => RootState
-) => {
-  const storeData = getState().post.downvoteReasons
-  if (storeData.state === FetchingState.Fetched) {
-    return Promise.resolve()
-  }
+export const getDownvoteReasons =
+  // TODO: fix types
+  //@ts-expect-error
+  () => async (dispatch, getState: () => RootState) => {
+    const storeData = getState().post.downvoteReasons
+    if (storeData.state === FetchingState.Fetched) {
+      return Promise.resolve()
+    }
 
-  dispatch({ type: POST_DOWNVOTE_REASONS_FETCH })
+    dispatch({ type: POST_DOWNVOTE_REASONS_FETCH })
 
-  try {
-    const data = await api.getDownvoteReasons()
-    dispatch({
-      type: POST_DOWNVOTE_REASONS_FETCH_FULFILLED,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: POST_DOWNVOTE_REASONS_FETCH_REJECTED,
-      payload: (error as Error).message,
-    })
+    try {
+      const data = await api.getDownvoteReasons()
+      dispatch({
+        type: POST_DOWNVOTE_REASONS_FETCH_FULFILLED,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: POST_DOWNVOTE_REASONS_FETCH_REJECTED,
+        payload: (error as Error).message,
+      })
+    }
   }
-}
 
 /**
  * Parse existing comments
  * @param id Post ID
  */
-export const parsePostComments = (
-  id: number | string,
-  options: Partial<GetPostCommentsOptions> = {}
-) => async (dispatch, getState: () => RootState) => {
-  const state = getState()
-  const storeData = state.post
+export const parsePostComments =
+  (id: number | string, options: Partial<GetPostCommentsOptions> = {}) =>
+  // TODO: fix types
+  //@ts-expect-error
+  async (dispatch, getState: () => RootState) => {
+    const state = getState()
+    const storeData = state.post
 
-  if (
-    storeData.comments.state === FetchingState.Fetched &&
-    storeData.post.data.id.toString() === id.toString()
-  ) {
-    const data = storeData.comments.fetchedData
-    const parsedComments = parseComments(data.comments, options)
-    const flattenComments = flatten(parsedComments)
-    const commentsWithLevelInfo = setLevelInfo(flattenComments)
+    if (
+      storeData.comments.state === FetchingState.Fetched &&
+      storeData.post.data?.id.toString() === id.toString()
+    ) {
+      const data = storeData.comments.fetchedData
+      if (!data) return
 
-    dispatch({
-      type: COMMENTS_FETCH_FULFILLED,
-      payload: { comments: commentsWithLevelInfo, fetchedData: data },
-    })
+      const parsedComments = parseComments(data.comments, options)
+      const flattenComments = flatten(parsedComments)
+      const commentsWithLevelInfo = setLevelInfo(flattenComments)
+
+      dispatch({
+        type: COMMENTS_FETCH_FULFILLED,
+        payload: { comments: commentsWithLevelInfo, fetchedData: data },
+      })
+    }
   }
-}
 
 /**
  * Gets post comments and dispatches the data to the `post` store
  * @param id Post ID
  */
-export const getPostComments = (
-  id: number | string,
-  options: Partial<GetPostCommentsOptions> = {}
-) => async (dispatch, getState: () => RootState) => {
-  const state = getState()
-  const storeData = state.post
-  const authData = state.auth.authorizedRequestData
-  if (
-    storeData.comments.state === FetchingState.Fetched &&
-    storeData.post.data.id.toString() === id.toString()
-  ) {
-    return Promise.resolve()
+export const getPostComments =
+  (id: number | string, options: Partial<GetPostCommentsOptions> = {}) =>
+  // TODO: fix types
+  //@ts-expect-error
+  async (dispatch, getState: () => RootState) => {
+    const state = getState()
+    const storeData = state.post
+    const authData = state.auth.authorizedRequestData
+    if (
+      storeData.comments.state === FetchingState.Fetched &&
+      storeData.post.data?.id.toString() === id.toString()
+    ) {
+      return Promise.resolve()
+    }
+
+    dispatch({ type: COMMENTS_FETCH })
+
+    try {
+      const data = await api.getComments(id, authData)
+      const parsedComments = parseComments(data.comments, options)
+      const flattenComments = flatten(parsedComments)
+      const commentsWithLevelInfo = setLevelInfo(flattenComments)
+
+      dispatch({
+        type: COMMENTS_FETCH_FULFILLED,
+        payload: {
+          comments: commentsWithLevelInfo,
+          fetchedData: data,
+          parseOptions: options,
+        },
+      })
+    } catch (error) {
+      dispatch({
+        type: COMMENTS_FETCH_REJECTED,
+        payload: (error as Error).message,
+      })
+    }
   }
 
-  dispatch({ type: COMMENTS_FETCH })
+export const setPostCommentSize =
+  (id: number | string, size: number) =>
+  // TODO: fix types
+  //@ts-expect-error
+  (dispatch, getState: () => RootState) => {
+    const sizesMap = getState().post.comments.sizesMap
 
-  try {
-    const data = await api.getComments(id, authData)
-    const parsedComments = parseComments(data.comments, options)
-    const flattenComments = flatten(parsedComments)
-    const commentsWithLevelInfo = setLevelInfo(flattenComments)
-
-    dispatch({
-      type: COMMENTS_FETCH_FULFILLED,
-      payload: {
-        comments: commentsWithLevelInfo,
-        fetchedData: data,
-        parseOptions: options,
-      },
-    })
-  } catch (error) {
-    dispatch({
-      type: COMMENTS_FETCH_REJECTED,
-      payload: (error as Error).message,
-    })
+    if (!sizesMap[id]) {
+      dispatch({ type: SET_POST_COMMENT_SIZE, payload: { id, size } })
+    }
   }
-}
-
-export const setPostCommentSize = (id: number | string, size: number) => (
-  dispatch,
-  getState: () => RootState
-) => {
-  const sizesMap = getState().post.comments.sizesMap
-
-  if (!sizesMap[id]) {
-    dispatch({ type: SET_POST_COMMENT_SIZE, payload: { id, size } })
-  }
-}
 
 /**
  * Gets post comments and dispatches the data to the `post` store
  * @param id Post ID
  */
-export const getCompany = (alias: string) => async (
-  dispatch,
-  getState: () => RootState
-) => {
-  const storeState = getState()
-  const storeData = storeState.post
-  const authData = storeState.auth.authorizedRequestData
-  if (
-    storeData.company.state === FetchingState.Fetched &&
-    alias === storeData.company.data.alias
-  ) {
-    return Promise.resolve()
-  }
+export const getCompany =
+  // TODO: fix types
+  //@ts-expect-error
+  (alias: string) => async (dispatch, getState: () => RootState) => {
+    const storeState = getState()
+    const storeData = storeState.post
+    const authData = storeState.auth.authorizedRequestData
+    if (
+      storeData.company.state === FetchingState.Fetched &&
+      alias === storeData.company.data?.alias
+    ) {
+      return Promise.resolve()
+    }
 
-  dispatch({ type: COMPANY_FETCH })
+    dispatch({ type: COMPANY_FETCH })
 
-  try {
-    const data = await apiGetCompany(alias, authData)
-    dispatch({
-      type: COMPANY_FETCH_FULFILLED,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: COMPANY_FETCH_REJECTED,
-      payload: (error as Error).message,
-    })
+    try {
+      const data = await apiGetCompany(alias, authData)
+      dispatch({
+        type: COMPANY_FETCH_FULFILLED,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: COMPANY_FETCH_REJECTED,
+        payload: (error as Error).message,
+      })
+    }
   }
-}

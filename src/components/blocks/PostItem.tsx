@@ -23,7 +23,7 @@ import {
 import LazyLoadImage from './LazyLoadImage'
 import { useSelector } from 'src/hooks'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
-import { Button, Chip, fade, Theme } from '@material-ui/core'
+import { Button, Chip, alpha, Theme } from '@material-ui/core'
 import { POST_LABELS } from 'src/config/constants'
 import getPostLink from 'src/utils/getPostLink'
 import VisibilitySensor from 'react-visibility-sensor'
@@ -165,7 +165,7 @@ const useStyles = makeStyles<
     alignItems: 'center',
     justifyContent: 'center',
     fontWeight: 600,
-    '-webkit-tap-highlight-color': fade(theme.palette.background.paper, 0.3),
+    '-webkit-tap-highlight-color': alpha(theme.palette.background.paper, 0.3),
   },
   postBottomRowItemIcon: {
     fontSize: 16,
@@ -273,6 +273,8 @@ export const PostItem = ({
   setPostItemSize?: (id: number | string, size: number) => void
   getPostItemSize?: (id?: number | string) => number
 }) => {
+  if (!post) return
+
   const isPWA = useIsPWA()
   const isExtended = useSelector(
     (store) => !store.settings.interfaceFeed.isCompact
@@ -289,9 +291,13 @@ export const PostItem = ({
   const hideImage =
     hideImageProp || disablePostImage || shouldReplaceImagesWithPlaceholder
   const { enqueueSnackbar } = useSnackbar()
-  const { titleHtml: unparsedTitle, statistics, postFirstImage, leadData } =
-    post || {}
-  const hasImagesInLeadText = !!getImagesFromText(leadData.textHtml)
+  const {
+    titleHtml: unparsedTitle,
+    statistics,
+    postFirstImage,
+    leadData,
+  } = post || {}
+  const hasImagesInLeadText = !!getImagesFromText(leadData?.textHtml || '')
   const classes = useStyles({
     hasImage: (!!postFirstImage || hasImagesInLeadText) && !hideImage,
     isExtended,
@@ -314,7 +320,7 @@ export const PostItem = ({
             classes.postTypeVoice,
           ].join(' ')}
         >
-          {leadData.textHtml}
+          {leadData?.textHtml || ''}
         </FormattedText>
       </Paper>
     )
@@ -322,15 +328,12 @@ export const PostItem = ({
 
   const hiddenAuthors = useSelector((state) => state.settings.hiddenAuthors)
   const hiddenCompanies = useSelector((state) => state.settings.hiddenCompanies)
-  const postBookmarked = post?.relatedData?.bookmarked
-  const unreadCommentsCount = post?.relatedData?.unreadCommentsCount
-  const [isBookmarked, setBookmarkState] = React.useState<boolean>(
-    postBookmarked
-  )
-  const [
-    isFetchingBookmarkResponse,
-    setIsFetchingBookmarkResponse,
-  ] = React.useState(false)
+  const postBookmarked = post?.relatedData?.bookmarked || false
+  const unreadCommentsCount = post?.relatedData?.unreadCommentsCount || 0
+  const [isBookmarked, setBookmarkState] =
+    React.useState<boolean>(postBookmarked)
+  const [isFetchingBookmarkResponse, setIsFetchingBookmarkResponse] =
+    React.useState(false)
   const [isRendered, setIsRendered] = React.useState(false)
   const history = useHistory<OutsidePageLocationState>()
   const location = useLocation()
@@ -356,7 +359,7 @@ export const PostItem = ({
   const comments = formatNumber(Number(commentsCount))
   const isCorporative = post.isCorporative
   const companyAlias = isCorporative
-    ? post.hubs.find((e) => e.type === 'corporative').alias
+    ? post?.hubs?.find((e) => e.type === 'corporative')?.alias
     : null
   const authData = useSelector((store) => store.auth.authData.data)
   const authorizedRequestData = useSelector(
@@ -404,7 +407,7 @@ export const PostItem = ({
           setIsFetchingBookmarkResponse(true)
           const response = await setArticleBookmark({
             mode: isBookmarked ? 'remove' : 'add',
-            authData: authorizedRequestData,
+            authData: authorizedRequestData || undefined,
             id: post.id,
           })
           if (response.ok) {
@@ -443,7 +446,7 @@ export const PostItem = ({
   // Return troll text for hidden post
   if (
     hiddenAuthors.includes(alias) ||
-    (isCorporative && hiddenCompanies.includes(companyAlias))
+    (companyAlias && isCorporative && hiddenCompanies.includes(companyAlias))
   )
     return (
       <LinkToOutsidePage
@@ -483,13 +486,13 @@ export const PostItem = ({
       >
         {item.coloredText ? (
           <GreenRedNumber
-            number={item.number}
+            number={item.number || 0}
             wrapperProps={{ style: { display: 'flex', alignItems: 'center' } }}
           >
             <>
               {itemIcon}
               <Typography className={classes.postBottomRowItemText}>
-                {item.number > 0 ? '+' : ''}
+                {(item.number || 0) > 0 ? '+' : ''}
                 {item.text}
               </Typography>
             </>
@@ -524,9 +527,9 @@ export const PostItem = ({
         bottom: POST_ITEM_VISIBILITY_THRESHOLD,
       }}
       active={!isRendered}
-      onChange={(newIsVisible) => setIsRendered(newIsVisible)}
+      onChange={(newIsVisible: boolean) => setIsRendered(newIsVisible)}
     >
-      {({ isVisible }) =>
+      {({ isVisible }: { isVisible: boolean }) =>
         isVisible ? (
           <Paper
             ref={rootRef}

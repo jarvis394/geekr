@@ -106,7 +106,7 @@ const FlowsBar: React.FC<{
               }}
             />
           )}
-          {FLOWS.filter(e => e.alias !== 'feed').map((e, i) => (
+          {FLOWS.filter((e) => e.alias !== 'feed').map((e, i) => (
             <FlowItem key={i} data={e} />
           ))}
         </div>

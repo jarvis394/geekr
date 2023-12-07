@@ -7,12 +7,12 @@ import { useSelector } from 'src/hooks'
 
 interface TabObject {
   label: React.ReactElement | string
-  to: () => string
+  to: () => string | null
   match: RegExp
   tab: string
 }
 
-const Counter = ({ children }) => {
+const Counter: React.FC<React.PropsWithChildren> = ({ children }) => {
   const theme = useTheme()
   return (
     <Fade in>
@@ -71,9 +71,9 @@ const generateTabs = (user: UserExtendedObject): TabObject[] => [
 ]
 
 const UserTabs = () => {
-  const user = useSelector((state) => state.profile.profile.card.data)
-  const tabs = generateTabs(user)
-  const findPath = (path: string): TabObject => {
+  const user = useSelector((state) => state.profile.profile.card?.data)
+  const tabs = user ? generateTabs(user) : []
+  const findPath = (path: string): TabObject | undefined => {
     return tabs.find((e) => path.match(e.match))
   }
   const findPathValue = React.useCallback(
@@ -94,10 +94,10 @@ const UserTabs = () => {
     setValue(newValue)
   }
 
-  useEffect(() => setValue(findPathValue(location.pathname)), [
-    location.pathname,
-    findPathValue,
-  ])
+  useEffect(
+    () => setValue(findPathValue(location.pathname)),
+    [location.pathname, findPathValue]
+  )
 
   return (
     <Tabs

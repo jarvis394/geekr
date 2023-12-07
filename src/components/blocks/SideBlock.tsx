@@ -44,7 +44,7 @@ interface Props {
   >
 }
 
-const SideBlock: React.FC<Props> = ({
+const SideBlock: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   title,
   childrenContainerProps,

@@ -2,7 +2,7 @@ import * as React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { usePagination } from '@material-ui/lab/Pagination'
 import { PaginationItem } from '@material-ui/lab'
-import { fade, Typography } from '@material-ui/core'
+import { alpha, Typography } from '@material-ui/core'
 import { MIN_WIDTH } from 'src/config/constants'
 import ChevronLeftRoundedIcon from '@material-ui/icons/ChevronLeftRounded'
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded'
@@ -51,10 +51,10 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'default',
     },
     '&:hover:enabled': {
-      background: fade(theme.palette.primary.main, 0.03),
+      background: alpha(theme.palette.primary.main, 0.03),
     },
     '&:active:enabled': {
-      background: fade(theme.palette.primary.main, 0.1),
+      background: alpha(theme.palette.primary.main, 0.1),
     },
   },
   navigationButtonText: {
@@ -92,7 +92,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Pagination = ({
+type Props = {
+  disabled?: boolean
+  steps: number
+  handleChange: (event: React.ChangeEvent<unknown>, page: number) => void
+  currentStep?: number
+}
+
+const Pagination: React.FC<Props> = ({
   disabled = false,
   steps,
   handleChange,

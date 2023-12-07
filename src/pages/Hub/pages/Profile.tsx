@@ -24,8 +24,7 @@ import { HubParams } from '..'
 import { getHubPosts } from 'src/store/actions/hub'
 import { useDispatch } from 'react-redux'
 
-import { Icon28Users3Outline } from '@vkontakte/icons'
-import { Icon24WorkOutline } from '@vkontakte/icons'
+import { Icon28Users3Outline, Icon24WorkOutline } from '@vkontakte/icons'
 import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import SubscribeButton from 'src/components/blocks/SubscribeButton'
@@ -159,13 +158,13 @@ const Information = () => {
     <div className={classes.root}>
       <div className={classes.avatarAndRating}>
         <Avatar
-          alt={profile.titleHtml}
-          src={profile.imageUrl}
+          alt={profile?.titleHtml}
+          src={profile?.imageUrl}
           className={classes.avatar}
         />
         <div className={classes.rating}>
           <Typography className={classes.ratingText}>
-            {profile.statistics.rating}
+            {profile?.statistics.rating}
           </Typography>
           <Typography className={classes.caption}>Рейтинг</Typography>
         </div>
@@ -187,9 +186,9 @@ const Description = () => {
 
   return (
     <div className={classes.root}>
-      <Typography className={classes.title}>{profile.titleHtml}</Typography>
+      <Typography className={classes.title}>{profile?.titleHtml}</Typography>
       <Typography className={classes.description}>
-        {profile.descriptionHtml}
+        {profile?.descriptionHtml}
       </Typography>
     </div>
   )
@@ -223,7 +222,7 @@ const Links = () => {
   )
 }
 
-const Posts = ({ mode }) => {
+const Posts: React.FC<{ mode: Mode }> = ({ mode }) => {
   const classes = usePostsStyles()
   const { alias } = useParams<HubParams>()
   const data = useSelector((state) => state.hub.posts.data)
@@ -235,8 +234,8 @@ const Posts = ({ mode }) => {
   const history = useHistory()
   const postsComponents =
     data &&
-    data.articleIds.map((id, i) => (
-      <PostItem key={id} post={data.articleRefs[id]} />
+    data.publicationIds.map((id, i) => (
+      <PostItem key={id} post={data.publicationRefs[id]} />
     ))
   const PaginationComponent = () =>
     pagesCount ? (
@@ -248,13 +247,13 @@ const Posts = ({ mode }) => {
       />
     ) : null
 
-  const handlePagination = (_, i) => {
+  const handlePagination = (_: any, i: string | number) => {
     const currentModeObject = modes.find((e) => e.mode === mode)
     if (i === currentPage) return
-    if (currentModeObject.mode === 'all') {
+    if (currentModeObject?.mode === 'all') {
       history.replace('/hub/' + alias + '/p/' + i)
     } else {
-      history.replace('/hub/' + alias + currentModeObject.to + 'p/' + i)
+      history.replace('/hub/' + alias + currentModeObject?.to + 'p/' + i)
     }
   }
 
@@ -264,9 +263,9 @@ const Posts = ({ mode }) => {
         [...new Array(4)].map((_, i) => <PostSkeleton key={i} />)}
       {fetchState === FetchingState.Fetched && data && (
         <>
-          {postsComponents[0]}
+          {postsComponents?.[0]}
           {currentPage === 1 && <NewsBlock hubAlias={alias} />}
-          {postsComponents.slice(1)}
+          {postsComponents?.slice(1)}
         </>
       )}
       {fetchError && <ErrorComponent message="Не удалось получить статьи" />}
@@ -285,6 +284,8 @@ const Profile = () => {
   const currentPage = Number(params.page)
 
   const handleSwitcher = React.useCallback(
+    // TODO: fix types
+    //@ts-expect-error
     ({ mode: newMode, to }) => {
       setMode(newMode)
       if (newMode === 'all') {

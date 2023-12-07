@@ -3,7 +3,7 @@ import { ModeObject, FlowObject } from '../interfaces'
 import { UserSettings } from '../interfaces'
 import {
   darken,
-  fade,
+  alpha,
   lighten,
   PaletteType as MUIPaletteType,
 } from '@material-ui/core'
@@ -173,18 +173,16 @@ export const POST_LABELS: Record<
   recovery: { text: 'Recovery' },
   technotext2020: {
     text: '🔥 Технотекст 2020',
-    link:
-      'https://contenting.io/challenge.html?utm_source=habr&utm_medium=label',
+    link: 'https://contenting.io/challenge.html?utm_source=habr&utm_medium=label',
   },
   technotext2021: {
     text: '🔥 Технотекст 2021',
-    link:
-      'https://contenting.io/2021.html',
+    link: 'https://contenting.io/2021.html',
   },
   technotext2022: {
     text: '✏️ Технотекст 2022',
     link: 'https://habr.com/ru/technotext/2022/',
-  }
+  },
 }
 
 export const DONATION_LINKS_MAP = {
@@ -365,7 +363,7 @@ export const BACKGROUND_COLORS_PAPER = {
   sepia: '#ffecb3',
   dimmed: '#252c35',
   solarized_light: '#fdf6e3',
-  solarized_dark: '#002b36'
+  solarized_dark: '#002b36',
 }
 
 export const THEME_PRIMARY_COLORS = {
@@ -415,40 +413,40 @@ export const THEME_TEXT_COLORS = {
   },
   dark: {
     primary: '#e9e9e9',
-    secondary: fade('#e9e9e9', 0.54),
-    disabled: fade('#e9e9e9', 0.38),
-    hint: fade('#e9e9e9', 0.38),
+    secondary: alpha('#e9e9e9', 0.54),
+    disabled: alpha('#e9e9e9', 0.38),
+    hint: alpha('#e9e9e9', 0.38),
   },
   oled: {
     primary: '#e9e9e9',
-    secondary: fade('#e9e9e9', 0.54),
-    disabled: fade('#e9e9e9', 0.38),
-    hint: fade('#e9e9e9', 0.38),
+    secondary: alpha('#e9e9e9', 0.54),
+    disabled: alpha('#e9e9e9', 0.38),
+    hint: alpha('#e9e9e9', 0.38),
   },
   sepia: {
     primary: '#5b4636',
-    secondary: fade('#5b4636', 0.54),
-    disabled: fade('#5b4636', 0.38),
-    hint: fade('#5b4636', 0.38),
+    secondary: alpha('#5b4636', 0.54),
+    disabled: alpha('#5b4636', 0.38),
+    hint: alpha('#5b4636', 0.38),
   },
   dimmed: {
     primary: '#cdd9e5',
-    secondary: fade('#cdd9e5', 0.54),
-    disabled: fade('#cdd9e5', 0.38),
-    hint: fade('#cdd9e5', 0.38),
+    secondary: alpha('#cdd9e5', 0.54),
+    disabled: alpha('#cdd9e5', 0.38),
+    hint: alpha('#cdd9e5', 0.38),
   },
   solarized_light: {
     primary: '#586e75',
-    secondary: fade('#586e75', 0.54),
-    disabled: fade('#586e75', 0.38),
-    hint: fade('#586e75', 0.38),
+    secondary: alpha('#586e75', 0.54),
+    disabled: alpha('#586e75', 0.38),
+    hint: alpha('#586e75', 0.38),
   },
   solarized_dark: {
     primary: '#9cadad',
-    secondary: fade('#9cadad', 0.54),
-    disabled: fade('#9cadad', 0.38),
-    hint: fade('#9cadad', 0.38),
-  }
+    secondary: alpha('#9cadad', 0.54),
+    disabled: alpha('#9cadad', 0.38),
+    hint: alpha('#9cadad', 0.38),
+  },
 }
 
 export const THEME_NAMES: Record<PaletteType, string> = {

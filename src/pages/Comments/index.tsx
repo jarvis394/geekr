@@ -121,9 +121,10 @@ const CommentsPage: React.FC = () => {
   const shouldSortByKarma = useSelector(
     (store) => store.settings.interfaceComments.sortByKarma
   )
-  const parseOptions = useMemo(() => ({ sortByKarma: shouldSortByKarma }), [
-    shouldSortByKarma,
-  ])
+  const parseOptions = useMemo(
+    () => ({ sortByKarma: shouldSortByKarma }),
+    [shouldSortByKarma]
+  )
   const filteredComments = useMemo(() => {
     if (!comments) return []
     if (shouldShowThreads)
@@ -144,7 +145,7 @@ const CommentsPage: React.FC = () => {
     if (!post || post?.id !== id) dispatch(getPost(id))
     if (!comments) {
       dispatch(getPostComments(id, parseOptions))
-      setCommentsLength(null)
+      setCommentsLength(0)
     }
     if (comments) {
       setCommentsLength(comments.length)

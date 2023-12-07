@@ -1,8 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { fade, Typography, useTheme } from '@material-ui/core'
+import { alpha, Typography, useTheme } from '@material-ui/core'
 import OutsidePage from 'src/components/blocks/OutsidePage'
-import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import { MIN_WIDTH } from 'src/config/constants'
 import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
@@ -74,13 +73,13 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     '-webkit-tap-highlight-color': 'transparent !important',
     '&:hover': {
-      backgroundColor: fade(
+      backgroundColor: alpha(
         theme.palette.common[isDarkTheme(theme) ? 'white' : 'black'],
         0.05
       ),
     },
     '&:active': {
-      background: fade(
+      background: alpha(
         theme.palette.common[isDarkTheme(theme) ? 'white' : 'black'],
         0.2
       ),
