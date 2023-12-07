@@ -8,7 +8,7 @@ const LinkToOutsidePage = (
     children,
     ...props
   }: { to: string } & LinkProps & React.RefAttributes<HTMLAnchorElement>,
-  ref
+  ref: React.Ref<HTMLAnchorElement> | undefined
 ) => {
   const location = useLocation()
   const route = useRoute()

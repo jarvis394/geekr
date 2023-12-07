@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
-import {
-  getProfileCard,
-  getProfileWhois,
-} from 'src/store/actions/profile'
+import { getProfileCard, getProfileWhois } from 'src/store/actions/profile'
 import UserPageSkeleton from 'src/components/skeletons/Profile'
 import ErrorComponent from 'src/components/blocks/Error'
 import Profile from './pages/Profile'
@@ -31,25 +28,25 @@ const useStyles = makeStyles((theme) => ({
 const User = () => {
   const dispatch = useDispatch()
   const classes = useStyles()
-  const profile = useSelector((state) => state.profile.profile.card.data)
-  const whois = useSelector((state) => state.profile.profile.whois.data)
+  const profile = useSelector((state) => state.profile.profile.card?.data)
+  const whois = useSelector((state) => state.profile.profile.whois?.data)
   const isUserFetched = useSelector(
-    (state) => state.profile.profile.card.fetched
+    (state) => state.profile.profile.card?.fetched
   )
   const isWhoisFetched = useSelector(
-    (state) => state.profile.profile.whois.fetched
+    (state) => state.profile.profile.whois?.fetched
   )
   const isUserFetching = useSelector(
-    (state) => state.profile.profile.card.fetching
+    (state) => state.profile.profile.card?.fetching
   )
   const isWhoisFetching = useSelector(
-    (state) => state.profile.profile.whois.fetching
+    (state) => state.profile.profile.whois?.fetching
   )
   const userFetchError = useSelector(
-    (state) => state.profile.profile.card.error
+    (state) => state.profile.profile.card?.error
   )
   const whoisFetchError = useSelector(
-    (state) => state.profile.profile.whois.error
+    (state) => state.profile.profile.whois?.error
   )
   const { login } = useParams<UserParams>()
 
@@ -67,13 +64,13 @@ const User = () => {
 
   return (
     <OutsidePage
-      headerText={login ? '@' + login : null}
+      headerText={login ? '@' + login : ''}
       hidePositionBar
       shrinkedHeaderText={profile?.fullname}
     >
       <div className={classes.root}>
         {(userFetchError || whoisFetchError) && (
-          <ErrorComponent message={userFetchError || whoisFetchError} />
+          <ErrorComponent message={userFetchError || whoisFetchError || ''} />
         )}
         {isUserFetched && isWhoisFetched && <Profile />}
         {(isUserFetching || isWhoisFetching) && <UserPageSkeleton />}

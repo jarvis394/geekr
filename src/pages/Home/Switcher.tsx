@@ -11,7 +11,7 @@ import {
   Button,
   ButtonBase,
   createStyles,
-  fade,
+  alpha,
   Tab,
   Tabs,
   Theme,
@@ -107,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
 
 const IOSTabs = withStyles((theme: Theme) => ({
   root: {
-    background: fade(theme.palette.divider, isDarkTheme(theme) ? 0.1 : 0.03),
+    background: alpha(theme.palette.divider, isDarkTheme(theme) ? 0.1 : 0.03),
     borderRadius: 12,
     display: 'flex',
     minHeight: 'unset',
@@ -117,13 +117,13 @@ const IOSTabs = withStyles((theme: Theme) => ({
     padding: 4,
   },
   indicator: {
-    background: fade(theme.palette.divider, 0.1),
+    background: alpha(theme.palette.divider, 0.1),
     height: 'calc(100% - 8px)',
     marginBottom: 4,
     borderRadius: 8,
     boxShadow:
       '0 3px 6px ' +
-      fade(theme.palette.background.default, 0.1) +
+      alpha(theme.palette.background.default, 0.1) +
       ' !important',
   },
 }))(Tabs)
@@ -163,6 +163,8 @@ const TabGroupUnmemoized: React.FC<TabGroupProps> = ({
         padding: 0,
         maxWidth: 'unset',
         fontFamily: 'Google Sans',
+        // TODO: fix types
+        //@ts-expect-error
         fontWeight: theme.typography.fontWeightMedium,
         transition: 'opacity 0.1s ease',
         '&:hover': {
@@ -188,7 +190,7 @@ const TabGroupUnmemoized: React.FC<TabGroupProps> = ({
 const TabGroup = React.memo(TabGroupUnmemoized)
 
 type ShowMode = 'top' | 'new'
-const showModes: { text: string; mode: ShowMode }[] = [
+const showModes: Array<{ text: string; mode: ShowMode }> = [
   {
     text: 'Лучшие',
     mode: 'top',
@@ -208,14 +210,16 @@ const Switcher: React.FC<{
   flow?: FlowAlias
   mode: Mode
   setMode: React.Dispatch<React.SetStateAction<Mode>>
-  handleClick: ({ mode: newMode, to }: { mode: Mode; to: string }) => void
+  handleClick: ({ mode, to }: { mode: Mode; to: string }) => void
 }> = ({ flow, handleClick, mode, setMode }) => {
   const [isOpen, setOpen] = useState(false)
   const current = modes.find((e) => e.mode === mode)
   const [showMode, setShowMode] = useState<ShowMode>(
-    current.isNewMode ? 'new' : 'top'
+    current?.isNewMode ? 'new' : 'top'
   )
-  const [currentMode, setCurrentMode] = useState<ModeObject>(current)
+  const [currentMode, setCurrentMode] = useState<ModeObject | undefined>(
+    current
+  )
   const currentFlow = flow ? FLOWS.find((e) => e.alias === flow) : null
   const classes = useStyles()
 
@@ -241,8 +245,8 @@ const Switcher: React.FC<{
     }
   }
   const handleApplyClick = () => {
-    setMode(currentMode.mode)
-    handleClick(currentMode)
+    currentMode && setMode(currentMode.mode)
+    currentMode && handleClick(currentMode)
     setOpen(false)
   }
   const onChange = (e: ModeObject) => setCurrentMode(e)
@@ -254,7 +258,7 @@ const Switcher: React.FC<{
 
   useEffect(() => {
     const newCurrentMode = modes.find((e) => e.mode === mode)
-    setShowMode(newCurrentMode.isNewMode ? 'new' : 'top')
+    setShowMode(newCurrentMode?.isNewMode ? 'new' : 'top')
     setCurrentMode(newCurrentMode)
   }, [mode, handleClick])
 
@@ -263,7 +267,7 @@ const Switcher: React.FC<{
       <ButtonBase className={classes.button} onClick={onButtonClick}>
         <div className={classes.buttonContainer}>
           <Typography className={classes.currentMode}>
-            {current.text}
+            {current?.text}
           </Typography>
           <div className={classes.expandIconWrapper}>
             <ExpandMoreRoundedIcon className={classes.expandIcon} />
@@ -283,16 +287,18 @@ const Switcher: React.FC<{
             showMode={showMode}
             desktop
           />
-          <SwitcherButtons
-            data={
-              showMode === 'new'
-                ? switcherButtonsDataNew
-                : switcherButtonsDataTop
-            }
-            onChange={onDesktopSwitcherChange}
-            currentValue={currentMode.mode}
-            inline
-          />
+          {currentMode && (
+            <SwitcherButtons
+              data={
+                showMode === 'new'
+                  ? switcherButtonsDataNew
+                  : switcherButtonsDataTop
+              }
+              onChange={onDesktopSwitcherChange}
+              currentValue={currentMode?.mode}
+              inline
+            />
+          )}
         </div>
       </div>
 
@@ -314,11 +320,13 @@ const Switcher: React.FC<{
             >
               Порог рейтинга
             </Typography>
-            <SwitcherButtons
-              data={switcherButtonsDataNew}
-              onChange={onChange}
-              currentValue={currentMode.mode}
-            />
+            {currentMode && (
+              <SwitcherButtons
+                data={switcherButtonsDataNew}
+                onChange={onChange}
+                currentValue={currentMode.mode}
+              />
+            )}
           </>
         )}
 
@@ -331,11 +339,13 @@ const Switcher: React.FC<{
             >
               Период
             </Typography>
-            <SwitcherButtons
-              data={switcherButtonsDataTop}
-              onChange={onChange}
-              currentValue={currentMode.mode}
-            />
+            {currentMode && (
+              <SwitcherButtons
+                data={switcherButtonsDataTop}
+                onChange={onChange}
+                currentValue={currentMode.mode}
+              />
+            )}
           </>
         )}
         <Button

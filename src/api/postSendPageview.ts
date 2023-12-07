@@ -1,10 +1,7 @@
 import makeRequest from './makeRequest'
 import { AuthorizedRequestParams, Post } from '../interfaces'
 
-export default async (
-  id: number | string,
-  authData: AuthorizedRequestParams
-) =>
+export default async (id: number | string, authData: AuthorizedRequestParams) =>
   await makeRequest<Post>({
     path: `articles/${id}/pageview`,
     version: 1,
@@ -13,7 +10,7 @@ export default async (
       method: 'POST',
       data: {},
       headers: {
-        Referer: `https://habr.com/ru/post/${id}`
-      }
+        Referer: `https://habr.com/ru/post/${id}`,
+      },
     },
   })

@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import {
-  IconButton,
-  Typography,
-  useMediaQuery,
-} from '@material-ui/core'
+import { IconButton, Typography, useMediaQuery } from '@material-ui/core'
 import {
   MIDDLE_WIDTH,
   BOTTOM_BAR_HEIGHT,
@@ -68,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
     color: 'white',
     zIndex: 1,
-    position: 'relative'
+    position: 'relative',
   },
   closeButton: {
     position: 'absolute',
@@ -82,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(0.5),
     fontSize: 14,
     zIndex: 1,
-    position: 'relative'
+    position: 'relative',
   },
 }))
 

@@ -152,6 +152,8 @@ const DonateDialog: React.FC<{
 
   const paymentDetails = Object.keys(post.author.paymentDetails).map((e) => ({
     field: e,
+    // TODO: fix types
+    //@ts-expect-error
     value: post.author.paymentDetails[e],
   }))
 
@@ -176,9 +178,13 @@ const DonateDialog: React.FC<{
                 key={e.field}
                 component={'a'}
                 target={'_blank'}
+                // TODO: fix types
+                //@ts-expect-error
                 href={DONATION_LINKS_MAP[e.field] + e.value}
               >
                 <ListItemText
+                  // TODO: fix types
+                  //@ts-expect-error
                   primary={DONATION_TITLES_MAP[e.field]}
                   secondary={e.value}
                 />
@@ -191,7 +197,7 @@ const DonateDialog: React.FC<{
 }
 
 const AuthorCard: React.FC<{
-  post: Post
+  post: Post | null
 }> = ({ post }) => {
   if (!post) return null
 

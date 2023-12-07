@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { darken, fade, lighten, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { UserAvatarAndLogin } from '../UserAvatarAndLogin'
 import { Statistics } from '../Statistics'
 import { InvitedTime } from '../InvitedTime'
@@ -39,7 +39,7 @@ export const useStyles = makeStyles((theme) => ({
 
 const Profile = () => {
   const classes = useStyles()
-  const user = useSelector((state) => state.profile.profile.card.data)
+  const user = useSelector((state) => state.profile.profile.card?.data)
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   useEffect(() => {}, [user?.alias])

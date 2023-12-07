@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Skeleton from '@material-ui/lab/Skeleton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { GridListTile } from '@material-ui/core'
+import { ImageListItem } from '@material-ui/core'
 import {
   ADVERTS_BLOCK_HEIGHT,
   ADVERTS_BLOCK_MAX_WIDTH,
@@ -20,7 +20,7 @@ const AdvertsBlockSkeleton = () => {
   return (
     <>
       {[...Array(3)].map((_, i) => (
-        <GridListTile
+        <ImageListItem
           key={i}
           style={{
             padding: '2px 2px 2px 16px',
@@ -34,7 +34,7 @@ const AdvertsBlockSkeleton = () => {
             key={i}
             height={ADVERTS_BLOCK_HEIGHT}
           />
-        </GridListTile>
+        </ImageListItem>
       ))}
     </>
   )

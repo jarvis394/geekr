@@ -55,7 +55,7 @@ const ProfileSkeleton = () => {
         width={128}
         height={24}
       />
-      <Grid className={classes.stats} container justify="center">
+      <Grid className={classes.stats} container justifyContent="center">
         {[...Array(3)].map((_, i) => (
           <div className={classes.headerColumn} key={i}>
             <Skeleton

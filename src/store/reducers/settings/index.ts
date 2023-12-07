@@ -3,6 +3,8 @@ import generateTheme from 'src/config/theme'
 import * as userSettings from 'src/utils/userSettings'
 
 const userLocalSettings = userSettings.get()
+// TODO: fix types
+//@ts-expect-error
 const theme = generateTheme(userLocalSettings.themeType)
 
 const initialState = {
@@ -12,6 +14,8 @@ const initialState = {
 
 export default (
   state = initialState,
+  // TODO: fix types
+  //@ts-expect-error
   { type, payload }
 ): typeof initialState => {
   switch (type) {
@@ -21,7 +25,9 @@ export default (
       state = {
         ...newSettings,
         theme: shouldUpdateTheme
-          ? generateTheme(newSettings.themeType)
+          ? // TODO: fix types
+            //@ts-expect-error
+            generateTheme(newSettings.themeType)
           : state.theme,
       }
       return state

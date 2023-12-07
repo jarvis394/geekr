@@ -100,11 +100,11 @@ export interface UserExtended {
     paymentWebmoney: string | number
     paymentYandexMoney: string | number
   }
-  contacts: {
+  contacts: Array<{
     title: string
     url: string
     value: string
-  }[]
+  }>
   registerDateTime: string
   relatedData: Record<string, never>
   scoreStats: {
@@ -114,5 +114,5 @@ export interface UserExtended {
   score: number
   votesCount: number
   speciality: string
-  workplace: { alias: string; title: string }[]
+  workplace: Array<{ alias: string; title: string }>
 }

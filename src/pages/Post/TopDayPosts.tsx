@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Typography, Paper } from '@material-ui/core'
-import { makeStyles, fade } from '@material-ui/core/styles'
+import { makeStyles, alpha } from '@material-ui/core/styles'
 import { Posts } from 'src/interfaces'
 import DensePostsSkeleton from 'src/components/skeletons/DensePosts'
 import { getPosts } from 'src/api'
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(1.5),
     marginTop: theme.spacing(0.5),
     '&:not(:first-child)': {
-      borderTop: '1px solid ' + fade(theme.palette.divider, 0.05),
+      borderTop: '1px solid ' + alpha(theme.palette.divider, 0.05),
     },
     '&:first-child': {
       paddingTop: theme.spacing(1),
@@ -74,15 +74,13 @@ const TopDayPosts = () => {
       <div>
         {!data && <DensePostsSkeleton n={5} />}
         {data &&
-          data.articleIds
-            .slice(0, 5)
-            .map((id, i) => (
-              <DensePostItem
-                className={classes.postItem}
-                post={data.articleRefs[id]}
-                key={i}
-              />
-            ))}
+          data.publicationIds.slice(0, 5).map((id, i) => (
+            <DensePostItem
+              className={classes.postItem}
+              post={data.publicationRefs[id]}
+              key={i}
+            />
+          ))}
       </div>
     </Paper>
   )

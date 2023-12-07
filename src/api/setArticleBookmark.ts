@@ -8,7 +8,7 @@ export default async ({
 }: {
   mode: 'add' | 'remove'
   id: string | number
-  authData: AuthorizedRequestParams
+  authData?: AuthorizedRequestParams
 }) =>
   await makeRequest<{
     ok: boolean

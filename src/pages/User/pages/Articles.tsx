@@ -31,15 +31,17 @@ const UserArticles = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const isProfileFetched = useSelector(
-    (state) => state.profile.profile.card.fetched
+    (state) => state.profile.profile.card?.fetched || false
   )
   const isFetched = useSelector((state) => state.profile.articles.fetched)
   const isFetching = useSelector((state) => state.profile.articles.fetching)
   const fetchError = useSelector((state) => state.profile.articles.error)
   const data = useSelector(
+    // TODO: fix types
+    //@ts-expect-error
     (state) => state.profile.articles.data.pages[currentPage]
   )
-  const profile = useSelector((state) => state.profile.profile.card.data)
+  const profile = useSelector((state) => state.profile.profile.card?.data)
   const pagesCount = useSelector(
     (state) => state.profile.articles.data.pagesCount
   )
@@ -55,7 +57,7 @@ const UserArticles = () => {
       />
     ) : null
 
-  const handlePagination = (_: never, i: number) => {
+  const handlePagination = (_: any, i: number) => {
     if (i === currentPage) return
     else history.replace(`/user/${login}/articles/${i}`)
   }
@@ -82,8 +84,8 @@ const UserArticles = () => {
         {isFetched &&
           !fetchError &&
           data &&
-          data.articleIds.map((id: number) => (
-            <PostItem post={data.articleRefs[id]} key={id} />
+          data.publicationIds.map((id: number) => (
+            <PostItem post={data.publicationRefs[id]} key={id} />
           ))}
         {fetchError && <ErrorComponent message={fetchError.error.message} />}
         <PaginationComponent />

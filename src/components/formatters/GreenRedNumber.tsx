@@ -14,18 +14,16 @@ interface Props {
 
 const GreenRedNumber = ({ children, wrapperProps = {}, number }: Props) => {
   const classes = useStyles()
-  const {
-    className: wrapperPropsClassName,
-    ...otherWrapperProps
-  } = wrapperProps
+  const { className: wrapperPropsClassName, ...otherWrapperProps } =
+    wrapperProps
   const wrapperClassName = wrapperPropsClassName
     ? ' ' + wrapperPropsClassName
     : ''
   let className = ''
 
-  if (number > 0) {
+  if (Number(number) > 0) {
     className = classes.greenText
-  } else if (number < 0) {
+  } else if (Number(number) < 0) {
     className = classes.redText
   }
 

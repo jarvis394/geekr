@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import { fade, makeStyles, darken, lighten } from '@material-ui/core/styles'
+import { alpha, makeStyles, darken, lighten } from '@material-ui/core/styles'
 import { useParams } from 'react-router'
 import { getPost, getCompany } from 'src/store/actions/post'
 import { Link } from 'react-router-dom'
@@ -24,10 +24,10 @@ import { useDispatch } from 'react-redux'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
-import MetaTags from 'react-meta-tags'
-import getPostLink from 'src/utils/getPostLink'
-import getPostSocialImage from 'src/utils/getPostSocialImage'
-import formatLdJsonSchema from 'src/utils/formatLdJsonSchema'
+// import MetaTags from 'react-meta-tags'
+// import getPostLink from 'src/utils/getPostLink'
+// import getPostSocialImage from 'src/utils/getPostSocialImage'
+// import formatLdJsonSchema from 'src/utils/formatLdJsonSchema'
 import MainBlock from 'src/components/blocks/MainBlock'
 import PostSidebar from './Sidebar'
 import { HubsItem } from '../User/Hubs'
@@ -44,20 +44,20 @@ const makeGradient = (theme: Theme) => {
       : darken(theme.palette.background.paper, 0.1)
   const colors = [
     t,
-    fade(t, 0.98),
-    fade(t, 0.94),
-    fade(t, 0.88),
-    fade(t, 0.8),
-    fade(t, 0.71),
-    fade(t, 0.61),
-    fade(t, 0.5),
-    fade(t, 0.39),
-    fade(t, 0.29),
-    fade(t, 0.2),
-    fade(t, 0.12),
-    fade(t, 0.06),
-    fade(t, 0.02),
-    fade(t, 0),
+    alpha(t, 0.98),
+    alpha(t, 0.94),
+    alpha(t, 0.88),
+    alpha(t, 0.8),
+    alpha(t, 0.71),
+    alpha(t, 0.61),
+    alpha(t, 0.5),
+    alpha(t, 0.39),
+    alpha(t, 0.29),
+    alpha(t, 0.2),
+    alpha(t, 0.12),
+    alpha(t, 0.06),
+    alpha(t, 0.02),
+    alpha(t, 0),
   ]
 
   return `linear-gradient(to bottom, ${colors.join(',')})`
@@ -151,7 +151,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(2),
   },
   translatedBox: {
-    backgroundColor: fade(theme.palette.primary.dark, 0.1),
+    backgroundColor: alpha(theme.palette.primary.dark, 0.1),
     padding: theme.spacing(1, 2),
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1),
@@ -209,7 +209,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   tagsContainer: {
     display: 'flex',
     flexWrap: 'wrap',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   hubsContainer: {
     marginTop: theme.spacing(0.5),
@@ -245,7 +245,7 @@ const Post = () => {
   const { id: strigifiedId, alias: companyAlias } = useParams<Params>()
   const id = Number(strigifiedId)
   const classes = useStyles()
-  const contentsRef = React.useRef<HTMLDivElement>()
+  const contentsRef = React.useRef<HTMLDivElement>(null)
   const isTranslated =
     post && post?.postLabels?.some((e) => e.type === 'translation')
   const translationData =
@@ -313,7 +313,7 @@ const Post = () => {
       headerText={post?.titleHtml}
       scrollElement={contentsRef.current}
     >
-      <MetaTags>
+      {/* <MetaTags>
         <title>{(post ? post.titleHtml : 'Публикация') + ' | geekr.'}</title>
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@habrahabr" />
@@ -332,22 +332,19 @@ const Post = () => {
           name="twitter:description"
           content={post?.metadata.metaDescription}
         />
-        {/* <meta itemProp="image" content={getPostSocialImage(post)} />
+        <meta itemProp="image" content={getPostSocialImage(post)} />
         <meta property="og:image" content={getPostSocialImage(post)} />
         <meta property="vk:image" content={getPostSocialImage(post)} />
-        <meta name="twitter:image" content={getPostSocialImage(post)} /> */}
+        <meta name="twitter:image" content={getPostSocialImage(post)} />
         <meta property="og:type" content="article" />
-        <meta
-          property="og:url"
-          content={process.env.PUBLIC_URL + getPostLink(post)}
-        />
+        <meta property="og:url" content={import.meta.url + getPostLink(post)} />
         <meta itemProp="name" content={post?.titleHtml} />
         <meta property="og:title" content={post?.titleHtml} />
         <meta property="aiturec:title" content={post?.titleHtml} />
         <meta property="aiturec:item_id" content={post?.id.toString()} />
         <meta property="aiturec:datetime" content={post?.timePublished} />
         <script type="application/ld+json">{formatLdJsonSchema(post)}</script>
-      </MetaTags>
+      </MetaTags> */}
 
       <MainBlock>
         <div className={classes.root}>
@@ -412,10 +409,19 @@ const Post = () => {
                     {labels}
                     {isTranslated && (
                       <MUILink
-                        href={translationData.originalUrl}
+                        href={
+                          // TODO: fix types
+                          //@ts-expect-error
+                          translationData?.originalUrl
+                        }
                         className={classes.translatedBox}
                       >
-                        Автор оригинала: {translationData.originalAuthorName}
+                        Автор оригинала:{' '}
+                        {
+                          // TODO: fix types
+                          //@ts-expect-error
+                          translationData?.originalAuthorName
+                        }
                       </MUILink>
                     )}
                   </div>
@@ -458,7 +464,7 @@ const Post = () => {
                         className={classes.hubsContainer}
                       >
                         {post.hubs.map((e, i) => (
-                          <HubsItem data={(e as unknown) as Hub} key={i} />
+                          <HubsItem data={e as unknown as Hub} key={i} />
                         ))}
                       </Grid>
                     </div>

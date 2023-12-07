@@ -34,7 +34,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Spoiler = ({ children, title }) => {
+const Spoiler: React.FC<React.PropsWithChildren<{ title: string }>> = ({
+  children,
+  title,
+}) => {
   const [isOpen, setOpenState] = useState(false)
   const classes = useStyles(isOpen)
 

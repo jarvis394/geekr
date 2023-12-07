@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useEffect } from 'react'
 import { Paper, Grid, Typography, Button } from '@material-ui/core'
-import { makeStyles, fade } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
 import numToWord from 'number-to-words-ru'
 import { Link } from 'react-router-dom'
@@ -74,52 +74,51 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const NewsItem = React.memo(
-  ({ data }: { data: Post }): React.ReactElement => {
-    const classes = useStyles()
-    const ts = dayjs(data.timePublished).calendar()
-    const commentsCount = numToWord.convert(data.statistics.commentsCount, {
-      currency: {
-        currencyNameCases: ['комментарий', 'комментария', 'комментариев'],
-        fractionalPartNameCases: ['', '', ''],
-        currencyNounGender: {
-          integer: 0,
-          fractionalPart: 0,
-        },
+// eslint-disable-next-line react/display-name
+const NewsItem = React.memo(({ data }: { data: Post }): React.ReactElement => {
+  const classes = useStyles()
+  const ts = dayjs(data.timePublished).calendar()
+  const commentsCount = numToWord.convert(data.statistics.commentsCount, {
+    currency: {
+      currencyNameCases: ['комментарий', 'комментария', 'комментариев'],
+      fractionalPartNameCases: ['', '', ''],
+      currencyNounGender: {
+        integer: 0,
+        fractionalPart: 0,
       },
-      showNumberParts: {
-        integer: true,
-        fractional: false,
-      },
-      convertNumbertToWords: {
-        integer: false,
-        fractional: false,
-      },
-    })
+    },
+    showNumberParts: {
+      integer: true,
+      fractional: false,
+    },
+    convertNumbertToWords: {
+      integer: false,
+      fractional: false,
+    },
+  })
 
-    return (
-      <Link to={'/post/' + data.id} className={classes.article}>
-        <Grid container direction="row" className={classes.item}>
-          <Grid container direction="column">
-            <Grid item>
-              <FormattedText className={classes.title}>
-                {data.titleHtml}
-              </FormattedText>
-            </Grid>
-            <Grid container direction="row" alignItems="center">
-              <Typography className={classes.ts}>{ts}</Typography>
-              <span className={classes.dot}>•</span>
-              <Typography className={classes.ts}>{commentsCount}</Typography>
-            </Grid>
-          </Grid>
+  return (
+    <Link to={'/post/' + data.id} className={classes.article}>
+      <Grid container direction="row" className={classes.item}>
+        <Grid container direction="column">
           <Grid item>
-            <RightIcon color="disabled" />
+            <FormattedText className={classes.title}>
+              {data.titleHtml}
+            </FormattedText>
+          </Grid>
+          <Grid container direction="row" alignItems="center">
+            <Typography className={classes.ts}>{ts}</Typography>
+            <span className={classes.dot}>•</span>
+            <Typography className={classes.ts}>{commentsCount}</Typography>
           </Grid>
         </Grid>
-      </Link>
-    )
-  }
-)
+        <Grid item>
+          <RightIcon color="disabled" />
+        </Grid>
+      </Grid>
+    </Link>
+  )
+})
 
 const NewsBlock = ({ hubAlias }: { hubAlias?: string }) => {
   const classes = useStyles()
@@ -162,14 +161,14 @@ const NewsBlock = ({ hubAlias }: { hubAlias?: string }) => {
       {isFetching &&
         !fetchError &&
         [...Array(5)].map((_, i) => <NewsItemSkeleton key={i} />)}
-      {isFetched &&
-        news &&
-        news
-          // Sort news in a descending order based on their timePublished
-          .sort(
-            (a, b) => +new Date(b.timePublished) - +new Date(a.timePublished)
-          )
-          .map((e, i) => <NewsItem data={e} key={i} />)}
+      {news
+        // Sort news in a descending order based on their timePublished
+        ?.sort(
+          // TODO: fix types
+          //@ts-expect-error
+          (a, b) => +new Date(b.timePublished) - +new Date(a.timePublished)
+        )
+        ?.map((e, i) => <NewsItem data={e} key={i} />)}
       <div className={classes.linkBox}>
         <GoToNewsButton />
       </div>

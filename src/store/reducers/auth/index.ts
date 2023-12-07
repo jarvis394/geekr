@@ -11,7 +11,7 @@ import {
 } from './types'
 
 const cachedAuthData = safeJSONParse<AuthData, null>(
-  localStorage.getItem(AUTH_DATA_KEY),
+  localStorage.getItem(AUTH_DATA_KEY) || '{}',
   null
 )
 const cachedCSRFToken = localStorage.getItem(CSRF_TOKEN_KEY)
@@ -22,7 +22,7 @@ const initialState: State = {
     fetchError: null,
   },
   csrfToken: {
-    data: cachedCSRFToken,
+    data: cachedCSRFToken || '',
     state: FetchingState[cachedCSRFToken ? 'Fetched' : 'Idle'],
     fetchError: null,
   },
@@ -31,13 +31,17 @@ const initialState: State = {
     fetchError: null,
     data: null,
   },
-  authorizedRequestData: cachedAuthData && cachedCSRFToken ? {
-    connectSID: cachedAuthData?.connectSID,
-    csrfToken: cachedCSRFToken,
-  }
-  : null,
+  authorizedRequestData:
+    cachedAuthData && cachedCSRFToken
+      ? {
+          connectSID: cachedAuthData?.connectSID,
+          csrfToken: cachedCSRFToken,
+        }
+      : undefined,
 }
 
+// TODO: fix types
+//@ts-expect-error
 export default (reducerState = initialState, { type, payload }): State => {
   switch (type) {
     case GET_AUTH_DATA + '_FETCH': {
@@ -111,7 +115,7 @@ export default (reducerState = initialState, { type, payload }): State => {
         reducerState.csrfToken.data = null
         reducerState.csrfToken.state = FetchingState.Idle
         reducerState.csrfToken.fetchError = null
-        reducerState.authorizedRequestData = null
+        reducerState.authorizedRequestData = undefined
         localStorage.removeItem(AUTH_DATA_KEY)
         localStorage.removeItem(CSRF_TOKEN_KEY)
 
@@ -160,7 +164,7 @@ export default (reducerState = initialState, { type, payload }): State => {
           fetchError: null,
         },
         me: initialState.me,
-        authorizedRequestData: null,
+        authorizedRequestData: undefined,
       }
     }
 

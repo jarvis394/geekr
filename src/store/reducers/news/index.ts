@@ -2,7 +2,14 @@ import { NEWS_PREFIX } from './types'
 import getPostFirstImage from 'src/utils/getPostFirstImage'
 import { FLOWS } from 'src/config/constants'
 
-const flowsData = {}
+const flowsData: Record<
+  string,
+  {
+    // TODO: fix types
+    pages: any
+    pagesCount: null
+  }
+> = {}
 FLOWS.forEach((e) => {
   flowsData[e.alias] = {
     pages: {},
@@ -28,6 +35,8 @@ const initialState = {
   },
 }
 
+// TODO: fix types
+//@ts-expect-error
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case NEWS_PREFIX + 'FETCH': {
@@ -36,24 +45,26 @@ export default (state = initialState, { type, payload }) => {
 
     case NEWS_PREFIX + 'FETCH_FULFILLED': {
       const { page, pagesCount, data, flow } = payload
-      const ids = flow === 'all' ? data.articleIds : data.newsIds
-      const refs = flow === 'all' ? data.articleRefs : data.newsRefs
+      const ids = flow === 'all' ? data.publicationIds : data.newsIds
+      const refs = flow === 'all' ? data.publicationRefs : data.newsRefs
 
       for (const id in refs) {
         refs[id].postFirstImage = getPostFirstImage(refs[id])
       }
 
       if (flow === 'all') {
+        // TODO: fix types
+        //@ts-expect-error
         state.data.pages[page] = {
-          articleIds: ids,
-          articleRefs: refs,
+          publicationIds: ids,
+          publicationRefs: refs,
           lastUpdated: Date.now(),
         }
         state.data.pagesCount = pagesCount
       } else {
         state.flows[flow].pages[page] = {
-          articleIds: ids,
-          articleRefs: refs,
+          publicationIds: ids,
+          publicationRefs: refs,
           lastUpdated: Date.now(),
         }
         state.flows[flow].pagesCount = pagesCount
@@ -70,7 +81,7 @@ export default (state = initialState, { type, payload }) => {
       state.block.fetching = true
       state.block.fetched = false
       state.block.error = null
-      return state
+      return { ...state }
     }
 
     case NEWS_PREFIX + 'PROMO_FETCH_FULFILLED': {
@@ -79,16 +90,18 @@ export default (state = initialState, { type, payload }) => {
       state.block.fetched = true
       state.block.error = null
       state.block.data = Object.values(data.articleRefs)
+      // TODO: fix types
+      //@ts-expect-error
       state.block.lastUpdated = Date.now()
 
-      return state
+      return { ...state }
     }
 
     case NEWS_PREFIX + 'PROMO_FETCH_REJECTED': {
       state.block.fetching = false
       state.block.fetched = false
       state.block.error = payload
-      return state
+      return { ...state }
     }
 
     default:

@@ -4,10 +4,10 @@ export default interface Company {
   aDeskSettings: unknown
   alias: string
   careerAlias: string
-  contacts: {
+  contacts: Array<{
     title: string
     url: string
-  }[]
+  }>
   descriptionHtml: string
   foundationDate: {
     year: string
@@ -31,10 +31,10 @@ export default interface Company {
   relatedData: Record<string, never>
   representativeUser: User
   settings: {
-    analyticsSettings: {
+    analyticsSettings: Array<{
       type: string
       trackingId: string
-    }[]
+    }>
     branding: {
       imageUrl: string
       linkUrl: string
@@ -59,25 +59,25 @@ export default interface Company {
 
 export interface CompanyPost {
   alias: string
-  analytics: {
+  analytics: Array<{
     id: string
     service: string
     type: number
-  }[]
+  }>
   branding: {
     headerImageUrl: string
     headerUrl: string
     statisticCounterUrl: string
   }
-  categories: {
+  categories: Array<{
     id: string
     title: string
     alias: string
-  }[]
-  contacts: {
+  }>
+  contacts: Array<{
     title: string
     link: string
-  }[]
+  }>
   date_foundation: string
   description: string
   directors: {

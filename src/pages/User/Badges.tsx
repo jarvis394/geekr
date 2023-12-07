@@ -20,9 +20,9 @@ export const Badges = ({
   classes: additionalClasses,
 }: ComponentWithUserParams) => {
   const classes = useStyles()
-  const whois = useSelector((store) => store.profile.profile.whois.data)
+  const whois = useSelector((store) => store.profile.profile.whois?.data)
 
-  return whois.badgets ? (
+  return whois?.badgets ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>Значки</Typography>
       <Grid spacing={1} container className={classes.badges}>

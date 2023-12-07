@@ -27,14 +27,17 @@ const useSearchStyles = makeStyles((theme) => ({
   },
 }))
 
-const SearchBar = ({ inputRef = null, onSubmit: onSubmitProp }) => {
+const SearchBar: React.FC<{
+  inputRef?: React.MutableRefObject<HTMLInputElement | null>
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+}> = ({ inputRef = null, onSubmit: onSubmitProp }) => {
   const classes = useSearchStyles()
   const searchParams = useQuery()
   const query = searchParams.get('q') || ''
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    onSubmitProp(e)
+    onSubmitProp?.(e)
   }
 
   return (

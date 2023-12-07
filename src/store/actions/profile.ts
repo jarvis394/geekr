@@ -27,6 +27,8 @@ export const request = async ({
   dispatch({ type })
 
   try {
+    // TODO: fix types
+    //@ts-expect-error
     const data = await api[method](...params)
 
     dispatch({
@@ -41,6 +43,8 @@ export const request = async ({
   }
 }
 
+// TODO: fix types
+//@ts-expect-error
 export const getProfileCard = (alias: string) => async (dispatch) => {
   return await request({
     method: 'getProfileCard',
@@ -51,6 +55,8 @@ export const getProfileCard = (alias: string) => async (dispatch) => {
   })
 }
 
+// TODO: fix types
+//@ts-expect-error
 export const getProfileWhois = (alias: string) => async (dispatch) => {
   return await request({
     method: 'getProfileWhois',
@@ -61,6 +67,8 @@ export const getProfileWhois = (alias: string) => async (dispatch) => {
   })
 }
 
+// TODO: fix types
+//@ts-expect-error
 export const getProfileCompanies = (alias: string) => async (dispatch) => {
   return await request({
     method: 'getProfileCompanies',
@@ -71,6 +79,8 @@ export const getProfileCompanies = (alias: string) => async (dispatch) => {
   })
 }
 
+// TODO: fix types
+//@ts-expect-error
 export const getProfileChildren = (alias: string) => async (dispatch) => {
   return await request({
     method: 'getProfileChildren',
@@ -81,6 +91,8 @@ export const getProfileChildren = (alias: string) => async (dispatch) => {
   })
 }
 
+// TODO: fix types
+//@ts-expect-error
 export const getProfileHubs = (alias: string) => async (dispatch) => {
   return await request({
     method: 'getProfileHubs',
@@ -91,23 +103,24 @@ export const getProfileHubs = (alias: string) => async (dispatch) => {
   })
 }
 
-export const getProfileArticles = (alias: string, page: number) => async (
-  dispatch
-) => {
-  const type = PROFILE_ARTICLES + 'FETCH'
-  dispatch({ type })
+export const getProfileArticles =
+  // TODO: fix types
+  //@ts-expect-error
+  (alias: string, page: number) => async (dispatch) => {
+    const type = PROFILE_ARTICLES + 'FETCH'
+    dispatch({ type })
 
-  try {
-    const data = await api.getProfileArticles(alias, page)
+    try {
+      const data = await api.getProfileArticles(alias, page)
 
-    dispatch({
-      type: type + '_FULFILLED',
-      payload: { data, page, pagesCount: data.pagesCount },
-    })
-  } catch (error) {
-    dispatch({
-      type: type + '_REJECTED',
-      payload: { error: (error as Error)?.message, page },
-    })
+      dispatch({
+        type: type + '_FULFILLED',
+        payload: { data, page, pagesCount: data.pagesCount },
+      })
+    } catch (error) {
+      dispatch({
+        type: type + '_REJECTED',
+        payload: { error: (error as Error)?.message, page },
+      })
+    }
   }
-}

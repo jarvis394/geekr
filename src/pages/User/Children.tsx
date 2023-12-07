@@ -62,31 +62,35 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   const [showAll, setShowAll] = useState<boolean>(false)
   const classes = useStyles()
   const dispatch = useDispatch()
-  const profile = useSelector((store) => store.profile.profile.card.data)
+  const profile = useSelector((store) => store.profile.profile.card?.data)
   const childrenData = useSelector(
-    (store) => store.profile.profile.children.data
+    (store) => store.profile.profile.children?.data
   )
   const isFetched = useSelector(
-    (store) => store.profile.profile.children.fetched
+    (store) => store.profile.profile.children?.fetched
   )
   const isFetching = useSelector(
-    (store) => store.profile.profile.children.fetching
+    (store) => store.profile.profile.children?.fetching
   )
   const fetchError = useSelector(
-    (store) => store.profile.profile.children.error
+    (store) => store.profile.profile.children?.error
   )
   const sortingFunction = (a: string, b: string) => {
-    const aRef = childrenData.userRefs[a]
-    const bRef = childrenData.userRefs[b]
+    // TODO: fix types
+    //@ts-expect-error
+    const aRef = childrenData?.userRefs[a]
+    // TODO: fix types
+    //@ts-expect-error
+    const bRef = childrenData?.userRefs[b]
     return aRef.alias.localeCompare(bRef.alias)
   }
-  const sorted = isFetched ? childrenData.userIds.sort(sortingFunction) : []
-  const shouldCollapse = sorted.length > 5
+  const sorted = isFetched ? childrenData?.userIds.sort(sortingFunction) : []
+  const shouldCollapse = (sorted?.length || 0) > 5
 
   useEffect(() => {
     setShowAll(false)
-    dispatch(getProfileChildren(profile.alias))
-  }, [profile.alias, dispatch])
+    dispatch(getProfileChildren(profile?.alias || ''))
+  }, [profile?.alias, dispatch])
 
   const Item = ({ data }: { data: User }) => (
     <ListItem
@@ -118,7 +122,7 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
     )
   if (isFetching) return <ProfileChildrenSkeleton />
 
-  return isFetched && sorted.length !== 0 ? (
+  return isFetched && sorted?.length !== 0 ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>Пригласил на сайт</Typography>
       <Collapse
@@ -128,8 +132,10 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
         collapsedHeight={shouldCollapse ? 280 : '100%'}
       >
         <List>
-          {sorted.map((e) => (
-            <Item data={childrenData.userRefs[e]} key={e} />
+          {sorted?.map((e) => (
+            // TODO: fix types
+            //@ts-expect-error
+            <Item data={childrenData?.userRefs[e]} key={e} />
           ))}
         </List>
         {shouldCollapse && (

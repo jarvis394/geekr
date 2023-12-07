@@ -12,6 +12,8 @@ const initialState = {
   searchResults: [],
 }
 
+// TODO: fix types
+//@ts-expect-error
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case HUBS_PREFIX + 'FETCH': {
@@ -21,6 +23,8 @@ export default (state = initialState, { type, payload }) => {
     case HUBS_PREFIX + 'FETCH_FULFILLED': {
       const { page, data } = payload
       state.data.pagesCount = data.pagesCount
+      // TODO: fix types
+      //@ts-expect-error
       state.data.pages[page] = data
       return { ...state, fetching: false, fetched: true, error: null }
     }

@@ -80,8 +80,8 @@ const BottomDrawer = ({
   const query = useMediaQuery(theme.breakpoints.up(MIDDLE_WIDTH), {
     noSsr: true,
   })
-  const open = () => setOpen(true)
-  const close = () => setOpen(false)
+  const open = () => setOpen?.(true)
+  const close = () => setOpen?.(false)
   const contents = (
     <div className={classes.drawer}>
       <div className={classes.drawerHeader}>

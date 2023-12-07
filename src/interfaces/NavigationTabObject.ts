@@ -1,6 +1,8 @@
+import React from 'react'
+
 export default interface TabObject {
   label: string
-  icon: unknown
+  icon: React.ReactElement
   to: () => string
   match: string[] | string
   tab: string

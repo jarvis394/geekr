@@ -23,26 +23,26 @@ export interface GetPostCommentsOptions {
 }
 export interface State {
   comments: {
-    fetchedData: Comments
-    comments: Comment[]
+    fetchedData: Comments | null
+    comments: Comment[] | null
     state: FetchingState
-    fetchError: string
+    fetchError: string | null
     sizesMap: Record<string, number>
     parseOptions: Partial<GetPostCommentsOptions>
   }
   post: {
-    data: Post
+    data: Post | null
     state: FetchingState
-    fetchError: string
+    fetchError: string | null
   }
   company: {
-    data: Company
+    data: Company | null
     state: FetchingState
-    fetchError: string
+    fetchError: string | null
   }
   downvoteReasons: {
-    data: DownvoteReason[]
+    data: DownvoteReason[] | null
     state: FetchingState
-    fetchError: string
+    fetchError: string | null
   }
 }

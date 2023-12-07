@@ -6,8 +6,11 @@ const getScoreTotal = ({
 }: {
   post: Post
   voteState: {
-    canVote: Post['relatedData']['canVote']
-    vote: Post['relatedData']['vote']
+    canVote: boolean
+    vote: {
+      value: number | null
+      voteTimeExpired: string | null
+    }
     voteByDefault: boolean
   }
 }) => {
@@ -16,7 +19,7 @@ const getScoreTotal = ({
     (voteState?.vote?.value && !voteState.voteByDefault ? 1 : 0)
   const score = Number(
     post.statistics.score +
-      (!voteState.voteByDefault ? voteState?.vote?.value : 0)
+      (!voteState.voteByDefault ? voteState?.vote?.value || 0 : 0)
   )
   const positive = (total + score) / 2
   const negative = (total - score) / 2

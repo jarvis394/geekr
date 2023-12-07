@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Sidebar: React.FC = ({ children }) => {
+const Sidebar: React.FC<React.PropsWithChildren> = ({ children }) => {
   const classes = useStyles()
   const theme = useTheme()
   // future: https://material-ui.com/components/use-media-query/#server-side-rendering

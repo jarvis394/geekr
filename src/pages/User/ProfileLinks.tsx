@@ -1,9 +1,11 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Badge, Button, Typography } from '@material-ui/core'
-import { Icon28CommentOutline } from '@vkontakte/icons'
-import { Icon20BookmarkOutline } from '@vkontakte/icons'
-import { Icon28ArticleOutline } from '@vkontakte/icons'
+import {
+  Icon28CommentOutline,
+  Icon20BookmarkOutline,
+  Icon28ArticleOutline,
+} from '@vkontakte/icons'
 import { useHistory, useLocation } from 'react-router-dom'
 import OutsidePageLocationState from 'src/interfaces/OutsidePageLocationState'
 import { useSelector } from 'src/hooks'
@@ -42,27 +44,27 @@ const useStyles = makeStyles((theme) => ({
 const ProfileLinks = () => {
   const location = useLocation()
   const history = useHistory<OutsidePageLocationState>()
-  const profile = useSelector((state) => state.profile.profile.card.data)
+  const profile = useSelector((state) => state.profile.profile.card?.data)
   const classes = useStyles()
   const buttons = [
     {
       icon: Icon28ArticleOutline,
       to: location.pathname + '/articles/p/1',
       text: 'Публикации',
-      badgeContent: profile.counterStats.postCount,
+      badgeContent: profile?.counterStats.postCount,
     },
     {
       icon: Icon28CommentOutline,
       to: location.pathname + '/comments/p/1',
       text: 'Комментарии',
       style: { transform: 'scale(1.1)' },
-      badgeContent: profile.counterStats.commentCount,
+      badgeContent: profile?.counterStats.commentCount,
     },
     {
       icon: Icon20BookmarkOutline,
       to: location.pathname + '/favorites/articles/p/1',
       text: 'Закладки',
-      badgeContent: profile.counterStats.favoriteCount,
+      badgeContent: profile?.counterStats.favoriteCount,
     },
   ]
 

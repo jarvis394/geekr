@@ -20,14 +20,14 @@ export interface State {
     } | null
   }
   csrfToken: {
-    data: string
+    data: string | null
     state: FetchingState
-    fetchError: string
+    fetchError: string | null
   }
   me: {
     state: FetchingState
-    fetchError: string
-    data: Me
+    fetchError: string | null
+    data: Me | null
   }
-  authorizedRequestData: AuthorizedRequestParams | null
+  authorizedRequestData?: AuthorizedRequestParams
 }

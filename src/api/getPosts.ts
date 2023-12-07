@@ -54,8 +54,8 @@ export default async ({
       sort: flow === 'all' ? modeParams[mode].sort : 'all',
       page: page.toString(),
       hub: hubAlias || '',
-      flow: (flow === 'all' || flow === 'feed') ? '' : flow,
-      custom: flow === 'feed' ? 'true' : ''
+      flow: flow === 'all' || flow === 'feed' ? '' : flow,
+      custom: flow === 'feed' ? 'true' : '',
     },
     authData,
   })

@@ -5,7 +5,7 @@ import { getMostReading } from 'src/store/actions/home'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'src/hooks'
 import { FetchingState, Post } from 'src/interfaces'
-import { makeStyles, lighten, darken, fade } from '@material-ui/core/styles'
+import { makeStyles, lighten, darken, alpha } from '@material-ui/core/styles'
 import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
@@ -44,7 +44,7 @@ const usePostItemStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     marginTop: theme.spacing(2),
     paddingTop: theme.spacing(2),
-    borderTop: '1px solid ' + fade(theme.palette.divider, 0.05),
+    borderTop: '1px solid ' + alpha(theme.palette.divider, 0.05),
     '&:first-child': {
       marginTop: 0,
       paddingTop: 0,
@@ -64,7 +64,7 @@ const usePostItemStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     fontWeight: 600,
-    '-webkit-tap-highlight-color': fade(theme.palette.background.paper, 0.3),
+    '-webkit-tap-highlight-color': alpha(theme.palette.background.paper, 0.3),
   },
   bottomRowItemIcon: {
     fontSize: 16,
@@ -77,6 +77,8 @@ const usePostItemStyles = makeStyles((theme) => ({
   title: {
     color: theme.palette.text.primary,
     '&:visited > p': {
+      // TODO: fix types
+      //@ts-expect-error
       color: ld[theme.palette.type + 'en'](theme.palette.text.primary, 0.4),
     },
     fontWeight: 800,
@@ -265,11 +267,13 @@ const PostSidebar = () => {
             <MostReadingSideBlockSkeleton />
           )}
           {mostReadingState === FetchingState.Fetched &&
-            mostReading.articleIds
-              .slice(0, 5)
-              .map((e) => (
-                <PostItem data={mostReading.articleRefs[e]} key={e} />
-              ))}
+            // TODO: fix types
+            //@ts-expect-error
+            mostReading.articleIds.slice(0, 5).map((e) => (
+              // TODO: fix types
+              //@ts-expect-error
+              <PostItem data={mostReading.articleRefs[e]} key={e} />
+            ))}
         </SideBlock>
       )}
     </Sidebar>

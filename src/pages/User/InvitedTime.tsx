@@ -21,17 +21,17 @@ const useStyles = makeStyles((theme) => ({
 
 export const InvitedTime = () => {
   const classes = useStyles()
-  const user = useSelector((store) => store.profile.profile.card.data)
-  const whois = useSelector((store) => store.profile.profile.whois.data)
+  const user = useSelector((store) => store.profile.profile.card?.data)
+  const whois = useSelector((store) => store.profile.profile.whois?.data)
   const timeInvited = dayjs(whois?.invitedBy?.timeCreated).fromNow()
   const textTimeInvited = timeInvited[0].toUpperCase() + timeInvited.slice(1)
   const wasInvitedText =
-    user.gender === '1' ? 'был приглашён' : 'была приглашена'
+    user?.gender === '1' ? 'был приглашён' : 'была приглашена'
 
   return whois?.invitedBy?.timeCreated ? (
     <Typography variant="caption" color="textSecondary" align="center">
       {textTimeInvited}{' '}
-      {user.gender === '0' ? 'было получено приглашение от' : wasInvitedText}{' '}
+      {user?.gender === '0' ? 'было получено приглашение от' : wasInvitedText}{' '}
       {whois.invitedBy.issuerLogin ? (
         <LinkToOutsidePage
           className={classes.link}

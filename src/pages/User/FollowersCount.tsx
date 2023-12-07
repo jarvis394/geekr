@@ -15,9 +15,9 @@ type Cases = [string, string, string]
 
 export const FollowersCount = (): JSX.Element => {
   const classes = useStyles()
-  const user = useSelector((store) => store.profile.profile.card.data)
-  const followers = Number(user.followStats.followersCount)
-  const followed = Number(user.followStats.followCount)
+  const user = useSelector((store) => store.profile.profile.card?.data)
+  const followers = Number(user?.followStats.followersCount)
+  const followed = Number(user?.followStats.followCount)
   const followersCases: Cases = ['подписчик', 'подписчика', 'подписчиков']
   const followedCases: Cases = ['подписка', 'подписки', 'подписок']
   const generateOptions = (cases: Cases): ConvertOptions => ({

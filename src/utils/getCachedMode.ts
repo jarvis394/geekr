@@ -3,7 +3,7 @@ import { ModeObject } from 'src/interfaces'
 
 export default (): ModeObject => {
   const mode = localStorage.getItem('mode')
-  const topDaily = RATING_MODES.find((e) => e.mode === 'daily')
+  const topDaily = RATING_MODES.find((e) => e.mode === 'daily')!
   const cachedMode = RATING_MODES.find((e) => e.mode === mode)
 
   if (cachedMode) return cachedMode

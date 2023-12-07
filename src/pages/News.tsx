@@ -13,7 +13,7 @@ import { useSelector } from 'src/hooks'
 import { APP_BAR_HEIGHT, FLOWS, MIN_WIDTH } from 'src/config/constants'
 import FlowsBar from 'src/components/blocks/FlowsBar'
 import FlowAlias from 'src/interfaces/FlowAlias'
-import { FlowObject } from 'src/interfaces'
+import { FlowObject, Posts } from 'src/interfaces'
 import useQuery from 'src/hooks/useQuery'
 import NotFound from './NotFound'
 import MainBlock from 'src/components/blocks/MainBlock'
@@ -56,9 +56,11 @@ const News = () => {
   const isFetched = useSelector((state) => state.news.fetched)
   const isFetching = useSelector((state) => state.news.fetching)
   const fetchError = useSelector((state) => state.news.error)
-  const posts = useSelector((state) =>
+  const posts: Posts = useSelector((state) =>
     flow === 'all'
-      ? state.news.data.pages[currentPage]
+      ? // TODO: fix types
+        // @ts-ignore
+        state.news.data.pages[currentPage]
       : state.news.flows[flow].pages[currentPage]
   )
   const pagesCount = useSelector((state) =>
@@ -77,7 +79,7 @@ const News = () => {
       />
     ) : null
 
-  const handlePagination = (_: never, i: number) => {
+  const handlePagination = (_: any, i: string | number) => {
     if (i === currentPage) return
     else history.push('/news/p/' + i)
   }
@@ -104,8 +106,8 @@ const News = () => {
           {isFetched &&
             !fetchError &&
             posts &&
-            posts.articleIds.map((i: number) => (
-              <PostItem post={posts.articleRefs[i]} key={i} />
+            posts.publicationIds?.map((i: number) => (
+              <PostItem post={posts.publicationRefs[i]} key={i} />
             ))}
           {fetchError && (
             <ErrorComponent message={fetchError.error.message} to="/news/p/1" />

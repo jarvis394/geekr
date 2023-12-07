@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 380,
     borderRadius: 16,
     justifyContent: 'center',
-    zIndex: theme.zIndex.snackbar + 1
+    zIndex: theme.zIndex.snackbar + 1,
   },
   imageHolder: {
     display: 'flex',
@@ -73,10 +73,7 @@ const Rebranding = () => {
   return (
     <Dialog open={isOpen} classes={{ paper: classes.paper }}>
       <div className={classes.imageHolder}>
-        <img
-          className={classes.image}
-          src={process.env.PUBLIC_URL + '/images/rebranding.png'}
-        />
+        <img className={classes.image} src={'/images/rebranding.png'} />
       </div>
       <Typography className={classes.title}>Теперь это geekr.</Typography>
       <Typography className={classes.text}>

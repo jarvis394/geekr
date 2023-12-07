@@ -28,13 +28,13 @@ export const Contacts = ({
   classes: additionalClasses,
 }: ComponentWithUserParams) => {
   const classes = useStyles()
-  const whois = useSelector((store) => store.profile.profile.whois.data)
+  const whois = useSelector((store) => store.profile.profile.whois?.data)
 
-  return whois.contacts.length !== 0 ? (
+  return whois?.contacts.length !== 0 ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>Контакты</Typography>
       <Grid container>
-        {whois.contacts.map((e, i) => (
+        {whois?.contacts.map((e, i) => (
           <Grid key={i} item className={classes.contactsItem}>
             <Typography>{e.title}</Typography>
             <Link

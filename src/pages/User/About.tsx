@@ -18,9 +18,9 @@ export const About = ({
   classes: additionalClasses,
 }: ComponentWithUserParams) => {
   const classes = useStyles()
-  const whois = useSelector((store) => store.profile.profile.whois.data)
+  const whois = useSelector((store) => store.profile.profile.whois?.data)
 
-  return whois.aboutHtml ? (
+  return whois?.aboutHtml ? (
     <div className={additionalClasses}>
       <Typography className={classes.blockTitle}>О себе</Typography>
       <FormattedText>{whois.aboutHtml}</FormattedText>

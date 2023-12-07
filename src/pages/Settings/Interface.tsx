@@ -78,8 +78,8 @@ const Interface = () => {
   const userSettings = useSelector((store) => store.settings)
   const dispatch = useDispatch()
   const sectionRefs = {
-    comments: useRef<HTMLDivElement>(),
-    feed: useRef<HTMLDivElement>(),
+    comments: useRef<HTMLDivElement>(null),
+    feed: useRef<HTMLDivElement>(null),
   }
   const setInterfaceSettings = (
     field: 'interfaceFeed' | 'interfaceComments',
@@ -99,6 +99,8 @@ const Interface = () => {
 
   useEffect(() => {
     if (location.state.highlightSection) {
+      // TODO: fix types
+      //@ts-expect-error
       sectionRefs[location.state.highlightSection].current.className = [
         classes.section,
         classes.highlight,
@@ -169,7 +171,7 @@ const Interface = () => {
           />
           <SwitchButton
             primary={'Открывать статьи в новой вкладке'}
-            secondary={isPWA ? 'Функция отключена в PWA приложении' : null}
+            secondary={isPWA ? 'Функция отключена в PWA приложении' : ''}
             checked={userSettings.interfaceFeed.openPostsInNewTab}
             onChange={() =>
               setInterfaceSettings(

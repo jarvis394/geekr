@@ -19,7 +19,9 @@ const Hub = () => {
   const { alias } = useParams<HubParams>()
   const profile = useSelector((state) => state.hub.profile.data)
   const profileFetchingState = useSelector((state) => state.hub.profile.state)
-  const profileFetchError = useSelector((state) => state.hub.profile.fetchError)
+  const profileFetchError = useSelector(
+    (state) => state.hub.profile.fetchError || ''
+  )
 
   useEffect(() => {
     if (profile?.alias !== alias) dispatch(getHub(alias))
@@ -27,10 +29,10 @@ const Hub = () => {
 
   return (
     <OutsidePage
-      headerText={profile ? profile.titleHtml : null}
+      headerText={profile ? profile.titleHtml : undefined}
       shrinkedHeaderText={
         profileFetchingState === FetchingState.Fetched
-          ? profile.titleHtml
+          ? profile?.titleHtml
           : alias
       }
       hidePositionBar

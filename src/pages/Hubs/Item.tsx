@@ -7,7 +7,7 @@ import {
   Typography,
   Grid,
 } from '@material-ui/core'
-import { makeStyles, fade } from '@material-ui/core/styles'
+import { makeStyles, alpha } from '@material-ui/core/styles'
 import { Hub } from 'src/interfaces'
 import GroupRoundedIcon from '@material-ui/icons/GroupRounded'
 import FormattedText from 'src/components/formatters/FormattedText'
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.hint,
   },
   statisticsItemIcon: {
-    color: fade(theme.palette.text.primary, 0.62),
+    color: alpha(theme.palette.text.primary, 0.62),
   },
   statisticsItemText: {
     marginLeft: theme.spacing(1),
@@ -60,7 +60,7 @@ const Item = ({ data }: { data: Hub }) => {
     },
   ]
 
-  const StatisticsItemText = ({ text }) => (
+  const StatisticsItemText = ({ text }: { text: string | number }) => (
     <Typography
       component="span"
       variant="body2"

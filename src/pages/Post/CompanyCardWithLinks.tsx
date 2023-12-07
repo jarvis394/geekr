@@ -89,27 +89,27 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const CompanyCardWithLinks: React.FC<{
-  post: Post
+  post: Post | null
 }> = ({ post }) => {
-  if (!post) return null
-
   const company = useSelector((store) => store.post.company.data)
   const classes = useStyles()
+
+  if (!post) return null
 
   return (
     <div className={classes.root}>
       <div className={classes.flexRow}>
-        <Link to={'/company/' + company.alias} className={classes.link}>
+        <Link to={'/company/' + company?.alias} className={classes.link}>
           <UserAvatar
             className={classes.avatar}
-            src={company.imageUrl}
-            alias={company.alias}
+            src={company?.imageUrl}
+            alias={company?.alias}
           />
           <div className={classes.companyNameAndDescription}>
             <FormattedText className={classes.companyName}>
-              {company.titleHtml || ''}
+              {company?.titleHtml || ''}
             </FormattedText>
-            {company.descriptionHtml && (
+            {company?.descriptionHtml && (
               <FormattedText className={classes.description}>
                 {company.descriptionHtml}
               </FormattedText>
@@ -118,7 +118,7 @@ const CompanyCardWithLinks: React.FC<{
         </Link>
       </div>
       <div className={classes.links}>
-        {company.contacts.map((e, i) => (
+        {company?.contacts.map((e, i) => (
           <MUILink
             target={'_blank'}
             href={e.url}

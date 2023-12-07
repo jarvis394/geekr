@@ -94,7 +94,8 @@ const useAppBarStyles = makeStyles((theme) => ({
     width: '100%',
     '&::before': {
       position: 'absolute',
-      width: ({ scrollProgress }: StyleProps) => scrollProgress * 100 + '%',
+      width: ({ scrollProgress }: StyleProps) =>
+        (scrollProgress || 0) * 100 + '%',
       background:
         theme.palette.type === 'dark'
           ? 'rgba(255, 255, 255, .1)'
@@ -190,21 +191,26 @@ const useAppBarStyles = makeStyles((theme) => ({
 }))
 
 interface Props {
-  children: unknown
-  headerText: unknown
+  headerText: string
   hidePositionBar: boolean
-  shrinkedHeaderText: unknown
+  shrinkedHeaderText: string
   shrinkedBackgroundColor: string
   disableShrinking: boolean
   backgroundColor: string
   toolbarIcons: JSX.Element
-  onBackClick: (
-    backLinkFunction: (history: History<unknown>) => void
-  ) => unknown
-  scrollElement?: HTMLElement
+  onBackClick: (backLinkFunction: (history: History<unknown>) => void) => void
+  scrollElement: HTMLElement | null
 }
 
-const ShrinkedContentUnmemoized = ({ isShrinked, shrinkedHeaderText }) => {
+type ShrinkedContentProps = {
+  isShrinked: boolean
+  shrinkedHeaderText?: string
+}
+
+const ShrinkedContentUnmemoized: React.FC<ShrinkedContentProps> = ({
+  isShrinked,
+  shrinkedHeaderText,
+}) => {
   const classes = useAppBarStyles({})
   return (
     <Fade in={isShrinked} unmountOnExit mountOnEnter>
@@ -223,7 +229,14 @@ const backLinkFunction = (history: History<unknown>) => {
   } else goHome()
 }
 
-const UnshrinkedContentUnmemoized = ({
+type UnshrinkedContentProps = {
+  onBackClick?: (prop: typeof backLinkFunction) => void
+  isShrinked: boolean
+  headerText?: string
+  headerTextUpdated: boolean
+}
+
+const UnshrinkedContentUnmemoized: React.FC<UnshrinkedContentProps> = ({
   headerText,
   onBackClick,
   isShrinked,
@@ -257,7 +270,9 @@ const UnshrinkedContentUnmemoized = ({
 }
 const UnshrinkedContent = React.memo(UnshrinkedContentUnmemoized)
 
-const ToolbarIconsWrapperUnmemoized = ({ isShrinked, children }) => {
+const ToolbarIconsWrapperUnmemoized: React.FC<
+  React.PropsWithChildren<{ isShrinked: boolean }>
+> = ({ isShrinked, children }) => {
   const classes = useAppBarStyles({})
   return (
     <Fade in={!isShrinked}>
@@ -306,8 +321,9 @@ const NavBarUnmemoized = ({
             (element.offsetHeight - 200)
           )
         }
-        const newScrollProgress = getElementScroll(scrollElement)
-        setScrollProgress(newScrollProgress)
+        const newScrollProgress =
+          scrollElement && getElementScroll(scrollElement)
+        setScrollProgress(newScrollProgress || 0)
       }),
     [scrollElement]
   )
@@ -371,7 +387,10 @@ const NavBarUnmemoized = ({
 }
 const NavBar = React.memo(NavBarUnmemoized)
 
-const OutsidePage: React.FC<Partial<Props>> = ({ children, ...props }) => {
+const OutsidePage: React.FC<React.PropsWithChildren<Partial<Props>>> = ({
+  children,
+  ...props
+}) => {
   const classes = useStyles()
 
   return (

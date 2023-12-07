@@ -49,8 +49,8 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       textDecoration: 'underline',
       color: theme.palette.primary.light,
-    }
-  }
+    },
+  },
 }))
 
 const Error: React.FC<{
@@ -71,7 +71,8 @@ const Error: React.FC<{
         <a className={classes.link} href={linkHref}>
           Нажми сюда
         </a>
-        , чтобы вернуться домой. Эта ошибка записана в логи Sentry и будет обработана в ближайшее время.
+        , чтобы вернуться домой. Эта ошибка записана в логи Sentry и будет
+        обработана в ближайшее время.
       </Typography>
       <div className={classes.code}>
         <FormattedText>{`<pre><code class="javascript">${error.toString()}\n${componentStack}</code></pre>`}</FormattedText>

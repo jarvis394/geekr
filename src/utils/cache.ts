@@ -1,4 +1,5 @@
 import { DEFAULT_UPDATE_INTERVAL } from 'src/config/constants'
+import { Posts } from 'src/interfaces'
 
 export const parse = (data: string) => {
   if (!data) return false
@@ -11,11 +12,13 @@ export const parse = (data: string) => {
   }
 }
 
-export const shouldUpdate = (storeData) => {
+export const shouldUpdate = (storeData: Omit<Posts, 'pagesCount'>) => {
   const now = Date.now()
   const shouldUpdateByTS = (d: number) => now - d >= DEFAULT_UPDATE_INTERVAL
 
   if (storeData) {
+    // TODO: fix types
+    //@ts-expect-error
     return shouldUpdateByTS(storeData.lastUpdated)
   } else return true
 }

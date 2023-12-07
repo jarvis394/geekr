@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const MainBlock = ({ children }) => {
+const MainBlock: React.FC<React.PropsWithChildren> = ({ children }) => {
   const classes = useStyles()
 
   return <div className={classes.root}>{children}</div>

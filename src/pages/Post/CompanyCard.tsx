@@ -177,8 +177,8 @@ const CompanyCardSkeleton = () => {
 }
 
 const CompanyCard: React.FC<{
-  post: Post
-  companyAlias: string
+  post: Post | null
+  companyAlias?: string
 }> = ({ post, companyAlias }) => {
   const company = useSelector((store) => store.post.company.data)
   const classes = useStyles()

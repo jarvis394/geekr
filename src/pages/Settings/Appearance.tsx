@@ -28,7 +28,7 @@ import {
   ListItem,
   ListItemText,
   Switch,
-  fade,
+  alpha,
   Divider,
   Button,
   Dialog,
@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
       isDarkTheme(theme) ? 0.01 : 0.3
     ),
     [theme.breakpoints.up(MIN_WIDTH)]: {
-      border: '1px solid ' + fade(theme.palette.divider, 0.03),
+      border: '1px solid ' + alpha(theme.palette.divider, 0.03),
       borderRadius: 8,
       marginTop: theme.spacing(1.5),
     },
@@ -323,7 +323,7 @@ const ThemeCard = ({ theme }: { theme: CustomTheme }) => {
   const classes = useThemeCardStyles({ color: textColor })
   const themeType = useSelector((state) => state.settings.themeType)
   const isCurrent = themeType === theme.type
-  const ref = useRef<HTMLDivElement>()
+  const ref = useRef<HTMLDivElement>(null)
   const changeTheme: React.MouseEventHandler<HTMLButtonElement> = (_event) => {
     if (!isCurrent) dispatch(setSettings({ themeType: theme.type }))
   }
@@ -345,7 +345,7 @@ const ThemeCard = ({ theme }: { theme: CustomTheme }) => {
         component={ButtonBase}
         onClick={changeTheme}
         container
-        justify="center"
+        justifyContent="center"
         className={`${classes.box} ${isCurrent ? classes.border : ''}`}
         style={{ background: paper }}
       >
@@ -419,16 +419,16 @@ const PaletteGridItem = ({
   )
 }
 
-const Switcher = ({
-  onClick: onSwitcherClick = null,
-  primary,
-  secondary,
-  checked = false,
-}) => {
+const Switcher: React.FC<{
+  onClick: () => void
+  primary: React.ReactNode
+  secondary: React.ReactNode
+  checked: boolean
+}> = ({ onClick: onSwitcherClick, primary, secondary, checked = false }) => {
   const [isChecked, setChecked] = useState(checked)
   const onClick = () => {
     setChecked((prev) => !prev)
-    onSwitcherClick()
+    onSwitcherClick?.()
   }
 
   return (
@@ -704,20 +704,20 @@ const Appearance = () => {
   const isCustomThemeChosen = customThemes.some((e) => e.type === themeType)
   const preferredLightThemeName =
     preferredLightTheme in THEME_NAMES
-      ? THEME_NAMES[preferredLightTheme]
+      ? // TODO: fix types
+        //@ts-expect-error
+        THEME_NAMES[preferredLightTheme]
       : customThemes.find((e) => e.type === preferredLightTheme)?.name
   const preferredDarkThemeName =
     preferredDarkTheme in THEME_NAMES
-      ? THEME_NAMES[preferredDarkTheme]
+      ? // TODO: fix types
+        //@ts-expect-error
+        THEME_NAMES[preferredDarkTheme]
       : customThemes.find((e) => e.type === preferredDarkTheme)?.name
-  const [
-    isPreferredLightThemeDialogOpen,
-    setPreferredLightThemeDialogOpen,
-  ] = useState(false)
-  const [
-    isPreferredDarkThemeDialogOpen,
-    setPreferredDarkThemeDialogOpen,
-  ] = useState(false)
+  const [isPreferredLightThemeDialogOpen, setPreferredLightThemeDialogOpen] =
+    useState(false)
+  const [isPreferredDarkThemeDialogOpen, setPreferredDarkThemeDialogOpen] =
+    useState(false)
 
   const handlePreferredLightThemeDialogClose = (value?: string) => {
     setPreferredLightThemeDialogOpen(false)
@@ -752,7 +752,7 @@ const Appearance = () => {
         </Grid>
         <div
           className={classes.section}
-          style={{ paddingBottom: isCustomThemeChosen ? 0 : null }}
+          {...(isCustomThemeChosen && { style: { paddingBottom: 0 } })}
         >
           <Typography className={classes.sectionHeader}>Темы</Typography>
           <FormControl

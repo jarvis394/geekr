@@ -98,13 +98,15 @@ const useNoResultsStyles = makeStyles((theme) => ({
   },
 }))
 
-const SearchInput = ({ q }) => {
+const SearchInput: React.FC<{ q: string }> = ({ q }) => {
   const classes = useSearchStyles()
   const history = useHistory()
   const { t } = useTranslation()
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    // TODO: fix types
+    //@ts-expect-error
     history.push('/search/p/1?q=' + e.target.q.value)
   }
 
@@ -150,17 +152,19 @@ const NoResults = () => {
   )
 }
 
-const SearchResultsScreen = ({ q }) => {
+const SearchResultsScreen: React.FC<{ q: string }> = ({ q }) => {
   const params = useParams() as { page: string }
   const location = useLocation()
   const history = useHistory()
-  const [data, setData] = useState<Posts>()
-  const [fetchError, setError] = useState<string>()
+  const [data, setData] = useState<Posts | null>()
+  const [fetchError, setError] = useState<string | null>()
   const [currentPage, setCurrentPage] = useState<number>(Number(params.page))
   const [pagesCount, setPagesCount] = useState<number>()
-  const authorizedRequestData = useSelector((store) => store.auth.authorizedRequestData)
+  const authorizedRequestData = useSelector(
+    (store) => store.auth.authorizedRequestData
+  )
 
-  const handleChange = (_, i) => {
+  const handleChange = (_: any, i: number) => {
     if (i === currentPage) return
 
     setCurrentPage(i)
@@ -179,11 +183,13 @@ const SearchResultsScreen = ({ q }) => {
           query: q,
           page: currentPage,
           order: 'relevance',
-          authData: authorizedRequestData,
+          authData: authorizedRequestData || undefined,
         })
-        for (const id in d.articleRefs) {
-          d.articleRefs[id].postFirstImage = getPostFirstImage(
-            d.articleRefs[id]
+        for (const id in d.publicationRefs) {
+          // TODO: fix types
+          //@ts-expect-error
+          d.publicationRefs[id].postFirstImage = getPostFirstImage(
+            d.publicationRefs[id]
           )
         }
         setData(d)
@@ -195,18 +201,18 @@ const SearchResultsScreen = ({ q }) => {
     get()
   }, [q, currentPage])
 
-  if (fetchError || data?.articleIds?.length === 0) return <NoResults />
+  if (fetchError || data?.publicationIds?.length === 0) return <NoResults />
 
   return (
     <div>
       {!data && [...new Array(7)].map((_, i) => <PostSkeleton key={i} />)}
       {data &&
-        data.articleIds.map((e, i) => (
-          <PostItem post={data.articleRefs[e]} key={i} />
+        data.publicationIds.map((e, i) => (
+          <PostItem post={data.publicationRefs[e]} key={i} />
         ))}
       <Pagintaion
         disabled={!data}
-        steps={pagesCount}
+        steps={pagesCount || 0}
         currentStep={currentPage}
         handleChange={handleChange}
       />
@@ -232,7 +238,7 @@ const SvgScreen = () => {
 const Search = () => {
   const searchParams = useQuery()
   const classes = useStyles()
-  const query = searchParams.get('q')
+  const query = searchParams.get('q') || ''
 
   return (
     <div className={classes.root}>

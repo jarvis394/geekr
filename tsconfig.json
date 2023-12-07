@@ -1,36 +1,25 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "./build",
-    "module": "esnext",
-    "target": "es5",
-    "lib": [
-      "es6",
-      "dom",
-      "es2018"
-    ],
-    "sourceMap": true,
-    "allowJs": true,
-    "jsx": "react-jsx",
-    "moduleResolution": "node",
-    "rootDir": "./src",
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": false,
-    "noImplicitThis": true,
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": false,
-    "allowSyntheticDefaultImports": true,
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
     "skipLibCheck": true,
-    "esModuleInterop": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "noFallthroughCasesInSwitch": true
+    "jsx": "react-jsx",
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "types": ["vite/client"]
   },
-  "include": [
-    "src"
-  ],
+  "exclude": ["node_modules", "dist"],
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,19 +1,19 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Button, fade, Grid } from '@material-ui/core'
+import { Button, alpha, Grid } from '@material-ui/core'
 import { ModeObject } from 'src/interfaces'
 import { Mode } from 'src/config/constants'
 import isDarkTheme from 'src/utils/isDarkTheme'
 
 const useStyles = makeStyles((theme) => ({
   button: {
-    background: fade(theme.palette.divider, isDarkTheme(theme) ? 0.1 : 0.03),
+    background: alpha(theme.palette.divider, isDarkTheme(theme) ? 0.1 : 0.03),
     borderRadius: 8,
-    color: fade(theme.palette.text.primary, 0.5),
+    color: alpha(theme.palette.text.primary, 0.5),
     fontFamily: 'Google Sans',
     fontWeight: 500,
     '&:hover': {
-      background: fade(theme.palette.divider, 0.1),
+      background: alpha(theme.palette.divider, 0.1),
     },
     fontSize: 15,
     minHeight: 40,
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.primary.main + ' !important',
     color: theme.palette.getContrastText(theme.palette.primary.main),
     boxShadow:
-      '0 3px 6px ' + fade(theme.palette.primary.main, 0.1) + ' !important',
+      '0 3px 6px ' + alpha(theme.palette.primary.main, 0.1) + ' !important',
   },
   inlineContainer: {
     display: 'inline-flex',

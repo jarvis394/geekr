@@ -21,7 +21,7 @@ import { useRoute, useSelector } from 'src/hooks'
 import { FetchingState } from 'src/interfaces'
 import {
   CircularProgress,
-  fade,
+  alpha,
   Theme,
   useMediaQuery,
   useTheme,
@@ -31,8 +31,12 @@ import UserMenu from './UserMenu'
 
 interface StyleProps {
   isTransformed: boolean
-  appBarColor: (theme: Theme) => string
-  shouldChangeColors: boolean
+  appBarColor?: (theme: Theme) => string
+  shouldChangeColors?: boolean
+}
+
+type MakeAppBarBackgroundColorProps = StyleProps & {
+  theme: Theme
 }
 
 const makeAppBarBackgroundColor = ({
@@ -40,7 +44,7 @@ const makeAppBarBackgroundColor = ({
   appBarColor,
   shouldChangeColors,
   theme,
-}) => {
+}: MakeAppBarBackgroundColorProps) => {
   if (shouldChangeColors)
     return theme.palette.background[isTransformed ? 'paper' : 'default']
   else return appBarColor ? appBarColor(theme) : theme.palette.background.paper
@@ -78,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     fontFamily: 'Google Sans',
     cursor: 'pointer',
-    '-webkit-tap-highlight-color': fade(theme.palette.background.paper, 0.3),
+    '-webkit-tap-highlight-color': alpha(theme.palette.background.paper, 0.3),
     userSelect: 'none',
   },
   headerTitleWrapper: {
@@ -109,8 +113,8 @@ const useStyles = makeStyles((theme) => ({
     transform: 'rotate(30deg)',
     width: 24,
     height: 11.85,
-    fill: '#eb4b2b !important'
-  }
+    fill: '#eb4b2b !important',
+  },
 }))
 
 const AppBarComponent = () => {
@@ -118,9 +122,9 @@ const AppBarComponent = () => {
   const history = useHistory()
   const location = useLocation()
   const route = useRoute()
-  const shouldChangeColors = route.shouldAppBarChangeColors
-  const appBarColor = route.appBarColor
-  const isHidden = !route.shouldShowAppBar
+  const shouldChangeColors = route?.shouldAppBarChangeColors
+  const appBarColor = route?.appBarColor
+  const isHidden = !route?.shouldShowAppBar
   const theme = useTheme()
   const appHasDrawer = useMediaQuery(theme.breakpoints.up(MIDDLE_WIDTH))
   const [isUserMenuOpen, setUserMenuOpen] = React.useState(false)
@@ -181,6 +185,9 @@ const AppBarComponent = () => {
               </Typography>
               <Offline
                 polling={{
+                  enabled: true,
+                  interval: 10000,
+                  timeout: 10000,
                   url: 'https://ipv4.icanhazip.com',
                 }}
               >
@@ -205,7 +212,7 @@ const AppBarComponent = () => {
             )}
             {shouldShowUser && (
               <IconButton onClick={openUserMenu}>
-                <Avatar className={classes.avatar} src={userData.avatarUrl} />
+                <Avatar className={classes.avatar} src={userData?.avatarUrl} />
               </IconButton>
             )}
           </div>

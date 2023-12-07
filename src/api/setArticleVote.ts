@@ -9,7 +9,7 @@ export default async ({
 }: {
   mode: 'up' | 'down'
   id: string | number
-  authData: AuthorizedRequestParams
+  authData?: AuthorizedRequestParams
   reason?: string
 }): Promise<ArticleVoteResponse> =>
   await makeRequest<ArticleVoteResponse>({

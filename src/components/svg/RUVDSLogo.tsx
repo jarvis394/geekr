@@ -2,7 +2,7 @@ import React from 'react'
 
 const RUVDSLogo = (
   props: JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>
-) => {  
+) => {
   return (
     <svg
       id="svg"

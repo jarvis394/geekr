@@ -2,12 +2,12 @@ import React, { useEffect } from 'react'
 import {
   Typography,
   ButtonBase,
-  GridList,
-  GridListTile,
+  ImageList,
+  ImageListItem,
   Fade,
   useTheme,
 } from '@material-ui/core'
-import { darken, fade, lighten, makeStyles } from '@material-ui/core/styles'
+import { darken, alpha, lighten, makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
 import { getAdverts } from 'src/store/actions/home'
 import { useDispatch } from 'react-redux'
@@ -110,7 +110,7 @@ const useStyles = makeStyles((theme) => ({
   },
   label: {
     padding: '2px 6px',
-    background: fade(theme.palette.common.white, 0.9),
+    background: alpha(theme.palette.common.white, 0.9),
     fontFamily: 'Google Sans',
     fontSize: 14,
     fontWeight: 800,
@@ -171,10 +171,10 @@ const AdvertsBlock = () => {
   const fetched = useSelector((store) => store.home.adverts.fetched)
   const error = useSelector((store) => store.home.adverts.error)
   const getButtonStyles = (imageUrl: string) => ({
-    backgroundImage: `linear-gradient(to right, ${fade(
+    backgroundImage: `linear-gradient(to right, ${alpha(
       theme.palette.common.black,
       0.7
-    )}, ${fade(theme.palette.common.black, 0.5)}), url(${imageUrl})`,
+    )}, ${alpha(theme.palette.common.black, 0.5)}), url(${imageUrl})`,
   })
 
   if (isHidden) return null
@@ -190,14 +190,14 @@ const AdvertsBlock = () => {
   return (
     <div className={classes.root}>
       <div className={classes.header}>Мегапосты</div>
-      <GridList
-        cellHeight={ADVERTS_BLOCK_HEIGHT}
+      <ImageList
+        rowHeight={ADVERTS_BLOCK_HEIGHT}
         className={classes.buttonsHolder}
         cols={1.2}
       >
         {fetched &&
           data.map((e, i) => (
-            <GridListTile
+            <ImageListItem
               className={classes.tile}
               component={'a'}
               href={e.linkUrl}
@@ -212,15 +212,15 @@ const AdvertsBlock = () => {
                   <Typography className={classes.label}>{e.label}</Typography>
                 </ButtonBase>
               </Fade>
-            </GridListTile>
+            </ImageListItem>
           ))}
         {!fetched && <AdvertsBlockSkeleton />}
-        <GridListTile
+        <ImageListItem
           to={'/megaprojects/p/1'}
           className={classes.tileMegaprojects}
           component={Link}
           classes={{
-            tile: classes.tileTileMegaprojects,
+            item: classes.tileTileMegaprojects,
           }}
         >
           <ButtonBase className={classes.buttonMegaprojects}>
@@ -238,8 +238,8 @@ const AdvertsBlock = () => {
               />
             </span>
           </ButtonBase>
-        </GridListTile>
-      </GridList>
+        </ImageListItem>
+      </ImageList>
     </div>
   )
 }

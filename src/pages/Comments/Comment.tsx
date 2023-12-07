@@ -6,7 +6,7 @@ import UserAvatar from 'src/components/blocks/UserAvatar'
 import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 import {
   Button,
-  fade,
+  alpha,
   IconButton,
   Fade,
   Typography,
@@ -19,9 +19,7 @@ import { MIN_WIDTH } from 'src/config/constants'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
-import {
-  LazyLoadComponent,
-} from 'react-lazy-load-image-component'
+import { LazyLoadComponent } from 'react-lazy-load-image-component'
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded'
 import { Icon16Up, Icon16Down } from '@vkontakte/icons'
 import { useSelector } from 'src/hooks'
@@ -78,13 +76,13 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 2,
     height: 24,
     '&:focus': {
-      outline: '1px solid ' + fade(theme.palette.primary.main, 0.75),
+      outline: '1px solid ' + alpha(theme.palette.primary.main, 0.75),
     },
   },
   authorBarOP: {
-    background: fade(lightGreen[400], 0.2),
+    background: alpha(lightGreen[400], 0.2),
     '&:focus': {
-      outline: '1px solid ' + fade(lightGreen[400], 0.75),
+      outline: '1px solid ' + alpha(lightGreen[400], 0.75),
     },
   },
   authorBarLink: {
@@ -104,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
   },
   depthLine: {
     position: 'absolute',
-    borderLeft: '1px solid ' + fade(theme.palette.divider, 0.05),
+    borderLeft: '1px solid ' + alpha(theme.palette.divider, 0.05),
   },
   avatar: {
     width: 24,
@@ -113,7 +111,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 2,
   },
   grayIcon: {
-    color: fade(theme.palette.text.hint, 0.2),
+    color: alpha(theme.palette.text.hint, 0.2),
     padding: 3,
   },
   message: {
@@ -126,9 +124,10 @@ const useStyles = makeStyles((theme) => ({
       margin: 0,
       fontSize: '15px !important',
     },
-    '& p+p, pre+p, blockquote, blockquote+p, details, details+p, figure, figure+p, iframe, iframe+p, pre, pre+p, table, table+p': {
-      marginTop: theme.spacing(1.5) + 'px !important',
-    },
+    '& p+p, pre+p, blockquote, blockquote+p, details, details+p, figure, figure+p, iframe, iframe+p, pre, pre+p, table, table+p':
+      {
+        marginTop: theme.spacing(1.5) + 'px !important',
+      },
   },
   authorAndTS: {
     display: 'flex',
@@ -202,7 +201,7 @@ const useStyles = makeStyles((theme) => ({
   },
   favoriteIcon: {
     fontSize: 20,
-    color: fade(theme.palette.primary.main, 0.2),
+    color: alpha(theme.palette.primary.main, 0.2),
   },
   placeholder: {
     width: '100%',

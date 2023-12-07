@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   ButtonBase,
-  fade,
+  alpha,
   Typography,
   useMediaQuery,
   useTheme,
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontFamily: 'Google Sans',
     fontSize: 14,
-    color: fade(
+    color: alpha(
       theme.palette.getContrastText(theme.palette.primary.dark),
       0.75
     ),
@@ -81,12 +81,12 @@ const UpdateNotification = () => {
   const match = useMediaQuery(theme.breakpoints.up(MIDDLE_WIDTH), {
     noSsr: true,
   })
-  const noBottomMargin = !route.shouldShowAppBar || match
+  const noBottomMargin = !route?.shouldShowAppBar || match
   const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
     const receiveMessage = (event: MessageEvent<string>) => {
-      if (event.origin === process.env.PUBLIC_URL) {
+      if (event.origin === import.meta.url) {
         if (event.data === 'showUpdateNotification') {
           setIsShown(true)
         } else if (event.data === 'showUpdateSuccessNotification') {

@@ -61,12 +61,6 @@ const Home = () => {
   const params = useParams<HomePathParams>()
   const query = useQuery()
   const flow = (query.get('flow') || 'all') as FlowAlias
-
-  /** Show 404 page when 'flow' value is outside of flows aliases */
-  if (!FLOWS.some((e) => e.alias === flow)) {
-    return <NotFound />
-  }
-
   const lastSelectedMode = getCachedMode()
   const paramsMode = useLastMode()
   const [mode, setMode] = useState<Mode>(paramsMode || lastSelectedMode.mode)
@@ -99,12 +93,20 @@ const Home = () => {
       ? state.home.data[mode].pagesCount
       : state.home.flows.data[flow][mode].pagesCount
   )
+  // TODO: fix types
+  //@ts-expect-error
   const fetchErrorMessage = isServerUpdateError(fetchError?.error?.message)
     ? 'Идут технические работы'
-    : fetchError?.error?.message
+    : // TODO: fix types
+      //@ts-expect-error
+      fetchError?.error?.message
+  // TODO: fix types
+  //@ts-expect-error
   const fetchErrorCode = isServerUpdateError(fetchError?.error?.message)
     ? 503
-    : fetchError?.error?.code
+    : // TODO: fix types
+      //@ts-expect-error
+      fetchError?.error?.code
 
   const PaginationComponent = () =>
     pagesCount ? (
@@ -117,30 +119,37 @@ const Home = () => {
     ) : null
 
   const setPostItemSizeWrapper = (id: number | string, size: number) => {
+    // TODO: fix types
+    //@ts-expect-error
     !postItemsSizesMap[id] && dispatch(setPostItemSize(id, size))
   }
-  const getPostItemSize = (id: number | string) => {
+  const getPostItemSize = (id?: number | string): number => {
+    // TODO: fix types
+    //@ts-expect-error
     return postItemsSizesMap[id] || DEFAULT_POST_ITEM_HEIGHT
   }
   const postsComponents =
-    posts &&
-    posts?.articleIds?.map((id, i) => (
-      <PostItem
-        key={i}
-        setPostItemSize={setPostItemSizeWrapper}
-        getPostItemSize={getPostItemSize}
-        post={posts.articleRefs[id]}
-      />
-    )) || []
+    (posts &&
+      posts?.publicationIds?.map((id, i) => (
+        <PostItem
+          key={i}
+          setPostItemSize={setPostItemSizeWrapper}
+          getPostItemSize={getPostItemSize}
+          post={posts.publicationRefs[id]}
+        />
+      ))) ||
+    []
 
-  const handlePagination = (_, i) => {
+  const handlePagination = (_: any, i: string | number) => {
     if (i === currentPage) return
     history.push(
-      modes.find((e) => e.mode === mode).to + 'p/' + i + '?' + query.toString()
+      modes.find((e) => e.mode === mode)?.to + 'p/' + i + '?' + query.toString()
     )
   }
 
   const handleSwitcher = React.useCallback(
+    // TODO: fix types
+    //@ts-expect-error
     ({ mode: newMode, to }) => {
       localStorage.setItem('mode', newMode)
       setMode(newMode)
@@ -151,7 +160,7 @@ const Home = () => {
 
   const onFlowsBarLinkClick = (e: FlowObject) => {
     if (e.alias === 'all') {
-      history.push(lastAllFlowsMode.to + 'p/1')
+      history.push(lastAllFlowsMode?.to + 'p/1')
     } else {
       history.push('/all/p/1?flow=' + e.alias)
     }
@@ -161,6 +170,11 @@ const Home = () => {
     if (paramsMode !== mode) setMode(paramsMode)
     dispatch(getPosts({ mode, page: currentPage, flow }))
   }, [paramsMode, mode, flow, currentPage, location.pathname, location.search])
+
+  /** Show 404 page when 'flow' value is outside of flows aliases */
+  if (!FLOWS.some((e) => e.alias === flow)) {
+    return <NotFound />
+  }
 
   return (
     <div className={classes.root}>

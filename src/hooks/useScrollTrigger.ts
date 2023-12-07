@@ -32,7 +32,7 @@ function defaultTrigger(store: StoreRef, options: Partial<Options>) {
   const { threshold = defaultThreshold, target, trigger } = options
   const previousDirection = store.current.direction
   const previousScroll = store.current.previousScroll
-  const currentScroll = target ? target.pageYOffset : 0
+  const currentScroll = target ? target.screenY : 0
 
   // Set the trigger to show if the scroll position is lower than a threshold
   if (currentScroll < threshold) return State.SHOW
@@ -56,13 +56,15 @@ function defaultTrigger(store: StoreRef, options: Partial<Options>) {
   // Return false when user passed the threshold value by scrolling upwards
   if (store.current.direction === Direction.UP) {
     if (store.current.position - threshold >= currentScroll) return State.SHOW
-    else return trigger
+    else if (trigger !== undefined) return trigger
   }
   // Return true when user passed the threshold value by scrolling downwards
   if (store.current.direction === Direction.DOWN) {
     if (store.current.position + threshold <= currentScroll) return State.HIDE
-    else return trigger
+    else if (trigger !== undefined) return trigger
   }
+
+  return State.SHOW
 }
 
 const useScrollTrigger = (options: Partial<Options> = {}) => {
@@ -70,28 +72,34 @@ const useScrollTrigger = (options: Partial<Options> = {}) => {
     getTrigger = defaultTrigger,
     target = defaultTarget,
     threshold = defaultThreshold,
-    triggerValue = target.pageYOffset > threshold,
+    triggerValue = (target?.scrollY || 0) > threshold,
   } = options
   const store: StoreRef = React.useRef({
-    position: target.pageYOffset,
-    previousScroll: target.pageYOffset,
-    direction: undefined,
+    position: target?.scrollY || 0,
+    previousScroll: target?.scrollY || 0,
+    direction: Direction.DOWN,
   })
   const [trigger, setTrigger] = React.useState(() =>
-    getTrigger(store, { trigger: triggerValue, target, threshold })
+    getTrigger(store, {
+      trigger: triggerValue,
+      target: target || window,
+      threshold,
+    })
   )
 
   React.useEffect(() => {
     const handleScroll = () => {
-      setTrigger(getTrigger(store, { target, trigger, threshold }))
+      setTrigger(
+        getTrigger(store, { target: target || window, trigger, threshold })
+      )
     }
 
     // Re-evaluate trigger when dependencies change
     handleScroll()
     // passive: true enhances scrolling experience
-    target.addEventListener('scroll', handleScroll, { passive: true })
+    target?.addEventListener('scroll', handleScroll, { passive: true })
     return () => {
-      target.removeEventListener('scroll', handleScroll)
+      target?.removeEventListener('scroll', handleScroll)
     }
   }, [target, getTrigger, trigger, threshold])
 
