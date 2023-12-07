@@ -45,7 +45,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "tinycolor2": "^1.6.0",
-    "workbox-build": "^6.1.1"
+    "workbox-build": "^6.1.1",
+    "rimraf": "^5.0.5"
   },
   "scripts": {
     "dev": "vite --host",
@@ -102,7 +103,6 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "8.0.3",
     "prettier": "^3.0.3",
-    "rimraf": "^5.0.0",
     "typescript": "latest",
     "vite": "latest",
     "vite-tsconfig-paths": "^4.0.5"
