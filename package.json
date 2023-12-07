@@ -46,7 +46,11 @@
     "redux-thunk": "^2.3.0",
     "tinycolor2": "^1.6.0",
     "workbox-build": "^6.1.1",
-    "rimraf": "^5.0.5"
+    "rimraf": "^5.0.5",
+    "typescript": "latest",
+    "vite": "latest",
+    "vite-tsconfig-paths": "^4.0.5",
+    "@vitejs/plugin-react": "latest"
   },
   "scripts": {
     "dev": "vite --host",
@@ -95,16 +99,12 @@
     "@types/tinycolor2": "^1.4.6",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
-    "@vitejs/plugin-react": "latest",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "8.0.3",
-    "prettier": "^3.0.3",
-    "typescript": "latest",
-    "vite": "latest",
-    "vite-tsconfig-paths": "^4.0.5"
+    "prettier": "^3.0.3"
   }
 }
