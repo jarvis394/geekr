@@ -19,8 +19,6 @@ import {
   MIDDLE_WIDTH,
   MIN_WIDTH,
 } from 'src/config/constants'
-import isMobile from 'is-mobile'
-import { chromeAddressBarHeight } from 'src/config/constants'
 import { useScrollTrigger } from 'src/hooks'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import getInvertedContrastPaperColor from 'src/utils/getInvertedContrastPaperColor'
