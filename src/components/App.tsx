@@ -1,5 +1,11 @@
 import * as React from 'react'
-import { ThemeProvider, alpha, makeStyles } from '@material-ui/core/styles'
+import {
+  ThemeProvider,
+  alpha,
+  makeStyles,
+  lighten,
+  darken,
+} from '@material-ui/core/styles'
 import createMuiTheme, { Theme } from '@material-ui/core/styles/createTheme'
 import AppRouter from './Router'
 import AppBar from './blocks/AppBar'
@@ -12,7 +18,6 @@ import {
   MIDDLE_WIDTH,
   MIN_WIDTH,
 } from '../config/constants'
-import { lighten, darken } from '@material-ui/core/styles'
 import isMobile from 'is-mobile'
 import { useRoute, useSelector } from 'src/hooks'
 import ScrollRestoration from 'react-scroll-restoration'
@@ -30,7 +35,7 @@ import { ErrorBoundary } from '@sentry/react'
 import ErrorPage from 'src/pages/Error'
 import RebrandingModal from 'src/components/modals/Rebranding'
 import RUVDSPromoNotification from './blocks/RUVDSPromo/Notification'
-import HalloweenNotification from './blocks/HalloweenThemePromo/Notification'
+import { Analytics } from '@vercel/analytics/react'
 
 interface StyleProps {
   theme: Theme
@@ -159,14 +164,7 @@ const App: React.FC = () => {
   // Set root classes
   useEffect(() => {
     document.body.className = classes.body
-
-    if (window.location.hostname === 'habra.vercel.app') {
-      window.location.replace(
-        'https://geekr.vercel.app' +
-          window.location.pathname +
-          window.location.search
-      )
-    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -185,6 +183,7 @@ const App: React.FC = () => {
             </div>
           </div>
           <RebrandingModal />
+          <Analytics />
         </SnackbarProvider>
       </ErrorBoundary>
     </ThemeProvider>

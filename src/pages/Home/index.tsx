@@ -98,15 +98,15 @@ const Home = () => {
   const fetchErrorMessage = isServerUpdateError(fetchError?.error?.message)
     ? 'Идут технические работы'
     : // TODO: fix types
-      //@ts-expect-error
-      fetchError?.error?.message
+  //@ts-expect-error
+    fetchError?.error?.message
   // TODO: fix types
   //@ts-expect-error
   const fetchErrorCode = isServerUpdateError(fetchError?.error?.message)
     ? 503
     : // TODO: fix types
-      //@ts-expect-error
-      fetchError?.error?.code
+  //@ts-expect-error
+    fetchError?.error?.code
 
   const PaginationComponent = () =>
     pagesCount ? (

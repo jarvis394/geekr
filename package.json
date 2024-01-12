@@ -12,6 +12,9 @@
     "@nteract/mathjax": "^4.0.15",
     "@sentry/react": "^7.85.0",
     "@sentry/tracing": "^7.85.0",
+    "@types/history": "^4.7.2",
+    "@types/react-router-dom": "^5.2.0",
+    "@vercel/analytics": "^1.1.1",
     "@vitejs/plugin-react": "latest",
     "@vkontakte/icons": "^1.124.0",
     "axios": "^1.6.2",
@@ -51,9 +54,7 @@
     "typescript": "latest",
     "vite": "latest",
     "vite-tsconfig-paths": "^4.0.5",
-    "workbox-build": "^6.1.1",
-    "@types/react-router-dom": "^5.2.0",
-    "@types/history": "^4.7.2"
+    "workbox-build": "^6.1.1"
   },
   "scripts": {
     "dev": "vite --host",
