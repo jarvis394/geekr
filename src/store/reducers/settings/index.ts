@@ -26,8 +26,8 @@ export default (
         ...newSettings,
         theme: shouldUpdateTheme
           ? // TODO: fix types
-            //@ts-expect-error
-            generateTheme(newSettings.themeType)
+        //@ts-expect-error
+          generateTheme(newSettings.themeType)
           : state.theme,
       }
       return state

@@ -22,37 +22,37 @@ export const getPosts =
   ({ mode, page, flow, forceUpdate = false }: GetPostsParams) =>
   // TODO: fix types
   //@ts-expect-error
-  async (dispatch, getState: () => RootState) => {
-    const type = HOME_PREFIX + 'FETCH'
-    // Get data from root store to find out if we're going to fetch a data or not
-    const storeState = getState()
-    const authData = storeState.auth.authorizedRequestData
-    const storeData =
+    async (dispatch, getState: () => RootState) => {
+      const type = HOME_PREFIX + 'FETCH'
+      // Get data from root store to find out if we're going to fetch a data or not
+      const storeState = getState()
+      const authData = storeState.auth.authorizedRequestData
+      const storeData =
       flow === 'all'
         ? storeState.home.data[mode].pages[page]
         : storeState.home.flows.data[flow][mode].pages[page]
 
-    if (!shouldUpdate(storeData) && !forceUpdate) {
-      return Promise.resolve()
+      if (!shouldUpdate(storeData) && !forceUpdate) {
+        return Promise.resolve()
+      }
+
+      dispatch({ type, payload: { mode, flow } })
+
+      try {
+        const data = await api.getPosts({ mode, page, flow, authData })
+        const pagesCount = data?.pagesCount
+
+        dispatch({
+          type: type + '_FULFILLED',
+          payload: { data: data, mode, page, pagesCount, flow },
+        })
+      } catch (error) {
+        dispatch({
+          type: type + '_REJECTED',
+          payload: { error: (error as Error)?.message, mode, page, flow },
+        })
+      }
     }
-
-    dispatch({ type, payload: { mode, flow } })
-
-    try {
-      const data = await api.getPosts({ mode, page, flow, authData })
-      const pagesCount = data?.pagesCount
-
-      dispatch({
-        type: type + '_FULFILLED',
-        payload: { data: data, mode, page, pagesCount, flow },
-      })
-    } catch (error) {
-      dispatch({
-        type: type + '_REJECTED',
-        payload: { error: (error as Error)?.message, mode, page, flow },
-      })
-    }
-  }
 
 // TODO: fix types
 //@ts-expect-error
@@ -126,12 +126,12 @@ export const setPostItemSize =
   (id: number | string, size: number) =>
   // TODO: fix types
   //@ts-expect-error
-  (dispatch, getState: () => RootState) => {
-    const sizesMap = getState().home.sizesMap
+    (dispatch, getState: () => RootState) => {
+      const sizesMap = getState().home.sizesMap
 
-    // TODO: fix types
-    //@ts-expect-error
-    if (!sizesMap[id]) {
-      dispatch({ type: SET_HOME_POST_ITEM_SIZE, payload: { id, size } })
+      // TODO: fix types
+      //@ts-expect-error
+      if (!sizesMap[id]) {
+        dispatch({ type: SET_HOME_POST_ITEM_SIZE, payload: { id, size } })
+      }
     }
-  }

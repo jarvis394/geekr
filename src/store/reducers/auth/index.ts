@@ -34,9 +34,9 @@ const initialState: State = {
   authorizedRequestData:
     cachedAuthData && cachedCSRFToken
       ? {
-          connectSID: cachedAuthData?.connectSID,
-          csrfToken: cachedCSRFToken,
-        }
+        connectSID: cachedAuthData?.connectSID,
+        csrfToken: cachedCSRFToken,
+      }
       : undefined,
 }
 

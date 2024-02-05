@@ -705,14 +705,14 @@ const Appearance = () => {
   const preferredLightThemeName =
     preferredLightTheme in THEME_NAMES
       ? // TODO: fix types
-        //@ts-expect-error
-        THEME_NAMES[preferredLightTheme]
+    //@ts-expect-error
+      THEME_NAMES[preferredLightTheme]
       : customThemes.find((e) => e.type === preferredLightTheme)?.name
   const preferredDarkThemeName =
     preferredDarkTheme in THEME_NAMES
       ? // TODO: fix types
-        //@ts-expect-error
-        THEME_NAMES[preferredDarkTheme]
+    //@ts-expect-error
+      THEME_NAMES[preferredDarkTheme]
       : customThemes.find((e) => e.type === preferredDarkTheme)?.name
   const [isPreferredLightThemeDialogOpen, setPreferredLightThemeDialogOpen] =
     useState(false)

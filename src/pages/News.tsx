@@ -59,8 +59,8 @@ const News = () => {
   const posts: Posts = useSelector((state) =>
     flow === 'all'
       ? // TODO: fix types
-        // @ts-ignore
-        state.news.data.pages[currentPage]
+    // @ts-ignore
+      state.news.data.pages[currentPage]
       : state.news.flows[flow].pages[currentPage]
   )
   const pagesCount = useSelector((state) =>

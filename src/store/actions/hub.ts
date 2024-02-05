@@ -19,28 +19,28 @@ import { RootState } from '..'
  */
 export const getHub =
   (alias: string) =>
-  async (
+    async (
     // TODO: fix types
     //@ts-expect-error
-    dispatch,
-    getState: () => RootState
-  ) => {
-    const type = GET_PROFILE + '_FETCH'
-    const authData = getState().auth.authorizedRequestData
+      dispatch,
+      getState: () => RootState
+    ) => {
+      const type = GET_PROFILE + '_FETCH'
+      const authData = getState().auth.authorizedRequestData
 
-    dispatch({ type })
+      dispatch({ type })
 
-    try {
-      const data = await getHubProfile(alias, authData)
+      try {
+        const data = await getHubProfile(alias, authData)
 
-      dispatch({
-        type: type + '_FULFILLED',
-        payload: data,
-      })
-    } catch (error) {
-      dispatch({ type: type + '_REJECTED', payload: (error as Error)?.message })
+        dispatch({
+          type: type + '_FULFILLED',
+          payload: data,
+        })
+      } catch (error) {
+        dispatch({ type: type + '_REJECTED', payload: (error as Error)?.message })
+      }
     }
-  }
 
 /**
  * Gets hub's news promo
@@ -77,23 +77,23 @@ export const getHubPosts =
   (mode: Mode, page: number, alias: string) =>
   // TODO: fix types
   //@ts-expect-error
-  async (dispatch, getState: () => RootState) => {
-    const type = GET_POSTS + '_FETCH'
-    const authData = getState().auth.authorizedRequestData
+    async (dispatch, getState: () => RootState) => {
+      const type = GET_POSTS + '_FETCH'
+      const authData = getState().auth.authorizedRequestData
 
-    dispatch({ type })
+      dispatch({ type })
 
-    try {
-      const data = await getHubPostsRequest({ mode, page, alias, authData })
+      try {
+        const data = await getHubPostsRequest({ mode, page, alias, authData })
 
-      dispatch({
-        type: type + '_FULFILLED',
-        payload: data,
-      })
-    } catch (error) {
-      dispatch({ type: type + '_REJECTED', payload: (error as Error)?.message })
+        dispatch({
+          type: type + '_FULFILLED',
+          payload: data,
+        })
+      } catch (error) {
+        dispatch({ type: type + '_REJECTED', payload: (error as Error)?.message })
+      }
     }
-  }
 
 /**
  * Gets hub's authors
@@ -102,22 +102,22 @@ export const getHubAuthors =
   ({ alias, page }: { alias: string; page: number }) =>
   // TODO: fix types
   //@ts-expect-error
-  async (dispatch) => {
-    const type = GET_AUTHORS + '_FETCH'
+    async (dispatch) => {
+      const type = GET_AUTHORS + '_FETCH'
 
-    dispatch({ type })
+      dispatch({ type })
 
-    try {
-      const data = await getHubAuthorsRequest({ alias, page })
+      try {
+        const data = await getHubAuthorsRequest({ alias, page })
 
-      dispatch({
-        type: type + '_FULFILLED',
-        payload: data,
-      })
-    } catch (error) {
-      dispatch({ type: type + '_REJECTED', payload: (error as Error)?.message })
+        dispatch({
+          type: type + '_FULFILLED',
+          payload: data,
+        })
+      } catch (error) {
+        dispatch({ type: type + '_REJECTED', payload: (error as Error)?.message })
+      }
     }
-  }
 
 /**
  * Gets hub's companies

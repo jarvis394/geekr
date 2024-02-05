@@ -1,4 +1,4 @@
-<p align="center"><a href="https://geekr.vercel.app/top/weekly/p/1/"><img width=830 src="images/promo.png" alt="geekr logo" /></a></p>
+<p align="center"><a href="https://geekr.onrender.com"><img width=830 src="images/promo.png" alt="geekr logo" /></a></p>
 <h5 align="center">✨🎉 Habrahabr, but with a new client</h5>
 
 <p align="center">
@@ -9,7 +9,7 @@
 
 ## See it live
 
-Go to the [geekr.vercel.app](https://geekr.vercel.app/top/weekly/p/1) site and feel yourself at home! It can do almost everything that the original site does, but with its own tricks and features.
+Go to the [geekr.onrender.com](https://geekr.onrender.com) site and feel yourself at home! It can do almost everything that the original site does, but with its own tricks and features.
 
 ## Features
 

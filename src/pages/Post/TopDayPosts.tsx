@@ -74,13 +74,15 @@ const TopDayPosts = () => {
       <div>
         {!data && <DensePostsSkeleton n={5} />}
         {data &&
-          data.publicationIds.slice(0, 5).map((id, i) => (
-            <DensePostItem
-              className={classes.postItem}
-              post={data.publicationRefs[id]}
-              key={i}
-            />
-          ))}
+          data.publicationIds
+            .slice(0, 5)
+            .map((id, i) => (
+              <DensePostItem
+                className={classes.postItem}
+                post={data.publicationRefs[id]}
+                key={i}
+              />
+            ))}
       </div>
     </Paper>
   )

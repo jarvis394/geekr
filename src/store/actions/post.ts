@@ -150,27 +150,27 @@ export const parsePostComments =
   (id: number | string, options: Partial<GetPostCommentsOptions> = {}) =>
   // TODO: fix types
   //@ts-expect-error
-  async (dispatch, getState: () => RootState) => {
-    const state = getState()
-    const storeData = state.post
+    async (dispatch, getState: () => RootState) => {
+      const state = getState()
+      const storeData = state.post
 
-    if (
-      storeData.comments.state === FetchingState.Fetched &&
+      if (
+        storeData.comments.state === FetchingState.Fetched &&
       storeData.post.data?.id.toString() === id.toString()
-    ) {
-      const data = storeData.comments.fetchedData
-      if (!data) return
+      ) {
+        const data = storeData.comments.fetchedData
+        if (!data) return
 
-      const parsedComments = parseComments(data.comments, options)
-      const flattenComments = flatten(parsedComments)
-      const commentsWithLevelInfo = setLevelInfo(flattenComments)
+        const parsedComments = parseComments(data.comments, options)
+        const flattenComments = flatten(parsedComments)
+        const commentsWithLevelInfo = setLevelInfo(flattenComments)
 
-      dispatch({
-        type: COMMENTS_FETCH_FULFILLED,
-        payload: { comments: commentsWithLevelInfo, fetchedData: data },
-      })
+        dispatch({
+          type: COMMENTS_FETCH_FULFILLED,
+          payload: { comments: commentsWithLevelInfo, fetchedData: data },
+        })
+      }
     }
-  }
 
 /**
  * Gets post comments and dispatches the data to the `post` store
@@ -180,52 +180,52 @@ export const getPostComments =
   (id: number | string, options: Partial<GetPostCommentsOptions> = {}) =>
   // TODO: fix types
   //@ts-expect-error
-  async (dispatch, getState: () => RootState) => {
-    const state = getState()
-    const storeData = state.post
-    const authData = state.auth.authorizedRequestData
-    if (
-      storeData.comments.state === FetchingState.Fetched &&
+    async (dispatch, getState: () => RootState) => {
+      const state = getState()
+      const storeData = state.post
+      const authData = state.auth.authorizedRequestData
+      if (
+        storeData.comments.state === FetchingState.Fetched &&
       storeData.post.data?.id.toString() === id.toString()
-    ) {
-      return Promise.resolve()
+      ) {
+        return Promise.resolve()
+      }
+
+      dispatch({ type: COMMENTS_FETCH })
+
+      try {
+        const data = await api.getComments(id, authData)
+        const parsedComments = parseComments(data.comments, options)
+        const flattenComments = flatten(parsedComments)
+        const commentsWithLevelInfo = setLevelInfo(flattenComments)
+
+        dispatch({
+          type: COMMENTS_FETCH_FULFILLED,
+          payload: {
+            comments: commentsWithLevelInfo,
+            fetchedData: data,
+            parseOptions: options,
+          },
+        })
+      } catch (error) {
+        dispatch({
+          type: COMMENTS_FETCH_REJECTED,
+          payload: (error as Error).message,
+        })
+      }
     }
-
-    dispatch({ type: COMMENTS_FETCH })
-
-    try {
-      const data = await api.getComments(id, authData)
-      const parsedComments = parseComments(data.comments, options)
-      const flattenComments = flatten(parsedComments)
-      const commentsWithLevelInfo = setLevelInfo(flattenComments)
-
-      dispatch({
-        type: COMMENTS_FETCH_FULFILLED,
-        payload: {
-          comments: commentsWithLevelInfo,
-          fetchedData: data,
-          parseOptions: options,
-        },
-      })
-    } catch (error) {
-      dispatch({
-        type: COMMENTS_FETCH_REJECTED,
-        payload: (error as Error).message,
-      })
-    }
-  }
 
 export const setPostCommentSize =
   (id: number | string, size: number) =>
   // TODO: fix types
   //@ts-expect-error
-  (dispatch, getState: () => RootState) => {
-    const sizesMap = getState().post.comments.sizesMap
+    (dispatch, getState: () => RootState) => {
+      const sizesMap = getState().post.comments.sizesMap
 
-    if (!sizesMap[id]) {
-      dispatch({ type: SET_POST_COMMENT_SIZE, payload: { id, size } })
+      if (!sizesMap[id]) {
+        dispatch({ type: SET_POST_COMMENT_SIZE, payload: { id, size } })
+      }
     }
-  }
 
 /**
  * Gets post comments and dispatches the data to the `post` store
