@@ -44,11 +44,6 @@ const News = () => {
   const query = useQuery()
   const flow = (query.get('flow') || 'all') as FlowAlias
 
-  /** Show 404 page when 'flow' value is outside of flows aliases */
-  if (!FLOWS.some((e) => e.alias === flow)) {
-    return <NotFound />
-  }
-
   const currentPage = Number(params.page)
   const history = useHistory()
   const classes = useStyles()
@@ -56,13 +51,15 @@ const News = () => {
   const isFetched = useSelector((state) => state.news.fetched)
   const isFetching = useSelector((state) => state.news.fetching)
   const fetchError = useSelector((state) => state.news.error)
-  const posts: Posts = useSelector((state) =>
-    flow === 'all'
-      ? // TODO: fix types
-        // @ts-ignore
-        state.news.data.pages[currentPage]
-      : state.news.flows[flow].pages[currentPage]
-  )
+  const posts: Posts = useSelector((state) => {
+    if (flow === 'all') {
+      // TODO: fix types
+      // @ts-expect-error temporary fix
+      return state.news.data.pages[currentPage]
+    } else {
+      return state.news.flows[flow].pages[currentPage]
+    }
+  })
   const pagesCount = useSelector((state) =>
     flow === 'all'
       ? state.news.data.pagesCount
@@ -79,7 +76,10 @@ const News = () => {
       />
     ) : null
 
-  const handlePagination = (_: any, i: string | number) => {
+  const handlePagination = (
+    _e: React.ChangeEvent<unknown>,
+    i: string | number
+  ) => {
     if (i === currentPage) return
     else history.push('/news/p/' + i)
   }
@@ -94,7 +94,14 @@ const News = () => {
 
   useEffect(() => {
     dispatch(getNews(currentPage, flow))
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, dispatch, flow, location.pathname, location.search])
+
+  /** Show 404 page when 'flow' value is outside of flows aliases */
+  if (!FLOWS.some((e) => e.alias === flow)) {
+    return <NotFound />
+  }
 
   return (
     <>

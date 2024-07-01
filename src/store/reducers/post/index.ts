@@ -38,7 +38,7 @@ const initialState: State = {
 }
 
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 export default (storeState = initialState, { type, payload }): State => {
   switch (type) {
     /** New post is being fetched, so we need to reset `comments` and `company` data */

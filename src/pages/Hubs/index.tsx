@@ -6,11 +6,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import { List, Typography } from '@material-ui/core'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
-import { getHubsList } from 'src/store/actions/hubs'
+import { getHubsList, getHubsSearchResults } from 'src/store/actions/hubs'
 import { useParams, useHistory, useLocation } from 'react-router-dom'
 import ErrorComponent from 'src/components/blocks/Error'
 import EmptySVG from 'src/components/svg/Empty'
-import { getHubsSearchResults } from 'src/store/actions/hubs'
 import { HUBS_PREFIX } from 'src/store/reducers/hubs/types'
 import Pagination from 'src/components/blocks/Pagination'
 import OutsidePage from 'src/components/blocks/OutsidePage'
@@ -83,7 +82,7 @@ const Hubs = () => {
   const fetchError = useSelector((state) => state.hubs.error)
   const pagesCount = useSelector((state) => state.hubs.data.pagesCount)
   // TODO: fix types
-  //@ts-expect-error
+  //@ts-expect-error temporary fix
   const data = useSelector((state) => state.hubs.data.pages[currentPage])
   const storeSearchResults = useSelector((state) => state.hubs.searchResults)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -107,7 +106,7 @@ const Hubs = () => {
     return true
   }
 
-  const handlePagination = (_: any, i: number) => {
+  const handlePagination = (_e: React.ChangeEvent<unknown>, i: number) => {
     if (i === currentPage) return
     history.replace('/hubs/p/' + i)
   }

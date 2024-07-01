@@ -14,8 +14,7 @@ import {
 } from 'src/config/constants'
 import { useRoute } from 'src/hooks'
 import RUVDSLogo from 'src/components/svg/RUVDSLogo'
-import { Icon20Clear } from '@vkontakte/icons'
-import { Icon16Chevron } from '@vkontakte/icons'
+import { Icon20Clear, Icon16Chevron } from '@vkontakte/icons'
 
 const useStyles = makeStyles((theme) => ({
   rootWrapper: {

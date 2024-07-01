@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   AppBar,
-  ButtonBase,
   darken,
   Fade,
   IconButton,
@@ -332,13 +331,14 @@ const NavBarUnmemoized = ({
       window.addEventListener('scroll', scrollCallback, { passive: true })
       return () => window.removeEventListener('scroll', scrollCallback)
     } else return () => null
-  }, [hidePositionBar, disableShrinking, scrollElement])
+  }, [hidePositionBar, disableShrinking, scrollElement, scrollCallback])
 
   // Remove fade effect on a title if it was set by default
   // If the title is being fetched (ex. Post),
   // we need to change the state and render Fade component
   useEffect(() => {
     !headerTextUpdated && setHeaderTextUpdated(!headerText)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerText])
 
   const onBackButtonClick = () => {
@@ -364,16 +364,16 @@ const NavBarUnmemoized = ({
           <div className={classes.marginContainer}>
             <div className={classes.content}>
               <UnshrinkedContent
-                isShrinked={isShrinked}
+                isShrinked={isShrinked || false}
                 headerText={headerText}
                 onBackClick={onBackClick}
                 headerTextUpdated={headerTextUpdated}
               />
               <ShrinkedContent
-                isShrinked={isShrinked}
+                isShrinked={isShrinked || false}
                 shrinkedHeaderText={shrinkedHeaderText || headerText}
               />
-              <ToolbarIconsWrapper isShrinked={isShrinked}>
+              <ToolbarIconsWrapper isShrinked={isShrinked || false}>
                 {toolbarIcons}
               </ToolbarIconsWrapper>
             </div>

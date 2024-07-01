@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import Tabs from '.'
 import { UserExtended as UserExtendedObject } from 'src/interfaces/User'
@@ -72,7 +72,7 @@ const generateTabs = (user: UserExtendedObject): TabObject[] => [
 
 const UserTabs = () => {
   const user = useSelector((state) => state.profile.profile.card?.data)
-  const tabs = user ? generateTabs(user) : []
+  const tabs = useMemo(() => (user ? generateTabs(user) : []), [user])
   const findPath = (path: string): TabObject | undefined => {
     return tabs.find((e) => path.match(e.match))
   }

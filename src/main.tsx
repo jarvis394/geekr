@@ -23,8 +23,8 @@ Sentry.init({
   dsn: SENTRY_DSN,
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 0,
-  environment: import.meta.env.NODE_ENV,
-  enabled: import.meta.env.NODE_ENV === 'production',
+  environment: import.meta.env.MODE,
+  enabled: import.meta.env.PROD,
 })
 
 dayjs.locale(userSettings.language.interface || 'ru')

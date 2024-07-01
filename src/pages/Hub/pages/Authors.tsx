@@ -116,7 +116,10 @@ const Authors = () => {
   const history = useHistory()
   const location = useLocation()
 
-  const handlePagination = (_: any, i: string | number) => {
+  const handlePagination = (
+    _e: React.ChangeEvent<unknown>,
+    i: string | number
+  ) => {
     if (i === currentPage) return
     history.replace('/hub/' + alias + '/authors/p/' + i, {
       from: location.pathname,
@@ -125,6 +128,8 @@ const Authors = () => {
 
   useEffect(() => {
     dispatch(getHubAuthors({ alias, page: currentPage }))
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [alias, currentPage])
 
   return (

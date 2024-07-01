@@ -20,8 +20,10 @@ import {
 } from 'src/config/constants'
 import isDarkTheme from 'src/utils/isDarkTheme'
 import { Link } from 'react-router-dom'
-import { Icon28FireCircleFillRed } from '@vkontakte/icons'
-import { Icon24ChevronCompactRight } from '@vkontakte/icons'
+import {
+  Icon28FireCircleFillRed,
+  Icon24ChevronCompactRight,
+} from '@vkontakte/icons'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -177,11 +179,11 @@ const AdvertsBlock = () => {
     )}, ${alpha(theme.palette.common.black, 0.5)}), url(${imageUrl})`,
   })
 
-  if (isHidden) return null
-
   useEffect(() => {
     !data && dispatch(getAdverts())
   }, [dispatch, data])
+
+  if (isHidden) return null
 
   if (error) return null
 

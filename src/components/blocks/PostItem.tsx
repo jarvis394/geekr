@@ -6,7 +6,6 @@ import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
-import { CircularProgress } from '@material-ui/core'
 import { makeStyles, darken, lighten } from '@material-ui/core/styles'
 import formatNumber from 'src/utils/formatNumber'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
@@ -19,12 +18,12 @@ import {
   MIN_WIDTH,
   POST_IMAGE_HEIGHT,
   POST_ITEM_VISIBILITY_THRESHOLD,
+  POST_LABELS,
 } from 'src/config/constants'
 import LazyLoadImage from './LazyLoadImage'
 import { useSelector } from 'src/hooks'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
-import { Button, Chip, alpha, Theme } from '@material-ui/core'
-import { POST_LABELS } from 'src/config/constants'
+import { Button, Chip, alpha, Theme, CircularProgress } from '@material-ui/core'
 import getPostLink from 'src/utils/getPostLink'
 import VisibilitySensor from 'react-visibility-sensor'
 import { useLocation, useHistory } from 'react-router-dom'
@@ -273,8 +272,6 @@ export const PostItem = ({
   setPostItemSize?: (id: number | string, size: number) => void
   getPostItemSize?: (id?: number | string) => number
 }) => {
-  if (!post) return
-
   const isPWA = useIsPWA()
   const isExtended = useSelector(
     (store) => !store.settings.interfaceFeed.isCompact
@@ -282,9 +279,10 @@ export const PostItem = ({
   const shouldReplaceImagesWithPlaceholder = useSelector(
     (store) => store.settings.readerSettings.replaceImagesWithPlaceholder
   )
-  const shouldOpenInNewTab =
-    !isPWA &&
-    useSelector((store) => store.settings.interfaceFeed.openPostsInNewTab)
+  const shouldOpenInNewTabSetting = useSelector(
+    (store) => store.settings.interfaceFeed.openPostsInNewTab
+  )
+  const shouldOpenInNewTab = !isPWA && shouldOpenInNewTabSetting
   const disablePostImage = useSelector(
     (store) => store.settings.interfaceFeed.disablePostImage
   )
@@ -303,29 +301,6 @@ export const PostItem = ({
     isExtended,
   })
 
-  /** Do not show megaproject articles (not supported) */
-  if (post.postType === 'megaproject') return null
-
-  /**
-   * Post with postType 'voice' needs just a title to be shown.
-   * Example: https://habr.com/ru/search/?q=%D1%81%D0%B8%D1%81#h
-   * */
-  if (post.postType === 'voice') {
-    return (
-      <Paper elevation={0} className={classes.paper} style={style}>
-        <FormattedText
-          className={[
-            classes.postLink,
-            classes.noDeco,
-            classes.postTypeVoice,
-          ].join(' ')}
-        >
-          {leadData?.textHtml || ''}
-        </FormattedText>
-      </Paper>
-    )
-  }
-
   const hiddenAuthors = useSelector((state) => state.settings.hiddenAuthors)
   const hiddenCompanies = useSelector((state) => state.settings.hiddenCompanies)
   const postBookmarked = post?.relatedData?.bookmarked || false
@@ -338,26 +313,24 @@ export const PostItem = ({
   const history = useHistory<OutsidePageLocationState>()
   const location = useLocation()
   const currentLocation = location.pathname
-  const ts = dayjs(post.timePublished).calendar().toLowerCase()
-  const { alias, avatarUrl } = post.author
-  const {
-    readingCount,
-    favoritesCount,
-    commentsCount,
-    score: unformattedScore,
-  } = statistics
-  const score = formatNumber(unformattedScore)
-  const title = parse(unparsedTitle.replace(NBSP_CHAR, WHITESPACE_CHAR))
-  const reads = formatNumber(readingCount)
+  const ts = dayjs(post?.timePublished)
+    .calendar()
+    .toLowerCase()
+  const { alias, avatarUrl } = post?.author || {}
+  const score = formatNumber(statistics?.score || 0)
+  const title = parse(unparsedTitle?.replace(NBSP_CHAR, WHITESPACE_CHAR) || '')
+  const reads = formatNumber(statistics?.readingCount || 0)
   let favoritesCountAddAmount = 0
   if (postBookmarked) {
     favoritesCountAddAmount = isBookmarked ? 0 : -1
   } else {
     favoritesCountAddAmount = isBookmarked ? 1 : 0
   }
-  const favorites = formatNumber(favoritesCount + favoritesCountAddAmount)
-  const comments = formatNumber(Number(commentsCount))
-  const isCorporative = post.isCorporative
+  const favorites = formatNumber(
+    (statistics?.favoritesCount || 0) + favoritesCountAddAmount
+  )
+  const comments = formatNumber(Number(statistics?.commentsCount))
+  const isCorporative = post?.isCorporative
   const companyAlias = isCorporative
     ? post?.hubs?.find((e) => e.type === 'corporative')?.alias
     : null
@@ -367,10 +340,10 @@ export const PostItem = ({
   )
   const rootRef = React.useRef<HTMLDivElement>()
   const placeholderStyles = React.useMemo(
-    () => ({ height: getPostItemSize(post.id) }),
-    [getPostItemSize]
+    () => ({ height: getPostItemSize(post?.id) }),
+    [getPostItemSize, post?.id]
   )
-  const postLink = getPostLink(post)
+  const postLink = post && getPostLink(post)
   const linkProps = {
     rel: 'noreferrer',
     target: shouldOpenInNewTab ? '_target' : '_self',
@@ -381,7 +354,7 @@ export const PostItem = ({
       icon: <ThumbsUpDownIcon className={classes.postBottomRowItemIcon} />,
       text: <>{score}</>,
       coloredText: true,
-      number: unformattedScore,
+      number: statistics?.score || 0,
     },
     {
       icon: <VisibilityIcon className={classes.postBottomRowItemIcon} />,
@@ -408,7 +381,7 @@ export const PostItem = ({
           const response = await setArticleBookmark({
             mode: isBookmarked ? 'remove' : 'add',
             authData: authorizedRequestData || undefined,
-            id: post.id,
+            id: post?.id || 0,
           })
           if (response.ok) {
             setBookmarkState((prev) => !prev)
@@ -442,35 +415,6 @@ export const PostItem = ({
       },
     },
   ]
-
-  // Return troll text for hidden post
-  if (
-    hiddenAuthors.includes(alias) ||
-    (companyAlias && isCorporative && hiddenCompanies.includes(companyAlias))
-  )
-    return (
-      <LinkToOutsidePage
-        {...linkProps}
-        to={postLink}
-        style={{ textDecoration: 'none' }}
-      >
-        <Paper
-          style={{ padding: 16, display: 'flex', flexDirection: 'row' }}
-          elevation={0}
-          className={classes.paper}
-        >
-          <div className={classes.trollWrapper}>
-            <Typography className={classes.trollText}>
-              Тут был тролль / @{alias}
-            </Typography>
-            <Typography className={classes.trollTextTitle}>{title}</Typography>
-          </div>
-          <div className={classes.trollLink}>
-            <RightIcon />
-          </div>
-        </Paper>
-      </LinkToOutsidePage>
-    )
 
   const BottomRowItemUnmemoized = ({ item }: { item: BottomRowItemType }) => {
     const itemIcon = item.icon
@@ -514,10 +458,65 @@ export const PostItem = ({
   const BottomRowItem = React.memo(BottomRowItemUnmemoized)
 
   useEffect(() => {
+    if (!post?.id) return
     if (setPostItemSize && isRendered && rootRef.current) {
       setPostItemSize(post.id, rootRef.current.getBoundingClientRect().height)
     }
-  }, [isRendered])
+  }, [isRendered, post?.id, setPostItemSize])
+
+  if (!post) return
+
+  /** Do not show megaproject articles (not supported) */
+  if (post.postType === 'megaproject') return null
+
+  /**
+   * Post with postType 'voice' needs just a title to be shown.
+   * Example: https://habr.com/ru/search/?q=%D1%81%D0%B8%D1%81#h
+   * */
+  if (post.postType === 'voice') {
+    return (
+      <Paper elevation={0} className={classes.paper} style={style}>
+        <FormattedText
+          className={[
+            classes.postLink,
+            classes.noDeco,
+            classes.postTypeVoice,
+          ].join(' ')}
+        >
+          {leadData?.textHtml || ''}
+        </FormattedText>
+      </Paper>
+    )
+  }
+
+  // Return troll text for hidden post
+  if (
+    (alias && hiddenAuthors.includes(alias)) ||
+    (companyAlias && isCorporative && hiddenCompanies.includes(companyAlias))
+  )
+    return (
+      <LinkToOutsidePage
+        {...linkProps}
+        to={postLink || ''}
+        style={{ textDecoration: 'none' }}
+      >
+        <Paper
+          style={{ padding: 16, display: 'flex', flexDirection: 'row' }}
+          elevation={0}
+          className={classes.paper}
+        >
+          <div className={classes.trollWrapper}>
+            <Typography className={classes.trollText}>
+              Тут был тролль / @{alias}
+            </Typography>
+            <Typography className={classes.trollTextTitle}>{title}</Typography>
+          </div>
+          <div className={classes.trollLink}>
+            <RightIcon />
+          </div>
+        </Paper>
+      </LinkToOutsidePage>
+    )
 
   return (
     <VisibilitySensor
@@ -557,7 +556,7 @@ export const PostItem = ({
               <LinkToOutsidePage
                 {...linkProps}
                 className={classes.imageHolder}
-                to={postLink}
+                to={postLink || ''}
               >
                 <LazyLoadImage
                   src={postFirstImage}
@@ -574,7 +573,7 @@ export const PostItem = ({
 
             <LinkToOutsidePage
               className={[classes.postLink, classes.noDeco].join(' ')}
-              to={postLink}
+              to={postLink || ''}
               {...linkProps}
             >
               {title}
@@ -625,11 +624,11 @@ export const PostItem = ({
                   </div>
                 )}
                 <FormattedText disableImageZoom>
-                  {leadData.textHtml}
+                  {leadData?.textHtml || ''}
                 </FormattedText>
                 <LinkToOutsidePage
                   {...linkProps}
-                  to={postLink}
+                  to={postLink || ''}
                   className={classes.link}
                 >
                   <Button
@@ -637,7 +636,7 @@ export const PostItem = ({
                     className={classes.leadButton}
                     variant={'outlined'}
                   >
-                    {parse(leadData.buttonTextHtml || 'Читать далее')}
+                    {parse(leadData?.buttonTextHtml || 'Читать далее')}
                   </Button>
                 </LinkToOutsidePage>
               </div>

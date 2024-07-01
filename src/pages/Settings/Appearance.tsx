@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import OutsidePage from 'src/components/blocks/OutsidePage'
 import { useDispatch } from 'react-redux'
@@ -35,7 +35,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
   FormControlLabel,
   RadioGroup,
 } from '@material-ui/core'
@@ -337,6 +336,7 @@ const ThemeCard = ({ theme }: { theme: CustomTheme }) => {
         inline: 'center',
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -553,63 +553,6 @@ export const SingleRowGrid = ({ component: Item = PaletteGridItem }) => {
   )
 }
 
-interface AddDialogProps {
-  isOpen: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  onSubmit: (login: string) => void
-  placeholder: string
-  title: string
-}
-const AddDialog: React.FC<AddDialogProps> = ({
-  isOpen,
-  setOpen,
-  onSubmit,
-  placeholder,
-  title,
-}) => {
-  const textInputRef = useRef<HTMLInputElement>()
-  const handleClose = () => setOpen(false)
-  const handleSubmit = () => {
-    if (textInputRef.current) {
-      onSubmit(textInputRef.current.value)
-      setOpen(false)
-    }
-  }
-
-  return (
-    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={handleClose}>
-      <DialogTitle style={{ paddingBottom: 0 }} id="add-dialog-title">
-        {title}
-      </DialogTitle>
-      <DialogContent>
-        <TextField
-          inputRef={textInputRef}
-          autoFocus
-          margin="dense"
-          name="title"
-          label="Логин"
-          placeholder={placeholder}
-          type="text"
-          fullWidth
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} color="default">
-          Отмена
-        </Button>
-        <Button
-          color="primary"
-          variant="contained"
-          disableElevation
-          onClick={handleSubmit}
-        >
-          Добавить
-        </Button>
-      </DialogActions>
-    </Dialog>
-  )
-}
-
 export interface ThemeSelectDialogProps {
   classes?: Record<'paper', string>
   id: string
@@ -702,18 +645,24 @@ const Appearance = () => {
   )
   const themeType = useSelector((state) => state.settings.themeType)
   const isCustomThemeChosen = customThemes.some((e) => e.type === themeType)
-  const preferredLightThemeName =
-    preferredLightTheme in THEME_NAMES
-      ? // TODO: fix types
-        //@ts-expect-error
-        THEME_NAMES[preferredLightTheme]
-      : customThemes.find((e) => e.type === preferredLightTheme)?.name
-  const preferredDarkThemeName =
-    preferredDarkTheme in THEME_NAMES
-      ? // TODO: fix types
-        //@ts-expect-error
-        THEME_NAMES[preferredDarkTheme]
-      : customThemes.find((e) => e.type === preferredDarkTheme)?.name
+  const preferredLightThemeName = useMemo(() => {
+    if (preferredLightTheme in THEME_NAMES) {
+      // TODO: fix types
+      //@ts-expect-error temporary fix
+      return THEME_NAMES[preferredLightTheme]
+    } else {
+      return customThemes.find((e) => e.type === preferredLightTheme)?.name
+    }
+  }, [customThemes, preferredLightTheme])
+  const preferredDarkThemeName = useMemo(() => {
+    if (preferredDarkTheme in THEME_NAMES) {
+      // TODO: fix types
+      //@ts-expect-error temporary fix
+      return THEME_NAMES[preferredDarkTheme]
+    } else {
+      return customThemes.find((e) => e.type === preferredDarkTheme)?.name
+    }
+  }, [customThemes, preferredDarkTheme])
   const [isPreferredLightThemeDialogOpen, setPreferredLightThemeDialogOpen] =
     useState(false)
   const [isPreferredDarkThemeDialogOpen, setPreferredDarkThemeDialogOpen] =

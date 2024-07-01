@@ -13,8 +13,7 @@ import {
   MIDDLE_WIDTH,
   RATING_MODES,
 } from 'src/config/constants'
-import { Icon28SettingsOutline } from '@vkontakte/icons'
-import { Icon24UserOutline } from '@vkontakte/icons'
+import { Icon28SettingsOutline, Icon24UserOutline } from '@vkontakte/icons'
 import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
 import { Offline } from 'react-detect-offline'
 import { useRoute, useSelector } from 'src/hooks'
@@ -165,7 +164,7 @@ const AppBarComponent = () => {
 
   useEffect(() => {
     if (appHasDrawer && isUserMenuOpen) setUserMenuOpen(false)
-  }, [shouldChangeColors, isHidden, route, appHasDrawer])
+  }, [shouldChangeColors, isHidden, route, appHasDrawer, isUserMenuOpen])
 
   // Do not render the AppBar if it is hidden by the route
   if (isHidden) return null

@@ -37,7 +37,7 @@ const initialState: State = {
 }
 
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 export default (reducerState = initialState, { type, payload }): State => {
   const field = typeCorrespondings[type.split('_').slice(0, 3).join('_')]
 

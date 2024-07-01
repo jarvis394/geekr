@@ -6,14 +6,16 @@ import isDarkTheme from 'src/utils/isDarkTheme'
 import { MIN_WIDTH } from 'src/config/constants'
 import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
 
-import { Icon24PaletteOutline } from '@vkontakte/icons'
-import { Icon24HideOutline } from '@vkontakte/icons'
-import { Icon24ChevronRight } from '@vkontakte/icons'
-import { Icon243SquareOutline } from '@vkontakte/icons'
-import { Icon28ArticleOutline } from '@vkontakte/icons'
-import { Icon28GlobeOutline } from '@vkontakte/icons'
-import { Icon28PrivacyOutline } from '@vkontakte/icons'
-import { Icon28DownloadOutline } from '@vkontakte/icons'
+import {
+  Icon24PaletteOutline,
+  Icon24HideOutline,
+  Icon24ChevronRight,
+  Icon243SquareOutline,
+  Icon28ArticleOutline,
+  Icon28GlobeOutline,
+  Icon28PrivacyOutline,
+  Icon28DownloadOutline,
+} from '@vkontakte/icons'
 
 const items = [
   {

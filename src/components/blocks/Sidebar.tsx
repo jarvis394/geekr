@@ -9,7 +9,7 @@ import {
 } from 'src/config/constants'
 import { useMediaQuery } from '@material-ui/core'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     width: 300,

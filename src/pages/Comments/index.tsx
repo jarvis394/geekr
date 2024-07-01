@@ -136,7 +136,7 @@ const CommentsPage: React.FC = () => {
         ...e,
         level: Math.min(e.level, MAX_LEVEL),
       }))
-  }, [comments])
+  }, [comments, shouldShowThreads])
 
   const goToCommentsSettings = () =>
     history.push('/settings/interface', { highlightSection: 'comments' })
@@ -150,6 +150,8 @@ const CommentsPage: React.FC = () => {
     if (comments) {
       setCommentsLength(comments.length)
     }
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, comments])
 
   useEffect(() => {
@@ -159,6 +161,8 @@ const CommentsPage: React.FC = () => {
     ) {
       dispatch(parsePostComments(id, parseOptions))
     }
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(parseOptions)])
 
   useEffect(() => {

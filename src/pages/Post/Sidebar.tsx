@@ -12,7 +12,6 @@ import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
 import getPostLink from 'src/utils/getPostLink'
 import parse from 'html-react-parser'
 import formatNumber from 'src/utils/formatNumber'
-import purple from '@material-ui/core/colors/purple'
 import { Skeleton } from '@material-ui/lab'
 
 const ld = { lighten, darken }
@@ -20,19 +19,6 @@ const useSkeletonStyles = makeStyles((theme) => ({
   skeleton: {
     backgroundColor: theme.palette.action.hover,
     borderRadius: 8,
-  },
-}))
-
-const useStyles = makeStyles((theme) => ({
-  companiesChildrenContainerProps: {
-    marginBottom: 12,
-    display: 'flex',
-    flexDirection: 'column',
-    padding: theme.spacing(0, 2),
-  },
-  button: {
-    marginTop: 12,
-    width: '100%',
   },
 }))
 
@@ -78,7 +64,7 @@ const usePostItemStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     '&:visited > p': {
       // TODO: fix types
-      //@ts-expect-error
+      //@ts-expect-error temporary fix
       color: ld[theme.palette.type + 'en'](theme.palette.text.primary, 0.4),
     },
     fontWeight: 800,
@@ -90,38 +76,6 @@ const usePostItemStyles = makeStyles((theme) => ({
   },
   marginLeft: {
     marginLeft: theme.spacing(3),
-  },
-}))
-
-const useCompanyItemStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-    textDecoration: 'none !important',
-    background: 'transparent !important',
-    marginTop: theme.spacing(2),
-    color: theme.palette.text.primary,
-    '&:first-child': {
-      marginTop: 0,
-    },
-  },
-  avatar: {
-    marginRight: theme.spacing(1.5),
-    width: 36,
-    height: 36,
-    borderRadius: 4,
-  },
-  title: {
-    fontSize: 13,
-    fontWeight: 700,
-    lineHeight: '18px',
-  },
-  rating: {
-    marginLeft: 'auto',
-    fontSize: 13,
-    fontWeight: 700,
-    lineHeight: '18px',
-    color: theme.palette.type === 'dark' ? purple[200] : purple.A700,
   },
 }))
 
@@ -257,6 +211,8 @@ const PostSidebar = () => {
         mostReadingFetchError
       )
     }
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -268,10 +224,10 @@ const PostSidebar = () => {
           )}
           {mostReadingState === FetchingState.Fetched &&
             // TODO: fix types
-            //@ts-expect-error
+            //@ts-expect-error temporary fix
             mostReading.articleIds.slice(0, 5).map((e) => (
               // TODO: fix types
-              //@ts-expect-error
+              //@ts-expect-error temporary fix
               <PostItem data={mostReading.articleRefs[e]} key={e} />
             ))}
         </SideBlock>

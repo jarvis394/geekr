@@ -94,7 +94,7 @@ const newResponse = (
 const cacheHeaderPlugin = [
   {
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     cacheWillUpdate: ({ response }) =>
       newResponse(response.clone(), (headers: Headers) => {
         headers.set('x-sw-cache', new Date().getTime().toString())

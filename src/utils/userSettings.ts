@@ -22,10 +22,10 @@ export const get = (): UserSettings => {
 
   for (const key in DEFAULT_USER_SETTINGS) {
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     if (!res[key]) {
       // TODO: fix types
-      //@ts-expect-error
+      //@ts-expect-error temporary fix
       res[key] = DEFAULT_USER_SETTINGS[key]
     } else if (key === 'themeType') {
       const { themeType, customThemes = [] } = res
@@ -48,7 +48,7 @@ export const set = (payload: Partial<UserSettings>): UserSettings => {
 
   for (const key in payload) {
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     data[key] = payload[key]
   }
 

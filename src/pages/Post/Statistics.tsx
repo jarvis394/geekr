@@ -8,7 +8,12 @@ import VisibilityIcon from '@material-ui/icons/Visibility'
 import CommentsIcon from '@material-ui/icons/CommentRounded'
 import ThumbDownAltRoundedIcon from '@material-ui/icons/ThumbDownAltRounded'
 import ThumbUpAltRoundedIcon from '@material-ui/icons/ThumbUpAltRounded'
-import { Icon28ShareOutline as ShareIcon } from '@vkontakte/icons'
+import {
+  Icon28ShareOutline as ShareIcon,
+  Icon24ChevronCompactRight,
+  Icon16Up,
+  Icon16Down,
+} from '@vkontakte/icons'
 import formatNumber from 'src/utils/formatNumber'
 import { FetchingState, Post } from 'src/interfaces'
 import {
@@ -29,9 +34,7 @@ import { useHistory } from 'react-router'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import BottomDrawer from 'src/components/blocks/BottomDrawer'
-import { Icon24ChevronCompactRight } from '@vkontakte/icons'
 import GreenRedNumber from 'src/components/formatters/GreenRedNumber'
-import { Icon16Up, Icon16Down } from '@vkontakte/icons'
 import { Link } from 'react-router-dom'
 import getPostLink from 'src/utils/getPostLink'
 import getFavoritesCount from 'src/utils/getFavoritesCount'
@@ -401,6 +404,8 @@ const ScoreCard: React.FC<{
     if (voteState.vote.value === -1 && !isFetchingScoreResponse) {
       setDownvoteReasonsDrawerOpen(false)
     }
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFetchingScoreResponse])
 
   return (

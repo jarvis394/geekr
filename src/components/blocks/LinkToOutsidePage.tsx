@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link, LinkProps, useLocation } from 'react-router-dom'
-import { useRoute } from 'src/hooks'
 
 const LinkToOutsidePage = (
   {
@@ -11,7 +10,6 @@ const LinkToOutsidePage = (
   ref: React.Ref<HTMLAnchorElement> | undefined
 ) => {
   const location = useLocation()
-  const route = useRoute()
 
   return (
     <Link

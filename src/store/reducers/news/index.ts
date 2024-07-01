@@ -6,6 +6,7 @@ const flowsData: Record<
   string,
   {
     // TODO: fix types
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     pages: any
     pagesCount: null
   }
@@ -36,7 +37,7 @@ const initialState = {
 }
 
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case NEWS_PREFIX + 'FETCH': {
@@ -54,7 +55,7 @@ export default (state = initialState, { type, payload }) => {
 
       if (flow === 'all') {
         // TODO: fix types
-        //@ts-expect-error
+        //@ts-expect-error temporary fix
         state.data.pages[page] = {
           publicationIds: ids,
           publicationRefs: refs,
@@ -91,7 +92,7 @@ export default (state = initialState, { type, payload }) => {
       state.block.error = null
       state.block.data = Object.values(data.articleRefs)
       // TODO: fix types
-      //@ts-expect-error
+      //@ts-expect-error temporary fix
       state.block.lastUpdated = Date.now()
 
       return { ...state }

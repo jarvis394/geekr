@@ -28,7 +28,7 @@ export const request = async ({
 
   try {
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     const data = await api[method](...params)
 
     dispatch({
@@ -44,7 +44,7 @@ export const request = async ({
 }
 
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 export const getProfileCard = (alias: string) => async (dispatch) => {
   return await request({
     method: 'getProfileCard',
@@ -56,7 +56,7 @@ export const getProfileCard = (alias: string) => async (dispatch) => {
 }
 
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 export const getProfileWhois = (alias: string) => async (dispatch) => {
   return await request({
     method: 'getProfileWhois',
@@ -68,7 +68,7 @@ export const getProfileWhois = (alias: string) => async (dispatch) => {
 }
 
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 export const getProfileCompanies = (alias: string) => async (dispatch) => {
   return await request({
     method: 'getProfileCompanies',
@@ -80,7 +80,7 @@ export const getProfileCompanies = (alias: string) => async (dispatch) => {
 }
 
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 export const getProfileChildren = (alias: string) => async (dispatch) => {
   return await request({
     method: 'getProfileChildren',
@@ -92,7 +92,7 @@ export const getProfileChildren = (alias: string) => async (dispatch) => {
 }
 
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 export const getProfileHubs = (alias: string) => async (dispatch) => {
   return await request({
     method: 'getProfileHubs',
@@ -105,7 +105,7 @@ export const getProfileHubs = (alias: string) => async (dispatch) => {
 
 export const getProfileArticles =
   // TODO: fix types
-  //@ts-expect-error
+  //@ts-expect-error temporary fix
   (alias: string, page: number) => async (dispatch) => {
     const type = PROFILE_ARTICLES + 'FETCH'
     dispatch({ type })

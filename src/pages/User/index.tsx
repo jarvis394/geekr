@@ -17,7 +17,7 @@ export interface UserParams {
   login: string
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
     display: 'flex',
@@ -54,13 +54,15 @@ const User = () => {
     if (profile?.alias !== login) {
       dispatch(getProfileCard(login))
     }
-  }, [login])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [login, profile?.alias])
 
   useEffect(() => {
     if (whois?.alias !== login) {
       dispatch(getProfileWhois(login))
     }
-  }, [login])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [login, whois?.alias])
 
   return (
     <OutsidePage

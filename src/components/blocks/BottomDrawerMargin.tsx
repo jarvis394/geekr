@@ -1,10 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import { MIN_WIDTH } from '../../config/constants'
-import { Drawer, alpha, IconButton, SwipeableDrawer } from '@material-ui/core'
-import { Icon24Cancel } from '@vkontakte/icons'
+import { alpha, SwipeableDrawer } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {

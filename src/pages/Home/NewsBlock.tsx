@@ -126,16 +126,15 @@ const NewsBlock = ({ hubAlias }: { hubAlias?: string }) => {
   const isHidden = useSelector(
     (store) => store.settings.interfaceFeed.hideNewsBlock
   )
-  const isFetched = useSelector((state) => state.news.block.fetched)
   const isFetching = useSelector((state) => state.news.block.fetching)
   const fetchError = useSelector((state) => state.news.block.error)
   const news = useSelector((state) => state.news.block.data)
 
-  if (isHidden) return null
-
   useEffect(() => {
     dispatch(getNewsPromo(hubAlias))
-  }, [])
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hubAlias])
 
   const GoToNewsButton = () => (
     <Button
@@ -149,6 +148,8 @@ const NewsBlock = ({ hubAlias }: { hubAlias?: string }) => {
       Все новости
     </Button>
   )
+
+  if (isHidden) return null
 
   return (
     <Paper className={classes.root} elevation={0}>
@@ -165,7 +166,7 @@ const NewsBlock = ({ hubAlias }: { hubAlias?: string }) => {
         // Sort news in a descending order based on their timePublished
         ?.sort(
           // TODO: fix types
-          //@ts-expect-error
+          //@ts-expect-error temporary fix
           (a, b) => +new Date(b.timePublished) - +new Date(a.timePublished)
         )
         ?.map((e, i) => <NewsItem data={e} key={i} />)}

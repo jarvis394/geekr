@@ -1,16 +1,9 @@
-import { Button, ListItem, makeStyles } from '@material-ui/core'
+import { Button, ListItem } from '@material-ui/core'
 import React, { useState } from 'react'
 import BottomDrawerMargin from 'src/components/blocks/BottomDrawerMargin'
 
-const useStyles = makeStyles((theme) => ({
-  drawerRoot: {
-    padding: theme.spacing(1.5, 0) + ' !important',
-  },
-}))
-
-const Favorites: React.FC<{ page: 'articles' | 'comments' }> = ({ page }) => {
+const Favorites: React.FC<{ page: 'articles' | 'comments' }> = () => {
   const [isModeDrawerOpen, setModeDrawerOpen] = useState(false)
-  const classes = useStyles()
 
   return (
     <div>

@@ -11,6 +11,8 @@ const useGetDownvoteReasons = () => {
 
   useEffect(() => {
     if (shouldFetchDownvoteReasons) dispatch(getDownvoteReasons())
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shouldFetchDownvoteReasons])
 }
 

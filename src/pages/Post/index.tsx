@@ -3,7 +3,13 @@ import { useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import { alpha, makeStyles, darken, lighten } from '@material-ui/core/styles'
+import {
+  alpha,
+  makeStyles,
+  darken,
+  lighten,
+  Theme,
+} from '@material-ui/core/styles'
 import { useParams } from 'react-router'
 import { getPost, getCompany } from 'src/store/actions/post'
 import { Link } from 'react-router-dom'
@@ -11,7 +17,6 @@ import PostViewSkeleton from 'src/components/skeletons/PostView'
 import ErrorComponent from 'src/components/blocks/Error'
 import dayjs from 'dayjs'
 import FormattedText from 'src/components/formatters/FormattedText'
-import { Theme } from '@material-ui/core/styles'
 import UserAvatar from 'src/components/blocks/UserAvatar'
 import Statistics from './Statistics'
 import SimilarPosts from './SimilarPosts'
@@ -283,6 +288,8 @@ const Post = () => {
         console.error('Cannot send pageview in Post:', e)
       }
     }
+    // TODO: investigate deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, companyAlias])
 
   if (fetchError) return <ErrorComponent message={fetchError} />
@@ -411,7 +418,7 @@ const Post = () => {
                       <MUILink
                         href={
                           // TODO: fix types
-                          //@ts-expect-error
+                          //@ts-expect-error temporary fix
                           translationData?.originalUrl
                         }
                         className={classes.translatedBox}
@@ -419,7 +426,7 @@ const Post = () => {
                         Автор оригинала:{' '}
                         {
                           // TODO: fix types
-                          //@ts-expect-error
+                          //@ts-expect-error temporary fix
                           translationData?.originalAuthorName
                         }
                       </MUILink>

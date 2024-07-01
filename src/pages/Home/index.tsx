@@ -93,20 +93,32 @@ const Home = () => {
       ? state.home.data[mode].pagesCount
       : state.home.flows.data[flow][mode].pagesCount
   )
-  // TODO: fix types
-  //@ts-expect-error
-  const fetchErrorMessage = isServerUpdateError(fetchError?.error?.message)
-    ? 'Идут технические работы'
-    : // TODO: fix types
-  //@ts-expect-error
-    fetchError?.error?.message
-  // TODO: fix types
-  //@ts-expect-error
-  const fetchErrorCode = isServerUpdateError(fetchError?.error?.message)
-    ? 503
-    : // TODO: fix types
-  //@ts-expect-error
-    fetchError?.error?.code
+  const fetchErrorMessage = React.useMemo(() => {
+    // TODO: fix types
+    //@ts-expect-error temporary fix
+    if (isServerUpdateError(fetchError?.error?.message)) {
+      return 'Идут технические работы'
+    } else {
+      // TODO: fix types
+      //@ts-expect-error temporary fix
+      return fetchError?.error?.message
+    }
+    // TODO: fix types
+    //@ts-expect-error temporary fix
+  }, [fetchError?.error?.message])
+  const fetchErrorCode = React.useMemo(() => {
+    // TODO: fix types
+    //@ts-expect-error temporary fix
+    if (isServerUpdateError(fetchError?.error?.message)) {
+      return 503
+    } else {
+      // TODO: fix types
+      //@ts-expect-error temporary fix
+      return fetchError?.error?.code
+    }
+    // TODO: fix types
+    //@ts-expect-error temporary fix
+  }, [fetchError?.error?.code, fetchError?.error?.message])
 
   const PaginationComponent = () =>
     pagesCount ? (
@@ -118,16 +130,22 @@ const Home = () => {
       />
     ) : null
 
-  const setPostItemSizeWrapper = (id: number | string, size: number) => {
-    // TODO: fix types
-    //@ts-expect-error
-    !postItemsSizesMap[id] && dispatch(setPostItemSize(id, size))
-  }
-  const getPostItemSize = (id?: number | string): number => {
-    // TODO: fix types
-    //@ts-expect-error
-    return postItemsSizesMap[id] || DEFAULT_POST_ITEM_HEIGHT
-  }
+  const setPostItemSizeWrapper = React.useCallback(
+    (id: number | string, size: number) => {
+      // TODO: fix types
+      //@ts-expect-error temporary fix
+      !postItemsSizesMap[id] && dispatch(setPostItemSize(id, size))
+    },
+    [dispatch, postItemsSizesMap]
+  )
+  const getPostItemSize = React.useCallback(
+    (id?: number | string): number => {
+      // TODO: fix types
+      //@ts-expect-error temporary fix
+      return postItemsSizesMap[id] || DEFAULT_POST_ITEM_HEIGHT
+    },
+    [postItemsSizesMap]
+  )
   const postsComponents =
     (posts &&
       posts?.publicationIds?.map((id, i) => (
@@ -140,7 +158,10 @@ const Home = () => {
       ))) ||
     []
 
-  const handlePagination = (_: any, i: string | number) => {
+  const handlePagination = (
+    _e: React.ChangeEvent<unknown>,
+    i: string | number
+  ) => {
     if (i === currentPage) return
     history.push(
       modes.find((e) => e.mode === mode)?.to + 'p/' + i + '?' + query.toString()
@@ -149,13 +170,15 @@ const Home = () => {
 
   const handleSwitcher = React.useCallback(
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     ({ mode: newMode, to }) => {
       localStorage.setItem('mode', newMode)
       setMode(newMode)
       history.push(to + 'p/1?' + query.toString())
     },
-    [flow, location.pathname, location.search]
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [query, flow, location.pathname, location.search]
   )
 
   const onFlowsBarLinkClick = (e: FlowObject) => {
@@ -169,6 +192,8 @@ const Home = () => {
   useEffect(() => {
     if (paramsMode !== mode) setMode(paramsMode)
     dispatch(getPosts({ mode, page: currentPage, flow }))
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paramsMode, mode, flow, currentPage, location.pathname, location.search])
 
   /** Show 404 page when 'flow' value is outside of flows aliases */

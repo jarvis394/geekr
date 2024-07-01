@@ -9,7 +9,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'ru',
-    debug: import.meta.env.NODE_ENV === 'development',
+    debug: import.meta.env.DEV,
     interpolation: {
       escapeValue: false,
     },

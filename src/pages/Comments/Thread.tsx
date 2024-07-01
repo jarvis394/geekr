@@ -6,10 +6,7 @@ import { useSelector } from 'src/hooks'
 import { useParams } from 'react-router'
 import { getPostComments } from 'src/store/actions/post'
 import Comment from './Comment'
-import {
-  trackWindowScroll,
-  ScrollPosition,
-} from 'react-lazy-load-image-component'
+import { trackWindowScroll } from 'react-lazy-load-image-component'
 import { FetchingState } from 'src/interfaces'
 import { THREAD_LEVEL } from 'src/config/constants'
 
@@ -51,11 +48,13 @@ const Thread: React.FC = () => {
     )
     const slice = a?.slice(rootIndex, lastIndex)
     return slice
-  }, [threadId, comments])
+  }, [comments, rootComment?.threadLevel, threadId])
   const shouldShowComments = commentsFetchingState === FetchingState.Fetched
 
   useEffect(() => {
     if (!comments) dispatch(getPostComments(id))
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, comments, threadId])
 
   return (

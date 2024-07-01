@@ -5,8 +5,6 @@ import fadedLinearGradient from 'src/utils/fadedLinearGradient'
 import {
   Avatar,
   ButtonBase,
-  darken,
-  lighten,
   List,
   Typography,
   useTheme,
@@ -234,7 +232,7 @@ const Posts: React.FC<{ mode: Mode }> = ({ mode }) => {
   const history = useHistory()
   const postsComponents =
     data &&
-    data.publicationIds.map((id, i) => (
+    data.publicationIds.map((id) => (
       <PostItem key={id} post={data.publicationRefs[id]} />
     ))
   const PaginationComponent = () =>
@@ -247,7 +245,10 @@ const Posts: React.FC<{ mode: Mode }> = ({ mode }) => {
       />
     ) : null
 
-  const handlePagination = (_: any, i: string | number) => {
+  const handlePagination = (
+    _e: React.ChangeEvent<unknown>,
+    i: string | number
+  ) => {
     const currentModeObject = modes.find((e) => e.mode === mode)
     if (i === currentPage) return
     if (currentModeObject?.mode === 'all') {
@@ -285,7 +286,7 @@ const Profile = () => {
 
   const handleSwitcher = React.useCallback(
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     ({ mode: newMode, to }) => {
       setMode(newMode)
       if (newMode === 'all') {
@@ -294,11 +295,13 @@ const Profile = () => {
         history.replace('/hub/' + alias + to + '/p/1')
       }
     },
-    [history]
+    [alias, history]
   )
 
   useEffect(() => {
     dispatch(getHubPosts(mode, currentPage, alias))
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, currentPage, alias])
 
   return (

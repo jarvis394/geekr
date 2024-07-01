@@ -27,11 +27,11 @@ RATING_MODES.forEach(({ mode }) => {
 })
 FLOWS.forEach((e) => {
   // TODO: fix types
-  //@ts-expect-error
+  //@ts-expect-error temporary fix
   flowModes[e.alias] = {}
   RATING_MODES.forEach(({ mode }) => {
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     flowModes[e.alias][mode] = {
       pages: {},
       pagesCount: null,
@@ -76,7 +76,7 @@ const initialState = {
 export default (
   state = initialState,
   // TODO: fix types
-  //@ts-expect-error
+  //@ts-expect-error temporary fix
   { type, payload }
 ): typeof initialState => {
   switch (type) {
@@ -145,7 +145,7 @@ export default (
 
     case SET_HOME_POST_ITEM_SIZE: {
       // TODO: fix types
-      //@ts-expect-error
+      //@ts-expect-error temporary fix
       state.sizesMap[payload.id] = payload.size
       return { ...state }
     }

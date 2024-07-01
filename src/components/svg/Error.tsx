@@ -4,7 +4,7 @@ import Props from '../../interfaces/SVGProps'
 const Error = ({ svgProps, ...props }: Props) => {
   return (
     <div {...props}>
-      <svg viewBox="0 0 1022.7 785.81">
+      <svg viewBox="0 0 1022.7 785.81" {...svgProps}>
         <defs>
           <linearGradient
             id="af83dc26-9572-4816-b7a1-1af4f72ff554"

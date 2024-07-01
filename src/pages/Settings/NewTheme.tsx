@@ -351,7 +351,7 @@ const PaletteGridItem = ({
               style={{
                 backgroundColor: e.color,
                 // TODO: fix types
-                //@ts-expect-error
+                //@ts-expect-error temporary fix
                 border:
                   'background.paper' === e.text ||
                   'background.default' === e.text
@@ -424,10 +424,10 @@ const CustomColorfulPicker: React.FC<{
             key={presetColor}
             className={classes.swatch}
             // TODO: fix types
-            //@ts-expect-error
+            //@ts-expect-error temporary fix
             style={{ background: presetColor }}
             // TODO: fix types
-            //@ts-expect-error
+            //@ts-expect-error temporary fix
             onClick={() => onChange(presetColor)}
           />
         ))}
@@ -451,7 +451,7 @@ const ColorPicker = ({
   const handleSubmit = () => {
     setCurrentTheme((theme) =>
       // TODO: fix types
-      //@ts-expect-error
+      //@ts-expect-error temporary fix
       paletteTextToThemeField[state.item](theme, tinycolor(color).toHexString())
     )
     setState({
@@ -471,7 +471,7 @@ const ColorPicker = ({
 
   useEffect(() => {
     state.open && setColor(state.color)
-  }, [state.color])
+  }, [state.color, state.open])
 
   return (
     <BottomDrawer isOpen={state.open} disableClose headerText={'Выбор цвета'}>
@@ -481,7 +481,7 @@ const ColorPicker = ({
           style={{
             backgroundColor: color,
             // TODO: fix types
-            //@ts-expect-error
+            //@ts-expect-error temporary fix
             border:
               theme.palette.background.paper === color
                 ? '1px solid ' + theme.palette.divider
@@ -576,6 +576,8 @@ const PreviewBox = ({ currentTheme }: { currentTheme: CustomTheme }) => {
   const classes = usePreviewStyles()
   const compiledCurrentTheme = useCallback(
     () => createMuiTheme(currentTheme),
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [JSON.stringify(currentTheme)]
   )
   const buttonVariants: ['contained', 'outlined', 'text'] = [
@@ -682,18 +684,20 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
   const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false)
   const [currentTheme, setCurrentThemeUnwrapped] = useState<CustomTheme>(
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     isEditMode ? editTheme : defaultTheme
   )
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
   const paletteItems = React.useMemo(
     () => getPaletteItems(currentTheme),
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [JSON.stringify(currentTheme)]
   )
   const isAlreadySavedLocally = React.useMemo(
     () => customThemes.some((e) => e.type === currentTheme.type),
-    [customThemes]
+    [currentTheme.type, customThemes]
   )
   const classes = useStyles({ isAlreadySavedLocally })
   const setCurrentTheme: React.Dispatch<React.SetStateAction<CustomTheme>> = (
@@ -771,7 +775,10 @@ const NewTheme = ({ isEditMode = false }: { isEditMode?: boolean }) => {
       setTitleEditDialogOpen(false)
     }
   }
-  const handleThemeTypeChange = (_event: any, type: string) => {
+  const handleThemeTypeChange = (
+    _event: React.ChangeEvent<HTMLInputElement>,
+    type: string
+  ) => {
     setCurrentTheme((prev) => ({
       ...prev,
       palette: {

@@ -86,7 +86,7 @@ const FlowsBar: React.FC<{
   const FlowItem: React.FC<{ data: FlowObject }> = ({ data }) => (
     <a
       className={[classes.link]
-        .concat(flow == data.alias ? [classes.selected] : [])
+        .concat(flow === data.alias ? [classes.selected] : [])
         .join(' ')}
       onClick={() => onClick(data)}
     >

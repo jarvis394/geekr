@@ -54,7 +54,7 @@ interface Params {
   to?: string
 }
 
-const ErrorComponent = ({ code = 500, message, to = '/' }: Params) => {
+const ErrorComponent = ({ code = 500, message }: Params) => {
   const classes = useStyles()
 
   return (

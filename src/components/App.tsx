@@ -34,7 +34,6 @@ import { useEffect } from 'react'
 import { ErrorBoundary } from '@sentry/react'
 import ErrorPage from 'src/pages/Error'
 import RebrandingModal from 'src/components/modals/Rebranding'
-import RUVDSPromoNotification from './blocks/RUVDSPromo/Notification'
 import { Analytics } from '@vercel/analytics/react'
 
 interface StyleProps {
@@ -176,7 +175,6 @@ const App: React.FC = () => {
             <div className={classes.app}>
               <ScrollRestoration />
               <UpdateNotification />
-              <RUVDSPromoNotification />
               <AppBar />
               <BottomBar />
               <AppRouter />

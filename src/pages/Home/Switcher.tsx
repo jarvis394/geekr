@@ -164,7 +164,7 @@ const TabGroupUnmemoized: React.FC<TabGroupProps> = ({
         maxWidth: 'unset',
         fontFamily: 'Google Sans',
         // TODO: fix types
-        //@ts-expect-error
+        //@ts-expect-error temporary fix
         fontWeight: theme.typography.fontWeightMedium,
         transition: 'opacity 0.1s ease',
         '&:hover': {

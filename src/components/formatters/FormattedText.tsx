@@ -23,7 +23,7 @@ import { UserSettings } from 'src/interfaces'
 import formatLink from 'src/utils/formatLink'
 import { Link } from 'react-router-dom'
 import blend from 'src/utils/blendColors'
-import { Tooltip, Typography } from '@material-ui/core'
+import { Tooltip } from '@material-ui/core'
 import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 
 interface IframeResizeData {

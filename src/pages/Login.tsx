@@ -3,7 +3,6 @@ import {
   Button,
   Typography,
   Grid,
-  Paper,
   TextField,
   IconButton,
   InputAdornment,
@@ -79,9 +78,6 @@ const Login = () => {
   const csrfTokenFetchingState = useSelector(
     (store) => store.auth.csrfToken.state
   )
-  const csrfTokenFetchError = useSelector(
-    (store) => store.auth.csrfToken.fetchError
-  )
   const csrfToken = useSelector((store) => store.auth.csrfToken.data)
   const shouldDisableLoginButton =
     authDataFetchingState === FetchingState.Fetching ||
@@ -92,10 +88,10 @@ const Login = () => {
   const handleLoginSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault()
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     const email = e.target.email.value
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     const password = e.target.password.value
 
     // Get auth data with user's email and password
@@ -134,6 +130,8 @@ const Login = () => {
         autoHideDuration: 4000,
       })
     }
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authData, csrfToken, history, authDataFetchingState])
 
   return (

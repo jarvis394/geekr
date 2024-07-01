@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Typography } from '@material-ui/core'
 import dayjs from 'dayjs'
-import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'src/hooks'
 import LinkToOutsidePage from 'src/components/blocks/LinkToOutsidePage'
-import { useDispatch } from 'react-redux'
-import { getProfileWhois } from 'src/store/actions/profile'
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -19,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const InvitedTime = () => {
+export const InvitedTime: React.FC = () => {
   const classes = useStyles()
   const user = useSelector((store) => store.profile.profile.card?.data)
   const whois = useSelector((store) => store.profile.profile.whois?.data)

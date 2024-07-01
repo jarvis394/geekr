@@ -250,7 +250,7 @@ const Comment: React.FC<{
   isLastInFilteredRootThread: boolean
   postId: string
   placeholderSize?: number
-}> = ({ data, isLastInFilteredRootThread, postId, placeholderSize }) => {
+}> = ({ data, isLastInFilteredRootThread, postId }) => {
   const isRootComment = data.level === 0
   const { id, isLastInThread, isPostAuthor, isThreadStart } = data
   const theme = useTheme()

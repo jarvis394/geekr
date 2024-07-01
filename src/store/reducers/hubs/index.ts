@@ -13,7 +13,7 @@ const initialState = {
 }
 
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case HUBS_PREFIX + 'FETCH': {
@@ -24,7 +24,7 @@ export default (state = initialState, { type, payload }) => {
       const { page, data } = payload
       state.data.pagesCount = data.pagesCount
       // TODO: fix types
-      //@ts-expect-error
+      //@ts-expect-error temporary fix
       state.data.pages[page] = data
       return { ...state, fetching: false, fetched: true, error: null }
     }

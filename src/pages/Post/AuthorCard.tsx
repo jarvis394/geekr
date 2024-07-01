@@ -153,7 +153,7 @@ const DonateDialog: React.FC<{
   const paymentDetails = Object.keys(post.author.paymentDetails).map((e) => ({
     field: e,
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     value: post.author.paymentDetails[e],
   }))
 
@@ -179,12 +179,12 @@ const DonateDialog: React.FC<{
                 component={'a'}
                 target={'_blank'}
                 // TODO: fix types
-                //@ts-expect-error
+                //@ts-expect-error temporary fix
                 href={DONATION_LINKS_MAP[e.field] + e.value}
               >
                 <ListItemText
                   // TODO: fix types
-                  //@ts-expect-error
+                  //@ts-expect-error temporary fix
                   primary={DONATION_TITLES_MAP[e.field]}
                   secondary={e.value}
                 />
@@ -199,15 +199,14 @@ const DonateDialog: React.FC<{
 const AuthorCard: React.FC<{
   post: Post | null
 }> = ({ post }) => {
-  if (!post) return null
-
   const classes = useStyles()
   const [isSubscribed, setSubscribed] = useState(false)
   const [isDonateDialogOpen, setDonateDialogOpen] = useState(false)
   const theme = useTheme()
-  const shouldShowDonateButton = Object.values(post.author.paymentDetails).some(
-    (e) => !!e
-  )
+  const shouldShowDonateButton =
+    post && Object.values(post.author.paymentDetails).some((e) => !!e)
+
+  if (!post) return null
 
   return (
     <div className={classes.root}>

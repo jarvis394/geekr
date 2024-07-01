@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import OutsidePage from 'src/components/blocks/OutsidePage'
-import { fade, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { MIN_WIDTH, THREAD_LEVEL } from 'src/config/constants'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
@@ -100,12 +100,13 @@ const Interface = () => {
   useEffect(() => {
     if (location.state.highlightSection) {
       // TODO: fix types
-      //@ts-expect-error
+      //@ts-expect-error temporary fix
       sectionRefs[location.state.highlightSection].current.className = [
         classes.section,
         classes.highlight,
       ].join(' ')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

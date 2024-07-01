@@ -80,7 +80,7 @@ const usePostItemStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     '&:visited > p': {
       // TODO: fix types
-      //@ts-expect-error
+      //@ts-expect-error temporary fix
       color: ld[theme.palette.type + 'en'](theme.palette.text.primary, 0.4),
     },
     fontWeight: 800,
@@ -318,6 +318,8 @@ const HomeSidebar = () => {
         topCompaniesFetchError
       )
     }
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -334,10 +336,10 @@ const HomeSidebar = () => {
           )}
           {topCompaniesState === FetchingState.Fetched &&
             // TODO: fix types
-            //@ts-expect-error
+            //@ts-expect-error temporary fix
             topCompanies.companyIds.map((e) => (
               // TODO: fix types
-              //@ts-expect-error
+              //@ts-expect-error temporary fix
               <CompanyItem data={topCompanies.companyRefs[e]} key={e} />
             ))}
           <Link
@@ -359,13 +361,13 @@ const HomeSidebar = () => {
           )}
           {mostReadingState === FetchingState.Fetched &&
             // TODO: fix types
-            //@ts-expect-error
+            //@ts-expect-error temporary fix
             mostReading?.articleIds &&
             // TODO: fix types
-            //@ts-expect-error
+            //@ts-expect-error temporary fix
             mostReading.articleIds.slice(0, 5).map((e) => (
               // TODO: fix types
-              //@ts-expect-error
+              //@ts-expect-error temporary fix
               <PostItem data={mostReading.articleRefs[e]} key={e} />
             ))}
         </SideBlock>

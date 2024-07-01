@@ -20,6 +20,8 @@ const useUserDataFetch = () => {
           csrfToken,
         })
       )
+    // TODO: fix deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [csrfToken, authData, shouldFetchUser])
 }
 

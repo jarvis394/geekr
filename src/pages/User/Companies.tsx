@@ -91,7 +91,7 @@ const Companies = ({ classes: additionalClasses }: ComponentWithUserParams) => {
       </Typography>
       {companies.companyIds.map((e, i) => (
         // TODO: fix types
-        //@ts-expect-error
+        //@ts-expect-error temporary fix
         <Item data={companies.companyRefs[e]} key={i} />
       ))}
     </div>

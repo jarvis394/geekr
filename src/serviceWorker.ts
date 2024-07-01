@@ -27,7 +27,7 @@ const isLocalhost = Boolean(
 
 export function register(config?: Config): void {
   if (
-    import.meta.env.NODE_ENV === 'production' &&
+    import.meta.env.PROD &&
     'serviceWorker' in navigator
   ) {
     window.addEventListener('load', () => {

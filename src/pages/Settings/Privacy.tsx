@@ -1,6 +1,6 @@
 import React from 'react'
 import OutsidePage from 'src/components/blocks/OutsidePage'
-import { fade, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { MIN_WIDTH } from 'src/config/constants'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'

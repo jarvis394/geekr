@@ -13,7 +13,7 @@ const State = {
 type StoreRef = React.MutableRefObject<{
   position: number
   previousScroll: number
-  direction: Direction
+  direction?: Direction
 }>
 
 interface Options {
@@ -28,10 +28,15 @@ interface Options {
 
 const defaultThreshold = 200
 const defaultScrollThreshold = 200
-const defaultTarget = typeof window !== 'undefined' ? window : null
+const defaultTarget = typeof window !== 'undefined' ? window : undefined
 
 function defaultTrigger(store: StoreRef, options: Partial<Options>) {
-  const { threshold, target, trigger, scrollThreshold } = options
+  const {
+    threshold = defaultThreshold,
+    target = defaultTarget,
+    trigger,
+    scrollThreshold = defaultScrollThreshold,
+  } = options
   const previousDirection = store.current.direction
   const previousScroll = store.current.previousScroll
   const currentScroll = target ? target.scrollY : 0
@@ -74,7 +79,7 @@ const useScrollTrigger = (options: Partial<Options> = {}) => {
     target = defaultTarget,
     threshold = defaultThreshold,
     scrollThreshold = defaultScrollThreshold,
-    triggerValue = target.scrollY > threshold,
+    triggerValue = (target?.scrollY || 0) > threshold,
     enabled = true,
   } = options
   const store: StoreRef = React.useRef({
@@ -97,11 +102,11 @@ const useScrollTrigger = (options: Partial<Options> = {}) => {
       // Re-evaluate trigger when dependencies change
       handleScroll()
       // passive: true enhances scrolling experience
-      target.addEventListener('scroll', handleScroll, { passive: true })
+      target?.addEventListener('scroll', handleScroll, { passive: true })
     }
 
     return () => {
-      target.removeEventListener('scroll', handleScroll)
+      target?.removeEventListener('scroll', handleScroll)
     }
   }, [target, getTrigger, trigger, threshold, enabled, scrollThreshold])
 

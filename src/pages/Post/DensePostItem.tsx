@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     '&:visited > p': {
       // TODO: fix types
-      //@ts-expect-error
+      //@ts-expect-error temporary fix
       color: ld[theme.palette.type + 'en'](theme.palette.text.primary, 0.4),
     },
     fontWeight: 800,
@@ -90,8 +90,6 @@ const DensePostItem = ({
   post?: Post
   className?: string
 }) => {
-  if (!post) return
-
   const classes = useStyles()
   const [isBookmarked, setBookmarkState] = React.useState<boolean>()
   const { titleHtml: unparsedTitle, statistics } = post || {}
@@ -101,24 +99,20 @@ const DensePostItem = ({
   const ts = dayjs(post?.timePublished)
     .calendar()
     .toLowerCase()
-  const {
-    readingCount,
-    favoritesCount,
-    commentsCount,
-    score: unformattedScore,
-  } = statistics
-  const score = formatNumber(unformattedScore)
-  const title = parse(unparsedTitle)
-  const reads = formatNumber(readingCount)
-  const favorites = formatNumber(favoritesCount + (isBookmarked ? 1 : 0))
-  const comments = formatNumber(Number(commentsCount))
-  const postLink = getPostLink(post)
+  const score = formatNumber(statistics?.score || 0)
+  const title = parse(unparsedTitle || '')
+  const reads = formatNumber(statistics?.readingCount || 0)
+  const favorites = formatNumber(
+    (statistics?.favoritesCount || 0) + (isBookmarked ? 1 : 0)
+  )
+  const comments = formatNumber(Number(statistics?.commentsCount))
+  const postLink = post && getPostLink(post)
   const bottomRow: BottomRowItemType[] = [
     {
       icon: ThumbsUpDownIcon,
       text: score,
       coloredText: true,
-      number: unformattedScore,
+      number: statistics?.score,
     },
     {
       icon: VisibilityIcon,
@@ -187,6 +181,8 @@ const DensePostItem = ({
     )
   }
 
+  if (!post) return null
+
   return (
     <Paper elevation={0} className={classes.paper + ' ' + className}>
       <Typography className={classes.postTs} variant="caption">
@@ -195,7 +191,7 @@ const DensePostItem = ({
 
       <LinkToOutsidePage
         className={classes.postLink + ' ' + classes.noDeco}
-        to={postLink}
+        to={postLink || ''}
       >
         {title}
       </LinkToOutsidePage>

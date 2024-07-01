@@ -34,14 +34,14 @@ const initialState: State = {
   authorizedRequestData:
     cachedAuthData && cachedCSRFToken
       ? {
-          connectSID: cachedAuthData?.connectSID,
-          csrfToken: cachedCSRFToken,
-        }
+        connectSID: cachedAuthData?.connectSID,
+        csrfToken: cachedCSRFToken,
+      }
       : undefined,
 }
 
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 export default (reducerState = initialState, { type, payload }): State => {
   switch (type) {
     case GET_AUTH_DATA + '_FETCH': {

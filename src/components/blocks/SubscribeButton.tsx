@@ -6,7 +6,6 @@ import {
   Theme,
 } from '@material-ui/core'
 import React from 'react'
-import isDarkTheme from 'src/utils/isDarkTheme'
 
 const useStyles = makeStyles<
   Theme,

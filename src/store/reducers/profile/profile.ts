@@ -4,7 +4,7 @@ const initialState: State = {}
 fieldsMap.forEach(
   (e: string) =>
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     (initialState[e] = {
       data: null,
       fetching: false,
@@ -47,7 +47,7 @@ export default (
 
   return Object.assign({}, state, {
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     [field]: { ...state[field], ...actionHandler(type) },
   })
 }

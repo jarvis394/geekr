@@ -38,7 +38,7 @@ const UserArticles = () => {
   const fetchError = useSelector((state) => state.profile.articles.error)
   const data = useSelector(
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     (state) => state.profile.articles.data.pages[currentPage]
   )
   const profile = useSelector((state) => state.profile.profile.card?.data)
@@ -57,7 +57,7 @@ const UserArticles = () => {
       />
     ) : null
 
-  const handlePagination = (_: any, i: number) => {
+  const handlePagination = (_e: React.ChangeEvent<unknown>, i: number) => {
     if (i === currentPage) return
     else history.replace(`/user/${login}/articles/${i}`)
   }
@@ -68,7 +68,7 @@ const UserArticles = () => {
     } else {
       dispatch(getProfileArticles(login, currentPage))
     }
-  }, [profile, currentPage, dispatch])
+  }, [profile, currentPage, dispatch, isProfileFetched, login])
 
   return (
     <OutsidePage

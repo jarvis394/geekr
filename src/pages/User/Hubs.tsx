@@ -118,7 +118,7 @@ const Hubs = ({ classes: additionalClasses }: ComponentWithUserParams) => {
         <Grid spacing={1} container className={classes.holder}>
           {hubs.hubIds.map((e, i) => (
             // TODO: fix types
-            //@ts-expect-error
+            //@ts-expect-error temporary fix
             <HubsItem data={hubs.hubRefs[e]} key={i} />
           ))}
         </Grid>

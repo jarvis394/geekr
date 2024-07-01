@@ -2,7 +2,6 @@ import * as React from 'react'
 import Skeleton from '@material-ui/lab/Skeleton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Grid from '@material-ui/core/Grid'
-import getContrastPaperColor from 'src/utils/getContrastPaperColor'
 import { ListItem, ListItemAvatar, ListItemText } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({

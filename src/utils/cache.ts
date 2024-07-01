@@ -18,7 +18,7 @@ export const shouldUpdate = (storeData: Omit<Posts, 'pagesCount'>) => {
 
   if (storeData) {
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     return shouldUpdateByTS(storeData.lastUpdated)
   } else return true
 }

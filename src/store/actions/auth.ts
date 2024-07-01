@@ -10,7 +10,7 @@ import { AuthorizedRequestParams } from 'src/interfaces'
 
 export const getAccountAuthData =
   // TODO: fix types
-  //@ts-expect-error
+  //@ts-expect-error temporary fix
   (props: { email: string; password: string }) => async (dispatch) => {
     const type = GET_AUTH_DATA + '_FETCH'
 
@@ -33,7 +33,7 @@ export const getAccountAuthData =
   }
 
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 export const getCSRFToken = (props: AccountAuthData) => async (dispatch) => {
   const type = GET_CSRF_TOKEN + '_FETCH'
 
@@ -56,7 +56,7 @@ export const getCSRFToken = (props: AccountAuthData) => async (dispatch) => {
 }
 
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 export const getMe = (params: AuthorizedRequestParams) => async (dispatch) => {
   const type = GET_ME + '_FETCH'
 
@@ -75,7 +75,7 @@ export const getMe = (params: AuthorizedRequestParams) => async (dispatch) => {
 }
 
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 export const userLogout = () => async (dispatch) => {
   dispatch({ type: USER_LOGOUT })
 }

@@ -21,7 +21,7 @@ import isDarkTheme from 'src/utils/isDarkTheme'
 const DIALOG_MAX_WIDTH = 440
 const MODAL_MAX_WIDTH = 300
 
-const useDialogStyles = makeStyles((theme) => ({
+const useDialogStyles = makeStyles(() => ({
   paper: {
     display: 'flex',
     width: '100%',

@@ -2,10 +2,9 @@ import * as React from 'react'
 import { useState, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
 import InputBase from '@material-ui/core/InputBase'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useParams, useHistory } from 'react-router-dom'
 import { Paper, Button } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import { useHistory } from 'react-router-dom'
 import PostItem from '../components/blocks/PostItem'
 import { getSearchResults } from '../api'
 import PostSkeleton from '../components/skeletons/PostItem'
@@ -106,7 +105,7 @@ const SearchInput: React.FC<{ q: string }> = ({ q }) => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     history.push('/search/p/1?q=' + e.target.q.value)
   }
 
@@ -164,7 +163,7 @@ const SearchResultsScreen: React.FC<{ q: string }> = ({ q }) => {
     (store) => store.auth.authorizedRequestData
   )
 
-  const handleChange = (_: any, i: number) => {
+  const handleChange = (_e: React.ChangeEvent<unknown>, i: number) => {
     if (i === currentPage) return
 
     setCurrentPage(i)
@@ -187,7 +186,7 @@ const SearchResultsScreen: React.FC<{ q: string }> = ({ q }) => {
         })
         for (const id in d.publicationRefs) {
           // TODO: fix types
-          //@ts-expect-error
+          //@ts-expect-error temporary fix
           d.publicationRefs[id].postFirstImage = getPostFirstImage(
             d.publicationRefs[id]
           )
@@ -199,6 +198,8 @@ const SearchResultsScreen: React.FC<{ q: string }> = ({ q }) => {
       }
     }
     get()
+    // TODO: investigate deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, currentPage])
 
   if (fetchError || data?.publicationIds?.length === 0) return <NoResults />

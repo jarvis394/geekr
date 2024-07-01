@@ -60,6 +60,8 @@ const useStyles = makeStyles((theme) => ({
 
 const List: React.FC<{
   items: string[]
+  // TODO: fix types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setItems: (items: string[]) => (dispatch: any) => any
 }> = ({ items, setItems }) => {
   const { t } = useTranslation()

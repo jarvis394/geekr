@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { ButtonBase, IconButton, Typography } from '@material-ui/core'
+import { IconButton, Typography } from '@material-ui/core'
 import { HALLOWEEN_MODAL_WAS_SHOWN } from 'src/config/constants'
 import BatIcon from 'src/components/svg/Bat'
 import { Icon20Clear } from '@vkontakte/icons'
-import { Icon16Chevron } from '@vkontakte/icons'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const HalloweenPromoBlock = () => {
+const HalloweenPromoBlock: React.FC = () => {
   const classes = useStyles()
   const shouldHide = localStorage.getItem(HALLOWEEN_MODAL_WAS_SHOWN) === 'true'
   const [isHidden, setIsHidden] = useState(shouldHide)

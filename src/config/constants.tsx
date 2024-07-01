@@ -1,6 +1,5 @@
 import React from 'react'
-import { ModeObject, FlowObject } from '../interfaces'
-import { UserSettings } from '../interfaces'
+import { ModeObject, FlowObject, UserSettings } from '../interfaces'
 import {
   darken,
   alpha,
@@ -8,10 +7,13 @@ import {
   PaletteType as MUIPaletteType,
 } from '@material-ui/core'
 import { blue } from '@material-ui/core/colors'
-import { Icon28Newsfeed, Icon28SettingsOutline } from '@vkontakte/icons'
-import { Icon20HomeOutline } from '@vkontakte/icons'
-import { Icon28ServicesOutline } from '@vkontakte/icons'
-import { Icon24Search } from '@vkontakte/icons'
+import {
+  Icon28Newsfeed,
+  Icon28SettingsOutline,
+  Icon20HomeOutline,
+  Icon28ServicesOutline,
+  Icon24Search,
+} from '@vkontakte/icons'
 import TabObject from 'src/interfaces/NavigationTabObject'
 import getCachedMode from 'src/utils/getCachedMode'
 

@@ -4,7 +4,6 @@ import {
   ButtonBase,
   Divider,
   Drawer,
-  Theme,
   Typography,
   useTheme,
 } from '@material-ui/core'
@@ -21,14 +20,15 @@ import { useRoute, useSelector } from 'src/hooks'
 import { useHistory, useLocation } from 'react-router'
 import { Link } from 'react-router-dom'
 import { Skeleton } from '@material-ui/lab'
-import { Icon24DoorArrowLeftOutline } from '@vkontakte/icons'
-import { Icon24InfoCircleOutline } from '@vkontakte/icons'
+import {
+  Icon24DoorArrowLeftOutline,
+  Icon24InfoCircleOutline,
+} from '@vkontakte/icons'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { Route } from 'src/config/routes'
 import { FetchingState } from 'src/interfaces'
 import UserMenu from './UserMenu'
 import RUVDSPromoBlock from './RUVDSPromo/Block'
-import HalloweenPromoBlock from './HalloweenThemePromo/Block'
 
 const NAVIGATION_TABS = makeNavigationTabs(28, 28, true)
 const avatarWidth = 32

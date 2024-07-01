@@ -77,10 +77,10 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
   )
   const sortingFunction = (a: string, b: string) => {
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     const aRef = childrenData?.userRefs[a]
     // TODO: fix types
-    //@ts-expect-error
+    //@ts-expect-error temporary fix
     const bRef = childrenData?.userRefs[b]
     return aRef.alias.localeCompare(bRef.alias)
   }
@@ -134,7 +134,7 @@ const Children = ({ classes: additionalClasses }: ComponentWithUserParams) => {
         <List>
           {sorted?.map((e) => (
             // TODO: fix types
-            //@ts-expect-error
+            //@ts-expect-error temporary fix
             <Item data={childrenData?.userRefs[e]} key={e} />
           ))}
         </List>

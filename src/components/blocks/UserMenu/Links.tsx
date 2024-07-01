@@ -1,12 +1,14 @@
 import { List, ListItem, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Icon28CommentOutline } from '@vkontakte/icons'
-import { Icon20BookmarkOutline } from '@vkontakte/icons'
-import { Icon28ArticleOutline } from '@vkontakte/icons'
+import {
+  Icon28CommentOutline,
+  Icon20BookmarkOutline,
+  Icon28ArticleOutline,
+} from '@vkontakte/icons'
 import { useSelector } from 'src/hooks'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {},
 }))
 

@@ -1,6 +1,6 @@
 import React, { useState, useRef, MutableRefObject } from 'react'
 // TODO: fix types
-//@ts-expect-error
+//@ts-expect-error temporary fix
 import ProgressiveImage from 'react-lazy-progressive-image'
 import {
   CircularProgress,
@@ -170,7 +170,7 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
     if (align) {
       imageContainerClasses.push(
         // TODO: fix types
-        //@ts-expect-error
+        //@ts-expect-error temporary fix
         classes['imgAlign-' + align]
       )
     }

@@ -5,7 +5,6 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import ErrorSVG from 'src/components/svg/Error'
 import { APP_BAR_HEIGHT, chromeAddressBarHeight } from 'src/config/constants'
 import FormattedText from 'src/components/formatters/FormattedText'
-import { useLocation } from 'react-router'
 
 const useStyles = makeStyles((theme) => ({
   svg: {
@@ -60,7 +59,6 @@ const Error: React.FC<{
   resetError(): void
 }> = ({ error, componentStack }) => {
   const classes = useStyles()
-  const location = useLocation()
   const linkHref = '/'
 
   return (

@@ -1,5 +1,4 @@
-import { blue } from '@material-ui/core/colors'
-import { darken, ThemeOptions } from '@material-ui/core/styles'
+import { ThemeOptions } from '@material-ui/core/styles'
 import { PaletteType as MUIPaletteType } from '@material-ui/core'
 import {
   BACKGROUND_COLORS_DEFAULT,
