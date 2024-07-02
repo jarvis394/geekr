@@ -8,7 +8,6 @@ export default defineConfig(() => {
     build: {
       sourcemap: false,
     },
-    base: '',
     resolve: {
       alias: {
         src: fileURLToPath(new URL('./src', import.meta.url)),

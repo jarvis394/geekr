@@ -58,7 +58,7 @@
   },
   "scripts": {
     "dev": "vite --host",
-    "build": "yarn clean && vite build && cp ./vercel.json ./dist/vercel.json",
+    "build": "yarn clean && vite build",
     "preview": "vite preview",
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "lint": "yarn lint:types && yarn lint:eslint && yarn lint:prettier",
