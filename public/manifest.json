@@ -19,7 +19,7 @@
       "purpose": "any maskable"
     }
   ],
-  "start_url": "/top/daily/p/1",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#1D76FE",
   "scope": "/",
