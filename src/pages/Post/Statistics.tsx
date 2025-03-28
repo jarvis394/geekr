@@ -556,7 +556,7 @@ const Statistics = ({ post }: { post: Post }) => {
   const share = () => {
     const shareData = {
       title,
-      url: import.meta.url + '/post/' + id,
+      url: window.location.origin + '/post/' + id,
     }
 
     navigator.share(shareData).catch((e) => {

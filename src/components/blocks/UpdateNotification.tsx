@@ -86,7 +86,7 @@ const UpdateNotification = () => {
 
   useEffect(() => {
     const receiveMessage = (event: MessageEvent<string>) => {
-      if (event.origin === import.meta.url) {
+      if (event.origin === import.meta.env.BASE_URL) {
         if (event.data === 'showUpdateNotification') {
           setIsShown(true)
         } else if (event.data === 'showUpdateSuccessNotification') {

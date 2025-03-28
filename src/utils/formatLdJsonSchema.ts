@@ -15,8 +15,8 @@ export default (post: Post) => {
 
   if (!schema.mainEntityOfPage) return
 
-  schema.mainEntityOfPage['@id'] = import.meta.url + getPostLink(post)
-  schema.url = import.meta.url + getPostLink(post)
+  schema.mainEntityOfPage['@id'] = window.location.origin + getPostLink(post)
+  schema.url = window.location.origin + getPostLink(post)
   schema.image = schema.image?.filter(
     (e) => !e.startsWith('https://habr.com/share/publication')
   )

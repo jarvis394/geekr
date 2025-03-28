@@ -46,7 +46,7 @@ registerRoute(
     // Return true to signal that we want to use the handler.
     return true
   },
-  createHandlerBoundToURL(import.meta.url + '/index.html')
+  createHandlerBoundToURL(import.meta.env.BASE_URL + '/index.html')
 )
 
 setCacheNameDetails({
@@ -93,9 +93,7 @@ const newResponse = (
 
 const cacheHeaderPlugin = [
   {
-    // TODO: fix types
-    //@ts-expect-error temporary fix
-    cacheWillUpdate: ({ response }) =>
+    cacheWillUpdate: ({ response }: { response: Response }) =>
       newResponse(response.clone(), (headers: Headers) => {
         headers.set('x-sw-cache', new Date().getTime().toString())
         return headers

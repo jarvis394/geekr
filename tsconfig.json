@@ -20,6 +20,6 @@
     "types": ["vite/client"]
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["src"],
+  "include": ["src", "src/service-worker.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

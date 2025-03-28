@@ -11,7 +11,7 @@ const config: Config = {
     registration
       .unregister()
       .then(() => {
-        window.postMessage('showUpdateNotification', import.meta.url)
+        window.postMessage('showUpdateNotification', import.meta.env.BASE_URL)
         localStorage.setItem(NEEDS_UPDATE_KEY, 'true')
         console.log(
           '%c[info] %cSent showUpdateNotification message from SW',
@@ -29,7 +29,7 @@ const config: Config = {
       )
   },
   onSuccess: () => {
-    window.postMessage('showUpdateSuccessNotification', import.meta.url)
+    window.postMessage('showUpdateSuccessNotification', window.location.origin)
     console.log(
       '%c[success] %cService worker succeed in registration.',
       'color: #00e676;',
